@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Nancy;
+using Nancy.Owin;
+using Speercs.Server.Configuration;
 
 namespace Speercs.Server
 {
@@ -27,6 +25,9 @@ namespace Speercs.Server
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // TODO: Bind configuration to context, build context
+            var context = new SContext();
             
             app.UseOwin(x => x.UseNancy(options =>
             {
