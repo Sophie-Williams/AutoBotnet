@@ -27,11 +27,15 @@ namespace Speercs.Server
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.Run(async (context) =>
+            
+            app.UseOwin(x => x.UseNancy(options =>
             {
-                await context.Response.WriteAsync("Hello World!");
-            });
+                options.PassThroughWhenStatusCodesAre(
+                    HttpStatusCode.NotFound,
+                    HttpStatusCode.InternalServerError
+                );
+                options.Bootstrapper = new SpeercsBootstrapper(context);
+            }));
         }
     }
 }
