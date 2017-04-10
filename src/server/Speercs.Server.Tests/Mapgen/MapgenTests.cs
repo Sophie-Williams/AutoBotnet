@@ -3,12 +3,12 @@ using Xunit;
 
 namespace Speercs.Server.Tests
 {
-    public class UnitTest1
+    public class MapgenTests
     {
         [Fact]
-        public void Test1()
+        public void TrueIsTrue()
         {
-
+            Assert.True(true);
         }
     }
 }
