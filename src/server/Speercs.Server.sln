@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speercs.Server", "Speercs.Server\Speercs.Server.csproj", "{7F4654EE-C94E-4A78-81C9-75D2826CD5A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speercs.Server.Tests", "Speercs.Server.Tests\Speercs.Server.Tests.csproj", "{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{7F4654EE-C94E-4A78-81C9-75D2826CD5A0}.Release|x64.Build.0 = Release|x64
 		{7F4654EE-C94E-4A78-81C9-75D2826CD5A0}.Release|x86.ActiveCfg = Release|x86
 		{7F4654EE-C94E-4A78-81C9-75D2826CD5A0}.Release|x86.Build.0 = Release|x86
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Debug|x64.ActiveCfg = Debug|x64
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Debug|x64.Build.0 = Debug|x64
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Debug|x86.ActiveCfg = Debug|x86
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Debug|x86.Build.0 = Debug|x86
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Release|x64.ActiveCfg = Release|x64
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Release|x64.Build.0 = Release|x64
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Release|x86.ActiveCfg = Release|x86
+		{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 EndGlobal
