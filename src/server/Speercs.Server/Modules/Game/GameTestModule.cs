@@ -1,6 +1,4 @@
-using Nancy.Security;
 using Speercs.Server.Configuration;
-using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server.Modules.Game
 {

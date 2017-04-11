@@ -1,4 +1,3 @@
-using Nancy;
 using Nancy.Security;
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Auth;
