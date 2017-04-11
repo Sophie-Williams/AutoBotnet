@@ -11,6 +11,52 @@ The game is played in a "map," a (not necessarily square) grid of chunks. the ch
 
 Chunk size: 128x128 tiles of procedurally generated terrain containing map artifacts that will be described later
 
+### Resources
+
+
+#### Energy
+
+There's energy "NRG" in large but finite quantities that comes from energy drilling areas on the map. This energy is pure
+and has no environemental concerns, as it is easy to extract.
+
+#### Building
+
+Once you have energy, you use the energy to power your robot to reach a resource mine.
+
+Resources are (WIP):
+
+- NRG (aforementioned pure energy)
+- Iron
+- Coal
+- (Iron + Coal) = Steel
+- Oil (Used as cheap power)
+- Ethanol (More expensive but cleaner power)
+- Electric batteries (These are rechargeable). They are made in factories
+- Nuclear fuel cell (Obviously very efficient but also highly toxic). Requires uranium refineries. Developed in advanced factories
+- Thermonuclear energy cell (Requires advanced research labs). Very expensive to make.
+
+How it works:
+
+You get energy, then you visit a mine and mine some iron in ore form. Then you mine some coal, and use your free
+factory that you are given at spawn time to create steel and build more robots. These robots can run on NRG, which is
+even more advanced than thermonuclear energy. It's basically some mystical magic energy that can only power robots for now.
+
+Once you have more robots, you mine more resources and build even more robots. However, you will be bottlenecked by your factory,
+so you build more factories (Yay Factorio!). Now you can mine other resources like oil and coal. Once you have a lot of coal,
+you can use your metal to build a fossil-fuel power plant, which generates electric power. You need to build electric batteries
+to store this power.
+
+There are more advanced ship classes that can be built in higher level factories. Factories can be leveled up with NRG, fuel (coal/oil/electricity), etc.
+and higher level factories can build different classes of ships that have swappable cores that can hold more resources or have more attack power.
+
+Finally, now you have lots of powerful ships. You can build refineries that can be used to get Ethanol from a corn farm or some other crazy thing.
+Then you can even level up refineries and build research labs, which require funding (yeah, scientists) and a steady supply of fuel and metal and other
+resources to research things. Researching gives you research XP points, and eventually you will discover nuclear energy.
+
+And so on.
+
+
+
 ## technical details
 
 (.NET Core) Server providing dual websockets/rest api
