@@ -1,6 +1,8 @@
 using LiteDB;
 using System.IO;
 using System.Linq;
+using Speercs.Server.Models.Game.Map;
+using System.Collections.Generic;
 
 namespace Speercs.Server.Configuration
 {
@@ -15,9 +17,23 @@ namespace Speercs.Server.Configuration
         }
 
         public const string StateStorageKey = "state";
+        
+        public static bool SerializationMappersRegistered { get; private set; }
 
         public static void LoadState(SContext serverContext, string stateStorageFile)
         {
+            if (!SerializationMappersRegistered)
+            {
+                BsonMapper.Global.RegisterType<WorldMap>(
+                    serialize: map => BsonMapper.Global.ToDocument(map.RoomDict),
+                    deserialize: bson => new WorldMap
+                    {
+                        RoomDict = (Dictionary<string, Room>)BsonMapper.Global
+                            .ToObject(typeof(Dictionary<string, Room>), bson.AsDocument)
+                    }
+                );
+                SerializationMappersRegistered = true;
+            }
             // Load the Server State into the context. This object also includes the OsmiumMine Core state
             var database = new LiteDatabase(stateStorageFile);
             var stateStorage = database.GetCollection<SAppState>(StateStorageKey);
