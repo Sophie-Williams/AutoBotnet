@@ -34,6 +34,7 @@ namespace Speercs.Server
                 // get user identity
                 var userManager = new UserManagerService(ServerContext);
                 var user = userManager.FindUserByApiKeyAsync(apiKey).Result;
+                if (user == null) return null;
                 return new ClaimsPrincipal(new GenericIdentity(user.Identifier));
             }));
 
