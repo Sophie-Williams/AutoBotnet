@@ -1,8 +1,7 @@
 ﻿using System;
 using Speercs.Server.Game.MapGen;
 
-namespace Speercs.DevTests
-{
+namespace Speercs.DevTests {
     class Program {
         static void Main(string[] args) {
             Console.WriteLine("Starting");

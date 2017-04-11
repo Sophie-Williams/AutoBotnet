@@ -3,7 +3,7 @@ using Speercs.Server.Models.Room;
 
 namespace Speercs.Server.Game.MapGen {
 
-    class MapGenerator {
+    public class MapGenerator {
 
         public MapGenerator(){
             rand = new Random();
@@ -15,7 +15,7 @@ namespace Speercs.Server.Game.MapGen {
             // fill with initial randomness
             for (var x = 0; x < Room.SIZE; x++) {
                 for (var y = 0; y < Room.SIZE; y++) {
-                    room.tiles[x, y] = rand.NextDouble()<0.5? TileType.Wall : TileType.Floor;
+                    room.Tiles[x, y] = rand.NextDouble()<0.5? TileType.Wall : TileType.Floor;
                 }
             }
 
