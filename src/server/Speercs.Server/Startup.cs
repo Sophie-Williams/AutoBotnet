@@ -25,7 +25,7 @@ namespace Speercs.Server
 
             fileConfig = builder.Build();
         }
-        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -55,7 +55,7 @@ namespace Speercs.Server
 
             // load persistent state
             SConfigurator.LoadState(context, StateStorageDatabaseFileName);
-            
+
             app.UseOwin(x => x.UseNancy(options =>
             {
                 options.PassThroughWhenStatusCodesAre(

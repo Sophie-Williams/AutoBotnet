@@ -1,10 +1,13 @@
-﻿using System;
-using Speercs.Server.Game.MapGen;
+﻿using Speercs.Server.Game.MapGen;
+using System;
 
-namespace Speercs.DevTests {
-    class Program {
-        static void Main(string[] args) {
-            Console.WriteLine("Starting");
+namespace Speercs.DevTests
+{
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            Console.WriteLine("Starting mapgen test");
 
             var generator = new MapGenerator();
             var room = generator.GenerateRoom();

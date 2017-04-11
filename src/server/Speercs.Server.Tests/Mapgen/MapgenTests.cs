@@ -11,7 +11,7 @@ namespace Speercs.Server.Tests
         {
             output = outputHelper;
         }
-        
+
         [Fact]
         public void TrueIsTrue()
         {

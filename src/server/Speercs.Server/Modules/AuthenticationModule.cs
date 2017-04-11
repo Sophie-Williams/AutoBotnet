@@ -1,20 +1,20 @@
-using System;
-using System.Security;
 using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Utilities;
+using System;
+using System.Security;
 
-namespace  Speercs.Server.Modules
+namespace Speercs.Server.Modules
 {
     public class AuthenticationModule : SBaseModule
     {
         private UserManagerService userManager;
 
         public ISContext ServerContext { get; private set; }
-        
+
         public AuthenticationModule(ISContext serverContext) : base("/auth")
         {
             ServerContext = serverContext;
@@ -23,7 +23,7 @@ namespace  Speercs.Server.Modules
                 userManager = new UserManagerService(ServerContext);
                 return null;
             };
-            Post("/register", async args => 
+            Post("/register", async args =>
             {
                 var req = this.Bind<UserRegistrationRequest>();
                 // Valdiate username length, charset

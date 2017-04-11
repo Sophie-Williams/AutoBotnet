@@ -1,4 +1,3 @@
-
 namespace Speercs.Server.Configuration
 {
     public class SDatabaseConfiguration
