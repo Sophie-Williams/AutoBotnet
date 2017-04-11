@@ -15,5 +15,8 @@ namespace Speercs.Server.Models.User
 
         [JsonIgnore]
         public string Identifier { get; set; }
+
+        [JsonIgnore]
+        public bool Enabled { get; set; }
     }
 }

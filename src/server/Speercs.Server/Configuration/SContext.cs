@@ -1,5 +1,5 @@
-using System;
 using LiteDB;
+using Speercs.Server.Infrastructure.Concurrency;
 
 namespace Speercs.Server.Configuration
 {
@@ -11,9 +11,13 @@ namespace Speercs.Server.Configuration
         // Database access
         public LiteDatabase Database { get; private set; }
 
+        // Service table
+        public UserServiceTable ServiceTable { get; }
+
         public SContext(SConfiguration config)
         {
             Configuration = config;
+            ServiceTable = new UserServiceTable(this);
         }
 
         public void ConnectDatabase()

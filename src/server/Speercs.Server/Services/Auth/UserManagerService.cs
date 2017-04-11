@@ -47,6 +47,7 @@ namespace  Speercs.Server.Services.Auth
                         Conf = cryptoConf,
                         Key = encryptedPassword
                     },
+                    Enabled = true,
                 };
                 // Add the user to the database
                 userCollection.Insert(userRecord);
@@ -57,6 +58,21 @@ namespace  Speercs.Server.Services.Auth
                 userCollection.EnsureIndex(x => x.Username);
                 return userRecord;
             });
+        }
+
+        public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
+        {
+            var ret = false;
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            await lockEntry.WithConcurrentReadAsync(Task.Run(() =>
+            {
+                //Calculate hash and compare
+                var cryptoHelper = new AuthCryptoHelper(user.Crypto.Conf);
+                var pwKey =
+                    cryptoHelper.CalculateUserPasswordHash(password, user.Crypto.Salt);
+                ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.Crypto.Key);
+            }));
+            return ret;
         }
     }
 }

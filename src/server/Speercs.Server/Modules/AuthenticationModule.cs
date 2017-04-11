@@ -1,9 +1,10 @@
+using System;
 using System.Security;
 using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests;
-using Speercs.Server.Services;
+using Speercs.Server.Services.Auth;
 using Speercs.Server.Utilities;
 
 namespace  Speercs.Server.Modules
@@ -67,6 +68,36 @@ namespace  Speercs.Server.Modules
                     ApiKey = newUser.ApiKey
                 });
                 return HttpStatusCode.Unauthorized;
+            });
+
+            Post("/login", async args =>
+            {
+                var req = this.Bind<UserLoginRequest>();
+                var selectedUser = await userManager.FindUserByUsernameAsync(req.Username);
+
+                if (selectedUser == null) return HttpStatusCode.Unauthorized;
+
+                try
+                {
+                    // Validate password
+                    if (selectedUser.Enabled && await userManager.CheckPasswordAsync(req.Password, selectedUser))
+                    {
+                        // Return user details
+                        return Response.AsJsonNet(selectedUser);
+                    }
+                    return HttpStatusCode.Unauthorized;
+                }
+                catch (NullReferenceException)
+                {
+                    // A parameter was not provided
+                    return HttpStatusCode.BadRequest;
+                }
+                catch (SecurityException secEx)
+                {
+                    // Registration blocked for security reasons
+                    return Response.AsText(secEx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
             });
         }
     }
