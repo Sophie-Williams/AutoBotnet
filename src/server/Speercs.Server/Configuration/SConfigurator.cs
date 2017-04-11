@@ -1,6 +1,6 @@
+using LiteDB;
 using System.IO;
 using System.Linq;
-using LiteDB;
 
 namespace Speercs.Server.Configuration
 {
@@ -13,6 +13,7 @@ namespace Speercs.Server.Configuration
             var context = new SContext(config);
             return context;
         }
+
         public const string StateStorageKey = "state";
 
         public static void LoadState(SContext serverContext, string stateStorageFile)

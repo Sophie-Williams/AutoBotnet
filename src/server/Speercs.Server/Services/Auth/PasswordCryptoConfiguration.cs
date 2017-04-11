@@ -1,4 +1,4 @@
-namespace  Speercs.Server.Services.Auth
+namespace Speercs.Server.Services.Auth
 {
     public class PasswordCryptoConfiguration
     {
