@@ -5,7 +5,7 @@ namespace Speercs.Server.Models.Game.Entities
 {
     public abstract class GameEntity
     {
-        public string MapIdentifier { get; set; }
+        public string RoomIdentifier { get; set; }
 
         public Point Location { get; set; }
 
