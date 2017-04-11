@@ -1,6 +1,6 @@
+using Speercs.Server.Services.Auth;
 using System.Security.Cryptography;
 using System.Text;
-using Speercs.Server.Services.Auth;
 
 namespace PenguinUpload.Services.Authentication
 {

@@ -1,17 +1,18 @@
-using System.Security.Claims;
-using System.Security.Principal;
 using Nancy;
 using Nancy.Authentication.Stateless;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Auth;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace Speercs.Server
 {
     public class SpeercsBootstrapper : DefaultNancyBootstrapper
     {
         public SContext ServerContext { get; }
+
         public SpeercsBootstrapper(SContext context)
         {
             ServerContext = context;

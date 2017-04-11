@@ -1,4 +1,4 @@
-namespace  Speercs.Server.Modules
+namespace Speercs.Server.Modules
 {
     public class MetadataModule : SBaseModule
     {

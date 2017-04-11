@@ -1,20 +1,21 @@
-using System;
-using System.Collections;
-using System.Security;
-using System.Threading.Tasks;
 using LiteDB;
 using PenguinUpload.Services.Authentication;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests;
 using Speercs.Server.Models.User;
 using Speercs.Server.Utilities;
+using System;
+using System.Collections;
+using System.Security;
+using System.Threading.Tasks;
 
-namespace  Speercs.Server.Services.Auth
+namespace Speercs.Server.Services.Auth
 {
     public class UserManagerService : DependencyObject
     {
         public const string RegisteredUsersKey = "r_users";
         private LiteCollection<RegisteredUser> userCollection;
+
         public UserManagerService(ISContext serverContext) : base(serverContext)
         {
             userCollection = serverContext.Database.GetCollection<RegisteredUser>(RegisteredUsersKey);
@@ -23,7 +24,7 @@ namespace  Speercs.Server.Services.Auth
         public async Task<RegisteredUser> RegisterUserAsync(UserRegistrationRequest regRequest)
         {
             if (await FindUserByUsernameAsync(regRequest.Username) != null) throw new SecurityException("A user with the same username already exists!");
-            return await Task.Run(() => 
+            return await Task.Run(() =>
             {
                 // Calculate cryptographic info
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
