@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Speercs.Server.Configuration;
+using System.Collections.Generic;
 
 namespace Speercs.Server.Infrastructure.Concurrency
 {

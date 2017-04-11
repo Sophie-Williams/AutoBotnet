@@ -9,7 +9,6 @@ namespace Speercs.Server.Infrastructure.Concurrency
         private readonly AutoResetEvent _readFree = new AutoResetEvent(true);
         private readonly AutoResetEvent _writeFree = new AutoResetEvent(true);
 
-
         public void ObtainExclusiveWrite()
         {
             // Wait for exclusive read and write

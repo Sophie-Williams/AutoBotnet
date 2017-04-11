@@ -5,7 +5,7 @@ namespace Speercs.Server.Models.Requests
         public string Username { get; }
 
         public string Password { get; }
-        
+
         public string InviteKey { get; }
     }
 }

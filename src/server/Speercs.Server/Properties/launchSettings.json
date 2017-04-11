@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Speercs.Server": {
+      "commandName": "Project"
+    }
+  }
+}
