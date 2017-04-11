@@ -66,6 +66,11 @@ namespace  Speercs.Server.Services.Auth
             return await Task.Run(() => (userCollection.FindOne(x => x.Username == username)));
         }
 
+        public async Task<RegisteredUser> FindUserByIdentifierAsync(string id)
+        {
+            return await Task.Run(() => (userCollection.FindOne(x => x.Identifier == id)));
+        }
+
         public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
         {
             var ret = false;
