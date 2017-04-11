@@ -1,0 +1,7 @@
+image : microsoft/dotnet:latest
+stages:
+  - build
+build:
+ stage: build
+ script:
+  - ./script/build.sh
