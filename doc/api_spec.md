@@ -1,7 +1,7 @@
 
 # API Spec for **Speercs**
 
-REST API routes:
+REST API route descriptions:
 
 - Auth
   - Register
@@ -12,8 +12,17 @@ REST API routes:
 - Info requests
   - Request some player data from identifier
 
-Websocket API routes:
+Websocket API route descriptions:
 
+"<--" incoming
+"-->" outgoing
+
+- Map
+  - Fetch map <--
+  - Build building -->
+- Player status
+  - Creep locations <--
+  - Attack/Mine/Resources/etc. <--
 
 
 How we'll use 2-way websocket requests/events:
