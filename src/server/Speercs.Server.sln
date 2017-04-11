@@ -2,11 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Speercs.Server", "Speercs.Server\Speercs.Server.csproj", "{7F4654EE-C94E-4A78-81C9-75D2826CD5A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speercs.Server", "Speercs.Server\Speercs.Server.csproj", "{7F4654EE-C94E-4A78-81C9-75D2826CD5A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Speercs.Server.Tests", "Speercs.Server.Tests\Speercs.Server.Tests.csproj", "{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speercs.Server.Tests", "Speercs.Server.Tests\Speercs.Server.Tests.csproj", "{CDB090F7-7BBA-48FF-A177-C6A48A1AED6C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Speercs.DevTests", "Speercs.DevTests\Speercs.DevTests.csproj", "{C0757F6C-395A-4BF4-9556-DF92ECA07E2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speercs.DevTests", "Speercs.DevTests\Speercs.DevTests.csproj", "{C0757F6C-395A-4BF4-9556-DF92ECA07E2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,21 +1,25 @@
-using System;
 using Speercs.Server.Models.Room;
+using System;
 
-namespace Speercs.Server.Game.MapGen {
-
-    class MapGenerator {
-
-        public MapGenerator(){
+namespace Speercs.Server.Game.MapGen
+{
+    public class MapGenerator
+    {
+        public MapGenerator()
+        {
             rand = new Random();
         }
 
-        public Room GenerateRoom() {
+        public Room GenerateRoom()
+        {
             var room = new Room();
 
             // fill with initial randomness
-            for (var x = 0; x < Room.SIZE; x++) {
-                for (var y = 0; y < Room.SIZE; y++) {
-                    room.tiles[x, y] = rand.NextDouble()<0.5? TileType.Wall : TileType.Floor;
+            for (var x = 0; x < Room.MapEdgeSize; x++)
+            {
+                for (var y = 0; y < Room.MapEdgeSize; y++)
+                {
+                    room.Tiles[x, y] = rand.NextDouble() < 0.5 ? TileType.Wall : TileType.Floor;
                 }
             }
 
@@ -26,7 +30,5 @@ namespace Speercs.Server.Game.MapGen {
         }
 
         protected Random rand;
-
     }
-
 }
