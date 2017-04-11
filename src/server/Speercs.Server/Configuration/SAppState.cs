@@ -18,5 +18,7 @@ namespace Speercs.Server.Configuration
         public Action Persist { get; set; }
 
         public Dictionary<string, UserTeam> PlayerData { get; set; } = new Dictionary<string, UserTeam>();
+
+        public WorldMap WorldMap { get; set; } = new WorldMap();
     }
 }
