@@ -1,7 +1,11 @@
+using System.Security.Claims;
+using System.Security.Principal;
 using Nancy;
+using Nancy.Authentication.Stateless;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
 using Speercs.Server.Configuration;
+using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server
 {
@@ -19,6 +23,18 @@ namespace Speercs.Server
 
             // TODO: Load database, etc.
             ServerContext.ConnectDatabase();
+
+            // Enable stateless authentication
+            StatelessAuthentication.Enable(pipelines, new StatelessAuthenticationConfiguration(ctx =>
+            {
+                // Take API from query string
+                var apiKey = (string)ctx.Request.Query.apikey.Value;
+
+                // get user identity
+                var userManager = new UserManagerService(ServerContext);
+                var user = userManager.FindUserByApiKeyAsync(apiKey).Result;
+                return new ClaimsPrincipal(new GenericIdentity(user.Identifier));
+            }));
 
             // TODO: Set configuration
         }

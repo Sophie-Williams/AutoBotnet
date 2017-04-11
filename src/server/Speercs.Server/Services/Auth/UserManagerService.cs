@@ -20,11 +20,6 @@ namespace  Speercs.Server.Services.Auth
             userCollection = serverContext.Database.GetCollection<RegisteredUser>(RegisteredUsersKey);
         }
 
-        public Task<RegisteredUser> FindUserByUsernameAsync(string username)
-        {
-            return Task.FromResult(userCollection.FindOne(x => x.Username == username));
-        }
-
         public async Task<RegisteredUser> RegisterUserAsync(UserRegistrationRequest regRequest)
         {
             if (await FindUserByUsernameAsync(regRequest.Username) != null) throw new SecurityException("A user with the same username already exists!");
@@ -59,6 +54,21 @@ namespace  Speercs.Server.Services.Auth
                 userCollection.EnsureIndex(x => x.Username);
                 return userRecord;
             });
+        }
+
+        public async Task<RegisteredUser> FindUserByApiKeyAsync(string apikey)
+        {
+            return await Task.Run(() => (userCollection.FindOne(x => x.ApiKey == apikey)));
+        }
+
+        public async Task<RegisteredUser> FindUserByUsernameAsync(string username)
+        {
+            return await Task.Run(() => (userCollection.FindOne(x => x.Username == username)));
+        }
+
+        public async Task<RegisteredUser> FindUserByIdentifierAsync(string id)
+        {
+            return await Task.Run(() => (userCollection.FindOne(x => x.Identifier == id)));
         }
 
         public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
