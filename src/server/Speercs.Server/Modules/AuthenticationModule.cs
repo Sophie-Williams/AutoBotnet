@@ -23,7 +23,7 @@ namespace  Speercs.Server.Modules
                 userManager = new UserManagerService(ServerContext);
                 return null;
             };
-            Post("/register", args => 
+            Post("/register", async args => 
             {
                 var req = this.Bind<UserRegistrationRequest>();
                 // Valdiate username length, charset
@@ -62,12 +62,7 @@ namespace  Speercs.Server.Modules
                 var newUser = await userManager.RegisterUserAsync(req);
 
                 // Return user details
-                return Response.AsJsonNet(new RemoteAuthResponse
-                {
-                    User = newUser,
-                    ApiKey = newUser.ApiKey
-                });
-                return HttpStatusCode.Unauthorized;
+                return Response.AsJsonNet(newUser);
             });
 
             Post("/login", async args =>

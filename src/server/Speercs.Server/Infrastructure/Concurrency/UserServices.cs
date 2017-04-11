@@ -1,5 +1,3 @@
-using System.Threading;
-
 namespace Speercs.Server.Infrastructure.Concurrency
 {
     public class UserServices
