@@ -3,6 +3,7 @@ using Speercs.Server.Models;
 using System;
 using System.Collections.Generic;
 using Speercs.Server.Models.Game;
+using Speercs.Server.Models.Game.Map;
 
 namespace Speercs.Server.Configuration
 {

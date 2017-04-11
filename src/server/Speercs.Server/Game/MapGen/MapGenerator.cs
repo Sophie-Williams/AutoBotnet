@@ -1,4 +1,4 @@
-using Speercs.Server.Models.Room;
+using Speercs.Server.Models.Game.Map;
 using System;
 
 namespace Speercs.Server.Game.MapGen
