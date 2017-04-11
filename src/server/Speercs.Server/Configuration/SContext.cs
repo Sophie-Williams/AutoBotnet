@@ -14,6 +14,9 @@ namespace Speercs.Server.Configuration
         // Service table
         public UserServiceTable ServiceTable { get; }
 
+        // Persistent State
+        public SAppState AppState { get; internal set; }
+
         public SContext(SConfiguration config)
         {
             Configuration = config;

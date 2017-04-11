@@ -11,5 +11,7 @@ namespace Speercs.Server.Configuration
         SConfiguration Configuration { get; }
 
         UserServiceTable ServiceTable { get; }
+
+        SAppState AppState { get; }
     }
 }

@@ -12,7 +12,8 @@ namespace Speercs.Server
     public class Startup
     {
         private const string ConfigFileName = "speercs.json";
-        private readonly IConfigurationRoot config;
+        private const string StateStorageDatabaseFileName = "speercs_state.lidb";
+        private readonly IConfigurationRoot fileConfig;
 
         public Startup(IHostingEnvironment env)
         {
@@ -22,7 +23,7 @@ namespace Speercs.Server
                                 reloadOnChange: true)
                               .SetBasePath(env.ContentRootPath);
 
-            config = builder.Build();
+            fileConfig = builder.Build();
         }
         
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -32,7 +33,7 @@ namespace Speercs.Server
             // Adds services required for using options.
             services.AddOptions();
             // Register IConfiguration
-            services.Configure<SConfiguration>(config);
+            services.Configure<SConfiguration>(fileConfig);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,9 +49,12 @@ namespace Speercs.Server
             // create default configuration
             var serverConfig = new SConfiguration();
             // bind configuration
-            config.Bind(serverConfig);
+            fileConfig.Bind(serverConfig);
             // build context
-            var context = new SContext(serverConfig);
+            var context = SConfigurator.CreateContext(serverConfig);
+
+            // load persistent state
+            SConfigurator.LoadState(context, StateStorageDatabaseFileName);
             
             app.UseOwin(x => x.UseNancy(options =>
             {
