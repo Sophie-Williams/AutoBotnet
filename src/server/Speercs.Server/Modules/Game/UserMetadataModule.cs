@@ -1,4 +1,7 @@
+using Nancy;
 using Speercs.Server.Configuration;
+using Speercs.Server.Models.User;
+using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Game
 {
@@ -7,6 +10,13 @@ namespace Speercs.Server.Modules.Game
         public UserMetadataModule(ISContext serverContext) : base("/game/umeta", serverContext)
         {
             Get("/me", async _ => (await UserManager.FindUserByIdentifierAsync(Context.CurrentUser.Identity.Name)).Username);
+            Get("/user/{id}", async args => 
+            {
+                var user = await UserManager.FindUserByIdentifierAsync(((string)args.id));
+                if (user == null) return HttpStatusCode.NotFound;
+                var publicProfile = new PublicUser(user);
+                return Response.AsJsonNet(publicProfile);
+            });
         }
     }
 }
