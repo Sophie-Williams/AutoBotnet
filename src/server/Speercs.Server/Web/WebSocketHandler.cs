@@ -34,7 +34,6 @@ namespace Speercs.Server.Web
             while (_ws.State == WebSocketState.Open)
             {
                 var data = await ReadLineAsync();
-                
             }
         }
 
