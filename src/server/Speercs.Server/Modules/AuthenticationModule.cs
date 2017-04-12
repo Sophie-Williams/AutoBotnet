@@ -29,47 +29,56 @@ namespace Speercs.Server.Modules
                 Regex charsetRegex = new Regex(@"^[a-zA-Z0-9\.\_\-]{3,24}$");
 
                 var req = this.Bind<UserRegistrationRequest>();
-                // Valdiate username length
-                if (req.Username.Length < 2)
-                {
-                    throw new SecurityException("Username must be at least 2 characters.");
-                }
-                if (req.Username.Length > 24)
-                {
-                    throw new SecurityException("Username may not exceed 24 characters.");
-                }
 
-                // Validate username charset
-                if (charsetRegex.Matches(req.Username).Count <= 0)
+                try
                 {
-                    throw new SecurityException("Invalid character in username.");
-                }
-
-                // Validate password
-                if (req.Password.Length < 8)
-                {
-                    throw new SecurityException("Password must be at least 8 characters.");
-                }
-                if (req.Password.Length > 128)
-                {
-                    throw new SecurityException("Password may not exceed 128 characters.");
-                }
-
-                // Check invite key if enabled
-                if (!string.IsNullOrWhiteSpace(ServerContext.Configuration.InviteKey))
-                {
-                    // Validate invite key
-                    if (req.InviteKey != ServerContext.Configuration.InviteKey)
+                    // Valdiate username length
+                    if (req.Username.Length < 2)
                     {
-                        throw new SecurityException("The invite key is not recognized.");
+                        throw new SecurityException("Username must be at least 2 characters.");
                     }
+                    if (req.Username.Length > 24)
+                    {
+                        throw new SecurityException("Username may not exceed 24 characters.");
+                    }
+
+                    // Validate username charset
+                    if (charsetRegex.Matches(req.Username).Count <= 0)
+                    {
+                        throw new SecurityException("Invalid character in username.");
+                    }
+
+                    // Validate password
+                    if (req.Password.Length < 8)
+                    {
+                        throw new SecurityException("Password must be at least 8 characters.");
+                    }
+                    if (req.Password.Length > 128)
+                    {
+                        throw new SecurityException("Password may not exceed 128 characters.");
+                    }
+
+                    // Check invite key if enabled
+                    if (!string.IsNullOrWhiteSpace(ServerContext.Configuration.InviteKey))
+                    {
+                        // Validate invite key
+                        if (req.InviteKey != ServerContext.Configuration.InviteKey)
+                        {
+                            throw new SecurityException("The invite key is not recognized.");
+                        }
+                    }
+                    
+                    // Attempt to register user
+                    var newUser = await userManager.RegisterUserAsync(req);
+
+                    // Return user details
+                    return Response.AsJsonNet(newUser);
                 }
-
-                // Register user
-                var newUser = await userManager.RegisterUserAsync(req);
-
-                // Return user details
-                return Response.AsJsonNet(newUser);
+                catch (SecurityException sx)
+                {
+                    return Response.AsText(sx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
             });
 
             Post("/login", async args =>
