@@ -4,6 +4,9 @@ using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server.Modules.Game
 {
+    /// <summary>
+    /// Defines a module that is part of the **authenticated** user API.
+    /// </summary>
     public abstract class UserApiModule : SBaseModule
     {
         public UserManagerService UserManager { get; private set; }
