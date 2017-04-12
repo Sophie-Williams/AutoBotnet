@@ -47,13 +47,13 @@ namespace Speercs.Server.Web
             );
         }
 
-        public async Task EventLoop()
+        public async Task EventLoopAsync()
         {
             while (_ws.State == WebSocketState.Open)
             {
                 var rawData = await ReadLineAsync();
                 var requestBundle = JObject.Parse(rawData);
-                await HandleRequest(requestBundle)
+                await HandleRequestAsync(requestBundle)
                     .ContinueWith(async t =>
                     {
                         // send result
@@ -64,7 +64,7 @@ namespace Speercs.Server.Web
             }
         }
 
-        public async Task<JToken> HandleRequest(JObject requestBundle)
+        public async Task<JToken> HandleRequestAsync(JObject requestBundle)
         {
             // parse request
             var rcommand = ((JValue)requestBundle["request"]).ToObject<string>();
@@ -75,14 +75,14 @@ namespace Speercs.Server.Web
             return await handler?.HandleRequestAsync(id, data);
         }
 
-        public static async Task AcceptWebSocketClients(HttpContext hc, Func<Task> n)
+        public static async Task AcceptWebSocketClientsAsync(HttpContext hc, Func<Task> n)
         {
             if (!hc.WebSockets.IsWebSocketRequest)
                 return;
 
             var ws = await hc.WebSockets.AcceptWebSocketAsync();
             var h = new WebSocketHandler(ws);
-            await h.EventLoop();
+            await h.EventLoopAsync();
         }
 
         public static void Map(IApplicationBuilder app, ISContext context)
@@ -90,7 +90,7 @@ namespace Speercs.Server.Web
             // DI for websocket handlers
             realtimeCookieContainer = new RealtimeBootstrapper()
                 .ConfigureRealtimeHandlerContainer(context);
-            app.Use(WebSocketHandler.AcceptWebSocketClients);
+            app.Use(WebSocketHandler.AcceptWebSocketClientsAsync);
         }
     }
 }
