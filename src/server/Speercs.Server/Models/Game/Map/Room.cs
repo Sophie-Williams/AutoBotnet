@@ -11,7 +11,7 @@ namespace Speercs.Server.Models.Game.Map
 
     public class Room
     {
-        public const int MapEdgeSize = 128;
+        public const int MapEdgeSize = 64;
 
         public Room()
         {

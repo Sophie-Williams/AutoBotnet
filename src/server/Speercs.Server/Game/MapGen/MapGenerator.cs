@@ -10,9 +10,12 @@ namespace Speercs.Server.Game.MapGen
             rand = new Random();
         }
 
-        public Room GenerateRoom(double density)
+        public Room GenerateRoom()
         {
             var room = new Room();
+
+            // set the density
+            var density = RandomDouble(0.40, 0.50);
 
             // set exits
             room.NorthExit = RandomExit();
@@ -160,6 +163,10 @@ namespace Speercs.Server.Game.MapGen
                 }
                 return true;
             }
+        }
+
+        protected double RandomDouble(double min, double max) {
+            return rand.NextDouble()*(max-min) + min;
         }
 
         protected Random rand;
