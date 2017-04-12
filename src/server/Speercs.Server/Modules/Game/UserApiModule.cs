@@ -14,8 +14,10 @@ namespace Speercs.Server.Modules.Game
         {
             ServerContext = serverContext;
 
+            // require claims from stateless auther, defined in bootstrapper
             this.RequiresAuthentication();
 
+            // add a pre-request hook to load the user manager
             Before += ctx =>
             {
                 UserManager = new UserManagerService(ServerContext);
