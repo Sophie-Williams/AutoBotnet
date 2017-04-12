@@ -53,14 +53,21 @@ namespace Speercs.Server.Web
             {
                 var rawData = await ReadLineAsync();
                 var requestBundle = JObject.Parse(rawData);
-                await HandleRequestAsync(requestBundle)
-                    .ContinueWith(async t =>
-                    {
-                        // send result
-                        var resultBundle = (JObject)t.Result;
-                        // write result to websocket
-                        await WriteLineAsync(resultBundle.ToString(Formatting.None));
-                    });
+                try
+                {
+                    await HandleRequestAsync(requestBundle)
+                        .ContinueWith(async t =>
+                        {
+                            // send result
+                            var resultBundle = (JObject)t.Result;
+                            // write result to websocket
+                            await WriteLineAsync(resultBundle.ToString(Formatting.None));
+                        });
+                }
+                catch (NullReferenceException) // Missing parameter
+                {
+                    continue;
+                }
             }
         }
 
