@@ -4,11 +4,17 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
+using Speercs.Server.Web.Realtime;
+using Speercs.Server.Configuration;
+using Newtonsoft.Json.Linq;
+using CookieIoC;
+using System.Linq;
 
 namespace Speercs.Server.Web
 {
     public class WebSocketHandler
     {
+        private static CookieContainer realtimeCookieContainer;
         private WebSocket _ws;
         public WebSocketHandler(WebSocket websocket) 
         {
@@ -33,8 +39,27 @@ namespace Speercs.Server.Web
         {
             while (_ws.State == WebSocketState.Open)
             {
-                var data = await ReadLineAsync();
+                var rawData = await ReadLineAsync();
+                var requestBundle = JObject.Parse(rawData);
+                var handlerTask = HandleRequest(requestBundle)
+                    .ContinueWith(t => 
+                    {
+                        // send result
+                        var resultBundle = (JObject)t.Result;
+                        // TODO: write result to websocket
+                    });
             }
+        }
+
+        public async Task<JToken> HandleRequest(JObject requestBundle)
+        {
+            // parse request
+            var rcommand = ((JValue)requestBundle["request"]).ToObject<string>();
+            var data = (JObject)requestBundle["data"];
+            var id = ((JValue)requestBundle["id"]).ToObject<long>();
+            // get handler
+            var handler = realtimeCookieContainer.GetAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
+            return await handler?.HandleRequest(id, data);
         }
 
         public static async Task AcceptWebSocketClients(HttpContext hc, Func<Task> n)
@@ -47,8 +72,11 @@ namespace Speercs.Server.Web
             await h.EventLoop();
         }
 
-        public static void Map(IApplicationBuilder app)
+        public static void Map(IApplicationBuilder app, ISContext context)
         {
+            // DI for websocket handlers
+            realtimeCookieContainer = new RealtimeBootstrapper()
+                .ConfigureRealtimeHandlerContainer(context);
             app.Use(WebSocketHandler.AcceptWebSocketClients);
         }
     }
