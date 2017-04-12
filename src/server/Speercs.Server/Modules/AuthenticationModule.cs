@@ -26,7 +26,7 @@ namespace Speercs.Server.Modules
             };
             Post("/register", async args =>
             {
-                Regex charsetRegex = new Regex(@"^[a-zA-Z\.\_\-]{3,}$", RegexOptions.IgnoreCase);
+                Regex charsetRegex = new Regex(@"^[a-zA-Z0-9\.\_\-]{3,24}$");
 
                 var req = this.Bind<UserRegistrationRequest>();
                 // Valdiate username length
@@ -35,10 +35,10 @@ namespace Speercs.Server.Modules
                     throw new SecurityException("Username must be at least 2 characters.");
                 }
                 // Validate username charset
-                if (charsetRegex.Matches(req.Username).Count <= 0) {
+                if (charsetRegex.Matches(req.Username).Count <= 0)
+                {
                     throw new SecurityException("Invalid character in username.");
                 }
-
                 // Validate password
                 if (req.Password.Length < 8)
                 {
