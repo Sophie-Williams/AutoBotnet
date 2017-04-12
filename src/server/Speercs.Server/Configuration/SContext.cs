@@ -17,6 +17,9 @@ namespace Speercs.Server.Configuration
         // Persistent State
         public SAppState AppState { get; internal set; }
 
+        public static string Version = Microsoft.Extensions.PlatformAbstractions
+            .PlatformServices.Default.Application.ApplicationVersion;
+
         public SContext(SConfiguration config)
         {
             Configuration = config;
