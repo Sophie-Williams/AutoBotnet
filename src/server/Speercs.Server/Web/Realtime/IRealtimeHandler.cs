@@ -7,6 +7,6 @@ namespace Speercs.Server.Web.Realtime
     {
         string Path { get; }
 
-        Task<JToken> HandleRequest(long id, JToken data);
+        Task<JToken> HandleRequestAsync(long id, JToken data);
     }
 }

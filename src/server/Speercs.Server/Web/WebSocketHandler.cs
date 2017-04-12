@@ -59,7 +59,7 @@ namespace Speercs.Server.Web
             var id = ((JValue)requestBundle["id"]).ToObject<long>();
             // get handler
             var handler = realtimeCookieContainer.GetAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
-            return await handler?.HandleRequest(id, data);
+            return await handler?.HandleRequestAsync(id, data);
         }
 
         public static async Task AcceptWebSocketClients(HttpContext hc, Func<Task> n)

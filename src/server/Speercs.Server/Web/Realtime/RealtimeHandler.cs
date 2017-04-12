@@ -12,6 +12,6 @@ namespace Speercs.Server.Web.Realtime
             Path = path;
         }
 
-        public abstract Task<JToken> HandleRequest(long id, JToken data);
+        public abstract Task<JToken> HandleRequestAsync(long id, JToken data);
     }
 }

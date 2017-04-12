@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
@@ -11,9 +10,9 @@ namespace Speercs.Server.Web.Realtime.Handlers
         {
         }
 
-        public override async Task<JToken> HandleRequest(long id, JToken data)
+        public override Task<JToken> HandleRequestAsync(long id, JToken data)
         {
-            return new JValue("pong");
+            return Task.FromResult<JToken>(new JValue("pong"));
         }
     }
 }

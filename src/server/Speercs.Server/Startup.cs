@@ -59,7 +59,7 @@ namespace Speercs.Server
 
             // map websockets
             app.UseWebSockets();
-            app.Map("/ws", (ab) => WebSocketHandler.Map(ab));
+            app.Map("/ws", (ab) => WebSocketHandler.Map(ab, context));
 
             // set up Nancy OWIN hosting
             app.UseOwin(x => x.UseNancy(options =>
