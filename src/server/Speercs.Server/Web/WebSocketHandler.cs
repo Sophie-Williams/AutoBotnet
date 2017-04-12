@@ -24,8 +24,8 @@ namespace Speercs.Server.Web
                 var arraySeg = new ArraySegment<byte>(buf);
                 await _ws.ReceiveAsync(arraySeg, CancellationToken.None);
                 var c = (char)buf[0];
-                if (c == '\n') return data;
                 data += c;
+                if (c == '\n') return data;
             }
         }
 
@@ -50,7 +50,6 @@ namespace Speercs.Server.Web
 
         public static void Map(IApplicationBuilder app)
         {
-            app.UseWebSockets();
             app.Use(WebSocketHandler.AcceptWebSocketClients);
         }
     }

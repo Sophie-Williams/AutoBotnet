@@ -58,6 +58,7 @@ namespace Speercs.Server
             SConfigurator.LoadState(context, StateStorageDatabaseFileName);
 
             // map websockets
+            app.UseWebSockets();
             app.Map("/ws", WebSocketHandler.Map);
 
             // set up Nancy OWIN hosting
