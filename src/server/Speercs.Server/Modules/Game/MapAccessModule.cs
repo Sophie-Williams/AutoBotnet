@@ -15,10 +15,8 @@ namespace Speercs.Server.Modules.Game
             Get("/", async _ => (await UserManager.FindUserByIdentifierAsync(Context.CurrentUser.Identity.Name)).Username);
             Get("/room", _ =>
             {
-                int x;
-                int y;
-                if (!int.TryParse(Request.Query['x'], out x)) return HttpStatusCode.BadRequest;
-                if (!int.TryParse(Request.Query['y'], out y)) return HttpStatusCode.BadRequest;
+                if (!int.TryParse(((string)Request.Query.x), out int x)) return HttpStatusCode.BadRequest;
+                if (!int.TryParse(((string)Request.Query.y), out int y)) return HttpStatusCode.BadRequest;
                 var room = ServerContext.AppState.WorldMap[x, y];
                 if (room == null) return HttpStatusCode.NotFound;
                 return Response.AsJsonNet(room);

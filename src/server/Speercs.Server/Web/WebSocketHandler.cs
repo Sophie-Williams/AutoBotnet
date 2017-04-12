@@ -16,7 +16,7 @@ namespace Speercs.Server.Web
 {
     public class WebSocketHandler
     {
-        private static CookieContainer realtimeCookieContainer;
+        private static CookieJar realtimeCookieJar;
         private WebSocket _ws;
         public WebSocketHandler(WebSocket websocket) 
         {
@@ -78,7 +78,7 @@ namespace Speercs.Server.Web
             var data = (JObject)requestBundle["data"];
             var id = ((JValue)requestBundle["id"]).ToObject<long>();
             // get handler
-            var handler = realtimeCookieContainer.GetAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
+            var handler = realtimeCookieJar.GetAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
             return await handler?.HandleRequestAsync(id, data);
         }
 
@@ -95,7 +95,7 @@ namespace Speercs.Server.Web
         public static void Map(IApplicationBuilder app, ISContext context)
         {
             // DI for websocket handlers
-            realtimeCookieContainer = new RealtimeBootstrapper()
+            realtimeCookieJar = new RealtimeBootstrapper()
                 .ConfigureRealtimeHandlerContainer(context);
             app.Use(WebSocketHandler.AcceptWebSocketClientsAsync);
         }

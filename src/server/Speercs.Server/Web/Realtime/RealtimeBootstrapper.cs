@@ -6,9 +6,9 @@ namespace Speercs.Server.Web.Realtime
 {
     public class RealtimeBootstrapper
     {
-        public CookieContainer ConfigureRealtimeHandlerContainer(ISContext context)
+        public CookieJar ConfigureRealtimeHandlerContainer(ISContext context)
         {
-            var container = new CookieContainer();
+            var container = new CookieJar();
             container.Register<IRealtimeHandler>(new PingRealtimeHandler(context));
             return container;
         }
