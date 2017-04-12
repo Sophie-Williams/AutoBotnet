@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 
 namespace Speercs.Server.Models.Game.Map
 {
@@ -11,6 +12,7 @@ namespace Speercs.Server.Models.Game.Map
 
     public class Room
     {
+        [JsonIgnore]
         public const int MapEdgeSize = 64;
         
         public Room()
@@ -48,6 +50,7 @@ namespace Speercs.Server.Models.Game.Map
             }
         }
 
+        [JsonProperty("tiles")]
         public TileType[,] Tiles { get; }
     }
 }
