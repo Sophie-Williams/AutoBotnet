@@ -4,6 +4,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game.Map;
 using Speercs.Server.Models.Requests;
 using Speercs.Server.Game.MapGen;
+using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Game
 {
@@ -12,23 +13,23 @@ namespace Speercs.Server.Modules.Game
         public MapAccessModule(ISContext serverContext) : base("/game/map", serverContext)
         {
             Get("/", async _ => (await UserManager.FindUserByIdentifierAsync(Context.CurrentUser.Identity.Name)).Username);
-            Get("/chunk", _ =>
+            Get("/room", _ =>
             {
-                int x;
-                int y;
-                if (!int.TryParse(Request.Query['x'], out x)) return HttpStatusCode.BadRequest;
-                if (!int.TryParse(Request.Query['y'], out y)) return HttpStatusCode.BadRequest;
-                return ServerContext.AppState.WorldMap.RoomDict[$"{x}:{y}"];
+                if (!int.TryParse(Request.Query['x'], out int x)) return HttpStatusCode.BadRequest;
+                if (!int.TryParse(Request.Query['y'], out int y)) return HttpStatusCode.BadRequest;
+                var room = ServerContext.AppState.WorldMap[x, y];
+                if (room == null) return HttpStatusCode.NotFound;
+                return Response.AsJsonNet(room);
             });
-            Post("/genroom", _ =>
-            {
-                MapGenerator mapGen = new MapGenerator();
-                var req = this.Bind<RoomGenerationRequest>();
-                if (ServerContext.AppState.WorldMap.RoomDict[$"{req.x}:{req.y}"] != null) return HttpStatusCode.BadRequest;
-                Room newRoom = mapGen.GenerateRoom(req.density);
-                ServerContext.AppState.WorldMap.RoomDict.Add($"{req.x}:{req.y}", newRoom);
-                return Response.AsJson(newRoom);
-            });
+            // Post("/genroom", _ =>
+            // {
+            //     MapGenerator mapGen = new MapGenerator();
+            //     var req = this.Bind<RoomGenerationRequest>();
+            //     if (ServerContext.AppState.WorldMap.RoomDict[$"{req.x}:{req.y}"] != null) return HttpStatusCode.BadRequest;
+            //     Room newRoom = mapGen.GenerateRoom(req.density);
+            //     ServerContext.AppState.WorldMap.RoomDict.Add($"{req.x}:{req.y}", newRoom);
+            //     return Response.AsJson(newRoom);
+            // });
         }
     }
 }
