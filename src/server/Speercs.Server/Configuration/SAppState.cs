@@ -3,6 +3,7 @@ using Speercs.Server.Models;
 using System;
 using System.Collections.Generic;
 using Speercs.Server.Models.Game;
+using Speercs.Server.Models.Game.Map;
 
 namespace Speercs.Server.Configuration
 {
@@ -18,5 +19,7 @@ namespace Speercs.Server.Configuration
         public Action Persist { get; set; }
 
         public Dictionary<string, UserTeam> PlayerData { get; set; } = new Dictionary<string, UserTeam>();
+
+        public WorldMap WorldMap { get; set; } = new WorldMap();
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Nancy;
 using Nancy.Owin;
 using Speercs.Server.Configuration;
+using Speercs.Server.Web;
 
 namespace Speercs.Server
 {
@@ -56,6 +57,11 @@ namespace Speercs.Server
             // load persistent state
             SConfigurator.LoadState(context, StateStorageDatabaseFileName);
 
+            // map websockets
+            app.UseWebSockets();
+            app.Map("/ws", (ab) => WebSocketHandler.Map(ab, context));
+
+            // set up Nancy OWIN hosting
             app.UseOwin(x => x.UseNancy(options =>
             {
                 options.PassThroughWhenStatusCodesAre(

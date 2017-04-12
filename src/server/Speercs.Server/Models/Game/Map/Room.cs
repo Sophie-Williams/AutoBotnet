@@ -2,7 +2,6 @@ using System;
 
 namespace Speercs.Server.Models.Game.Map
 {
-
     public enum TileType
     {
         Floor,
