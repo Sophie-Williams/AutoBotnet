@@ -12,7 +12,7 @@ namespace Speercs.Server.Models.Game.Map
     public class Room
     {
         public const int MapEdgeSize = 64;
-
+        
         public Room()
         {
             Tiles = new TileType[MapEdgeSize, MapEdgeSize];
