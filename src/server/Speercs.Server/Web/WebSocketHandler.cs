@@ -9,6 +9,8 @@ using Speercs.Server.Configuration;
 using Newtonsoft.Json.Linq;
 using CookieIoC;
 using System.Linq;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Speercs.Server.Web
 {
@@ -35,6 +37,16 @@ namespace Speercs.Server.Web
             }
         }
 
+        private async Task WriteLineAsync(string data)
+        {
+            await _ws.SendAsync(
+                new ArraySegment<byte>(Encoding.UTF8.GetBytes(data)),
+                WebSocketMessageType.Text,
+                true,
+                CancellationToken.None
+            );
+        }
+
         public async Task EventLoop()
         {
             while (_ws.State == WebSocketState.Open)
@@ -42,11 +54,12 @@ namespace Speercs.Server.Web
                 var rawData = await ReadLineAsync();
                 var requestBundle = JObject.Parse(rawData);
                 await HandleRequest(requestBundle)
-                    .ContinueWith(t =>
+                    .ContinueWith(async t =>
                     {
                         // send result
                         var resultBundle = (JObject)t.Result;
-                        // TODO: write result to websocket
+                        // write result to websocket
+                        await WriteLineAsync(resultBundle.ToString(Formatting.None));
                     });
             }
         }

@@ -6,6 +6,7 @@ using Speercs.Server.Services.Auth;
 using Speercs.Server.Utilities;
 using System;
 using System.Security;
+using System.Text.RegularExpressions;
 
 namespace Speercs.Server.Modules
 {
@@ -25,25 +26,30 @@ namespace Speercs.Server.Modules
             };
             Post("/register", async args =>
             {
+                Regex charsetRegex = new Regex(@"^[a-zA-Z0-9\.\_\-]{3,24}$");
+
                 var req = this.Bind<UserRegistrationRequest>();
-                // Valdiate username length, charset
+                // Valdiate username length
                 if (req.Username.Length < 2)
                 {
                     throw new SecurityException("Username must be at least 2 characters.");
                 }
-                // Validate phone number
+                if (req.Username.Length > 24)
+                {
+                    throw new SecurityException("Username may not exceed 24 characters.");
+                }
+
+                // Validate username charset
+                if (charsetRegex.Matches(req.Username).Count <= 0)
+                {
+                    throw new SecurityException("Invalid character in username.");
+                }
 
                 // Validate password
                 if (req.Password.Length < 8)
                 {
                     throw new SecurityException("Password must be at least 8 characters.");
                 }
-
-                if (req.Username.Length > 24)
-                {
-                    throw new SecurityException("Username may not exceed 24 characters.");
-                }
-
                 if (req.Password.Length > 128)
                 {
                     throw new SecurityException("Password may not exceed 128 characters.");
@@ -52,13 +58,14 @@ namespace Speercs.Server.Modules
                 // Check invite key if enabled
                 if (!string.IsNullOrWhiteSpace(ServerContext.Configuration.InviteKey))
                 {
+                    // Validate invite key
                     if (req.InviteKey != ServerContext.Configuration.InviteKey)
                     {
                         throw new SecurityException("The invite key is not recognized.");
                     }
                 }
 
-                // Validate registration
+                // Register user
                 var newUser = await userManager.RegisterUserAsync(req);
 
                 // Return user details
