@@ -41,8 +41,8 @@ namespace Speercs.Server.Web
             {
                 var rawData = await ReadLineAsync();
                 var requestBundle = JObject.Parse(rawData);
-                var handlerTask = HandleRequest(requestBundle)
-                    .ContinueWith(t => 
+                await HandleRequest(requestBundle)
+                    .ContinueWith(t =>
                     {
                         // send result
                         var resultBundle = (JObject)t.Result;
