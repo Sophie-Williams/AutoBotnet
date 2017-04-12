@@ -10,7 +10,7 @@ namespace Speercs.DevTests
             Console.WriteLine("Starting mapgen test");
 
             var generator = new MapGenerator();
-            var room = generator.GenerateRoom();
+            var room = generator.GenerateRoom(0.45);
             room.Print();
         }
     }

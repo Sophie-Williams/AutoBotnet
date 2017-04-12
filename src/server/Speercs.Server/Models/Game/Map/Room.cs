@@ -6,7 +6,8 @@ namespace Speercs.Server.Models.Game.Map
     public enum TileType
     {
         Floor,
-        Wall
+        Wall,
+        Bedrock
     }
 
     public class Room
@@ -26,6 +27,9 @@ namespace Speercs.Server.Models.Game.Map
                     return '.';
 
                 case TileType.Wall:
+                    return 'O';
+
+                case TileType.Bedrock:
                     return '#';
 
                 default:
