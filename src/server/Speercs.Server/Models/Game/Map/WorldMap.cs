@@ -14,6 +14,11 @@ namespace Speercs.Server.Models.Game.Map
                 if (!RoomDict.ContainsKey(roomKey)) return null;
                 return RoomDict[roomKey];
             }
+            set
+            {
+                var roomKey = $"{x}:{y}";
+                RoomDict[roomKey] = value;
+            }
         }
 
         public int RoomCount => RoomDict.Count;

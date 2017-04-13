@@ -27,7 +27,7 @@ namespace Speercs.Server.Modules.Game
                 var req = this.Bind<RoomGenerationRequest>();
                 if (ServerContext.AppState.WorldMap[req.X, req.Y] != null) return HttpStatusCode.BadRequest;
                 Room newRoom = mapGen.GenerateRoom(req.Density);
-                ServerContext.AppState.WorldMap.RoomDict.Add($"{req.X}:{req.Y}", newRoom);
+                ServerContext.AppState.WorldMap.RoomDict[x, y] = newRoom;
                 return Response.AsJson(newRoom);
             });
         }
