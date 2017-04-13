@@ -25,5 +25,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dependencies\CookieIoC\CookieIoC\CookieIoC\CookieIoC.csproj" />
+    <ProjectReference Include="..\Dependencies\Osmium.PluginEngine\src\Osmium.PluginEngine\Osmium.PluginEngine.csproj" />
   </ItemGroup>
 </Project>
