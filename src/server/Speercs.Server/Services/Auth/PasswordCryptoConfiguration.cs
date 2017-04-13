@@ -3,7 +3,9 @@ namespace Speercs.Server.Services.Auth
     public class PasswordCryptoConfiguration
     {
         public int Iterations { get; set; }
+
         public int Length { get; set; }
+
         public int SaltLength { get; set; }
 
         public static PasswordCryptoConfiguration CreateDefault()

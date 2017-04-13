@@ -1,4 +1,3 @@
-
 namespace Speercs.Server.Models.Game
 {
     /// <summary>
@@ -6,6 +5,5 @@ namespace Speercs.Server.Models.Game
     /// </summary>
     public class UserTeam
     {
-        
     }
 }

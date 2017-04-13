@@ -21,8 +21,8 @@ namespace Speercs.Server.Game.MapGen
             // set exits
             room.NorthExit = RandomExit();
             room.SouthExit = RandomExit();
-            room.EastExit  = RandomExit();
-            room.WestExit  = RandomExit();
+            room.EastExit = RandomExit();
+            room.WestExit = RandomExit();
 
             // fill with initial randomness
             InitRandomness();
@@ -43,33 +43,36 @@ namespace Speercs.Server.Game.MapGen
 
             /// helper functions ///
 
-            TileType GetTileAt(int x, int y) {
+            TileType GetTileAt(int x, int y)
+            {
                 if (x < 0) x = 0;
                 if (y < 0) y = 0;
-                if (x >= Room.MapEdgeSize) x = Room.MapEdgeSize-1;
-                if (y >= Room.MapEdgeSize) y = Room.MapEdgeSize-1;
+                if (x >= Room.MapEdgeSize) x = Room.MapEdgeSize - 1;
+                if (y >= Room.MapEdgeSize) y = Room.MapEdgeSize - 1;
                 return room.Tiles[x, y];
             }
 
-            Room.Exit RandomExit() {
+            Room.Exit RandomExit()
+            {
                 int size = rand.Next(MinExitSize, MaxExitSize);
-                int pos = rand.Next(1, Room.MapEdgeSize-size-1); // random position, not at a corner
-                return new Room.Exit(pos, pos+size-1);
+                int pos = rand.Next(1, Room.MapEdgeSize - size - 1); // random position, not at a corner
+                return new Room.Exit(pos, pos + size - 1);
             }
 
-            void InitRandomness() {
+            void InitRandomness()
+            {
                 // create base density map
                 var densityMap = new double[Room.MapEdgeSize, Room.MapEdgeSize];
                 for (var x = 0; x < Room.MapEdgeSize; x++)
                 {
                     for (var y = 0; y < Room.MapEdgeSize; y++)
                     {
-                        const double halfSize = (Room.MapEdgeSize-1)/2.0;
+                        const double halfSize = (Room.MapEdgeSize - 1) / 2.0;
                         var dx = Math.Abs(x - halfSize);
                         var dy = Math.Abs(y - halfSize);
                         var d = Math.Max(dx, dy) / halfSize;
                         densityMap[x, y] = density +
-                                           Math.Pow(d+0.01, DensityFalloffExponent)*(1-density);
+                                           Math.Pow(d + 0.01, DensityFalloffExponent) * (1 - density);
                     }
                 }
 
@@ -77,27 +80,27 @@ namespace Speercs.Server.Game.MapGen
                 for (var a = 0; a < ExitCarveDepth; a++)
                 {
                     // north exit
-                    for (var b = room.NorthExit.low; b <= room.NorthExit.high; b++)
+                    for (var b = room.NorthExit.Low; b <= room.NorthExit.High; b++)
                     {
                         densityMap[b, a] = 0;
                     }
                     // south exit
-                    for (var b = room.SouthExit.low; b <= room.SouthExit.high; b++)
+                    for (var b = room.SouthExit.Low; b <= room.SouthExit.High; b++)
                     {
-                        densityMap[b, Room.MapEdgeSize-a-1] = 0;
+                        densityMap[b, Room.MapEdgeSize - a - 1] = 0;
                     }
                     // west exit
-                    for (var b = room.WestExit.low; b <= room.WestExit.high; b++)
+                    for (var b = room.WestExit.Low; b <= room.WestExit.High; b++)
                     {
                         densityMap[a, b] = 0;
                     }
                     // east exit
-                    for (var b = room.EastExit.low; b <= room.EastExit.high; b++)
+                    for (var b = room.EastExit.Low; b <= room.EastExit.High; b++)
                     {
-                        densityMap[Room.MapEdgeSize-a-1, b] = 0;
+                        densityMap[Room.MapEdgeSize - a - 1, b] = 0;
                     }
                 }
-                
+
                 // fill map
                 for (var x = 0; x < Room.MapEdgeSize; x++)
                 {
@@ -109,7 +112,8 @@ namespace Speercs.Server.Game.MapGen
                 }
             }
 
-            void ApplyCellularAutomaton(int numGenerations) {
+            void ApplyCellularAutomaton(int numGenerations)
+            {
                 var counts = new int[Room.MapEdgeSize, Room.MapEdgeSize];
                 for (var generation = 0; generation < numGenerations; generation++)
                 {
@@ -119,14 +123,14 @@ namespace Speercs.Server.Game.MapGen
                         for (var y = 0; y < Room.MapEdgeSize; y++)
                         {
                             counts[x, y] = 0;
-                            if (GetTileAt(x-1, y) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x+1, y) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x, y-1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x, y+1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x-1, y-1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x-1, y+1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x+1, y-1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x+1, y+1) == TileType.Wall) counts[x, y]++;
+                            if (GetTileAt(x - 1, y) == TileType.Wall) counts[x, y]++;
+                            if (GetTileAt(x + 1, y) == TileType.Wall) counts[x, y]++;
+                            if (GetTileAt(x, y - 1) == TileType.Wall) counts[x, y]++;
+                            if (GetTileAt(x, y + 1) == TileType.Wall) counts[x, y]++;
+                            if (GetTileAt(x - 1, y - 1) == TileType.Wall) counts[x, y]++;
+                            if (GetTileAt(x - 1, y + 1) == TileType.Wall) counts[x, y]++;
+                            if (GetTileAt(x + 1, y - 1) == TileType.Wall) counts[x, y]++;
+                            if (GetTileAt(x + 1, y + 1) == TileType.Wall) counts[x, y]++;
                         }
                     }
 
@@ -148,15 +152,16 @@ namespace Speercs.Server.Game.MapGen
                 }
             }
 
-            bool ShouldBeBedrock(int x, int y) {
+            bool ShouldBeBedrock(int x, int y)
+            {
                 // edges are bedrock
                 if (GetTileAt(x, y) == TileType.Wall &&
-                    (x==0 || x==Room.MapEdgeSize-1 || y==0 || y==Room.MapEdgeSize-1))
+                    (x == 0 || x == Room.MapEdgeSize - 1 || y == 0 || y == Room.MapEdgeSize - 1))
                     return true;
                 // walls 2 tiles deep become bedrock
-                for (var x2 = x-BedrockDepth; x2 <= x+BedrockDepth; x2++)
+                for (var x2 = x - BedrockDepth; x2 <= x + BedrockDepth; x2++)
                 {
-                    for (var y2 = y-BedrockDepth; y2 <= y+BedrockDepth; y2++)
+                    for (var y2 = y - BedrockDepth; y2 <= y + BedrockDepth; y2++)
                     {
                         if (GetTileAt(x2, y2) == TileType.Floor)
                             return false;
@@ -166,8 +171,9 @@ namespace Speercs.Server.Game.MapGen
             }
         }
 
-        protected double RandomDouble(double min, double max) {
-            return rand.NextDouble()*(max-min) + min;
+        protected double RandomDouble(double min, double max)
+        {
+            return rand.NextDouble() * (max - min) + min;
         }
 
         protected Random rand;

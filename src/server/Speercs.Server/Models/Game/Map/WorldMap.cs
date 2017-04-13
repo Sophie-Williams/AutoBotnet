@@ -6,7 +6,7 @@ namespace Speercs.Server.Models.Game.Map
     {
         public Dictionary<string, Room> RoomDict { get; set; } = new Dictionary<string, Room>();
 
-        public Room this[int x, int y] 
+        public Room this[int x, int y]
         {
             get
             {

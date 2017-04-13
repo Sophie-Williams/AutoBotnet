@@ -1,4 +1,3 @@
-
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Game.Entities

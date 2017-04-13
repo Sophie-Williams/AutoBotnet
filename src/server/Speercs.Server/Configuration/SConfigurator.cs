@@ -1,8 +1,8 @@
 using LiteDB;
-using System.IO;
-using System.Linq;
 using Speercs.Server.Models.Game.Map;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Speercs.Server.Configuration
 {
@@ -17,7 +17,7 @@ namespace Speercs.Server.Configuration
         }
 
         public const string StateStorageKey = "state";
-        
+
         public static bool SerializationMappersRegistered { get; private set; }
 
         public static void LoadState(SContext serverContext, string stateStorageFile)

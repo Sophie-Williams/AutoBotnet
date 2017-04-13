@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Builder;
-using System.Net.WebSockets;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Threading.Tasks;
-using System.Threading;
-using Speercs.Server.Web.Realtime;
-using Speercs.Server.Configuration;
-using Newtonsoft.Json.Linq;
-using CookieIoC;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Speercs.Server.Configuration;
+using Speercs.Server.Web.Realtime;
+using System;
+using System.Linq;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Speercs.Server.Web
 {
@@ -18,7 +17,8 @@ namespace Speercs.Server.Web
     {
         private static CookieJar realtimeCookieJar;
         private WebSocket _ws;
-        public WebSocketHandler(WebSocket websocket) 
+
+        public WebSocketHandler(WebSocket websocket)
         {
             _ws = websocket;
         }

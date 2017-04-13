@@ -10,7 +10,7 @@ namespace Speercs.Server.Modules.Game
     public abstract class UserApiModule : SBaseModule
     {
         public UserManagerService UserManager { get; private set; }
-        
+
         public ISContext ServerContext { get; private set; }
 
         internal UserApiModule(string path, ISContext serverContext) : base(path)

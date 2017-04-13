@@ -1,5 +1,5 @@
-using System;
 using Newtonsoft.Json;
+using System;
 
 namespace Speercs.Server.Models.Game.Map
 {
@@ -14,7 +14,7 @@ namespace Speercs.Server.Models.Game.Map
     {
         [JsonIgnore]
         public const int MapEdgeSize = 64;
-        
+
         public Room()
         {
             Tiles = new TileType[MapEdgeSize, MapEdgeSize];
@@ -52,16 +52,19 @@ namespace Speercs.Server.Models.Game.Map
 
         [JsonProperty("tiles")]
         public TileType[,] Tiles { get; }
-        public Exit NorthExit, SouthExit, EastExit, WestExit;
 
+        public Exit NorthExit, SouthExit, EastExit, WestExit;
 
         public struct Exit
         {
-            public int low { get; }
-            public int high { get; }
-            public Exit(int l, int h) {
-                low = l;
-                high = h;
+            public int Low { get; }
+
+            public int High { get; }
+
+            public Exit(int low, int high)
+            {
+                Low = low;
+                High = high;
             }
         }
     }

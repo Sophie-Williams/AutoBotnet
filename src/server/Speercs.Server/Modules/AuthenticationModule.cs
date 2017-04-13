@@ -67,7 +67,7 @@ namespace Speercs.Server.Modules
                             throw new SecurityException("The invite key is not recognized.");
                         }
                     }
-                    
+
                     // Attempt to register user
                     var newUser = await userManager.RegisterUserAsync(req);
 
