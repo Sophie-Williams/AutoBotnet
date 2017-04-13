@@ -1,4 +1,3 @@
-
 # API Spec for **Speercs**
 
 REST API route descriptions:
@@ -14,8 +13,8 @@ REST API route descriptions:
 
 Websocket API route descriptions:
 
-"<--" incoming
-"-->" outgoing
+"<--": incoming  
+"-->": outgoing
 
 - Map
   - Fetch map <--
