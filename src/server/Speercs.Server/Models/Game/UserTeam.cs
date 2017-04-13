@@ -7,6 +7,6 @@ namespace Speercs.Server.Models.Game
     /// </summary>
     public class UserTeam
     {
-        public UserProgram Program { get; }
+        public UserProgram Program { get; set; }
     }
 }
