@@ -1,0 +1,3 @@
+[submodule "src/server/Dependencies/CookieIoC"]
+	path = src/server/Dependencies/CookieIoC
+	url = https://github.com/0xFireball/CookieIoC.git
