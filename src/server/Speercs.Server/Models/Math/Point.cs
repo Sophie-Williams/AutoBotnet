@@ -11,5 +11,7 @@ namespace Speercs.Server.Models.Math
             X = x;
             Y = y;
         }
+
+        public bool EqualTo(Point p) => (X == p.X) && (Y == p.Y);
     }
 }
