@@ -1,3 +1,6 @@
 [submodule "src/server/Dependencies/CookieIoC"]
 	path = src/server/Dependencies/CookieIoC
 	url = https://github.com/0xFireball/CookieIoC.git
+[submodule "src/server/Dependencies/Osmium.PluginEngine"]
+	path = src/server/Dependencies/Osmium.PluginEngine
+	url = https://github.com/0xFireball/Osmium.PluginEngine.git
