@@ -1,5 +1,6 @@
 using Speercs.Server.Models.Game.Map;
 using System;
+using static Speercs.Server.Game.MapGen.MapGenConstants;
 
 namespace Speercs.Server.Game.MapGen
 {
@@ -15,7 +16,7 @@ namespace Speercs.Server.Game.MapGen
             var room = new Room();
 
             // set the density
-            var density = RandomDouble(0.40, 0.50);
+            var density = RandomDouble(MinRoomDensity, MaxRoomDensity);
 
             // set exits
             room.NorthExit = RandomExit();
@@ -27,7 +28,7 @@ namespace Speercs.Server.Game.MapGen
             InitRandomness();
 
             // apply cellular automata for "caves"
-            ApplyCellularAutomaton(12);
+            ApplyCellularAutomaton(CellularAutomatonIterations);
 
             // fill in bedrock
             for (var x = 0; x < Room.MapEdgeSize; x++)
@@ -51,7 +52,7 @@ namespace Speercs.Server.Game.MapGen
             }
 
             Room.Exit RandomExit() {
-                int size = rand.Next(Room.MapEdgeSize/16, Room.MapEdgeSize/2);
+                int size = rand.Next(MinExitSize, MaxExitSize);
                 int pos = rand.Next(1, Room.MapEdgeSize-size-1); // random position, not at a corner
                 return new Room.Exit(pos, pos+size-1);
             }
@@ -67,13 +68,13 @@ namespace Speercs.Server.Game.MapGen
                         var dx = Math.Abs(x - halfSize);
                         var dy = Math.Abs(y - halfSize);
                         var d = Math.Max(dx, dy) / halfSize;
-                        densityMap[x, y] = density + Math.Pow(d+0.01, 20)*(1-density);
+                        densityMap[x, y] = density +
+                                           Math.Pow(d+0.01, DensityFalloffExponent)*(1-density);
                     }
                 }
 
                 // augment for exits
-                const int exitDepth = Room.MapEdgeSize/16;
-                for (var a = 0; a < exitDepth; a++)
+                for (var a = 0; a < ExitCarveDepth; a++)
                 {
                     // north exit
                     for (var b = room.NorthExit.low; b <= room.NorthExit.high; b++)
@@ -153,9 +154,9 @@ namespace Speercs.Server.Game.MapGen
                     (x==0 || x==Room.MapEdgeSize-1 || y==0 || y==Room.MapEdgeSize-1))
                     return true;
                 // walls 2 tiles deep become bedrock
-                for (var x2 = x-2; x2 <= x+2; x2++)
+                for (var x2 = x-BedrockDepth; x2 <= x+BedrockDepth; x2++)
                 {
-                    for (var y2 = y-2; y2 <= y+2; y2++)
+                    for (var y2 = y-BedrockDepth; y2 <= y+BedrockDepth; y2++)
                     {
                         if (GetTileAt(x2, y2) == TileType.Floor)
                             return false;
