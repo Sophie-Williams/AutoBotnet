@@ -13,10 +13,14 @@ namespace Speercs.Server.Game.MapGen
 
         public Room GenerateRoom()
         {
-            var room = new Room();
-
             // set the density
             var density = RandomDouble(MinRoomDensity, MaxRoomDensity);
+            return GenerateRoom(density);
+        }
+
+        public Room GenerateRoom(double density)
+        {
+            var room = new Room();            
 
             // set exits
             room.NorthExit = RandomExit();
@@ -41,7 +45,7 @@ namespace Speercs.Server.Game.MapGen
 
             return room;
 
-            /// helper functions ///
+            /* helper functions */
 
             TileType GetTileAt(int x, int y)
             {
