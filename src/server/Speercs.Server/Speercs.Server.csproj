@@ -7,6 +7,7 @@
     <Product>Speercs Server</Product>
     <Description>Speercs Server</Description>
     <Copyright>Copyright © 2017 The CookieEaters. All Rights Reserved.</Copyright>
+    <UserSecretsId>ebfc6db3-1aaa-42a1-8017-7771e4d8a168</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -24,7 +25,6 @@
     <PackageReference Include="Iridium.PluginCore" Version="2.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dependencies\CookieIoC\CookieIoC\CookieIoC\CookieIoC.csproj" />
     <ProjectReference Include="..\Dependencies\Osmium.PluginEngine\src\Osmium.PluginEngine\Osmium.PluginEngine.csproj" />
   </ItemGroup>
 </Project>
