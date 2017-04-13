@@ -2,6 +2,7 @@ using Nancy.Security;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Auth;
+using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Modules.Game
 {
@@ -11,6 +12,8 @@ namespace Speercs.Server.Modules.Game
     public abstract class UserApiModule : SBaseModule
     {
         public UserManagerService UserManager { get; private set; }
+
+        public PlayerPersistentDataService PlayerDataService { get; private set; }
         
         public RegisteredUser CurrentUser { get; private set; }
 
@@ -27,6 +30,7 @@ namespace Speercs.Server.Modules.Game
             Before += ctx =>
             {
                 UserManager = new UserManagerService(ServerContext);
+                PlayerDataService = new PlayerPersistentDataService(ServerContext);
                 CurrentUser = UserManager.FindUserByIdentifierAsync(Context.CurrentUser.Identity.Name).Result;
                 return null;
             };

@@ -13,14 +13,15 @@ namespace Speercs.Server.Modules.Game
         {
             Get("/get", _ => 
             {
-                var program = (serverContext.AppState.PlayerData[CurrentUser.Username]).Program;
+                var program = PlayerDataService[CurrentUser.Identifier].Program;
                 return Response.AsJsonNet(program);
             });
 
             Post("/deploy", _ => 
             {
                 var req = this.Bind<CodeDeployRequest>();
-                serverContext.AppState.PlayerData[CurrentUser.Username].Program = new UserProgram(req.Source);
+
+                PlayerDataService[CurrentUser.Identifier].Program = new UserProgram(req.Source);
                 return HttpStatusCode.OK;
             });
         }
