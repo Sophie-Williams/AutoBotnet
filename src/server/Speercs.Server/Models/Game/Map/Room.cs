@@ -40,9 +40,9 @@ namespace Speercs.Server.Models.Game.Map
 
         public void Print()
         {
-            for (var x = 0; x < MapEdgeSize; x++)
+            for (var y = 0; y < MapEdgeSize; y++)
             {
-                for (var y = 0; y < MapEdgeSize; y++)
+                for (var x = 0; x < MapEdgeSize; x++)
                 {
                     Console.Write(GetTileChar(Tiles[x, y]));
                 }
@@ -52,5 +52,17 @@ namespace Speercs.Server.Models.Game.Map
 
         [JsonProperty("tiles")]
         public TileType[,] Tiles { get; }
+        public Exit NorthExit, SouthExit, EastExit, WestExit;
+
+
+        public struct Exit
+        {
+            public int low { get; }
+            public int high { get; }
+            public Exit(int l, int h) {
+                low = l;
+                high = h;
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 using Speercs.Server.Models.Game.Map;
 using System;
+using static Speercs.Server.Game.MapGen.MapGenConstants;
 
 namespace Speercs.Server.Game.MapGen
 {
@@ -10,39 +11,26 @@ namespace Speercs.Server.Game.MapGen
             rand = new Random();
         }
 
-        public Room GenerateRoom(double density)
+        public Room GenerateRoom()
         {
             var room = new Room();
 
+            // set the density
+            var density = RandomDouble(MinRoomDensity, MaxRoomDensity);
+
+            // set exits
+            room.NorthExit = RandomExit();
+            room.SouthExit = RandomExit();
+            room.EastExit  = RandomExit();
+            room.WestExit  = RandomExit();
+
             // fill with initial randomness
-            for (var x = 0; x < Room.MapEdgeSize; x++)
-            {
-                for (var y = 0; y < Room.MapEdgeSize; y++)
-                {
-                    const double halfSize = (Room.MapEdgeSize-1)/2.0;
-                    var dx = Math.Abs(x - halfSize);
-                    var dy = Math.Abs(y - halfSize);
-                    var d = Math.Max(dx, dy) / halfSize;
-                    d = density + Math.Pow(d+0.01, 20)*(1-density);
-                    room.Tiles[x, y] = rand.NextDouble() < d ? TileType.Wall : TileType.Floor;
-                }
-            }
+            InitRandomness();
 
             // apply cellular automata for "caves"
-            ApplyCellularAutomaton(12);
+            ApplyCellularAutomaton(CellularAutomatonIterations);
 
             // fill in bedrock
-            bool ShouldBeBedrock(int x, int y) {
-                for (var x2 = x-2; x2 <= x+2; x2++)
-                {
-                    for (var y2 = y-2; y2 <= y+2; y2++)
-                    {
-                        if (GetTileAt(x2, y2) == TileType.Floor)
-                            return false;
-                    }
-                }
-                return true;
-            }
             for (var x = 0; x < Room.MapEdgeSize; x++)
             {
                 for (var y = 0; y < Room.MapEdgeSize; y++)
@@ -61,6 +49,64 @@ namespace Speercs.Server.Game.MapGen
                 if (x >= Room.MapEdgeSize) x = Room.MapEdgeSize-1;
                 if (y >= Room.MapEdgeSize) y = Room.MapEdgeSize-1;
                 return room.Tiles[x, y];
+            }
+
+            Room.Exit RandomExit() {
+                int size = rand.Next(MinExitSize, MaxExitSize);
+                int pos = rand.Next(1, Room.MapEdgeSize-size-1); // random position, not at a corner
+                return new Room.Exit(pos, pos+size-1);
+            }
+
+            void InitRandomness() {
+                // create base density map
+                var densityMap = new double[Room.MapEdgeSize, Room.MapEdgeSize];
+                for (var x = 0; x < Room.MapEdgeSize; x++)
+                {
+                    for (var y = 0; y < Room.MapEdgeSize; y++)
+                    {
+                        const double halfSize = (Room.MapEdgeSize-1)/2.0;
+                        var dx = Math.Abs(x - halfSize);
+                        var dy = Math.Abs(y - halfSize);
+                        var d = Math.Max(dx, dy) / halfSize;
+                        densityMap[x, y] = density +
+                                           Math.Pow(d+0.01, DensityFalloffExponent)*(1-density);
+                    }
+                }
+
+                // augment for exits
+                for (var a = 0; a < ExitCarveDepth; a++)
+                {
+                    // north exit
+                    for (var b = room.NorthExit.low; b <= room.NorthExit.high; b++)
+                    {
+                        densityMap[b, a] = 0;
+                    }
+                    // south exit
+                    for (var b = room.SouthExit.low; b <= room.SouthExit.high; b++)
+                    {
+                        densityMap[b, Room.MapEdgeSize-a-1] = 0;
+                    }
+                    // west exit
+                    for (var b = room.WestExit.low; b <= room.WestExit.high; b++)
+                    {
+                        densityMap[a, b] = 0;
+                    }
+                    // east exit
+                    for (var b = room.EastExit.low; b <= room.EastExit.high; b++)
+                    {
+                        densityMap[Room.MapEdgeSize-a-1, b] = 0;
+                    }
+                }
+                
+                // fill map
+                for (var x = 0; x < Room.MapEdgeSize; x++)
+                {
+                    for (var y = 0; y < Room.MapEdgeSize; y++)
+                    {
+                        var d = densityMap[x, y];
+                        room.Tiles[x, y] = rand.NextDouble() < d ? TileType.Wall : TileType.Floor;
+                    }
+                }
             }
 
             void ApplyCellularAutomaton(int numGenerations) {
@@ -101,6 +147,27 @@ namespace Speercs.Server.Game.MapGen
                     }
                 }
             }
+
+            bool ShouldBeBedrock(int x, int y) {
+                // edges are bedrock
+                if (GetTileAt(x, y) == TileType.Wall &&
+                    (x==0 || x==Room.MapEdgeSize-1 || y==0 || y==Room.MapEdgeSize-1))
+                    return true;
+                // walls 2 tiles deep become bedrock
+                for (var x2 = x-BedrockDepth; x2 <= x+BedrockDepth; x2++)
+                {
+                    for (var y2 = y-BedrockDepth; y2 <= y+BedrockDepth; y2++)
+                    {
+                        if (GetTileAt(x2, y2) == TileType.Floor)
+                            return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        protected double RandomDouble(double min, double max) {
+            return rand.NextDouble()*(max-min) + min;
         }
 
         protected Random rand;
