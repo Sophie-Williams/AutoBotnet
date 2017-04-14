@@ -1,6 +1,6 @@
 using Speercs.Server.Models.Game.Map;
 
-namespace Speercs.Server.Game.MapGen
+namespace Speercs.Server.Extensibility.MapGen
 {
     public interface IMapGenFeature
     {

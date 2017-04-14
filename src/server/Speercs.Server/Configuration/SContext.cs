@@ -1,5 +1,7 @@
 using CookieIoC;
 using LiteDB;
+using Osmium.PluginEngine;
+using Speercs.Server.Extensibility;
 using Speercs.Server.Infrastructure.Concurrency;
 
 namespace Speercs.Server.Configuration
@@ -20,6 +22,8 @@ namespace Speercs.Server.Configuration
 
         // Plugin/moddable stuff
         public CookieJar ExtensibilityContainer { get; }
+
+        public PluginLoader<ISpeercsPlugin> PluginLoader { get; }
 
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;

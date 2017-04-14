@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Nancy;
 using Nancy.Owin;
 using Speercs.Server.Configuration;
+using Speercs.Server.Game;
 using Speercs.Server.Web;
 
 namespace Speercs.Server
@@ -51,8 +52,13 @@ namespace Speercs.Server
             var serverConfig = new SConfiguration();
             // bind configuration
             fileConfig.Bind(serverConfig);
+
             // build context
             var context = SConfigurator.CreateContext(serverConfig);
+
+            // load plugins
+            // load builtin; TODO: Make some builtin plugins external, load external plugins
+            new BuiltinPluginBootstrapper(context).LoadAll();
 
             // load persistent state
             SConfigurator.LoadState(context, StateStorageDatabaseFileName);

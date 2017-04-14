@@ -1,3 +1,4 @@
+using Speercs.Server.Extensibility.MapGen;
 using Speercs.Server.Models.Game.Map;
 
 namespace Speercs.Server.Game.MapGen.Features.Resources

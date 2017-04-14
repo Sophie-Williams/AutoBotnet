@@ -2,6 +2,7 @@ using Speercs.Server.Models.Game.Map;
 using System;
 using static Speercs.Server.Game.MapGen.MapGenConstants;
 using Speercs.Server.Configuration;
+using Speercs.Server.Extensibility.MapGen;
 
 namespace Speercs.Server.Game.MapGen
 {
