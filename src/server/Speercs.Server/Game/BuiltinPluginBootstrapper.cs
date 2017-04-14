@@ -11,7 +11,14 @@ namespace Speercs.Server.Game
 
         public void LoadAll()
         {
+            // Load plugins
             ServerContext.PluginLoader.Load<DefaultFeaturesPlugin>();
+
+            // Load containers
+            foreach (var plugin in ServerContext.PluginLoader.Plugins)
+            {
+                plugin.BeforeActivation(ServerContext.ExtensibilityContainer);
+            }
         }
     }
 }

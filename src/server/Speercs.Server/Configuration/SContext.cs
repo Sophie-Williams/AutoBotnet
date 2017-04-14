@@ -33,6 +33,7 @@ namespace Speercs.Server.Configuration
             Configuration = config;
             ServiceTable = new UserServiceTable(this);
             ExtensibilityContainer = new CookieJar();
+            PluginLoader = new PluginLoader<ISpeercsPlugin>();
         }
 
         public void ConnectDatabase()
