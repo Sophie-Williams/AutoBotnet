@@ -27,11 +27,11 @@ namespace Speercs.Server.Modules.Game
             // require claims from stateless auther, defined in bootstrapper
             this.RequiresUserAuthentication();
 
-            var userIdentifier = Context.CurrentUser.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey).Value;
-
             // add a pre-request hook to load the user manager
             Before += ctx =>
             {
+                var userIdentifier = Context.CurrentUser.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey).Value;
+                
                 UserManager = new UserManagerService(ServerContext);
                 PlayerDataService = new PlayerPersistentDataService(ServerContext);
                 CurrentUser = UserManager.FindUserByIdentifierAsync(userIdentifier).Result;
