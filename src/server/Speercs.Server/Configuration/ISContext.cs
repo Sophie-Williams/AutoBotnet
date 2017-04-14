@@ -14,6 +14,6 @@ namespace Speercs.Server.Configuration
 
         SAppState AppState { get; }
 
-        CookieJar Extensibility { get; }
+        CookieJar ExtensibilityContainer { get; }
     }
 }

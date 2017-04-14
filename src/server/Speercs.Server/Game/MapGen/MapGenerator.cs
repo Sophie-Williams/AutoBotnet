@@ -10,7 +10,7 @@ namespace Speercs.Server.Game.MapGen
         public MapGenerator(ISContext sc)
         {
             rand = new Random();
-            scontext = sc;
+            ServerContext = sc;
         }
 
         public Room GenerateRoom()
@@ -46,7 +46,7 @@ namespace Speercs.Server.Game.MapGen
             }
 
             // generate map features
-            foreach (var feature in scontext.Extensibility.ResolveAll<IMapGenFeature>()) {
+            foreach (var feature in ServerContext.ExtensibilityContainer.ResolveAll<IMapGenFeature>()) {
                 feature.Generate(room, this);
             }
 
@@ -190,7 +190,7 @@ namespace Speercs.Server.Game.MapGen
         }
 
         protected Random rand;
-        protected ISContext scontext { get; }
+        protected ISContext ServerContext { get; }
         public Random Random => rand;
     }
 }

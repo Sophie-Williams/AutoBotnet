@@ -19,7 +19,7 @@ namespace Speercs.Server.Configuration
         public SAppState AppState { get; internal set; }
 
         // Plugin/moddable stuff
-        public CookieJar Extensibility { get; }
+        public CookieJar ExtensibilityContainer { get; }
 
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
@@ -28,7 +28,7 @@ namespace Speercs.Server.Configuration
         {
             Configuration = config;
             ServiceTable = new UserServiceTable(this);
-            Extensibility = new CookieJar();
+            ExtensibilityContainer = new CookieJar();
         }
 
         public void ConnectDatabase()
