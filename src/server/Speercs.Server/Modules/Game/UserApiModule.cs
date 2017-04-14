@@ -1,7 +1,8 @@
-using Nancy.Security;
+using System.Linq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Auth;
+using Speercs.Server.Services.Auth.Security;
 using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Modules.Game
@@ -24,14 +25,16 @@ namespace Speercs.Server.Modules.Game
             ServerContext = serverContext;
 
             // require claims from stateless auther, defined in bootstrapper
-            this.RequiresAuthentication();
+            this.RequiresUserAuthentication();
+
+            var userIdentifier = Context.CurrentUser.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey).Value;
 
             // add a pre-request hook to load the user manager
             Before += ctx =>
             {
                 UserManager = new UserManagerService(ServerContext);
                 PlayerDataService = new PlayerPersistentDataService(ServerContext);
-                CurrentUser = UserManager.FindUserByIdentifierAsync(Context.CurrentUser.Identity.Name).Result;
+                CurrentUser = UserManager.FindUserByIdentifierAsync(userIdentifier).Result;
                 return null;
             };
         }
