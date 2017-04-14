@@ -1,14 +1,16 @@
 using Speercs.Server.Models.Game.Map;
 using System;
 using static Speercs.Server.Game.MapGen.MapGenConstants;
+using Speercs.Server.Configuration;
 
 namespace Speercs.Server.Game.MapGen
 {
-    public class MapGenerator
+    public class MapGenerator: IMapGenerator
     {
-        public MapGenerator()
+        public MapGenerator(ISContext sc)
         {
             rand = new Random();
+            scontext = sc;
         }
 
         public Room GenerateRoom()
@@ -25,8 +27,8 @@ namespace Speercs.Server.Game.MapGen
             // set exits
             room.NorthExit = RandomExit();
             room.SouthExit = RandomExit();
-            room.EastExit = RandomExit();
-            room.WestExit = RandomExit();
+            room.EastExit  = RandomExit();
+            room.WestExit  = RandomExit();
 
             // fill with initial randomness
             InitRandomness();
@@ -41,6 +43,11 @@ namespace Speercs.Server.Game.MapGen
                 {
                     if (ShouldBeBedrock(x, y)) room.Tiles[x, y] = TileType.Bedrock;
                 }
+            }
+
+            // generate map features
+            foreach (var feature in scontext.Extensibility.ResolveAll<IMapGenFeature>()) {
+                feature.Generate(room, this);
             }
 
             return room;
@@ -58,8 +65,8 @@ namespace Speercs.Server.Game.MapGen
 
             Room.Exit RandomExit()
             {
-                int size = rand.Next(MinExitSize, MaxExitSize);
-                int pos = rand.Next(1, Room.MapEdgeSize - size - 1); // random position, not at a corner
+                int size = Random.Next(MinExitSize, MaxExitSize);
+                int pos = Random.Next(1, Room.MapEdgeSize - size - 1); // random position, not at a corner
                 return new Room.Exit(pos, pos + size - 1);
             }
 
@@ -111,7 +118,7 @@ namespace Speercs.Server.Game.MapGen
                     for (var y = 0; y < Room.MapEdgeSize; y++)
                     {
                         var d = densityMap[x, y];
-                        room.Tiles[x, y] = rand.NextDouble() < d ? TileType.Wall : TileType.Floor;
+                        room.Tiles[x, y] = Random.NextDouble() < d ? TileType.Wall : TileType.Floor;
                     }
                 }
             }
@@ -158,6 +165,8 @@ namespace Speercs.Server.Game.MapGen
 
             bool ShouldBeBedrock(int x, int y)
             {
+                // only Wall becomes Bedrock
+                if (GetTileAt(x, y) == TileType.Floor) return false;
                 // edges are bedrock
                 if (GetTileAt(x, y) == TileType.Wall &&
                     (x == 0 || x == Room.MapEdgeSize - 1 || y == 0 || y == Room.MapEdgeSize - 1))
@@ -177,9 +186,11 @@ namespace Speercs.Server.Game.MapGen
 
         protected double RandomDouble(double min, double max)
         {
-            return rand.NextDouble() * (max - min) + min;
+            return Random.NextDouble() * (max - min) + min;
         }
 
         protected Random rand;
+        protected ISContext scontext { get; }
+        public Random Random => rand;
     }
 }

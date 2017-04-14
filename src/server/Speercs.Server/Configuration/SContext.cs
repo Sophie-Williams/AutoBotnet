@@ -1,3 +1,4 @@
+using CookieIoC;
 using LiteDB;
 using Speercs.Server.Infrastructure.Concurrency;
 
@@ -17,6 +18,9 @@ namespace Speercs.Server.Configuration
         // Persistent State
         public SAppState AppState { get; internal set; }
 
+        // Plugin/moddable stuff
+        public CookieJar Extensibility { get; }
+
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
 
@@ -24,6 +28,7 @@ namespace Speercs.Server.Configuration
         {
             Configuration = config;
             ServiceTable = new UserServiceTable(this);
+            Extensibility = new CookieJar();
         }
 
         public void ConnectDatabase()

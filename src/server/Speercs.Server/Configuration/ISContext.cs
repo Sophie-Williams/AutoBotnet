@@ -1,3 +1,4 @@
+using CookieIoC;
 using LiteDB;
 using Speercs.Server.Infrastructure.Concurrency;
 
@@ -12,5 +13,7 @@ namespace Speercs.Server.Configuration
         UserServiceTable ServiceTable { get; }
 
         SAppState AppState { get; }
+
+        CookieJar Extensibility { get; }
     }
 }

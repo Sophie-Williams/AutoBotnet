@@ -24,7 +24,7 @@ namespace Speercs.Server.Modules.Game
 
             Post("/genroom", _ =>
             {
-                MapGenerator mapGen = new MapGenerator();
+                MapGenerator mapGen = new MapGenerator(ServerContext);
                 var req = this.Bind<RoomGenerationRequest>();
                 if (ServerContext.AppState.WorldMap[req.X, req.Y] != null) return HttpStatusCode.BadRequest;
                 var newRoom = mapGen.GenerateRoom(req.Density);
