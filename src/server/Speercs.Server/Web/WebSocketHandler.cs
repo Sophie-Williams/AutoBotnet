@@ -59,8 +59,12 @@ namespace Speercs.Server.Web
                     await HandleRequestAsync(requestBundle)
                         .ContinueWith(async t =>
                         {
+                            (var response, var id) = t.Result;
                             // send result
-                            var resultBundle = (JObject)t.Result;
+                            var resultBundle = new JObject(
+                                new JProperty("id", id),
+                                new JProperty("data", response)
+                            );
                             // write result to websocket
                             await WriteLineAsync(resultBundle.ToString(Formatting.None));
                         });
@@ -72,7 +76,7 @@ namespace Speercs.Server.Web
             }
         }
 
-        public async Task<JToken> HandleRequestAsync(JObject requestBundle)
+        public async Task<(JToken, long)> HandleRequestAsync(JObject requestBundle)
         {
             // parse request
             var rcommand = ((JValue)requestBundle["request"]).ToObject<string>();
@@ -80,7 +84,7 @@ namespace Speercs.Server.Web
             var id = ((JValue)requestBundle["id"]).ToObject<long>();
             // get handler
             var handler = realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
-            return await handler?.HandleRequestAsync(id, data);
+            return (await handler?.HandleRequestAsync(id, data), id);
         }
 
         public static async Task AcceptWebSocketClientsAsync(HttpContext hc, Func<Task> n)
