@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using Speercs.Server.Configuration;
 
@@ -17,8 +18,18 @@ namespace Speercs.Server.Services.Auth
         public ClaimsPrincipal ResolveIdentity(string apiKey)
         {            
             // check admin keys
-            // TODO...
-            
+            var adminKey = ServerContext.Configuration.AdminKeys.FirstOrDefault(x => x == apiKey);
+            if (adminKey != null)
+            {
+                var adminAuthClaims = new List<Claim>()
+                {
+                    new Claim(AuthTypeClaimKey, ApiAccessScope.Admin.ToString()),
+                };
+                var adminAuthIdentity = new ClaimsIdentity(adminAuthClaims);
+                var adminIdentity = new ClaimsPrincipal(adminAuthIdentity);
+                return adminIdentity;
+            }
+
             // get user identity
             var userManager = new UserManagerService(ServerContext);
             var user = userManager.FindUserByApiKeyAsync(apiKey).Result;

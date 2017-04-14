@@ -9,6 +9,8 @@ namespace Speercs.Server.Configuration
         [JsonProperty("inviteKey")]
         public string InviteKey { get; set; } = null;
 
+        public string[] AdminKeys { get; set; } = new string[0];
+
         public string BaseDirectory { get; set; }
     }
 }
