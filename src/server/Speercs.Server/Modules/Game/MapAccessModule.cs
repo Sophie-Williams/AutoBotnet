@@ -1,8 +1,5 @@
 using Nancy;
-using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
-using Speercs.Server.Game.MapGen;
-using Speercs.Server.Models.Requests;
 using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Game
