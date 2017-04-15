@@ -4,11 +4,10 @@ using Speercs.Server.Game.MapGen;
 
 namespace Speercs.Server.Modules.Admin
 {
-    public class AdminMapModule : AdminApiModule
+    public class AdminMapAccessModule : AdminApiModule
     {
-        public AdminMapModule(ISContext serverContext) : base("/map", serverContext)
+        public AdminMapAccessModule(ISContext serverContext) : base("/map", serverContext)
         {
-            Get("/", _ => HttpStatusCode.OK);
             Post("/genroom", _ =>
             {
                 MapGenerator mapGen = new MapGenerator(ServerContext);
