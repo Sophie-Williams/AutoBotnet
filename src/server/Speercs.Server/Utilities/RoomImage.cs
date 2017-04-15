@@ -56,7 +56,7 @@ namespace Speercs.Server.Utilities
                     {
                         for (var x = 0; x < Room.MapEdgeSize; x++)
                         {
-                            pixels[(64 * (i.X - worldMinX)) + x, (64 * Math.Abs(i.Y - worldMaxY)) + y] = colorDict[map[i.X, i.Y].Tiles[x, y]];
+                            pixels[(64 * (i.X - worldMinX)) + x, (64 * (i.Y - worldMinY)) + y] = colorDict[map[i.X, i.Y].Tiles[x, y]];
                         }
                     }
                 });
