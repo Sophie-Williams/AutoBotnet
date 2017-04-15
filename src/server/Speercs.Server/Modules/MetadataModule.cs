@@ -1,13 +1,16 @@
+using Nancy;
 using Speercs.Server.Configuration;
 
 namespace Speercs.Server.Modules
 {
-    public class MetadataModule : SBaseModule
+    public class MetadataModule : NancyModule
     {
-        public MetadataModule() : base("/meta")
+        public MetadataModule(ISContext serverContext) : base("/meta")
         {
-            Get("/", _ => "Speercs Server Pre-Alpha");
+            Get("/", _ => $"{serverContext.Configuration.GameName} Server Pre-Alpha");
             Get("/version", _ => SContext.Version); // automagically get version
+            Get("/motd", _ => serverContext.Configuration.GlobalMessage);
+            Get("/name", _ => serverContext.Configuration.GlobalName);
         }
     }
 }

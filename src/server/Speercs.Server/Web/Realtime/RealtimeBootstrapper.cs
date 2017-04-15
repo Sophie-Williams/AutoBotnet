@@ -1,6 +1,7 @@
 using CookieIoC;
 using Speercs.Server.Configuration;
 using Speercs.Server.Web.Realtime.Handlers;
+using Speercs.Server.Web.Realtime.Handlers.Game;
 
 namespace Speercs.Server.Web.Realtime
 {
@@ -10,6 +11,8 @@ namespace Speercs.Server.Web.Realtime
         {
             var container = new CookieJar();
             container.Register<IRealtimeHandler>(new PingRealtimeHandler(context));
+            container.Register<IRealtimeHandler>(new MapFetchRealtimeHandler(context));
+            container.Register<IRealtimeHandler>(new ApiAuthRealtimeHandler(context));
             return container;
         }
     }

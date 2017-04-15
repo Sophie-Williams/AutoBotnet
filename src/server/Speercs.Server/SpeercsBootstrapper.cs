@@ -4,8 +4,6 @@ using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Auth;
-using System.Security.Claims;
-using System.Security.Principal;
 
 namespace Speercs.Server
 {
@@ -30,12 +28,9 @@ namespace Speercs.Server
             {
                 // Take API from query string
                 var apiKey = (string)ctx.Request.Query.apikey.Value;
-
-                // get user identity
-                var userManager = new UserManagerService(ServerContext);
-                var user = userManager.FindUserByApiKeyAsync(apiKey).Result;
-                if (user == null) return null;
-                return new ClaimsPrincipal(new GenericIdentity(user.Identifier));
+                // call authenticator
+                var auther = new ApiAuthenticator(ServerContext);
+                return auther.ResolveIdentity(apiKey);
             }));
 
             // TODO: Set configuration
