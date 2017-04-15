@@ -23,7 +23,7 @@ class SpeercsApi {
     });
     this.axios.get("/game/umeta/me", { responseType: 'text' }).then((res) => {
       if (res.status != 200) return apiKeyValid = false;
-      this.username = res.data.username;
+      this.username = res.data;
     })
   }
 }
