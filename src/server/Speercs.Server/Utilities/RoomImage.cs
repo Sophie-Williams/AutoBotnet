@@ -52,11 +52,13 @@ namespace Speercs.Server.Utilities
             {
                 map.RoomPositions.ForEach((i) =>
                 {
+                    var roomX = Room.MapEdgeSize * (i.X - worldMinX);
+                    var roomY = Room.MapEdgeSize * (i.Y - worldMinY);
                     for (var y = 0; y < Room.MapEdgeSize; y++)
                     {
                         for (var x = 0; x < Room.MapEdgeSize; x++)
                         {
-                            pixels[(64 * Math.Abs(i.X - worldMaxX)) + x, (64 * Math.Abs(i.Y - worldMaxY)) + y] = colorDict[map[i.X, i.Y].Tiles[x, y]];
+                            pixels[roomX + x, roomY + y] = colorDict[map[i.X, i.Y].Tiles[x, y]];
                         }
                     }
                 });
