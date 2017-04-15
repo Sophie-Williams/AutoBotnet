@@ -16,7 +16,7 @@ namespace Speercs.Server.Models
 
         public PublicMetadata(SConfiguration configuration)
         {
-            Name = configuration.GameName;
+            Name = configuration.GlobalName;
             MOTD = configuration.GlobalMessage.Replace("{ver}", SContext.Version);
             Version = SContext.Version;
         }
