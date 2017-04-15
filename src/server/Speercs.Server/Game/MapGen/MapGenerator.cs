@@ -3,6 +3,9 @@ using System;
 using static Speercs.Server.Game.MapGen.MapGenConstants;
 using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility.MapGen;
+using System.Collections.Generic;
+using Speercs.Server.Models.Math;
+using System.Linq;
 
 namespace Speercs.Server.Game.MapGen
 {
@@ -10,7 +13,7 @@ namespace Speercs.Server.Game.MapGen
     {
         public MapGenerator(ISContext context): base(context)
         {
-            rand = new Random();
+            Random = new Random();
         }
 
         public Room GenerateRoom(int roomX, int roomY)
@@ -40,12 +43,30 @@ namespace Speercs.Server.Game.MapGen
             // apply cellular automata for "caves"
             ApplyCellularAutomaton(CellularAutomatonIterations);
 
-            // fill in bedrock
+            // fill in bedrock and create tile lists for IMapGenFeatures
             for (var x = 0; x < Room.MapEdgeSize; x++)
             {
                 for (var y = 0; y < Room.MapEdgeSize; y++)
                 {
                     if (ShouldBeBedrock(x, y)) room.Tiles[x, y] = TileType.Bedrock;
+                    if (GetTileAt(x, y) == TileType.Wall)
+                    {
+                        Walls.Add(new Point(x, y));
+                        if (IsExposed()) ExposedWalls.Add(new Point(x, y));
+                        else             UnexposedWalls.Add(new Point(x, y));
+                        
+                        bool IsExposed() {
+                            if (GetTileAt(x - 1, y) == TileType.Floor) return true;
+                            if (GetTileAt(x + 1, y) == TileType.Floor) return true;
+                            if (GetTileAt(x, y - 1) == TileType.Floor) return true;
+                            if (GetTileAt(x, y + 1) == TileType.Floor) return true;
+                            if (GetTileAt(x - 1, y - 1) == TileType.Floor) return true;
+                            if (GetTileAt(x - 1, y + 1) == TileType.Floor) return true;
+                            if (GetTileAt(x + 1, y - 1) == TileType.Floor) return true;
+                            if (GetTileAt(x + 1, y + 1) == TileType.Floor) return true;
+                            return false;
+                        }
+                    }
                 }
             }
 
@@ -53,7 +74,11 @@ namespace Speercs.Server.Game.MapGen
             foreach (var feature in ServerContext.ExtensibilityContainer.ResolveAll<IMapGenFeature>()) {
                 feature.Generate(room, this);
             }
-
+            
+            // clean up and return
+            Walls.Clear();
+            ExposedWalls.Clear();
+            UnexposedWalls.Clear();
             return room;
 
             /* helper functions */
@@ -193,7 +218,18 @@ namespace Speercs.Server.Game.MapGen
             return Random.NextDouble() * (max - min) + min;
         }
 
-        protected Random rand;
-        public Random Random => rand;
+        public Random Random { get; }
+        public ISet<Point> Walls { get; set; } = new HashSet<Point>();
+        public ISet<Point> ExposedWalls { get; set; } = new HashSet<Point>();
+        public ISet<Point> UnexposedWalls { get; set; } = new HashSet<Point>();
+        public Point RandomWall() {
+            return Walls.ElementAt(Random.Next(Walls.Count));
+        }
+        public Point RandomExposedWall() {
+            return ExposedWalls.ElementAt(Random.Next(ExposedWalls.Count));
+        }
+        public Point RandomUnexposedWall() {
+            return UnexposedWalls.ElementAt(Random.Next(UnexposedWalls.Count));
+        }
     }
 }

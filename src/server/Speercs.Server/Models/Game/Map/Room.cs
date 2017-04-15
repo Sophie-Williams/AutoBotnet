@@ -7,7 +7,8 @@ namespace Speercs.Server.Models.Game.Map
     {
         Floor,
         Wall,
-        Bedrock
+        Bedrock,
+        Ore, RareOre
     }
 
     public class Room
@@ -34,6 +35,12 @@ namespace Speercs.Server.Models.Game.Map
 
                 case TileType.Bedrock:
                     return '#';
+
+                case TileType.Ore:
+                    return '*';
+
+                case TileType.RareOre:
+                    return '+';
 
                 default:
                     return '?';
