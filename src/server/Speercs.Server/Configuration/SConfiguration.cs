@@ -15,9 +15,9 @@ namespace Speercs.Server.Configuration
 
         public string GameName { get; } = "Speercs";
 
-        public string GlobalMessage { get; set; }
+        public string GlobalMessage { get; set; } = "Speercs server v{ver}\nMessage goes here.";
 
-        public string GlobalName { get; set; }
+        public string GlobalName { get; set; } = "Speercs";
         public string[] CorsOrigins { get; set; } = new string[0];
     }
 }
