@@ -11,8 +11,9 @@ namespace Speercs.Server.Infrastructure.Push
         {
         }
 
-        // public async Task PushMessage()
-        // {
-        // }
+        public async Task PushMessage()
+        {
+            await Task.Delay(0);
+        }
     }
 }
