@@ -13,12 +13,16 @@ namespace Speercs.Server.Models
 
         [JsonProperty("version")]
         public string Version { get; set; }
+        
+        [JsonProperty("inviterequired")]
+        public bool InviteRequired { get; set; }
 
         public PublicMetadata(SConfiguration configuration)
         {
             Name = configuration.GlobalName;
             MOTD = configuration.GlobalMessage.Replace("{ver}", SContext.Version);
             Version = SContext.Version;
+            InviteRequired = !string.IsNullOrWhiteSpace(configuration.InviteKey);
         }
     }
 }
