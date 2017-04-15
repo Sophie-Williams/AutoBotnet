@@ -26,8 +26,16 @@ namespace Speercs.Server
             // Enable stateless authentication
             StatelessAuthentication.Enable(pipelines, new StatelessAuthenticationConfiguration(ctx =>
             {
-                // Take API from query string
+                // Take API key from query string
                 var apiKey = (string)ctx.Request.Query.apikey.Value;
+                if (apiKey == null) // key wasn't in query, check alternate sources
+                {
+                    var authHeader = ctx.Request.Headers.Authorization;
+                    if (!string.IsNullOrWhiteSpace(authHeader))
+                    {
+                        apiKey = authHeader;
+                    }
+                }
                 // call authenticator
                 var auther = new ApiAuthenticator(ServerContext);
                 return auther.ResolveIdentity(apiKey);
