@@ -5,6 +5,7 @@ class SpeercsApi {
     this.apiKeyValid = false;
     this.serverInfo = null;
     this.apiKey = apiKey;
+    this.program = null;
     this.axios = axios.create({
       baseURL: this.endpoint + "/a",
       params: {
@@ -12,10 +13,14 @@ class SpeercsApi {
       },
       responseType: 'json'
     });
-    this.UpdateMeta();
+    this.GetMeta();
+    if (this.apiKey) {
+      this.GetUserInfo();
+      this.GetUserCode();
+    }
   }
 
-  UpdateMeta() {
+  GetMeta() {
     return new Promise((sucess, error) => {
       axios.get(this.endpoint + "/meta").then((res) => {
         this.serverInfo = res.data;
@@ -26,7 +31,7 @@ class SpeercsApi {
     });
   }
 
-  UpdateUserInfo() {
+  GetUserInfo() {
     return new Promise((sucess, error) => {
       this.axios.get("/game/umeta/me", { responseType: 'text' }).then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.CredentialError());
@@ -38,9 +43,41 @@ class SpeercsApi {
     });
   }
 
+  GetUserCode() {
+    return new Promise((sucess, error) => {
+      this.axios.get("/game/code/get").then((res) => {
+        if (res.status != 200) return error(new SpeercsErrors.WtfError());
+        this.program = res.data.source;
+        sucess();
+      }).catch((err) => {
+        error(err);
+      });
+    });
+  }
+
+  GetRoom(x, y) {
+    return new Promise((sucess, error) => {
+      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+      this.axios.get("/game/map/room", {
+        params: {
+          x: x,
+          y: y
+        }
+      }).then((res) => {
+        if (res.status != 200) return error(new SpeercsErrors.WtfError());
+        sucess(res.data);
+      }).catch((err) => {
+        error(err);
+      })
+    });
+  }
+
   Login(username, password) {
     return new Promise((sucess, error) => {
-      this.axios.post("/auth/login", { username: username, password: password }).then((res) => {
+      this.axios.post("/auth/login", {
+        username: username,
+        password: password
+      }).then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.CredentialError());
         this.apiKey = res.data.apikey;
         this.apiKeyValid = true;
@@ -55,11 +92,16 @@ class SpeercsApi {
   Register(username, password, invitekey = false) {
     return new Promise((sucess, error) => {
       if (serverInfo.inviterequired && !invitekey) return error(new SpeercsErrors.NoInviteError());
-      this.axios.post("/auth/register").then((res) => {
+      this.axios.post("/auth/register", {
+        username: username,
+        password: password,
+        invitekey: invitekey
+      }).then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.WtfError());
         this.apiKey = res.data.apiKey;
         this.apiKeyValid = true;
         this.username = res.data.username;
+        this.GetUserCode();
         sucess();
       }).catch((err) => {
         error(err);
@@ -67,20 +109,18 @@ class SpeercsApi {
     });
   }
 
-  GetRoom(x, y) {
+  UpdateUserCode(code) {
     return new Promise((sucess, error) => {
-      if (!this.apiKey) return error(new SpeercsErrors.KeyError());
-      this.axios.get("/game/map/room", {
-        params: {
-          x: x,
-          y: y
-        }
+      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+      this.axios.post("/game/code/deploy", {
+        Source: code
       }).then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.WtfError());
-        sucess(res.data);
+        this.code = code;
+        sucess();
       }).catch((err) => {
         error(err);
-      })
+      });
     });
   }
 }
