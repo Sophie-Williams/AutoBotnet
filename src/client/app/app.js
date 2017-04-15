@@ -1,5 +1,5 @@
 class SpeercsApi {
-  constructor(endpoint, apiKey) {
+  constructor(endpoint, apiKey = null) {
     this.endpoint = endpoint;
     this.username = null;
     this.apiKeyValid = false;
@@ -25,5 +25,17 @@ class SpeercsApi {
       if (res.status != 200) return apiKeyValid = false;
       this.username = res.data;
     })
+  }
+  login(username, password) {
+    this.axios.post("/a/auth/login", {username: username, password: password}).then((res) => {
+      this.apiKey = res.data.apikey;
+      this.apiKeyValid = true;
+      this.username = res.data.username;
+    }).catch((err) => {
+      throw err;
+    })
+  }
+  register(username, password, invitekey = null) {
+
   }
 }
