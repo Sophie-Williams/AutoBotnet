@@ -18,7 +18,7 @@ namespace Speercs.Server.Configuration
         public UserServiceTable ServiceTable { get; }
 
         // Persistent State
-        public SAppState AppState { get; internal set; }
+        public SAppState AppState { get; set; }
 
         // Plugin/moddable stuff
         public CookieJar ExtensibilityContainer { get; }

@@ -13,7 +13,10 @@ namespace Speercs.DevTests
             Console.WriteLine("Initializing");
             
             var config = new SConfiguration();
-            ServerContext = new SContext(config);
+            ServerContext = new SContext(config)
+            {
+                AppState = new SAppState()
+            };
             ServerContext.ExtensibilityContainer.Register<IMapGenFeature>(new TestOre());
             
             Console.WriteLine("Starting mapgen test");
