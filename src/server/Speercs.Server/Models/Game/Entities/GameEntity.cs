@@ -14,6 +14,11 @@ namespace Speercs.Server.Models.Game.Entities
 
         private SContext serverContext;
 
+        // DELET THIS ASAP
+        public GameEntity() {
+
+        }
+
         public GameEntity(SContext context, string startingRoom)
         {
             serverContext = context;
