@@ -15,8 +15,10 @@ namespace Speercs.Server.Models.Game.Map
         [JsonIgnore]
         public const int MapEdgeSize = 64;
 
-        public Room()
+        public Room(int x, int y)
         {
+            X = x;
+            Y = y;
             Tiles = new TileType[MapEdgeSize, MapEdgeSize];
         }
 
@@ -49,6 +51,9 @@ namespace Speercs.Server.Models.Game.Map
                 Console.WriteLine();
             }
         }
+        
+        public int X { get; }
+        public int Y { get; }
 
         [JsonProperty("tiles")]
         public TileType[,] Tiles { get; }
