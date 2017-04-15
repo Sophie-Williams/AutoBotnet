@@ -10,7 +10,7 @@ namespace Speercs.Server.Web.Realtime.Handlers.Game
         {
         }
 
-        public override Task<JToken> HandleRequestAsync(long id, JToken data)
+        public override Task<JToken> HandleRequestAsync(long id, JToken data, RealtimeContext rtContext)
         {
             var dataBundle = (JObject)data;
             var x = dataBundle["x"].ToObject<int>();

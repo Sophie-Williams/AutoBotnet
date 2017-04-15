@@ -10,7 +10,7 @@ namespace Speercs.Server.Web.Realtime.Handlers
         {
         }
 
-        public override Task<JToken> HandleRequestAsync(long id, JToken data)
+        public override Task<JToken> HandleRequestAsync(long id, JToken data, RealtimeContext rtContext)
         {
             return Task.FromResult<JToken>(new JValue("pong"));
         }

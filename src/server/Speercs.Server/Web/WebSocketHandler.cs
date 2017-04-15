@@ -17,7 +17,7 @@ namespace Speercs.Server.Web
     public class WebSocketHandler : DependencyObject
     {
         private static CookieJar realtimeCookieJar;
-        
+
         private WebSocket _ws;
 
         private RealtimeContext rtContext;
@@ -62,7 +62,7 @@ namespace Speercs.Server.Web
                 var id = ((JValue)requestBundle["id"]).ToObject<long>();
                 // get handler
                 var handler = realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
-                return (await handler?.HandleRequestAsync(id, data), id);
+                return (await handler?.HandleRequestAsync(id, data, rtContext), id);
             }
 
             while (_ws.State == WebSocketState.Open)
