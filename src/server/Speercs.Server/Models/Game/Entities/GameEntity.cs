@@ -4,7 +4,7 @@ using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Game.Entities
 {
-    public abstract class GameEntity
+    public abstract class GameEntity : DependencyObject
     {
         public string RoomIdentifier { get; set; }
 
@@ -12,7 +12,10 @@ namespace Speercs.Server.Models.Game.Entities
 
         public int Size { get; set; }
 
-        public SContext ServerContext { get; set; }
+        public GameEntity(ISContext serverContext) : base(serverContext)
+        {
+            
+        }
 
         public Point Move(Point point)
         {
