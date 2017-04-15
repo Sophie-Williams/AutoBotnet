@@ -1,3 +1,5 @@
+[![build status](https://gitlab.com/CookieEaters/speercs/badges/master/build.svg)](https://gitlab.com/CookieEaters/speercs/commits/master) [![coverage 
+report](https://gitlab.com/CookieEaters/speercs/badges/master/coverage.svg)](https://gitlab.com/CookieEaters/speercs/commits/master)
 
 # speercs
 

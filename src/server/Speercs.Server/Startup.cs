@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,11 +16,17 @@ namespace Speercs.Server
     public class Startup
     {
         private const string ConfigFileName = "speercs.json";
+        private const string ExampleConfigName = "speercs.example.json";
         private const string StateStorageDatabaseFileName = "speercs_state.lidb";
         private readonly IConfigurationRoot fileConfig;
 
         public Startup(IHostingEnvironment env)
         {
+            if (!File.Exists(ConfigFileName) && File.Exists(ExampleConfigName))
+            {
+                Console.WriteLine($"{ConfigFileName} does not exist. Creating from template");
+                File.Copy(ExampleConfigName, ConfigFileName);
+            }
             var builder = new ConfigurationBuilder()
                               .AddJsonFile(ConfigFileName,
                                 optional: true,
