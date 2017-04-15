@@ -27,7 +27,7 @@ namespace Speercs.Server
                 try
                 {
                     // Create config file
-                    var confFileContent = JsonConvert.SerializeObject(new SConfiguration());
+                    var confFileContent = JsonConvert.SerializeObject(new SConfiguration(), Formatting.Indented);
                     File.WriteAllText(ConfigFileName, confFileContent);
                 }
                 catch

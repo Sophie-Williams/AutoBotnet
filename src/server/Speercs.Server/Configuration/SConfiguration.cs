@@ -9,15 +9,19 @@ namespace Speercs.Server.Configuration
         [JsonProperty("inviteKey")]
         public string InviteKey { get; set; } = null;
 
+        [JsonProperty("adminKeys")]
         public string[] AdminKeys { get; set; } = new string[0];
 
+        [JsonIgnore]
         public string BaseDirectory { get; set; }
 
+        [JsonProperty("gameName")]
         public string GameName { get; } = "Speercs";
 
+        [JsonProperty("globalMessage")]
         public string GlobalMessage { get; set; }
 
-        public string GlobalName { get; set; }
+        [JsonProperty("corsOrigins")]
         public string[] CorsOrigins { get; set; } = new string[0];
     }
 }
