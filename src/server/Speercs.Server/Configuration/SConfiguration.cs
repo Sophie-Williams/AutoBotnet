@@ -12,5 +12,11 @@ namespace Speercs.Server.Configuration
         public string[] AdminKeys { get; set; } = new string[0];
 
         public string BaseDirectory { get; set; }
+
+        public string GameName { get; } = "Speercs";
+
+        public string GlobalMessage { get; set; }
+
+        public string GlobalName { get; set; }
     }
 }
