@@ -21,5 +21,7 @@ namespace Speercs.Server.Configuration
         public Dictionary<string, UserTeam> PlayerData { get; set; } = new Dictionary<string, UserTeam>();
 
         public WorldMap WorldMap { get; set; } = new WorldMap();
+
+        public EntityBag Entities { get; set; } = new EntityBag();
     }
 }

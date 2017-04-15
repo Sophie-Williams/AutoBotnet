@@ -9,22 +9,6 @@ namespace Speercs.Server.Models.Game
     /// </summary>
     public class UserTeam
     {
-        public Dictionary<string, GameEntity> EntityData { get; set; } = new Dictionary<string, GameEntity>();
-
-        public string InsertEntity(GameEntity entity)
-        {
-            string newGuid = Guid.NewGuid().ToString();
-            this.EntityData.Add(newGuid, entity);
-            return newGuid;
-        }
-
-        public GameEntity this[string guid]
-        {
-            get
-            {
-                if (!EntityData.ContainsKey(guid)) return null;
-                return EntityData[guid];
-            }
-        }
+        
     }
 }
