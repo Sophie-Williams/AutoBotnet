@@ -12,44 +12,7 @@ namespace Speercs.Server.Models.Game.Entities
 
         public int Size { get; set; }
 
-        private SContext serverContext;
-
-        // DELET THIS ASAP
-        public GameEntity() {
-
-        }
-
-        public GameEntity(SContext context, string startingRoom)
-        {
-            serverContext = context;
-            RoomIdentifier = startingRoom;
-            Location = new Point(Room.MapEdgeSize / 2, Room.MapEdgeSize / 2);
-            Size = 1;
-        }
-
-        public GameEntity(SContext context, string startingRoom, Point startingPosition)
-        {
-            serverContext = context;
-            RoomIdentifier = startingRoom;
-            Location = startingPosition;
-            Size = 1;
-        }
-
-        public GameEntity(SContext context, string startingRoom, int size)
-        {
-            serverContext = context;
-            RoomIdentifier = startingRoom;
-            Location = new Point(Room.MapEdgeSize / 2, Room.MapEdgeSize / 2);
-            Size = size;
-        }
-
-        public GameEntity(SContext context, string startingRoom, Point startingPosition, int size)
-        {
-            serverContext = context;
-            RoomIdentifier = startingRoom;
-            Location = startingPosition;
-            Size = size;
-        }
+        public SContext ServerContext { get; set; }
 
         public Point Move(Point point)
         {
