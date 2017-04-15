@@ -6,17 +6,19 @@ namespace Speercs.Server.Models
     public class PublicMetadata
     {
         [JsonProperty("name")]
-        public string serverName { get; set; }
-        [JsonProperty("motd")]
-        public string serverMotd { get; set; }
-        [JsonProperty("version")]
-        public string serverVersion { get; set; }
+        public string Name { get; set; }
 
-        public PublicMetadata(ISContext context)
+        [JsonProperty("motd")]
+        public string MOTD { get; set; }
+
+        [JsonProperty("version")]
+        public string Version { get; set; }
+
+        public PublicMetadata(SConfiguration configuration)
         {
-            serverName = context.Configuration.GlobalName;
-            serverMotd = context.Configuration.GlobalMessage.Replace("{ver}",SContext.Version);
-            serverVersion = SContext.Version;
+            Name = configuration.GameName;
+            MOTD = configuration.GlobalMessage.Replace("{ver}", SContext.Version);
+            Version = SContext.Version;
         }
     }
 }
