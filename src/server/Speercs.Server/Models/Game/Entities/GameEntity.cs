@@ -58,7 +58,7 @@ namespace Speercs.Server.Models.Game.Entities
             }
             (int roomX, int roomY) = RoomIdentifier;
             if (ServerContext.AppState.WorldMap[roomX, roomY].Tiles[newX, newY] != TileType.Floor) return Location;
-            if (newX > Room.MapEdgeSize && ServerContext.AppState.WorldMap[roomX - 1, roomY] != null)
+            if (newX >= Room.MapEdgeSize && ServerContext.AppState.WorldMap[roomX - 1, roomY] != null)
             {
                     RoomIdentifier = (roomX - 1, roomY);
                     newX = 0;
@@ -67,6 +67,16 @@ namespace Speercs.Server.Models.Game.Entities
             {
                     RoomIdentifier = (roomX + 1, roomY);
                     newX = Room.MapEdgeSize-1;
+            }
+            if (newY >= Room.MapEdgeSize && ServerContext.AppState.WorldMap[roomX + 1, roomY] != null)
+            {
+                    RoomIdentifier = (roomX + 1, roomY);
+                    newY = 0;
+            }
+            if (newY < 0 && ServerContext.AppState.WorldMap[roomX + 1, roomY] != null)
+            {
+                    RoomIdentifier = (roomX + 1, roomY);
+                    newY = Room.MapEdgeSize-1;
             }
             Location = new Point(newX, newY);
             return Location;
