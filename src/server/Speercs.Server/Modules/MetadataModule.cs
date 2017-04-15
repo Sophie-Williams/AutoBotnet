@@ -9,7 +9,7 @@ namespace Speercs.Server.Modules
         {
             Get("/", _ => $"{serverContext.Configuration.GameName} Server Pre-Alpha");
             Get("/version", _ => SContext.Version); // automagically get version
-            Get("/motd", _ => serverContext.Configuration.GlobalMessage);
+            Get("/motd", _ => serverContext.Configuration.GlobalMessage.Replace("{ver}",SContext.Version));
             Get("/name", _ => serverContext.Configuration.GlobalName);
         }
     }

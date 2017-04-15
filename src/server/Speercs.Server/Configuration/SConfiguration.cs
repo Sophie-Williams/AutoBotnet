@@ -18,5 +18,6 @@ namespace Speercs.Server.Configuration
         public string GlobalMessage { get; set; }
 
         public string GlobalName { get; set; }
+        public string[] CorsOrigins { get; set; } = new string[0];
     }
 }

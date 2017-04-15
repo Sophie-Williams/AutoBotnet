@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nancy;
 using Nancy.Owin;
+using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game;
 using Speercs.Server.Web;
@@ -19,6 +22,19 @@ namespace Speercs.Server
 
         public Startup(IHostingEnvironment env)
         {
+            if (!File.Exists(ConfigFileName))
+            {
+                try
+                {
+                    // Create config file
+                    var confFileContent = JsonConvert.SerializeObject(new SConfiguration());
+                    File.WriteAllText(ConfigFileName, confFileContent);
+                }
+                catch
+                {
+                    Console.WriteLine($"Could not write to {ConfigFileName}");
+                }
+            }
             var builder = new ConfigurationBuilder()
                               .AddJsonFile(ConfigFileName,
                                 optional: true,

@@ -16,7 +16,7 @@ namespace Speercs.Server.Modules.Admin
         
         public ISContext ServerContext { get; private set; }
 
-        internal AdminApiModule(string path, ISContext serverContext) : base(path)
+        internal AdminApiModule(string path, ISContext serverContext) : base($"/admin{path}")
         {
             ServerContext = serverContext;
 

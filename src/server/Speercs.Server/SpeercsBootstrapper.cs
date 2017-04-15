@@ -33,6 +33,18 @@ namespace Speercs.Server
                 return auther.ResolveIdentity(apiKey);
             }));
 
+            // Enable CORS
+            pipelines.AfterRequest.AddItemToEndOfPipeline((ctx) =>
+            {
+                foreach (var origin in ServerContext.Configuration.CorsOrigins)
+                {
+                    ctx.Response.WithHeader("Access-Control-Allow-Origin", origin);
+                }
+                ctx.Response
+                    .WithHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
+                    .WithHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type");
+            });
+
             // TODO: Set configuration
         }
 
