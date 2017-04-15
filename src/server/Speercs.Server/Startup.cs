@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nancy;
 using Nancy.Owin;
+using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game;
 using Speercs.Server.Web;
@@ -16,16 +17,23 @@ namespace Speercs.Server
     public class Startup
     {
         private const string ConfigFileName = "speercs.json";
-        private const string ExampleConfigName = "speercs.example.json";
         private const string StateStorageDatabaseFileName = "speercs_state.lidb";
         private readonly IConfigurationRoot fileConfig;
 
         public Startup(IHostingEnvironment env)
         {
-            if (!File.Exists(ConfigFileName) && File.Exists(ExampleConfigName))
+            if (!File.Exists(ConfigFileName))
             {
-                Console.WriteLine($"{ConfigFileName} does not exist. Creating from template");
-                File.Copy(ExampleConfigName, ConfigFileName);
+                try
+                {
+                    // Create config file
+                    var confFileContent = JsonConvert.SerializeObject(new SConfiguration());
+                    File.WriteAllText(ConfigFileName, confFileContent);
+                }
+                catch
+                {
+                    Console.WriteLine($"Could not write to {ConfigFileName}");
+                }
             }
             var builder = new ConfigurationBuilder()
                               .AddJsonFile(ConfigFileName,
