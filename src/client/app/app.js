@@ -8,7 +8,7 @@ class SpeercsApi {
     };
     this.apiKey = apiKey;
     this.axios = axios.create({
-      baseURL: this.endpoint + "/a/",
+      baseURL: this.endpoint + "/a",
       params: {
         apikey: this.apiKey
       },
@@ -27,7 +27,7 @@ class SpeercsApi {
     })
   }
   login(username, password) {
-    this.axios.post("/a/auth/login", {username: username, password: password}).then((res) => {
+    this.axios.post("/auth/login", {username: username, password: password}).then((res) => {
       this.apiKey = res.data.apikey;
       this.apiKeyValid = true;
       this.username = res.data.username;
@@ -36,6 +36,11 @@ class SpeercsApi {
     })
   }
   register(username, password, invitekey = null) {
-
+    this.axios.post("/auth/register").then((res) => {
+      if (res.status != 200) return false;
+      this.apiKey = res.data.apiKey;
+      this.apiKeyValid = true;
+      this.username = res.data.username;
+    })
   }
 }
