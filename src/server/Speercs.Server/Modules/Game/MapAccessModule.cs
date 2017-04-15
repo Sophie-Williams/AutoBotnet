@@ -21,16 +21,6 @@ namespace Speercs.Server.Modules.Game
                 if (room == null) return HttpStatusCode.NotFound;
                 return Response.AsJsonNet(room);
             });
-
-            Post("/genroom", _ =>
-            {
-                MapGenerator mapGen = new MapGenerator(ServerContext);
-                var req = this.Bind<RoomGenerationRequest>();
-                if (ServerContext.AppState.WorldMap[req.X, req.Y] != null) return HttpStatusCode.BadRequest;
-                var newRoom = mapGen.GenerateRoom(req.Density);
-                ServerContext.AppState.WorldMap[req.X, req.Y] = newRoom;
-                return Response.AsJson(newRoom);
-            });
         }
     }
 }
