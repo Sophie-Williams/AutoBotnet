@@ -7,7 +7,7 @@ namespace Speercs.Server.Extensibility.MapGen
     {
         Random Random { get; }
 
-        Room GenerateRoom();
+        Room GenerateRoom(int roomX, int roomY);
 
         // TODO
     }

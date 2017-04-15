@@ -6,30 +6,33 @@ using Speercs.Server.Extensibility.MapGen;
 
 namespace Speercs.Server.Game.MapGen
 {
-    public class MapGenerator: IMapGenerator
+    public class MapGenerator: DependencyObject, IMapGenerator
     {
-        public MapGenerator(ISContext sc)
+        public MapGenerator(ISContext context): base(context)
         {
             rand = new Random();
-            ServerContext = sc;
         }
 
-        public Room GenerateRoom()
+        public Room GenerateRoom(int roomX, int roomY)
         {
             // set the density
             var density = RandomDouble(MinRoomDensity, MaxRoomDensity);
-            return GenerateRoom(density);
+            return GenerateRoom(roomX, roomY, density);
         }
 
-        public Room GenerateRoom(double density)
+        public Room GenerateRoom(int roomX, int roomY, double density)
         {
-            var room = new Room();            
+            var room = new Room(roomX, roomY);
 
             // set exits
-            room.NorthExit = RandomExit();
-            room.SouthExit = RandomExit();
-            room.EastExit  = RandomExit();
-            room.WestExit  = RandomExit();
+            var adjRoom = ServerContext.AppState.WorldMap[roomX, roomY-1];
+            room.NorthExit = adjRoom==null? RandomExit() : adjRoom.SouthExit;
+            adjRoom = ServerContext.AppState.WorldMap[roomX, roomY+1];
+            room.SouthExit = adjRoom==null? RandomExit() : adjRoom.NorthExit;
+            adjRoom = ServerContext.AppState.WorldMap[roomX-1, roomY];
+            room.WestExit = adjRoom==null? RandomExit() : adjRoom.EastExit;
+            adjRoom = ServerContext.AppState.WorldMap[roomX+1, roomY];
+            room.EastExit = adjRoom==null? RandomExit() : adjRoom.WestExit;
 
             // fill with initial randomness
             InitRandomness();
@@ -191,7 +194,6 @@ namespace Speercs.Server.Game.MapGen
         }
 
         protected Random rand;
-        protected ISContext ServerContext { get; }
         public Random Random => rand;
     }
 }
