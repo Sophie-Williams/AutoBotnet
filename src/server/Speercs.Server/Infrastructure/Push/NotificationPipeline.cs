@@ -8,7 +8,7 @@ namespace Speercs.Server.Infrastructure.Push
 {
     public class NotificationPipeline : DependencyObject
     {
-        protected ConcurrentDictionary<string, Pipelines<JObject, bool>> UserPipelines { get; set; }
+        protected ConcurrentDictionary<string, Pipelines<JObject, bool>> UserPipelines { get; set; } = new ConcurrentDictionary<string, Pipelines<JObject, bool>>();
 
         public NotificationPipeline(ISContext context) : base(context)
         {

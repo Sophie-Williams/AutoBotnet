@@ -34,6 +34,7 @@ namespace Speercs.Server.Configuration
         public SContext(SConfiguration config)
         {
             Configuration = config;
+            NotificationPipeline = new NotificationPipeline(this);
             ServiceTable = new UserServiceTable(this);
             ExtensibilityContainer = new CookieJar();
             PluginLoader = new PluginLoader<ISpeercsPlugin>();
