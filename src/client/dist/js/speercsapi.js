@@ -1,28 +1,38 @@
 class SpeercsApi {
-  constructor(endpoint, apiKey = null) {
+  constructor(endpoint, token = null) {
     this.endpoint = endpoint;
     this.username = null;
-    this.apiKeyValid = false;
+    this.tokenValid = false;
     this.serverInfo = null;
-    this.apiKey = apiKey;
+    this.token = token;
     this.program = null;
     this.entities = null;
     this.globalEntities = null;
+    this.wsId = new Date().getTime();
+    this.wsIds = {
+      'auth': {
+        'action':this.doAuthRequest
+      },
+      'ping': {
+        'action':this.doPingRequest
+      }
+    }
+    this.wsendpoint = endpoint.replace("http://","ws://").replace("https://","wss://")+"/ws";
     this.axios = axios.create({
       baseURL: this.endpoint + "/a",
       params: {
-        apikey: this.apiKey
+        token: this.token
       },
       responseType: 'json'
     });
-    this.GetMeta();
-    if (this.apiKey) {
-      this.GetUserInfo();
-      this.GetUserCode();
+    this.getMeta();
+    if (this.token) {
+      this.getUserInfo();
+      this.getUserCode();
     }
   }
 
-  GetMeta() {
+  getMeta() {
     return new Promise((sucess, error) => {
       axios.get(this.endpoint + "/meta").then((res) => {
         this.serverInfo = res.data;
@@ -33,7 +43,7 @@ class SpeercsApi {
     });
   }
 
-  GetUserInfo() {
+  getUserInfo() {
     return new Promise((sucess, error) => {
       this.axios.get("/game/umeta/me", { responseType: 'text' }).then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.CredentialError());
@@ -45,7 +55,7 @@ class SpeercsApi {
     });
   }
 
-  GetUserCode() {
+  getUserCode() {
     return new Promise((sucess, error) => {
       this.axios.get("/game/code/get").then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.WtfError());
@@ -57,9 +67,9 @@ class SpeercsApi {
     });
   }
 
-  GetUserEntities() {
+  getUserEntities() {
     return new Promise((sucess, error) => {
-      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+      if (!this.tokenValid) return error(new SpeercsErrors.KeyError());
       this.axios.get("/game/units").then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.WtfError());
         this.entities = res.data;
@@ -70,9 +80,9 @@ class SpeercsApi {
     });
   }
 
-  GetRoom(x, y) {
+  getRoom(x, y) {
     return new Promise((sucess, error) => {
-      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+      if (!this.tokenValid) return error(new SpeercsErrors.KeyError());
       this.axios.get("/game/map/room", {
         params: {
           x: x,
@@ -87,15 +97,15 @@ class SpeercsApi {
     });
   }
 
-  Login(username, password) {
+  login(username, password) {
     return new Promise((sucess, error) => {
       this.axios.post("/auth/login", {
         username: username,
         password: password
       }).then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.CredentialError());
-        this.apiKey = res.data.apikey;
-        this.apiKeyValid = true;
+        this.token = res.data.token;
+        this.tokenValid = true;
         this.username = res.data.username;
         sucess();
       }).catch((err) => {
@@ -104,7 +114,24 @@ class SpeercsApi {
     });
   }
 
-  Register(username, password, invitekey = false) {
+  openWS() {
+    return new Promise((sucess, error) => {
+      if (!this.tokenValid) return error(new SpeercsErrors.KeyError());
+      this.websocket = new WebSocket(this.wsendpoint);
+      this.websocket.onopen = (event) => {
+        var thisReqId = this.wsId++;
+        this.wsIds.auth[thisReqId] = [sucess, error];
+        this.websocket.send(JSON.stringify({
+          "request": "auth",
+          "data": this.token,
+          "id": authReqId
+        }));
+      }
+      this.websocket.onmessage = this.onWsRecive;
+    });
+  }
+
+  register(username, password, invitekey = false) {
     return new Promise((sucess, error) => {
       if (serverInfo.inviterequired && !invitekey) return error(new SpeercsErrors.NoInviteError());
       this.axios.post("/auth/register", {
@@ -113,8 +140,8 @@ class SpeercsApi {
         invitekey: invitekey
       }).then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.WtfError());
-        this.apiKey = res.data.apiKey;
-        this.apiKeyValid = true;
+        this.token = res.data.token;
+        this.tokenValid = true;
         this.username = res.data.username;
         this.GetUserCode();
         sucess();
@@ -124,9 +151,9 @@ class SpeercsApi {
     });
   }
 
-  UpdateUserCode(code) {
+  updateUserCode(code) {
     return new Promise((sucess, error) => {
-      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+      if (!this.tokenValid) return error(new SpeercsErrors.KeyError());
       this.axios.post("/game/code/deploy", {
         Source: code
       }).then((res) => {
@@ -138,6 +165,29 @@ class SpeercsApi {
       });
     });
   }
+
+  onWsRecive(data) {
+    data = JSON.parse(data);
+    if (!data.id) return false; // TODO: Stuff with this
+    for (key in Object.keys(wsIds)) {
+      if (data.id in wsIds[key]) {
+        wsIds[key].action(data);
+        delete wsIds[key][data.id];
+      }
+    }
+  }
+  
+  doAuthRequest(data) {
+    if (data.data != true) {
+      this.wsIds.auth[data.id][1]();
+      return;
+    }
+    this.wsIds.auth[data.id][0]();
+  }
+
+  doPingRequest(data) {
+    this.wsIds[data.id][0](data.data);
+  }
 }
 
 class SpeercsErrors {
@@ -146,7 +196,7 @@ class SpeercsErrors {
     this.name = "ErrNoInvite";
   }
   static WtfError() {
-    this.message = "No clue. Something bad happened I guess?";
+    this.message = "Your error message is in annother castle.";
     this.name = "ErrSomethingHappened";
   }
   static CredentialError() {
@@ -154,7 +204,7 @@ class SpeercsErrors {
     this.name = "ErrInvalidCredentials";
   }
   static KeyError() {
-    this.message = "API key is not set or invalid";
-    this.name = "ErrApiKey";
+    this.message = "Token is not set or invalid";
+    this.name = "ErrToken";
   }
 }
