@@ -7,6 +7,7 @@ using Speercs.Server.Utilities;
 using System;
 using System.Security;
 using System.Text.RegularExpressions;
+using Speercs.Server.Models.Game;
 
 namespace Speercs.Server.Modules
 {
@@ -70,6 +71,9 @@ namespace Speercs.Server.Modules
 
                     // Attempt to register user
                     var newUser = await userManager.RegisterUserAsync(req);
+
+                    // create team data
+                    ServerContext.AppState.PlayerData[newUser.Identifier] = new UserTeam();
 
                     // Return user details
                     return Response.AsJsonNet(newUser);
