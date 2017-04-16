@@ -1,5 +1,4 @@
 using LiteDB;
-using PenguinUpload.Services.Authentication;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests;
 using Speercs.Server.Models.User;

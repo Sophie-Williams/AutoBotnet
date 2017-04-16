@@ -2,7 +2,7 @@ using Speercs.Server.Services.Auth;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace PenguinUpload.Services.Authentication
+namespace Speercs.Server.Services.Auth
 {
     public class AuthCryptoHelper
     {
