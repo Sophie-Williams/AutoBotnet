@@ -27,18 +27,18 @@ namespace Speercs.Server
             StatelessAuthentication.Enable(pipelines, new StatelessAuthenticationConfiguration(ctx =>
             {
                 // Take API key from query string
-                var apiKey = (string)ctx.Request.Query.apikey.Value;
-                if (apiKey == null) // key wasn't in query, check alternate sources
+                var token = (string)ctx.Request.Query.token.Value;
+                if (token == null) // key wasn't in query, check alternate sources
                 {
                     var authHeader = ctx.Request.Headers.Authorization;
                     if (!string.IsNullOrWhiteSpace(authHeader))
                     {
-                        apiKey = authHeader;
+                        token = authHeader;
                     }
                 }
                 // call authenticator
                 var auther = new ApiAuthenticator(ServerContext);
-                return auther.ResolveIdentity(apiKey);
+                return auther.ResolveIdentity(token);
             }));
 
             // Enable CORS

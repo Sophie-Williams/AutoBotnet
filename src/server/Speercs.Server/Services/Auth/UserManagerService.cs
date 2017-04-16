@@ -1,5 +1,4 @@
 using LiteDB;
-using PenguinUpload.Services.Authentication;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests;
 using Speercs.Server.Models.User;
@@ -37,7 +36,7 @@ namespace Speercs.Server.Services.Auth
                 {
                     Identifier = Guid.NewGuid().ToString(),
                     Username = regRequest.Username,
-                    ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength),
+                    Token = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultTokenLength),
                     Crypto = new ItemCrypto
                     {
                         Salt = pwSalt,
@@ -52,15 +51,15 @@ namespace Speercs.Server.Services.Auth
 
                 // Index database
                 userCollection.EnsureIndex(x => x.Identifier);
-                userCollection.EnsureIndex(x => x.ApiKey);
+                userCollection.EnsureIndex(x => x.Token);
                 userCollection.EnsureIndex(x => x.Username);
                 return userRecord;
             });
         }
 
-        public async Task<RegisteredUser> FindUserByApiKeyAsync(string apikey)
+        public async Task<RegisteredUser> FindUserByTokenAsync(string token)
         {
-            return await Task.Run(() => (userCollection.FindOne(x => x.ApiKey == apikey)));
+            return await Task.Run(() => (userCollection.FindOne(x => x.Token == token)));
         }
 
         public async Task<RegisteredUser> FindUserByUsernameAsync(string username)

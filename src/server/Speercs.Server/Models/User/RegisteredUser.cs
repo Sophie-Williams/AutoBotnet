@@ -7,8 +7,8 @@ namespace Speercs.Server.Models.User
         [JsonProperty("username")]
         public string Username { get; set; }
 
-        [JsonProperty("apikey")]
-        public string ApiKey { get; set; }
+        [JsonProperty("token")]
+        public string Token { get; set; }
 
         [JsonIgnore]
         public ItemCrypto Crypto { get; set; }

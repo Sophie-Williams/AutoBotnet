@@ -2,7 +2,7 @@ using Speercs.Server.Services.Auth;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace PenguinUpload.Services.Authentication
+namespace Speercs.Server.Services.Auth
 {
     public class AuthCryptoHelper
     {
@@ -40,6 +40,6 @@ namespace PenguinUpload.Services.Authentication
             return CalculatePasswordHash(passwordBytes, salt);
         }
 
-        public const int DefaultApiKeyLength = 42;
+        public const int DefaultTokenLength = 42;
     }
 }

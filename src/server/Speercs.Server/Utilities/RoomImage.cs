@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using ImageSharp;
 using Speercs.Server.Models.Game.Map;
 
@@ -9,10 +8,6 @@ namespace Speercs.Server.Utilities
     {
         public Image drawRoom(Room room)
         {
-            Dictionary<TileType, Color> colorDict = new Dictionary<TileType, Color>();
-            colorDict.Add(TileType.Floor, Color.LightGray);
-            colorDict.Add(TileType.Wall, Color.Gray);
-            colorDict.Add(TileType.Bedrock, Color.DarkGray);
             Image image = new Image(Room.MapEdgeSize, Room.MapEdgeSize);
             using (var pixels = image.Lock())
             {
@@ -20,7 +15,7 @@ namespace Speercs.Server.Utilities
                 {
                     for (var x = 0; x < Room.MapEdgeSize; x++)
                     {
-                        pixels[x, y] = colorDict[room.Tiles[x, y]];
+                        pixels[x, y] = room.Tiles[x, y].GetColor();
                     }
                 }
             }
@@ -28,10 +23,6 @@ namespace Speercs.Server.Utilities
         }
         public Image drawMap(WorldMap map)
         {
-            Dictionary<TileType, Color> colorDict = new Dictionary<TileType, Color>();
-            colorDict.Add(TileType.Floor, Color.LightGray);
-            colorDict.Add(TileType.Wall, Color.Gray);
-            colorDict.Add(TileType.Bedrock, Color.DarkGray);
             int worldMaxX = Int32.MinValue;
             int worldMaxY = Int32.MinValue;
             int worldMinX = Int32.MaxValue;
@@ -58,7 +49,7 @@ namespace Speercs.Server.Utilities
                     {
                         for (var x = 0; x < Room.MapEdgeSize; x++)
                         {
-                            pixels[roomX + x, roomY + y] = colorDict[map[i.X, i.Y].Tiles[x, y]];
+                            pixels[roomX + x, roomY + y] = map[i.X, i.Y].Tiles[x, y].GetColor();
                         }
                     }
                 });
