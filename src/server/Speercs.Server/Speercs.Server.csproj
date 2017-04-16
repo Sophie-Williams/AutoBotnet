@@ -26,5 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dependencies\Osmium.PluginEngine\src\Osmium.PluginEngine\Osmium.PluginEngine.csproj" />
+    <ProjectReference Include="..\Dependencies\IridiumJS\IridiumJS\IridiumJS.csproj" />
   </ItemGroup>
 </Project>
