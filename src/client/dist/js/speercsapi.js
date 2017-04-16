@@ -127,10 +127,12 @@ class SpeercsApi {
       if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError());
       this.websocket = new WebSocket(this.wsendpoint);
       this.websocket.onopen = (event) => {
+        console.log("WS Open");
         this.wsIds.auth = [resolve, reject];
-        this.websocket.send(this.apiKey);
+        this.websocket.send(this.apiKey+"\n");
       }
       this.websocket.onmessage = this.onWsRecive;
+      this.websocket.onclose = () => { console.log("F") };
     });
   }
 
