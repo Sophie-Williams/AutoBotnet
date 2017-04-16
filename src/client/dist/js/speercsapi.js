@@ -6,6 +6,8 @@ class SpeercsApi {
     this.serverInfo = null;
     this.apiKey = apiKey;
     this.program = null;
+    this.entities = null;
+    this.globalEntities = null;
     this.axios = axios.create({
       baseURL: this.endpoint + "/a",
       params: {
@@ -48,6 +50,19 @@ class SpeercsApi {
       this.axios.get("/game/code/get").then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.WtfError());
         this.program = res.data.source;
+        sucess();
+      }).catch((err) => {
+        error(err);
+      });
+    });
+  }
+
+  GetUserEntities() {
+    return new Promise((sucess, error) => {
+      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+      this.axios.get("/game/units").then((res) => {
+        if (res.status != 200) return error(new SpeercsErrors.WtfError());
+        this.entities = res.data;
         sucess();
       }).catch((err) => {
         error(err);
