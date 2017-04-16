@@ -64,31 +64,50 @@ namespace Speercs.Server.Web
                 var handler = realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
                 return (await handler?.HandleRequestAsync(id, data, rtContext), rcommand, id);
             }
-
-            while (_ws.State == WebSocketState.Open)
+            var pipelineRegistered = false;
+            try
             {
-                var rawData = await ReadLineAsync();
-                var requestBundle = JObject.Parse(rawData);
-                try
+                while (_ws.State == WebSocketState.Open)
                 {
-                    await HandleRequestAsync(requestBundle)
-                        .ContinueWith(async t =>
-                        {
-                            (var response, var request, var id) = t.Result;
-                            // send result
-                            var resultBundle = new JObject(
-                                new JProperty("id", id),
-                                new JProperty("data", response),
-                                new JProperty("type", "response"),
-                                new JProperty("request", request)
-                            );
-                            // write result to websocket
-                            await WriteLineAsync(resultBundle.ToString(Formatting.None));
-                        });
+                    // require auth first
+                    var authApiKey = await ReadLineAsync();
+                    // attempt to authenticate
+                    if (!rtContext.AuthenticateWith(authApiKey)) 
+                    {
+                        await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "invalid authentication key", CancellationToken.None);
+                        break;
+                    }
+                    var rawData = await ReadLineAsync();
+                    var requestBundle = JObject.Parse(rawData);
+                    try
+                    {
+                        await HandleRequestAsync(requestBundle)
+                            .ContinueWith(async t =>
+                            {
+                                (var response, var request, var id) = t.Result;
+                                // send result
+                                var resultBundle = new JObject(
+                                    new JProperty("id", id),
+                                    new JProperty("data", response),
+                                    new JProperty("type", "response"),
+                                    new JProperty("request", request)
+                                );
+                                // write result to websocket
+                                await WriteLineAsync(resultBundle.ToString(Formatting.None));
+                            });
+                    }
+                    catch (NullReferenceException) // Missing parameter
+                    {
+                        continue;
+                    }
                 }
-                catch (NullReferenceException) // Missing parameter
+            }
+            finally
+            {
+                if (pipelineRegistered)
                 {
-                    continue;
+                    // unregister pipeline
+                    // todo...
                 }
             }
         }

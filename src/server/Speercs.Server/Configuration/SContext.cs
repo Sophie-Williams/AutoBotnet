@@ -3,6 +3,7 @@ using LiteDB;
 using Osmium.PluginEngine;
 using Speercs.Server.Extensibility;
 using Speercs.Server.Infrastructure.Concurrency;
+using Speercs.Server.Infrastructure.Push;
 
 namespace Speercs.Server.Configuration
 {
@@ -24,6 +25,8 @@ namespace Speercs.Server.Configuration
         public CookieJar ExtensibilityContainer { get; }
 
         public PluginLoader<ISpeercsPlugin> PluginLoader { get; }
+
+        public NotificationPipeline NotificationPipeline { get; }
 
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;

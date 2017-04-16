@@ -1,13 +1,13 @@
 using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
+using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Requests;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Utilities;
 using System;
 using System.Security;
 using System.Text.RegularExpressions;
-using Speercs.Server.Models.Game;
 
 namespace Speercs.Server.Modules
 {

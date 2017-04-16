@@ -3,6 +3,7 @@ using LiteDB;
 using Osmium.PluginEngine;
 using Speercs.Server.Extensibility;
 using Speercs.Server.Infrastructure.Concurrency;
+using Speercs.Server.Infrastructure.Push;
 
 namespace Speercs.Server.Configuration
 {
@@ -19,5 +20,7 @@ namespace Speercs.Server.Configuration
         CookieJar ExtensibilityContainer { get; }
 
         PluginLoader<ISpeercsPlugin> PluginLoader { get; }
+
+        NotificationPipeline NotificationPipeline { get; }
     }
 }

@@ -1,7 +1,7 @@
+using Speercs.Server.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using Speercs.Server.Configuration;
 
 namespace Speercs.Server.Services.Auth
 {
@@ -16,7 +16,7 @@ namespace Speercs.Server.Services.Auth
         }
 
         public ClaimsPrincipal ResolveIdentity(string apikey)
-        {            
+        {
             // check admin keys
             var adminKey = ServerContext.Configuration.AdminKeys.FirstOrDefault(x => x == apikey);
             if (adminKey != null)

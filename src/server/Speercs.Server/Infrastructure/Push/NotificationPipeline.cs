@@ -20,13 +20,13 @@ namespace Speercs.Server.Infrastructure.Push
                 new JProperty("data", data),
                 new JProperty("type", "push")
             );
-            foreach (var handler in GetOrCreateUserPipeline(userIdentifier).GetHandlers())
+            foreach (var handler in RetrieveUserPipeline(userIdentifier).GetHandlers())
             {
                 if (await handler.Invoke(dataBundle)) break;
             }
         }
 
-        protected Pipelines<JObject, bool> GetOrCreateUserPipeline(string userIdentifier)
+        public Pipelines<JObject, bool> RetrieveUserPipeline(string userIdentifier)
         {
             if (!UserPipelines.ContainsKey(userIdentifier)) UserPipelines.TryAdd(userIdentifier, new Pipelines<JObject, bool>());
             return UserPipelines[userIdentifier];

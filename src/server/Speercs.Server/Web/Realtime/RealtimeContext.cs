@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Auth;
+using System.Security.Claims;
 
 namespace Speercs.Server.Web.Realtime
 {
