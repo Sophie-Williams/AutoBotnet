@@ -11,6 +11,7 @@ using Speercs.Server.Game;
 using Speercs.Server.Web;
 using System;
 using System.IO;
+using System.Runtime.Loader;
 
 namespace Speercs.Server
 {
@@ -79,6 +80,9 @@ namespace Speercs.Server
             // load persistent state
             SConfigurator.LoadState(context, StateStorageDatabaseFileName);
 
+            // register SIGTERM handler
+            AssemblyLoadContext.Default.Unloading += (c) => OnUnload(c, context);
+
             // map websockets
             app.UseWebSockets();
             app.Map("/ws", (ab) => WebSocketHandler.Map(ab, context));
@@ -92,6 +96,12 @@ namespace Speercs.Server
                 );
                 options.Bootstrapper = new SpeercsBootstrapper(context);
             }));
+        }
+
+        private void OnUnload(AssemblyLoadContext alctx, ISContext sctx)
+        {
+            // persist on unload
+            sctx.AppState.Persist();
         }
     }
 }
