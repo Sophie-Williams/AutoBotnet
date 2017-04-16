@@ -1,14 +1,9 @@
 using Newtonsoft.Json;
 using System;
+using Speercs.Server.Extensibility;
 
 namespace Speercs.Server.Models.Game.Map
 {
-    public enum TileType
-    {
-        Floor,
-        Wall,
-        Bedrock
-    }
 
     public class Room
     {
@@ -19,25 +14,7 @@ namespace Speercs.Server.Models.Game.Map
         {
             X = x;
             Y = y;
-            Tiles = new TileType[MapEdgeSize, MapEdgeSize];
-        }
-
-        public static char GetTileChar(TileType t)
-        {
-            switch (t)
-            {
-                case TileType.Floor:
-                    return '.';
-
-                case TileType.Wall:
-                    return 'O';
-
-                case TileType.Bedrock:
-                    return '#';
-
-                default:
-                    return '?';
-            }
+            Tiles = new ITile[MapEdgeSize, MapEdgeSize];
         }
 
         public void Print()
@@ -46,7 +23,7 @@ namespace Speercs.Server.Models.Game.Map
             {
                 for (var x = 0; x < MapEdgeSize; x++)
                 {
-                    Console.Write(GetTileChar(Tiles[x, y]));
+                    Console.Write(Tiles[x, y].GetTileChar());
                 }
                 Console.WriteLine();
             }
@@ -56,7 +33,7 @@ namespace Speercs.Server.Models.Game.Map
         public int Y { get; }
 
         [JsonProperty("tiles")]
-        public TileType[,] Tiles { get; }
+        public ITile[,] Tiles { get; }
 
         public Exit NorthExit, SouthExit, EastExit, WestExit;
 

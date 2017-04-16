@@ -11,6 +11,7 @@ namespace Speercs.Server.Game.MapGen.Features
         {
             // Register MapGen features
             container.Register<IMapGenFeature>(new NRGResourceFeature());
+            container.Register<IMapGenFeature>(new TestOresFeature());
         }
     }
 }
