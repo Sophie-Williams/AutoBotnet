@@ -27,5 +27,11 @@ namespace Speercs.Server.Configuration
 
         [JsonProperty("corsOrigins")]
         public string[] CorsOrigins { get; set; } = new string[0];
+
+        [JsonProperty("tickRate")]
+        public int TickRate { get; set; } = 1000;
+
+        [JsonProperty("useDynamicTickRate")]
+        public bool UseDynamicTickRate { get; set; } = false;
     }
 }
