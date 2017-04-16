@@ -11,17 +11,17 @@ class SpeercsApi {
     this.wsId = new Date().getTime();
     this.wsIds = {
       'auth': {
-        'action':this.doAuthRequest
+        'action': this.doAuthRequest
       },
       'ping': {
-        'action':this.doPingRequest
+        'action': this.doPingRequest
       }
     }
-    this.wsendpoint = endpoint.replace("http://","ws://").replace("https://","wss://")+"/ws";
+    this.wsendpoint = endpoint.replace("http://", "ws://").replace("https://", "wss://") + "/ws";
     this.axios = axios.create({
       baseURL: this.endpoint + "/a",
-      headers: {Authorization: this.token},
-      responseType: 'json'
+      headers: { Authorization: this.token },
+      responseType: 'html'
     });
 
     this.getMeta();
@@ -102,6 +102,7 @@ class SpeercsApi {
         username: username,
         password: password
       }).then((res) => {
+        console.log("hi");
         if (res.status != 200) return error(new SpeercsErrors.CredentialError());
         this.token = res.data.token;
         this.tokenValid = true;
@@ -110,6 +111,14 @@ class SpeercsApi {
       }).catch((err) => {
         error(err);
       });
+    });
+  }
+
+  regenAxios() {
+    this.axios = axios.create({
+      baseURL: this.endpoint + "/a",
+      headers: { Authorization: this.token },
+      responseType: 'json'
     });
   }
 
@@ -142,6 +151,11 @@ class SpeercsApi {
         this.token = res.data.token;
         this.tokenValid = true;
         this.username = res.data.username;
+        this.axios = axios.create({
+          baseURL: this.endpoint + "/a",
+          headers: { Authorization: this.token },
+          responseType: 'json'
+        });
         this.GetUserCode();
         sucess();
       }).catch((err) => {
@@ -175,7 +189,7 @@ class SpeercsApi {
       }
     }
   }
-  
+
   doAuthRequest(data) {
     if (data.data != true) {
       this.wsIds.auth[data.id][1]();
