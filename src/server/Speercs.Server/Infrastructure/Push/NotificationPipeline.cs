@@ -5,8 +5,6 @@ namespace Speercs.Server.Infrastructure.Push
 {
     public class NotificationPipeline : DependencyObject
     {
-        
-
         public NotificationPipeline(ISContext context) : base(context)
         {
         }
