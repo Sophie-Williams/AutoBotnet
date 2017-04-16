@@ -20,11 +20,10 @@ class SpeercsApi {
     this.wsendpoint = endpoint.replace("http://","ws://").replace("https://","wss://")+"/ws";
     this.axios = axios.create({
       baseURL: this.endpoint + "/a",
-      params: {
-        token: this.token
-      },
+      headers: {Authorization: this.token},
       responseType: 'json'
     });
+
     this.getMeta();
     if (this.token) {
       this.getUserInfo();
