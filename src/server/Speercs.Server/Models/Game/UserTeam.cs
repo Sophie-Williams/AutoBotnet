@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Speercs.Server.Models.Game.Entities;
 
 namespace Speercs.Server.Models.Game
 {
@@ -9,6 +7,7 @@ namespace Speercs.Server.Models.Game
     /// </summary>
     public class UserTeam
     {
+        public List<string> ownedEntities { get; set; }
         
     }
 }

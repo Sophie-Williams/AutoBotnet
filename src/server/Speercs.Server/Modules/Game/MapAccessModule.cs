@@ -8,8 +8,6 @@ namespace Speercs.Server.Modules.Game
     {
         public MapAccessModule(ISContext serverContext) : base("/game/map", serverContext)
         {
-            Get("/", async _ => (await UserManager.FindUserByIdentifierAsync(Context.CurrentUser.Identity.Name)).Username);
-
             Get("/room", _ =>
             {
                 if (!int.TryParse(((string)Request.Query.x), out int x)) return HttpStatusCode.BadRequest;

@@ -46,6 +46,7 @@ namespace Speercs.Server.Services.Auth
                     },
                     Enabled = true,
                 };
+
                 // Add the user to the database
                 userCollection.Insert(userRecord);
 

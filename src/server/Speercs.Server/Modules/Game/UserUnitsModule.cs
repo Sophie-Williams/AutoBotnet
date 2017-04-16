@@ -7,8 +7,7 @@ namespace Speercs.Server.Modules.Game
     {
         public UserUnitsModule(ISContext serverContext) : base("/game/units", serverContext)
         {
-            // Should there be an instance of `UserTeam` for each user?
-            Get("/", _ => Response.AsJsonNet(CurrentUser.Username));
+            Get("/", _ => Response.AsJsonNet(ServerContext.AppState.Entities.GetAllByUser(ServerContext.AppState.PlayerData[Context.CurrentUser.Identity.Name])));
         }
     }
 }
