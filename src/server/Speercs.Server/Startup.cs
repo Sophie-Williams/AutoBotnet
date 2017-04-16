@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -62,11 +63,6 @@ namespace Speercs.Server
         {
             loggerFactory.AddConsole();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             // create default configuration
             var serverConfig = new SConfiguration();
             // bind configuration
@@ -88,6 +84,15 @@ namespace Speercs.Server
             // map websockets
             app.UseWebSockets();
             app.Map("/ws", (ab) => WebSocketHandler.Map(ab, context));
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true
+                });
+            }
 
             // set up Nancy OWIN hosting
             app.UseOwin(x => x.UseNancy(options =>
