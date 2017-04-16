@@ -1,6 +1,9 @@
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Auth;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Linq;
+using Speercs.Server.Models.User;
 
 namespace Speercs.Server.Web.Realtime
 {
@@ -18,6 +21,13 @@ namespace Speercs.Server.Web.Realtime
             var auther = new ApiAuthenticator(ServerContext);
             Identity = auther.ResolveIdentity(apikey);
             return Identity != null;
+        }
+
+        public async Task<RegisteredUser> GetCurrentUser()
+        {
+            var userIdentifier = Identity.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey).Value;
+            var userManager = new UserManagerService(ServerContext);
+            return await userManager.FindUserByIdentifierAsync(userIdentifier);
         }
     }
 }

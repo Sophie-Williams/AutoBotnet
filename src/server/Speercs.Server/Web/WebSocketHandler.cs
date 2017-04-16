@@ -11,6 +11,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Speercs.Server.Models.User;
 
 namespace Speercs.Server.Web
 {
@@ -65,6 +66,11 @@ namespace Speercs.Server.Web
                 return (await handler?.HandleRequestAsync(id, data, rtContext), rcommand, id);
             }
             var pipelineRegistered = false;
+            var currentUser = default(RegisteredUser);
+            var pipelineHandler = new Func<JObject, Task<bool>>(async (bundle) =>
+            {
+                return false;
+            });
             try
             {
                 while (_ws.State == WebSocketState.Open)
@@ -77,6 +83,12 @@ namespace Speercs.Server.Web
                         await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "invalid authentication key", CancellationToken.None);
                         break;
                     }
+                    currentUser = await rtContext.GetCurrentUser();
+                    // attempt to add handler
+                    ServerContext.NotificationPipeline
+                        .RetrieveUserPipeline(currentUser.Identifier)
+                        .AddItemToEnd(pipelineHandler);
+                    pipelineRegistered = true;
                     var rawData = await ReadLineAsync();
                     var requestBundle = JObject.Parse(rawData);
                     try
@@ -107,7 +119,9 @@ namespace Speercs.Server.Web
                 if (pipelineRegistered)
                 {
                     // unregister pipeline
-                    // todo...
+                    ServerContext.NotificationPipeline
+                        .RetrieveUserPipeline(currentUser.Identifier)
+                        .UnregisterHandler(pipelineHandler);
                 }
             }
         }
