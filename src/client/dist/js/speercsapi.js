@@ -8,9 +8,10 @@ class SpeercsApi {
     this.program = null;
     this.entities = null;
     this.globalEntities = null;
-    this.websocket = null;
+    this.websocket = false;
     this.wsId = new Date().getTime();
-    this.wsPushListener = ((data) => { console.log(JSON.stringify(data)) })
+    this.onclose = (() => { console.log("Connection Closed") });
+    this.wsPushListener = ((data) => { console.log(JSON.stringify(data)) });
     this.wsIds = {
       'auth': [],
       'ping': {
@@ -128,12 +129,25 @@ class SpeercsApi {
       this.websocket = new WebSocket(this.wsendpoint);
       this.websocket.parent = this;
       this.websocket.onopen = (event) => {
-        console.log("WS Open");
         this.wsIds.auth = [resolve, reject];
         this.websocket.send(this.apiKey+"\n");
       }
       this.websocket.onmessage = this.onWsRecive;
       this.websocket.onclose = () => { console.log("F") };
+    });
+  }
+
+  pingWS() {
+    return new Promise((resolve, reject) => {
+      if (!this.websocket || this.websocket.readyState != 1) return reject(SpeercsErrors.WSError());
+      this.websocket.parent = this;
+      let thisReqId = this.wsId++;
+      this.wsIds.ping[thisReqId] = [resolve,reject];
+      this.websocket.send(JSON.stringify({
+        request: "ping",
+        data: {},
+        id: thisReqId
+      })+"\n");
     });
   }
 
@@ -178,13 +192,9 @@ class SpeercsApi {
     if (data.data == "false") return this.parent.wsIds.auth[1]();
     data = JSON.parse(data.data);
     if (!data.id) { // Is `PUSH` notif, do stuff with this.
-      return this.wsPushListener(data.data);
+      return this.parent.wsPushListener(data.data);
     }
-    this.wsIds[data.request][data.id][0](data.data);
-  }
-
-  doPingRequest(data) {
-    this.wsIds[data.id][0](data.data);
+    this.parent.wsIds[data.request][data.id][0](data.data);
   }
 }
 
@@ -204,5 +214,9 @@ class SpeercsErrors {
   static KeyError() {
     this.message = "apiKey is not set or invalid";
     this.name = "ErrapiKey";
+  }
+  static WSError() {
+    this.message = "WebSocket is not initialized or connecter";
+    this.name = "ErrNoWS";
   }
 }
