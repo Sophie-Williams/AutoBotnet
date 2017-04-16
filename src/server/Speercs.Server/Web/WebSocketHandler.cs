@@ -69,6 +69,7 @@ namespace Speercs.Server.Web
             var currentUser = default(RegisteredUser);
             var pipelineHandler = new Func<JObject, Task<bool>>(async (bundle) =>
             {
+                await WriteLineAsync(bundle.ToString(Formatting.None));
                 return false;
             });
             try
