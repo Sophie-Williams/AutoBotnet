@@ -8,11 +8,11 @@ class SpeercsApi {
     this.program = null;
     this.entities = null;
     this.globalEntities = null;
+    this.websocket = null;
     this.wsId = new Date().getTime();
+    this.wsPushListener = ((data) => { console.log(JSON.stringify(data)) })
     this.wsIds = {
-      'auth': {
-        'action': this.doAuthRequest
-      },
+      'auth': [],
       'ping': {
         'action': this.doPingRequest
       }
@@ -127,13 +127,8 @@ class SpeercsApi {
       if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError());
       this.websocket = new WebSocket(this.wsendpoint);
       this.websocket.onopen = (event) => {
-        var thisReqId = this.wsId++;
-        this.wsIds.auth[thisReqId] = [resolve, reject];
-        this.websocket.send(JSON.stringify({
-          "request": "auth",
-          "data": this.apiKey,
-          "id": thisReqId
-        }));
+        this.wsIds.auth = [resolve, reject];
+        this.websocket.send(this.apiKey);
       }
       this.websocket.onmessage = this.onWsRecive;
     });
@@ -176,22 +171,14 @@ class SpeercsApi {
   }
 
   onWsRecive(data) {
+    console.log(JSON.stringify(data));
+    if (data == "true") return this.wsIds.auth();
+    if (data == "false") return this.wsIds.auth();
     data = JSON.parse(data);
-    if (!data.id) return false; // TODO: Stuff with this
-    for (key in Object.keys(wsIds)) {
-      if (data.id in wsIds[key]) {
-        wsIds[key].action(data);
-        delete wsIds[key][data.id];
-      }
+    if (!data.id) { // Is `PUSH` notif, do stuff with this.
+      return this.wsPushListener(data.data);
     }
-  }
-
-  doAuthRequest(data) {
-    if (data.data != true) {
-      this.wsIds.auth[data.id][1]();
-      return;
-    }
-    this.wsIds.auth[data.id][0]();
+    this.wsIds[data.request][data.id][0](data.data);
   }
 
   doPingRequest(data) {
