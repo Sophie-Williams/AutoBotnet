@@ -1,5 +1,6 @@
 using Speercs.Server.Configuration;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Speercs.Server.Infrastructure.Push
 {
@@ -9,9 +10,12 @@ namespace Speercs.Server.Infrastructure.Push
         {
         }
 
-        public async Task PushMessage()
+        public async Task PushMessage(JToken data)
         {
-            await Task.Delay(0);
+            var dataBundle = new JObject(
+                new JProperty("data", data),
+                new JProperty("type", "push")
+            );
         }
     }
 }

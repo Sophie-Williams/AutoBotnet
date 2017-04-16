@@ -54,7 +54,7 @@ namespace Speercs.Server.Web
 
         public async Task EventLoopAsync()
         {
-            async Task<(JToken, long)> HandleRequestAsync(JObject requestBundle)
+            async Task<(JToken, string, long)> HandleRequestAsync(JObject requestBundle)
             {
                 // parse request
                 var rcommand = ((JValue)requestBundle["request"]).ToObject<string>();
@@ -62,7 +62,7 @@ namespace Speercs.Server.Web
                 var id = ((JValue)requestBundle["id"]).ToObject<long>();
                 // get handler
                 var handler = realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
-                return (await handler?.HandleRequestAsync(id, data, rtContext), id);
+                return (await handler?.HandleRequestAsync(id, data, rtContext), rcommand, id);
             }
 
             while (_ws.State == WebSocketState.Open)
@@ -74,11 +74,13 @@ namespace Speercs.Server.Web
                     await HandleRequestAsync(requestBundle)
                         .ContinueWith(async t =>
                         {
-                            (var response, var id) = t.Result;
+                            (var response, var request, var id) = t.Result;
                             // send result
                             var resultBundle = new JObject(
                                 new JProperty("id", id),
-                                new JProperty("data", response)
+                                new JProperty("data", response),
+                                new JProperty("type", "response"),
+                                new JProperty("request", request)
                             );
                             // write result to websocket
                             await WriteLineAsync(resultBundle.ToString(Formatting.None));
