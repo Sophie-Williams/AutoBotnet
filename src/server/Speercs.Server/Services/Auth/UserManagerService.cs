@@ -36,7 +36,7 @@ namespace Speercs.Server.Services.Auth
                 {
                     Identifier = Guid.NewGuid().ToString(),
                     Username = regRequest.Username,
-                    Token = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultTokenLength),
+                    ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength),
                     Crypto = new ItemCrypto
                     {
                         Salt = pwSalt,
@@ -51,15 +51,15 @@ namespace Speercs.Server.Services.Auth
 
                 // Index database
                 userCollection.EnsureIndex(x => x.Identifier);
-                userCollection.EnsureIndex(x => x.Token);
+                userCollection.EnsureIndex(x => x.ApiKey);
                 userCollection.EnsureIndex(x => x.Username);
                 return userRecord;
             });
         }
 
-        public async Task<RegisteredUser> FindUserByTokenAsync(string token)
+        public async Task<RegisteredUser> FindUserByApiKeyAsync(string apikey)
         {
-            return await Task.Run(() => (userCollection.FindOne(x => x.Token == token)));
+            return await Task.Run(() => (userCollection.FindOne(x => x.ApiKey == apikey)));
         }
 
         public async Task<RegisteredUser> FindUserByUsernameAsync(string username)

@@ -12,11 +12,11 @@ namespace Speercs.Server.Web.Realtime
 
         public ClaimsPrincipal Identity { get; private set; }
 
-        public bool AuthenticateWith(string token)
+        public bool AuthenticateWith(string apikey)
         {
             // call authenticator
             var auther = new ApiAuthenticator(ServerContext);
-            Identity = auther.ResolveIdentity(token);
+            Identity = auther.ResolveIdentity(apikey);
             return Identity != null;
         }
     }

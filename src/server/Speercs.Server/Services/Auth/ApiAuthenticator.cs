@@ -15,10 +15,10 @@ namespace Speercs.Server.Services.Auth
         {
         }
 
-        public ClaimsPrincipal ResolveIdentity(string token)
+        public ClaimsPrincipal ResolveIdentity(string apikey)
         {            
             // check admin keys
-            var adminKey = ServerContext.Configuration.AdminKeys.FirstOrDefault(x => x == token);
+            var adminKey = ServerContext.Configuration.AdminKeys.FirstOrDefault(x => x == apikey);
             if (adminKey != null)
             {
                 var adminAuthClaims = new List<Claim>()
@@ -32,7 +32,7 @@ namespace Speercs.Server.Services.Auth
 
             // get user identity
             var userManager = new UserManagerService(ServerContext);
-            var user = userManager.FindUserByTokenAsync(token).Result;
+            var user = userManager.FindUserByApiKeyAsync(apikey).Result;
             if (user == null) return null;
             var userAuthClaims = new List<Claim>()
             {
