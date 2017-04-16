@@ -17,7 +17,7 @@ class SpeercsApi {
         'action': this.doPingRequest
       }
     }
-    this.wsendpoint = endpoint.replace("http://", "ws://").replace("https://", "wss://") + "/ws";
+    this.wsendpoint = endpoint.replace("http://", "ws://").replace("https://", "wss://") + "ws";
     this.axios = axios.create({
       baseURL: this.endpoint + "/a",
       headers: { Authorization: this.apiKey },
@@ -104,7 +104,7 @@ class SpeercsApi {
       }).then((res) => {
         console.log("hi");
         if (res.status != 200) return error(new SpeercsErrors.CredentialError());
-        this.apiKey = res.data.apiKey;
+        this.apiKey = res.data.apikey;
         this.apiKeyValid = true;
         this.username = res.data.username;
         this.regenAxios();
@@ -133,7 +133,7 @@ class SpeercsApi {
         this.websocket.send(JSON.stringify({
           "request": "auth",
           "data": this.apiKey,
-          "id": authReqId
+          "id": thisReqId
         }));
       }
       this.websocket.onmessage = this.onWsRecive;
@@ -149,7 +149,7 @@ class SpeercsApi {
         invitekey: invitekey
       }).then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.WtfError());
-        this.apiKey = res.data.apiKey;
+        this.apiKey = res.data.apikey;
         this.apiKeyValid = true;
         this.username = res.data.username;
         this.regenAxios();
