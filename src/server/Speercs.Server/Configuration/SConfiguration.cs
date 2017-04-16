@@ -16,6 +16,9 @@ namespace Speercs.Server.Configuration
         [JsonIgnore]
         public string BaseDirectory { get; set; }
 
+        [JsonIgnore]
+        public string GameName { get; } = "Speercs";
+
         [JsonProperty("globalName")]
         public string GlobalName { get; set; } = "Speercs";
 
