@@ -38,6 +38,7 @@ namespace Speercs.Server.Modules
                     {
                         throw new SecurityException("Username must be at least 2 characters.");
                     }
+
                     if (req.Username.Length > 24)
                     {
                         throw new SecurityException("Username may not exceed 24 characters.");
@@ -54,6 +55,7 @@ namespace Speercs.Server.Modules
                     {
                         throw new SecurityException("Password must be at least 8 characters.");
                     }
+                    
                     if (req.Password.Length > 128)
                     {
                         throw new SecurityException("Password may not exceed 128 characters.");

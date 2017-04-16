@@ -3,6 +3,8 @@ using Speercs.Server.Models.Game.Map;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace Speercs.Server.Configuration
 {
@@ -48,8 +50,14 @@ namespace Speercs.Server.Configuration
             savedState.PersistenceMedium = stateStorage;
             savedState.Persist = () =>
             {
-                // Update in database
-                stateStorage.Upsert(savedState);
+                // If needed...
+                if (savedState.PersistNeeded)
+                {
+                    // Update in database
+                    stateStorage.Upsert(savedState);
+                    // And unset needed flag
+                    savedState.PersistNeeded = false;
+                }
             };
             // TODO: Merge API keys, etc.
             // Save the state
@@ -57,6 +65,16 @@ namespace Speercs.Server.Configuration
             savedState.Persist();
             // Update references
             serverContext.AppState = savedState;
+            var timedPersistTask = StartTimedPersist(savedState);
+        }
+
+        private static async Task StartTimedPersist(SAppState state)
+        {
+            while (true)
+            {
+                await Task.Delay(state.PersistenceInterval);
+                state.Persist();
+            }
         }
     }
 }

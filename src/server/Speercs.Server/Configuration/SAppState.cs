@@ -15,8 +15,29 @@ namespace Speercs.Server.Configuration
         [BsonIgnore]
         public LiteCollection<SAppState> PersistenceMedium { get; set; }
 
+        /// <summary>
+        /// Persist the data container to disk. Call QueuePersist() if requesting a persist.
+        /// </summary>
+        /// <returns></returns>
         [BsonIgnore]
         public Action Persist { get; set; }
+
+        /// <summary>
+        /// Persistence interval in milliseconds
+        /// </summary>
+        /// <returns></returns>
+        public int PersistenceInterval { get; set; } = 1000 * 60;
+
+        [BsonIgnore]
+        public bool PersistNeeded { get; set; }
+
+        /// <summary>
+        /// Call this to queue a persist.
+        /// </summary>
+        public void QueuePersist()
+        {
+            PersistNeeded = true;
+        }
 
         public Dictionary<string, UserTeam> PlayerData { get; set; } = new Dictionary<string, UserTeam>();
 
