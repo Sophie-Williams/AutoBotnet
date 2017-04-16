@@ -84,7 +84,7 @@ namespace Speercs.Server.Web
                         await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "invalid authentication key", CancellationToken.None);
                         break;
                     }
-                    currentUser = await rtContext.GetCurrentUser();
+                    currentUser = await rtContext.GetCurrentUserAsync();
                     // attempt to add handler
                     ServerContext.NotificationPipeline
                         .RetrieveUserPipeline(currentUser.Identifier)

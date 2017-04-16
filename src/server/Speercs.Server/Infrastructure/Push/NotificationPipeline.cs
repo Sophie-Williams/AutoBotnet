@@ -14,7 +14,7 @@ namespace Speercs.Server.Infrastructure.Push
         {
         }
 
-        public async Task PushMessage(JToken data, string userIdentifier)
+        public async Task PushMessageAsync(JToken data, string userIdentifier)
         {
             var dataBundle = new JObject(
                 new JProperty("data", data),
