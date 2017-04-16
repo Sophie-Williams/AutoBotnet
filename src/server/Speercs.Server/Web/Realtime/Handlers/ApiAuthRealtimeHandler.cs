@@ -12,9 +12,9 @@ namespace Speercs.Server.Web.Realtime.Handlers
 
         public override Task<JToken> HandleRequestAsync(long id, JToken data, RealtimeContext rtContext)
         {
-            // take apikey
-            var apikey = data.ToObject<string>();
-            var result = rtContext.AuthenticateWith(apikey);
+            // take token
+            var token = data.ToObject<string>();
+            var result = rtContext.AuthenticateWith(token);
 
             return Task.FromResult<JToken>(JObject.FromObject(result));
         }

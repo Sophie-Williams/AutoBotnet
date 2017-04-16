@@ -40,6 +40,6 @@ namespace PenguinUpload.Services.Authentication
             return CalculatePasswordHash(passwordBytes, salt);
         }
 
-        public const int DefaultApiKeyLength = 42;
+        public const int DefaultTokenLength = 42;
     }
 }
