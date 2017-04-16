@@ -50,7 +50,7 @@ namespace Speercs.Server
                 }
                 ctx.Response
                     .WithHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
-                    .WithHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type");
+                    .WithHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, Authorization");
             });
 
             // TODO: Set configuration
