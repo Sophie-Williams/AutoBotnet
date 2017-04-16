@@ -126,6 +126,7 @@ class SpeercsApi {
     return new Promise((resolve, reject) => {
       if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError());
       this.websocket = new WebSocket(this.wsendpoint);
+      this.websocket.parent = this;
       this.websocket.onopen = (event) => {
         console.log("WS Open");
         this.wsIds.auth = [resolve, reject];
@@ -173,10 +174,9 @@ class SpeercsApi {
   }
 
   onWsRecive(data) {
-    console.log(JSON.stringify(data));
-    if (data == "true") return this.wsIds.auth();
-    if (data == "false") return this.wsIds.auth();
-    data = JSON.parse(data);
+    if (data.data == "true") return this.parent.wsIds.auth[0]();
+    if (data.data == "false") return this.parent.wsIds.auth[1]();
+    data = JSON.parse(data.data);
     if (!data.id) { // Is `PUSH` notif, do stuff with this.
       return this.wsPushListener(data.data);
     }
