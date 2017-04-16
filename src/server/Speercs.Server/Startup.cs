@@ -21,6 +21,8 @@ namespace Speercs.Server
         private const string StateStorageDatabaseFileName = "speercs_state.lidb";
         private readonly IConfigurationRoot fileConfig;
 
+        public SGameBootstrapper GameBootstrapper { get; private set; }
+
         public Startup(IHostingEnvironment env)
         {
             if (!File.Exists(ConfigFileName))
@@ -96,6 +98,10 @@ namespace Speercs.Server
                 );
                 options.Bootstrapper = new SpeercsBootstrapper(context);
             }));
+            
+            // start game services
+            GameBootstrapper = new SGameBootstrapper(context);
+            GameBootstrapper.OnStartup();
         }
 
         private void OnUnload(AssemblyLoadContext alctx, ISContext sctx)
