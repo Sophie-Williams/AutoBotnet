@@ -6,6 +6,8 @@ using Speercs.Server.Extensibility.MapGen;
 using System.Collections.Generic;
 using Speercs.Server.Models.Math;
 using System.Linq;
+using Speercs.Server.Game.MapGen.Tiles;
+using Speercs.Server.Extensibility;
 
 namespace Speercs.Server.Game.MapGen
 {
@@ -48,22 +50,22 @@ namespace Speercs.Server.Game.MapGen
             {
                 for (var y = 0; y < Room.MapEdgeSize; y++)
                 {
-                    if (ShouldBeBedrock(x, y)) room.Tiles[x, y] = TileType.Bedrock;
-                    if (GetTileAt(x, y) == TileType.Wall)
+                    if (ShouldBeBedrock(x, y)) room.Tiles[x, y] = new TileBedrock();
+                    if (GetTileAt(x, y) is TileWall)
                     {
                         Walls.Add(new Point(x, y));
                         if (IsExposed()) ExposedWalls.Add(new Point(x, y));
                         else             UnexposedWalls.Add(new Point(x, y));
                         
                         bool IsExposed() {
-                            if (GetTileAt(x - 1, y) == TileType.Floor) return true;
-                            if (GetTileAt(x + 1, y) == TileType.Floor) return true;
-                            if (GetTileAt(x, y - 1) == TileType.Floor) return true;
-                            if (GetTileAt(x, y + 1) == TileType.Floor) return true;
-                            if (GetTileAt(x - 1, y - 1) == TileType.Floor) return true;
-                            if (GetTileAt(x - 1, y + 1) == TileType.Floor) return true;
-                            if (GetTileAt(x + 1, y - 1) == TileType.Floor) return true;
-                            if (GetTileAt(x + 1, y + 1) == TileType.Floor) return true;
+                            if (GetTileAt(x - 1, y) is TileFloor) return true;
+                            if (GetTileAt(x + 1, y) is TileFloor) return true;
+                            if (GetTileAt(x, y - 1) is TileFloor) return true;
+                            if (GetTileAt(x, y + 1) is TileFloor) return true;
+                            if (GetTileAt(x - 1, y - 1) is TileFloor) return true;
+                            if (GetTileAt(x - 1, y + 1) is TileFloor) return true;
+                            if (GetTileAt(x + 1, y - 1) is TileFloor) return true;
+                            if (GetTileAt(x + 1, y + 1) is TileFloor) return true;
                             return false;
                         }
                     }
@@ -83,7 +85,7 @@ namespace Speercs.Server.Game.MapGen
 
             /* helper functions */
 
-            TileType GetTileAt(int x, int y)
+            ITile GetTileAt(int x, int y)
             {
                 if (x < 0) x = 0;
                 if (y < 0) y = 0;
@@ -147,7 +149,8 @@ namespace Speercs.Server.Game.MapGen
                     for (var y = 0; y < Room.MapEdgeSize; y++)
                     {
                         var d = densityMap[x, y];
-                        room.Tiles[x, y] = Random.NextDouble() < d ? TileType.Wall : TileType.Floor;
+                        if (Random.NextDouble() < d) room.Tiles[x, y] = new TileWall();
+                        else                         room.Tiles[x, y] = new TileFloor();
                     }
                 }
             }
@@ -163,14 +166,14 @@ namespace Speercs.Server.Game.MapGen
                         for (var y = 0; y < Room.MapEdgeSize; y++)
                         {
                             counts[x, y] = 0;
-                            if (GetTileAt(x - 1, y) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x + 1, y) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x, y - 1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x, y + 1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x - 1, y - 1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x - 1, y + 1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x + 1, y - 1) == TileType.Wall) counts[x, y]++;
-                            if (GetTileAt(x + 1, y + 1) == TileType.Wall) counts[x, y]++;
+                            if (GetTileAt(x - 1, y) is TileWall) counts[x, y]++;
+                            if (GetTileAt(x + 1, y) is TileWall) counts[x, y]++;
+                            if (GetTileAt(x, y - 1) is TileWall) counts[x, y]++;
+                            if (GetTileAt(x, y + 1) is TileWall) counts[x, y]++;
+                            if (GetTileAt(x - 1, y - 1) is TileWall) counts[x, y]++;
+                            if (GetTileAt(x - 1, y + 1) is TileWall) counts[x, y]++;
+                            if (GetTileAt(x + 1, y - 1) is TileWall) counts[x, y]++;
+                            if (GetTileAt(x + 1, y + 1) is TileWall) counts[x, y]++;
                         }
                     }
 
@@ -179,13 +182,13 @@ namespace Speercs.Server.Game.MapGen
                     {
                         for (var y = 0; y < Room.MapEdgeSize; y++)
                         {
-                            if (GetTileAt(x, y) == TileType.Wall)
+                            if (GetTileAt(x, y) is TileWall)
                             {
-                                if (counts[x, y] < 4) room.Tiles[x, y] = TileType.Floor;
+                                if (counts[x, y] < 4) room.Tiles[x, y] = new TileFloor();
                             }
                             else
                             {
-                                if (counts[x, y] >= 5) room.Tiles[x, y] = TileType.Wall;
+                                if (counts[x, y] >= 5) room.Tiles[x, y] = new TileWall();
                             }
                         }
                     }
@@ -195,9 +198,9 @@ namespace Speercs.Server.Game.MapGen
             bool ShouldBeBedrock(int x, int y)
             {
                 // only Wall becomes Bedrock
-                if (GetTileAt(x, y) == TileType.Floor) return false;
+                if (GetTileAt(x, y) is TileFloor) return false;
                 // edges are bedrock
-                if (GetTileAt(x, y) == TileType.Wall &&
+                if (GetTileAt(x, y) is TileWall &&
                     (x == 0 || x == Room.MapEdgeSize - 1 || y == 0 || y == Room.MapEdgeSize - 1))
                     return true;
                 // walls 2 tiles deep become bedrock
@@ -205,7 +208,7 @@ namespace Speercs.Server.Game.MapGen
                 {
                     for (var y2 = y - BedrockDepth; y2 <= y + BedrockDepth; y2++)
                     {
-                        if (GetTileAt(x2, y2) == TileType.Floor)
+                        if (GetTileAt(x2, y2) is TileFloor)
                             return false;
                     }
                 }
