@@ -97,7 +97,6 @@ namespace Speercs.Server.Modules
                     // Validate password
                     if (selectedUser.Enabled && await userManager.CheckPasswordAsync(req.Password, selectedUser))
                     {
-                        selectedUser.Token = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultTokenLength);
                         // Return user details
                         return Response.AsJsonNet(selectedUser);
                     }
