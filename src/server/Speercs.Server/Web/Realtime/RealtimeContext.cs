@@ -23,7 +23,7 @@ namespace Speercs.Server.Web.Realtime
             return Identity != null;
         }
 
-        public async Task<RegisteredUser> GetCurrentUser()
+        public async Task<RegisteredUser> GetCurrentUserAsync()
         {
             var userIdentifier = Identity.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey).Value;
             var userManager = new UserManagerService(ServerContext);

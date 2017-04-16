@@ -19,14 +19,14 @@ namespace Speercs.Server.Game
             // create tick system
             TickSystem = new TickSystem(context.Configuration.TickRate,
                 context.Configuration.UseDynamicTickRate,
-                TickHandler.OnTick);
+                TickHandler.OnTickAsync);
             TickSystemCancelToken = new CancellationTokenSource().Token;
         }
 
         public void OnStartup()
         {
             // start tick system
-            var tickLoopTask = TickSystem.Start(TickSystemCancelToken);
+            var tickLoopTask = TickSystem.StartAsync(TickSystemCancelToken);
         }
     }
 }

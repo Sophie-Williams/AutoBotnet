@@ -19,7 +19,7 @@ namespace Speercs.Server.Game.Subsystems
             TickAction = tickAction;
         }
 
-        public async Task Start(CancellationToken ctok)
+        public async Task StartAsync(CancellationToken ctok)
         {
             while (!ctok.IsCancellationRequested)
             {

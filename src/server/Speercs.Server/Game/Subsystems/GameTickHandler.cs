@@ -9,7 +9,7 @@ namespace Speercs.Server.Game.Subsystems
         {
         }
 
-        public async Task OnTick()
+        public async Task OnTickAsync()
         {
             await Task.Delay(0);
         }
