@@ -17,13 +17,13 @@ namespace Speercs.Server.Configuration
         public string BaseDirectory { get; set; }
 
         [JsonIgnore]
-        public string GameName { get; } = "Speercs";
+        public string GameName { get; } = "AutoBotnet";
 
         [JsonProperty("globalName")]
-        public string GlobalName { get; set; } = "Speercs";
+        public string GlobalName { get; set; } = "AutoBotnet";
 
         [JsonProperty("globalMessage")]
-        public string GlobalMessage { get; set; } = "Speercs server v{ver}\nThis message is configurable by the server admins.";
+        public string GlobalMessage { get; set; } = "AutoBotnet server v{ver}\nThis message is configurable by the server admins.";
 
         [JsonProperty("corsOrigins")]
         public string[] CorsOrigins { get; set; } = new string[0];
