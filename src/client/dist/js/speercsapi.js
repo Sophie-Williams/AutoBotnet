@@ -1,10 +1,10 @@
 class SpeercsApi {
-  constructor(endpoint, token = null) {
+  constructor(endpoint, apiKey = null) {
     this.endpoint = endpoint;
     this.username = null;
-    this.tokenValid = false;
+    this.apiKeyValid = false;
     this.serverInfo = null;
-    this.token = token;
+    this.apiKey = apiKey;
     this.program = null;
     this.entities = null;
     this.globalEntities = null;
@@ -20,12 +20,12 @@ class SpeercsApi {
     this.wsendpoint = endpoint.replace("http://", "ws://").replace("https://", "wss://") + "/ws";
     this.axios = axios.create({
       baseURL: this.endpoint + "/a",
-      headers: { Authorization: this.token },
-      responseType: 'html'
+      headers: { Authorization: this.apiKey },
+      responseType: 'json'
     });
 
     this.getMeta();
-    if (this.token) {
+    if (this.apiKey) {
       this.getUserInfo();
       this.getUserCode();
     }
@@ -68,7 +68,7 @@ class SpeercsApi {
 
   getUserEntities() {
     return new Promise((sucess, error) => {
-      if (!this.tokenValid) return error(new SpeercsErrors.KeyError());
+      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
       this.axios.get("/game/units").then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.WtfError());
         this.entities = res.data;
@@ -81,7 +81,7 @@ class SpeercsApi {
 
   getRoom(x, y) {
     return new Promise((sucess, error) => {
-      if (!this.tokenValid) return error(new SpeercsErrors.KeyError());
+      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
       this.axios.get("/game/map/room", {
         params: {
           x: x,
@@ -104,9 +104,10 @@ class SpeercsApi {
       }).then((res) => {
         console.log("hi");
         if (res.status != 200) return error(new SpeercsErrors.CredentialError());
-        this.token = res.data.token;
-        this.tokenValid = true;
+        this.apiKey = res.data.apiKey;
+        this.apiKeyValid = true;
         this.username = res.data.username;
+        this.regenAxios();
         sucess();
       }).catch((err) => {
         error(err);
@@ -117,21 +118,21 @@ class SpeercsApi {
   regenAxios() {
     this.axios = axios.create({
       baseURL: this.endpoint + "/a",
-      headers: { Authorization: this.token },
+      headers: { Authorization: this.apiKey },
       responseType: 'json'
     });
   }
 
   openWS() {
     return new Promise((sucess, error) => {
-      if (!this.tokenValid) return error(new SpeercsErrors.KeyError());
+      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
       this.websocket = new WebSocket(this.wsendpoint);
       this.websocket.onopen = (event) => {
         var thisReqId = this.wsId++;
         this.wsIds.auth[thisReqId] = [sucess, error];
         this.websocket.send(JSON.stringify({
           "request": "auth",
-          "data": this.token,
+          "data": this.apiKey,
           "id": authReqId
         }));
       }
@@ -148,14 +149,10 @@ class SpeercsApi {
         invitekey: invitekey
       }).then((res) => {
         if (res.status != 200) return error(new SpeercsErrors.WtfError());
-        this.token = res.data.token;
-        this.tokenValid = true;
+        this.apiKey = res.data.apiKey;
+        this.apiKeyValid = true;
         this.username = res.data.username;
-        this.axios = axios.create({
-          baseURL: this.endpoint + "/a",
-          headers: { Authorization: this.token },
-          responseType: 'json'
-        });
+        this.regenAxios();
         this.GetUserCode();
         sucess();
       }).catch((err) => {
@@ -166,7 +163,7 @@ class SpeercsApi {
 
   updateUserCode(code) {
     return new Promise((sucess, error) => {
-      if (!this.tokenValid) return error(new SpeercsErrors.KeyError());
+      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
       this.axios.post("/game/code/deploy", {
         Source: code
       }).then((res) => {
@@ -217,7 +214,7 @@ class SpeercsErrors {
     this.name = "ErrInvalidCredentials";
   }
   static KeyError() {
-    this.message = "Token is not set or invalid";
-    this.name = "ErrToken";
+    this.message = "apiKey is not set or invalid";
+    this.name = "ErrapiKey";
   }
 }
