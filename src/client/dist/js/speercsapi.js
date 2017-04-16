@@ -30,6 +30,32 @@ class SpeercsApi {
     }
   }
 
+  /* SECTION HELPERS */
+
+  promiseFromGETRequest(endpoint, params={}, includeData=true, options={}) {
+    return new Promise((resolve, reject) => {
+      if (!this.apiKeyValid) return reject(new SpeercsErrors.KeyError());
+      options['params'] = params;
+      this.axios.get(endpoint, options).then((res) => {
+        if (res.status != 200) return reject(new SpeercsErrors.WtfError());
+        if (includeData) return resolve(res.data);
+        resolve();
+      }).catch((err) => {
+        reject(err);
+      })
+    });
+  }
+
+  regenAxios() {
+    this.axios = axios.create({
+      baseURL: this.endpoint + "/a",
+      headers: { Authorization: this.apiKey },
+      responseType: 'json'
+    });
+  }
+
+  /* SECTION GET ENDPOINTS */
+
   getMeta() {
     return new Promise((resolve, reject) => {
       axios.get(this.endpoint + "/meta").then((res) => {
@@ -42,58 +68,22 @@ class SpeercsApi {
   }
 
   getUserInfo() {
-    return new Promise((resolve, reject) => {
-      this.axios.get("/game/umeta/me", { responseType: 'text' }).then((res) => {
-        if (res.status != 200) return reject(new SpeercsErrors.CredentialError());
-        this.username = res.data;
-        resolve();
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+    return this.promiseFromGETRequest("/game/umeta/me");
   }
 
   getUserCode() {
-    return new Promise((resolve, reject) => {
-      this.axios.get("/game/code/get").then((res) => {
-        if (res.status != 200) return reject(new SpeercsErrors.WtfError());
-        this.program = res.data.source;
-        resolve();
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+    return this.promiseFromGETRequest("/game/code/get");
   }
 
   getUserEntities() {
-    return new Promise((resolve, reject) => {
-      if (!this.apiKeyValid) return reject(new SpeercsErrors.KeyError());
-      this.axios.get("/game/units").then((res) => {
-        if (res.status != 200) return reject(new SpeercsErrors.WtfError());
-        this.entities = res.data;
-        resolve();
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+    return this.promiseFromGETRequest("/game/units");
   }
 
   getRoom(x, y) {
-    return new Promise((resolve, reject) => {
-      if (!this.apiKeyValid) return reject(new SpeercsErrors.KeyError());
-      this.axios.get("/game/map/room", {
-        params: {
-          x: x,
-          y: y
-        }
-      }).then((res) => {
-        if (res.status != 200) return reject(new SpeercsErrors.WtfError());
-        resolve(res.data);
-      }).catch((err) => {
-        reject(err);
-      })
-    });
+    return this.promiseFromGETRequest("/game/map/room", { x: x, y: y });
   }
+
+  /* SECTION AUTH */
 
   login(username, password) {
     return new Promise((resolve, reject) => {
@@ -113,13 +103,28 @@ class SpeercsApi {
     });
   }
 
-  regenAxios() {
-    this.axios = axios.create({
-      baseURL: this.endpoint + "/a",
-      headers: { Authorization: this.apiKey },
-      responseType: 'json'
+  register(username, password, invitekey = false) {
+    return new Promise((resolve, reject) => {
+      if (serverInfo.inviterequired && !invitekey) return reject(SpeercsErrors.NoInviteError());
+      this.axios.post("/auth/register", {
+        username: username,
+        password: password,
+        invitekey: invitekey
+      }).then((res) => {
+        if (res.status != 200) return reject(SpeercsErrors.WtfError());
+        this.apiKey = res.data.apikey;
+        this.apiKeyValid = true;
+        this.username = res.data.username;
+        this.regenAxios();
+        this.GetUserCode();
+        resolve();
+      }).catch((err) => {
+        reject(err);
+      });
     });
   }
+
+  /* SECTION WEBSOCKETS */
 
   openWS() {
     return new Promise((resolve, reject) => {
@@ -163,26 +168,17 @@ class SpeercsApi {
     });
   }
 
-  register(username, password, invitekey = false) {
-    return new Promise((resolve, reject) => {
-      if (serverInfo.inviterequired && !invitekey) return reject(SpeercsErrors.NoInviteError());
-      this.axios.post("/auth/register", {
-        username: username,
-        password: password,
-        invitekey: invitekey
-      }).then((res) => {
-        if (res.status != 200) return reject(SpeercsErrors.WtfError());
-        this.apiKey = res.data.apikey;
-        this.apiKeyValid = true;
-        this.username = res.data.username;
-        this.regenAxios();
-        this.GetUserCode();
-        resolve();
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+  onWsRecive(data) {
+    if (data.data == "true") return this.parent.authPromise[0]();
+    if (data.data == "false") return this.parent.authPromise[1]();
+    data = JSON.parse(data.data);
+    if (!data.id) { // Is `PUSH` notif, do stuff with this.
+      return this.parent.wsPushListener(data.data);
+    }
+    this.parent.wsIds[data.id][0](data.data);
   }
+
+  /* SECTION POST ENDPOINTS */
 
   updateUserCode(code) {
     return new Promise((resolve, reject) => {
@@ -197,16 +193,6 @@ class SpeercsApi {
         reject(err);
       });
     });
-  }
-
-  onWsRecive(data) {
-    if (data.data == "true") return this.parent.authPromise[0]();
-    if (data.data == "false") return this.parent.authPromise[1]();
-    data = JSON.parse(data.data);
-    if (!data.id) { // Is `PUSH` notif, do stuff with this.
-      return this.parent.wsPushListener(data.data);
-    }
-    this.parent.wsIds[data.id][0](data.data);
   }
 }
 
