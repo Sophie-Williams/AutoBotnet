@@ -6,6 +6,8 @@ The websocket system works through "bundles" that are sent back and forth.
 Bundles are JSON objects that contain metadata and are sent on one line.
 Bundles are used over raw data because they can contain additional information
 
+**Important note: Every bit of outgoing data should end with a newline (`\n`). For example, after sending the API key to authenticate, a newline should be appended.**
+
 There are different types of bundles for different kinds of request/response patterns:
 
 ## Request/Response bundles:
