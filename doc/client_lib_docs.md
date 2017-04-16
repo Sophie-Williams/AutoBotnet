@@ -6,7 +6,7 @@
 var user = new SpeercsApi("<Server Url>", "[API Key]");
 ```
 
-<Server Url> is the root of the server (For example: "http://speercs.joonatoona.me/") (***MAKE SURE YOU INCLUDE A SLASH AT THE END***)
+\<Server Url\> is the root of the server (For example: "http://speercs.joonatoona.me/") (***MAKE SURE YOU INCLUDE A SLASH AT THE END***)
 
 [API Key] is an optional argument for the users API key. Using `.login()` instead is recomended.
 
