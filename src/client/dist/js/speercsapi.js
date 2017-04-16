@@ -68,7 +68,7 @@ class SpeercsApi {
   }
 
   getUserInfo() {
-    return this.promiseFromGETRequest("/game/umeta/me");
+    return this.promiseFromGETRequest("/game/umeta/me", {}, true, { responseType: 'text' });
   }
 
   getUserCode() {
