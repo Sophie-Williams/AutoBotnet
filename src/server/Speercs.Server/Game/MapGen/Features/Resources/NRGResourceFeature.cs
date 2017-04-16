@@ -8,7 +8,7 @@ namespace Speercs.Server.Game.MapGen.Features.Resources
         public override void Generate(Room room, IMapGenerator generator)
         {
             base.Generate(room, generator);
-            
+
             // TODO: Resource generation post-processing
         }
     }

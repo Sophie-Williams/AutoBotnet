@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
 using Speercs.Server.Configuration;
+using System.Threading.Tasks;
 
 namespace Speercs.Server.Infrastructure.Push
 {

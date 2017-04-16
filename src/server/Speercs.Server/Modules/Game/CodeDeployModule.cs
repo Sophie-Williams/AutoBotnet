@@ -11,13 +11,13 @@ namespace Speercs.Server.Modules.Game
     {
         public CodeDeployModule(ISContext serverContext) : base("/game/code", serverContext)
         {
-            Get("/get", _ => 
+            Get("/get", _ =>
             {
                 var program = PlayerDataService[CurrentUser.Identifier].Program;
                 return Response.AsJsonNet(program);
             });
 
-            Post("/deploy", _ => 
+            Post("/deploy", _ =>
             {
                 var req = this.Bind<CodeDeployRequest>();
 

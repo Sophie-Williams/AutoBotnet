@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
-using System;
 using Speercs.Server.Extensibility;
+using System;
 
 namespace Speercs.Server.Models.Game.Map
 {
-
     public class Room
     {
         [JsonIgnore]
@@ -28,8 +27,9 @@ namespace Speercs.Server.Models.Game.Map
                 Console.WriteLine();
             }
         }
-        
+
         public int X { get; }
+
         public int Y { get; }
 
         [JsonProperty("tiles")]

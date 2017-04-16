@@ -1,8 +1,8 @@
+using ImageSharp.Formats;
 using Nancy;
+using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game.Map;
 using Speercs.Server.Utilities;
-using Speercs.Server.Configuration;
-using ImageSharp.Formats;
 using System.IO;
 
 namespace Speercs.Server.Modules.Game

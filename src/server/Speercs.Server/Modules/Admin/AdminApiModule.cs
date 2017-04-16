@@ -13,7 +13,7 @@ namespace Speercs.Server.Modules.Admin
         public UserManagerService UserManager { get; private set; }
 
         public PlayerPersistentDataService PlayerDataService { get; private set; }
-        
+
         public ISContext ServerContext { get; private set; }
 
         internal AdminApiModule(string path, ISContext serverContext) : base($"/admin{path}")

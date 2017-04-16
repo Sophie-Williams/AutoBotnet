@@ -1,7 +1,7 @@
-using System;
 using Speercs.Server.Extensibility.MapGen;
 using Speercs.Server.Game.MapGen.Tiles;
 using Speercs.Server.Models.Game.Map;
+using System;
 
 namespace Speercs.Server.Game.MapGen.Features
 {

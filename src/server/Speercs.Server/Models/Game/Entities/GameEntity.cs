@@ -46,12 +46,15 @@ namespace Speercs.Server.Models.Game.Entities
                 case 0:
                     newY--;
                     break;
+
                 case 1:
                     newX++;
                     break;
+
                 case 2:
                     newY++;
                     break;
+
                 case 3:
                     newX--;
                     break;
@@ -129,7 +132,7 @@ namespace Speercs.Server.Models.Game.Entities
             {
                 if (roomX + 1 == nRoomX || roomX - 1 == nRoomX ||
                     roomY + 1 == nRoomY || roomY - 1 == nRoomY)
-                { 
+                {
                     RoomIdentifier = roomIdentifier;
                     return true;
                 }

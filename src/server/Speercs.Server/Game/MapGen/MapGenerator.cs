@@ -1,19 +1,19 @@
-using Speercs.Server.Models.Game.Map;
-using System;
-using static Speercs.Server.Game.MapGen.MapGenConstants;
 using Speercs.Server.Configuration;
-using Speercs.Server.Extensibility.MapGen;
-using System.Collections.Generic;
-using Speercs.Server.Models.Math;
-using System.Linq;
-using Speercs.Server.Game.MapGen.Tiles;
 using Speercs.Server.Extensibility;
+using Speercs.Server.Extensibility.MapGen;
+using Speercs.Server.Game.MapGen.Tiles;
+using Speercs.Server.Models.Game.Map;
+using Speercs.Server.Models.Math;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static Speercs.Server.Game.MapGen.MapGenConstants;
 
 namespace Speercs.Server.Game.MapGen
 {
-    public class MapGenerator: DependencyObject, IMapGenerator
+    public class MapGenerator : DependencyObject, IMapGenerator
     {
-        public MapGenerator(ISContext context): base(context)
+        public MapGenerator(ISContext context) : base(context)
         {
             Random = new Random();
         }
@@ -30,14 +30,14 @@ namespace Speercs.Server.Game.MapGen
             var room = new Room(roomX, roomY);
 
             // set exits
-            var adjRoom = ServerContext.AppState.WorldMap[roomX, roomY-1];
-            room.NorthExit = adjRoom==null? RandomExit() : adjRoom.SouthExit;
-            adjRoom = ServerContext.AppState.WorldMap[roomX, roomY+1];
-            room.SouthExit = adjRoom==null? RandomExit() : adjRoom.NorthExit;
-            adjRoom = ServerContext.AppState.WorldMap[roomX-1, roomY];
-            room.WestExit = adjRoom==null? RandomExit() : adjRoom.EastExit;
-            adjRoom = ServerContext.AppState.WorldMap[roomX+1, roomY];
-            room.EastExit = adjRoom==null? RandomExit() : adjRoom.WestExit;
+            var adjRoom = ServerContext.AppState.WorldMap[roomX, roomY - 1];
+            room.NorthExit = adjRoom == null ? RandomExit() : adjRoom.SouthExit;
+            adjRoom = ServerContext.AppState.WorldMap[roomX, roomY + 1];
+            room.SouthExit = adjRoom == null ? RandomExit() : adjRoom.NorthExit;
+            adjRoom = ServerContext.AppState.WorldMap[roomX - 1, roomY];
+            room.WestExit = adjRoom == null ? RandomExit() : adjRoom.EastExit;
+            adjRoom = ServerContext.AppState.WorldMap[roomX + 1, roomY];
+            room.EastExit = adjRoom == null ? RandomExit() : adjRoom.WestExit;
 
             // fill with initial randomness
             InitRandomness();
@@ -55,9 +55,10 @@ namespace Speercs.Server.Game.MapGen
                     {
                         Walls.Add(new Point(x, y));
                         if (IsExposed()) ExposedWalls.Add(new Point(x, y));
-                        else             UnexposedWalls.Add(new Point(x, y));
-                        
-                        bool IsExposed() {
+                        else UnexposedWalls.Add(new Point(x, y));
+
+                        bool IsExposed()
+                        {
                             if (GetTileAt(x - 1, y) is TileFloor) return true;
                             if (GetTileAt(x + 1, y) is TileFloor) return true;
                             if (GetTileAt(x, y - 1) is TileFloor) return true;
@@ -73,10 +74,11 @@ namespace Speercs.Server.Game.MapGen
             }
 
             // generate map features
-            foreach (var feature in ServerContext.ExtensibilityContainer.ResolveAll<IMapGenFeature>()) {
+            foreach (var feature in ServerContext.ExtensibilityContainer.ResolveAll<IMapGenFeature>())
+            {
                 feature.Generate(room, this);
             }
-            
+
             // clean up and return
             Walls.Clear();
             ExposedWalls.Clear();
@@ -150,7 +152,7 @@ namespace Speercs.Server.Game.MapGen
                     {
                         var d = densityMap[x, y];
                         if (Random.NextDouble() < d) room.Tiles[x, y] = new TileWall();
-                        else                         room.Tiles[x, y] = new TileFloor();
+                        else room.Tiles[x, y] = new TileFloor();
                     }
                 }
             }
@@ -222,16 +224,25 @@ namespace Speercs.Server.Game.MapGen
         }
 
         public Random Random { get; }
+
         public ISet<Point> Walls { get; set; } = new HashSet<Point>();
+
         public ISet<Point> ExposedWalls { get; set; } = new HashSet<Point>();
+
         public ISet<Point> UnexposedWalls { get; set; } = new HashSet<Point>();
-        public Point RandomWall() {
+
+        public Point RandomWall()
+        {
             return Walls.ElementAt(Random.Next(Walls.Count));
         }
-        public Point RandomExposedWall() {
+
+        public Point RandomExposedWall()
+        {
             return ExposedWalls.ElementAt(Random.Next(ExposedWalls.Count));
         }
-        public Point RandomUnexposedWall() {
+
+        public Point RandomUnexposedWall()
+        {
             return UnexposedWalls.ElementAt(Random.Next(UnexposedWalls.Count));
         }
     }

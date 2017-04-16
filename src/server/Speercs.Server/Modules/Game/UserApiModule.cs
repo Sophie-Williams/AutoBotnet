@@ -1,9 +1,9 @@
-using System.Linq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Services.Auth.Security;
 using Speercs.Server.Services.Game;
+using System.Linq;
 
 namespace Speercs.Server.Modules.Game
 {
@@ -15,7 +15,7 @@ namespace Speercs.Server.Modules.Game
         public UserManagerService UserManager { get; private set; }
 
         public PlayerPersistentDataService PlayerDataService { get; private set; }
-        
+
         public RegisteredUser CurrentUser { get; private set; }
 
         public ISContext ServerContext { get; private set; }
@@ -31,7 +31,7 @@ namespace Speercs.Server.Modules.Game
             Before += ctx =>
             {
                 var userIdentifier = Context.CurrentUser.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey).Value;
-                
+
                 UserManager = new UserManagerService(ServerContext);
                 PlayerDataService = new PlayerPersistentDataService(ServerContext);
                 CurrentUser = UserManager.FindUserByIdentifierAsync(userIdentifier).Result;

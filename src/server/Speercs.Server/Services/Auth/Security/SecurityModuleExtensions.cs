@@ -5,8 +5,8 @@ namespace Speercs.Server.Services.Auth.Security
 {
     public static class ApiAccessModuleSecurityExtensions
     {
-        static Claim AdminClaim = new Claim(ApiAuthenticator.AuthTypeClaimKey, ApiAccessScope.Admin.ToString());
-        static Claim UserClaim = new Claim(ApiAuthenticator.AuthTypeClaimKey, ApiAccessScope.User.ToString());
+        private static Claim AdminClaim = new Claim(ApiAuthenticator.AuthTypeClaimKey, ApiAccessScope.Admin.ToString());
+        private static Claim UserClaim = new Claim(ApiAuthenticator.AuthTypeClaimKey, ApiAccessScope.User.ToString());
 
         public static void RequiresUserAuthentication(this NancyModule module)
         {
@@ -26,7 +26,7 @@ namespace Speercs.Server.Services.Auth.Security
                 {
                     return HttpStatusCode.Unauthorized;
                 }
-                
+
                 if (ctx.CurrentUser.EnsureClaim(requiredClaim))
                 {
                     return null;

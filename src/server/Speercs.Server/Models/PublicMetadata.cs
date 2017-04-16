@@ -13,7 +13,7 @@ namespace Speercs.Server.Models
 
         [JsonProperty("version")]
         public string Version { get; set; }
-        
+
         [JsonProperty("inviterequired")]
         public bool InviteRequired { get; set; }
 

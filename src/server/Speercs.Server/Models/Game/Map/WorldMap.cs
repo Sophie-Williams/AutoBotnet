@@ -1,6 +1,6 @@
+using Speercs.Server.Models.Math;
 using System.Collections.Generic;
 using System.Linq;
-using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Game.Map
 {

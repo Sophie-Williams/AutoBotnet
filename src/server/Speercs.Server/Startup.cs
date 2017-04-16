@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +9,8 @@ using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game;
 using Speercs.Server.Web;
+using System;
+using System.IO;
 
 namespace Speercs.Server
 {

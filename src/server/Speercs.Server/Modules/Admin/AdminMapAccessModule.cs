@@ -15,7 +15,7 @@ namespace Speercs.Server.Modules.Admin
                 MapGenerator mapGen = new MapGenerator(ServerContext);
                 var req = this.Bind<RoomGenerationRequest>();
                 if (ServerContext.AppState.WorldMap[req.X, req.Y] != null) return HttpStatusCode.BadRequest;
-                var newRoom = req.Density==0? mapGen.GenerateRoom(req.X, req.Y) :
+                var newRoom = req.Density == 0 ? mapGen.GenerateRoom(req.X, req.Y) :
                                               mapGen.GenerateRoom(req.X, req.Y, req.Density);
                 ServerContext.AppState.WorldMap[req.X, req.Y] = newRoom;
                 return Response.AsJson(newRoom);

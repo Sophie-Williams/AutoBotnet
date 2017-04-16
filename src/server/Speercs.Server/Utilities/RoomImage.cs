@@ -1,6 +1,6 @@
-using System;
 using ImageSharp;
 using Speercs.Server.Models.Game.Map;
+using System;
 
 namespace Speercs.Server.Utilities
 {
@@ -21,6 +21,7 @@ namespace Speercs.Server.Utilities
             }
             return image;
         }
+
         public Image drawMap(WorldMap map)
         {
             int worldMaxX = Int32.MinValue;

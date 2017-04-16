@@ -1,7 +1,6 @@
+using Speercs.Server.Models.Game.Entities;
 using System;
 using System.Collections.Generic;
-using Speercs.Server.Models.Game.Entities;
-using Speercs.Server.Models.User;
 
 namespace Speercs.Server.Models.Game
 {
@@ -9,7 +8,6 @@ namespace Speercs.Server.Models.Game
     {
         public EntityBag()
         {
-
         }
 
         public Dictionary<string, GameEntity> EntityData { get; set; } = new Dictionary<string, GameEntity>();
@@ -21,9 +19,11 @@ namespace Speercs.Server.Models.Game
             return newGuid;
         }
 
-        public List<GameEntity> GetAllByUser(UserTeam user) {
+        public List<GameEntity> GetAllByUser(UserTeam user)
+        {
             var entities = new List<GameEntity>();
-            user.ownedEntities.ForEach((entId) => {
+            user.ownedEntities.ForEach((entId) =>
+            {
                 entities.Add(this.EntityData[entId]);
             });
             return entities;
