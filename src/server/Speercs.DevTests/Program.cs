@@ -1,8 +1,7 @@
 ﻿using Speercs.Server.Game.MapGen;
 using System;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Game.Map;
-using Speercs.Server.Extensibility.MapGen;
+using Speercs.Server.Game;
 
 namespace Speercs.DevTests
 {
@@ -17,7 +16,7 @@ namespace Speercs.DevTests
             {
                 AppState = new SAppState()
             };
-            ServerContext.ExtensibilityContainer.Register<IMapGenFeature>(new TestOre());
+            new BuiltinPluginBootstrapper(ServerContext).LoadAll();
             
             Console.WriteLine("Starting mapgen test");
             
@@ -27,13 +26,5 @@ namespace Speercs.DevTests
         }
         
         public static ISContext ServerContext;
-    }
-    
-    internal class TestOre : IMapGenFeature
-    {
-        void IMapGenFeature.Generate(Room room, IMapGenerator generator)
-        {
-            Console.WriteLine("TestOre generate");
-        }
     }
 }

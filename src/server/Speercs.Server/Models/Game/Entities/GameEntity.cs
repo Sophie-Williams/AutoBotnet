@@ -58,8 +58,7 @@ namespace Speercs.Server.Models.Game.Entities
             }
             (int roomX, int roomY) = RoomIdentifier;
 
-            // Change this once tiles have a `Walkable` flag
-            if (ServerContext.AppState.WorldMap[roomX, roomY].Tiles[newX, newY] != TileType.Floor) return Location;
+            if (!ServerContext.AppState.WorldMap[roomX, roomY].Tiles[newX, newY].IsWalkable()) return Location;
 
             if (newX >= Room.MapEdgeSize)
             {
