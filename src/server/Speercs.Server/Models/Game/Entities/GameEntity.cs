@@ -14,7 +14,7 @@ namespace Speercs.Server.Models.Game.Entities
 
         public GameEntity(ISContext serverContext) : base(serverContext)
         {
-
+            ServerContext.AppState.Entities.Insert(this);
         }
 
         public Point Move(Point point)
