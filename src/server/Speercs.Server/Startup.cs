@@ -92,6 +92,10 @@ namespace Speercs.Server
                 );
                 options.Bootstrapper = new SpeercsBootstrapper(context);
             }));
+            
+            // start game services
+            var gameBootstrapper = new SGameBootstrapper(context);
+            gameBootstrapper.OnStartup();
         }
     }
 }

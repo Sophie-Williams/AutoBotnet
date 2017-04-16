@@ -30,5 +30,8 @@ namespace Speercs.Server.Configuration
 
         [JsonProperty("tickRate")]
         public int TickRate { get; set; } = 1000;
+
+        [JsonProperty("dynamicTickRate")]
+        public bool DynamicTickRate { get; set; } = false;
     }
 }
