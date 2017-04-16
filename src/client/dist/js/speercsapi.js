@@ -8,11 +8,12 @@ class SpeercsApi {
     this.program = null;
     this.entities = null;
     this.globalEntities = null;
+    this.websocket = false;
     this.wsId = new Date().getTime();
+    this.onclose = (() => { console.log("Connection Closed") });
+    this.wsPushListener = ((data) => { console.log(JSON.stringify(data)) });
     this.wsIds = {
-      'auth': {
-        'action': this.doAuthRequest
-      },
+      'auth': [],
       'ping': {
         'action': this.doPingRequest
       }
@@ -32,85 +33,84 @@ class SpeercsApi {
   }
 
   getMeta() {
-    return new Promise((sucess, error) => {
+    return new Promise((resolve, reject) => {
       axios.get(this.endpoint + "/meta").then((res) => {
         this.serverInfo = res.data;
-        sucess();
+        resolve();
       }).catch((err) => {
-        error(err);
+        reject(err);
       });
     });
   }
 
   getUserInfo() {
-    return new Promise((sucess, error) => {
+    return new Promise((resolve, reject) => {
       this.axios.get("/game/umeta/me", { responseType: 'text' }).then((res) => {
-        if (res.status != 200) return error(new SpeercsErrors.CredentialError());
+        if (res.status != 200) return reject(new SpeercsErrors.CredentialError());
         this.username = res.data;
-        sucess();
+        resolve();
       }).catch((err) => {
-        error(err);
+        reject(err);
       });
     });
   }
 
   getUserCode() {
-    return new Promise((sucess, error) => {
+    return new Promise((resolve, reject) => {
       this.axios.get("/game/code/get").then((res) => {
-        if (res.status != 200) return error(new SpeercsErrors.WtfError());
+        if (res.status != 200) return reject(new SpeercsErrors.WtfError());
         this.program = res.data.source;
-        sucess();
+        resolve();
       }).catch((err) => {
-        error(err);
+        reject(err);
       });
     });
   }
 
   getUserEntities() {
-    return new Promise((sucess, error) => {
-      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+    return new Promise((resolve, reject) => {
+      if (!this.apiKeyValid) return reject(new SpeercsErrors.KeyError());
       this.axios.get("/game/units").then((res) => {
-        if (res.status != 200) return error(new SpeercsErrors.WtfError());
+        if (res.status != 200) return reject(new SpeercsErrors.WtfError());
         this.entities = res.data;
-        sucess();
+        resolve();
       }).catch((err) => {
-        error(err);
+        reject(err);
       });
     });
   }
 
   getRoom(x, y) {
-    return new Promise((sucess, error) => {
-      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+    return new Promise((resolve, reject) => {
+      if (!this.apiKeyValid) return reject(new SpeercsErrors.KeyError());
       this.axios.get("/game/map/room", {
         params: {
           x: x,
           y: y
         }
       }).then((res) => {
-        if (res.status != 200) return error(new SpeercsErrors.WtfError());
-        sucess(res.data);
+        if (res.status != 200) return reject(new SpeercsErrors.WtfError());
+        resolve(res.data);
       }).catch((err) => {
-        error(err);
+        reject(err);
       })
     });
   }
 
   login(username, password) {
-    return new Promise((sucess, error) => {
+    return new Promise((resolve, reject) => {
       this.axios.post("/auth/login", {
         username: username,
         password: password
       }).then((res) => {
-        console.log("hi");
-        if (res.status != 200) return error(new SpeercsErrors.CredentialError());
+        if (res.status != 200) return reject(SpeercsErrors.CredentialError());
         this.apiKey = res.data.apikey;
         this.apiKeyValid = true;
         this.username = res.data.username;
         this.regenAxios();
-        sucess();
+        resolve();
       }).catch((err) => {
-        error(err);
+        reject(err);
       });
     });
   }
@@ -124,79 +124,77 @@ class SpeercsApi {
   }
 
   openWS() {
-    return new Promise((sucess, error) => {
-      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+    return new Promise((resolve, reject) => {
+      if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError());
       this.websocket = new WebSocket(this.wsendpoint);
+      this.websocket.parent = this;
       this.websocket.onopen = (event) => {
-        var thisReqId = this.wsId++;
-        this.wsIds.auth[thisReqId] = [sucess, error];
-        this.websocket.send(JSON.stringify({
-          "request": "auth",
-          "data": this.apiKey,
-          "id": thisReqId
-        }));
+        this.wsIds.auth = [resolve, reject];
+        this.websocket.send(this.apiKey+"\n");
       }
       this.websocket.onmessage = this.onWsRecive;
+      this.websocket.onclose = () => { console.log("F") };
+    });
+  }
+
+  pingWS() {
+    return new Promise((resolve, reject) => {
+      if (!this.websocket || this.websocket.readyState != 1) return reject(SpeercsErrors.WSError());
+      this.websocket.parent = this;
+      let thisReqId = this.wsId++;
+      this.wsIds.ping[thisReqId] = [resolve,reject];
+      this.websocket.send(JSON.stringify({
+        request: "ping",
+        data: {},
+        id: thisReqId
+      })+"\n");
     });
   }
 
   register(username, password, invitekey = false) {
-    return new Promise((sucess, error) => {
-      if (serverInfo.inviterequired && !invitekey) return error(new SpeercsErrors.NoInviteError());
+    return new Promise((resolve, reject) => {
+      if (serverInfo.inviterequired && !invitekey) return reject(SpeercsErrors.NoInviteError());
       this.axios.post("/auth/register", {
         username: username,
         password: password,
         invitekey: invitekey
       }).then((res) => {
-        if (res.status != 200) return error(new SpeercsErrors.WtfError());
+        if (res.status != 200) return reject(SpeercsErrors.WtfError());
         this.apiKey = res.data.apikey;
         this.apiKeyValid = true;
         this.username = res.data.username;
         this.regenAxios();
         this.GetUserCode();
-        sucess();
+        resolve();
       }).catch((err) => {
-        error(err);
+        reject(err);
       });
     });
   }
 
   updateUserCode(code) {
-    return new Promise((sucess, error) => {
-      if (!this.apiKeyValid) return error(new SpeercsErrors.KeyError());
+    return new Promise((resolve, reject) => {
+      if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError());
       this.axios.post("/game/code/deploy", {
         Source: code
       }).then((res) => {
-        if (res.status != 200) return error(new SpeercsErrors.WtfError());
+        if (res.status != 200) return reject(SpeercsErrors.WtfError());
         this.code = code;
-        sucess();
+        resolve();
       }).catch((err) => {
-        error(err);
+        reject(err);
       });
     });
   }
 
   onWsRecive(data) {
-    data = JSON.parse(data);
-    if (!data.id) return false; // TODO: Stuff with this
-    for (key in Object.keys(wsIds)) {
-      if (data.id in wsIds[key]) {
-        wsIds[key].action(data);
-        delete wsIds[key][data.id];
-      }
+    if (data.data == "true") return this.parent.wsIds.auth[0]();
+    if (data.data == "false") return this.parent.wsIds.auth[1]();
+    data = JSON.parse(data.data);
+    if (!data.id) { // Is `PUSH` notif, do stuff with this.
+      return this.parent.wsPushListener(data.data);
     }
-  }
-
-  doAuthRequest(data) {
-    if (data.data != true) {
-      this.wsIds.auth[data.id][1]();
-      return;
-    }
-    this.wsIds.auth[data.id][0]();
-  }
-
-  doPingRequest(data) {
-    this.wsIds[data.id][0](data.data);
+    this.parent.wsIds[data.request][data.id][0](data.data);
   }
 }
 
@@ -206,7 +204,7 @@ class SpeercsErrors {
     this.name = "ErrNoInvite";
   }
   static WtfError() {
-    this.message = "Your error message is in annother castle.";
+    this.message = "Your reject message is in annother castle.";
     this.name = "ErrSomethingHappened";
   }
   static CredentialError() {
@@ -216,5 +214,9 @@ class SpeercsErrors {
   static KeyError() {
     this.message = "apiKey is not set or invalid";
     this.name = "ErrapiKey";
+  }
+  static WSError() {
+    this.message = "WebSocket is not initialized or connecter";
+    this.name = "ErrNoWS";
   }
 }
