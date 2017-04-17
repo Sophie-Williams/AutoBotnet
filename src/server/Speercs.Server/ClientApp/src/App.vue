@@ -1,76 +1,43 @@
 <template>
-  <v-app top-toolbar>
-    <header>
-      <v-toolbar>
-        <v-toolbar-logo>{{ app_name }}</v-toolbar-logo>
-        <v-toolbar-items>
-          <v-toolbar-item>
-            
-          </v-toolbar-item>
-        </v-toolbar-items>
-      </v-toolbar>
-    </header>
+  <v-app class="elevation-1" top-toolbar left-sidebar>
+    <v-toolbar>
+      <v-toolbar-side-icon class="hidden-lg-and-up" @click.native.stop="sidebar_v = !sidebar_vsss" />
+      <v-toolbar-title>{{ app_name }}</v-toolbar-title>
+    </v-toolbar>
     <main>
+      <v-sidebar v-model="sidebar_v" height="auto">
+        <v-list dense>
+          <template v-for="(item, i) in sidebar">
+            <v-list-group v-if="item.items">
+              <v-list-item slot="item">
+                <v-list-tile ripple>
+                  <v-list-tile-title v-text="item.title" />
+                  <v-list-tile-action>
+                    <v-icon>keyboard_arrow_down</v-icon>
+                  </v-list-tile-action>
+                </v-list-tile>
+              </v-list-item>
+              <v-list-item v-for="(subItem,i) in item.items" :key="i">
+                <v-list-tile ripple>
+                  <v-list-tile-title v-text="subItem.title" />    
+                </v-list-tile>
+              </v-list-item>
+            </v-list-group>
+            <v-subheader v-else-if="item.header" v-text="item.header" />
+            <v-divider v-else-if="item.divider" light />
+            <v-list-item v-else>
+              <v-list-tile ripple>
+                <v-list-tile-avatar>
+                  <v-icon>{{ item.avatar }}</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-title v-text="item.title" />    
+              </v-list-tile>
+            </v-list-item>
+          </template>
+        </v-list>
+      </v-sidebar>
       <v-content>
-        <v-container fluid>
-          <div id="getting-started">
-            <v-card class="secondary">
-              <v-card-text class="text-xs-center">
-                <img src="public/v.png">
-              </v-card-text>
-            </v-card>
-            <p class="text-xs-center">Welcome to the Vuetify Webpack Template</p>
-            <h2 class="primary--text">Important Links</h2>
-            <div class="intro">
-              <v-list>
-                <v-list-item>
-                  <v-list-tile href="http://vuetifyjs.com" target="_blank">
-                    <v-list-tile-title>
-                      Vuetify Documentation
-                    </v-list-tile-title>
-                  </v-list-tile>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-tile href="https://github.com/vuetifyjs/webpack-ssr" target="_blank">
-                    <v-list-tile-title>
-                      Vuetify SSR Webpack
-                    </v-list-tile-title>
-                  </v-list-tile>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-tile href="https://github.com/vuetifyjs/webpack" target="_blank">
-                    <v-list-tile-title>
-                      Vuetify Webpack
-                    </v-list-tile-title>
-                  </v-list-tile>
-                </v-list-item>
-              </v-list>
-              <v-list>
-                <v-list-item>
-                  <v-list-tile href="https://github.com/vuetifyjs/webpack-simple" target="_blank">
-                    <v-list-tile-title>
-                      Vuetify Webpack Simple
-                    </v-list-tile-title>
-                  </v-list-tile>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-tile href="http://vuejs.org" target="_blank">
-                    <v-list-tile-title>
-                      Vue Documentation
-                    </v-list-tile-title>
-                  </v-list-tile>
-                </v-list-item>
-                <v-list-item>
-                    <v-list-tile href="https://github.com/vuejs/awesome-vue" target="_blank">
-                      <v-list-tile-title>
-                        Vue Awesome
-                      </v-list-tile-title>
-                    </v-list-tile>
-                </v-list-item>
-              </v-list>
-            </div>
-          </div>
-        </v-container>
+        <v-container fluid></v-container>
       </v-content>
     </main>
   </v-app>
@@ -80,9 +47,23 @@
   export default {
     data () {
       return {
-        item: {
-          text: 'Get Started'
-        },
+        sidebar_v: null,
+        sidebar: [
+          { header: 'Quick Links' },
+          // {
+          //   title: 'Parent',
+          //   items: [
+          //     { title: 'Child' },
+          //     { title: 'Child' },
+          //     { title: 'Child' }
+          //   ]
+          // },
+          { title: 'Dashboard', avatar: 'home' },
+          { title: 'Account', avatar: 'person' },
+          { divider: true },
+          { header: 'Support' },
+          { title: 'Report Bugs', avatar: 'error' }
+        ],
         app_name: "AutoBotnet"
       }
     }
