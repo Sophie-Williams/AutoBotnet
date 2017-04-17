@@ -1,4 +1,7 @@
-
 .content-container {
-    margin: 4rem;
+  margin: 4rem;
+}
+
+.center {
+  text-align: center;
 }
