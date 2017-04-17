@@ -63,7 +63,29 @@ user.entities;
 ### Initializing WebSocket
 
 ```js
-user.openWS().then(() => { Do whatever });
+user.openWS().then(() => { Do whatever }).catch(() => { Authentication Failed });
 ```
 
-WebSocket usage is currently unavailible, as it hasn't been implemented server-side yet
+### Pinging WebSocket
+
+```js
+user.pingWS().then(() => { Do whatever });
+```
+
+### Sending data to WebSocket
+
+```js
+user.sendWS({<data>}, "<type>").then((data) => { Do whatever with data })
+```
+
+Where \<data\> is JSON, and \<type\> is the request type (See wsock_api.md)
+
+Data is JSON resposnse from the server.
+
+### Reciving pushes
+
+```js
+user.wsPushListener = ((data) => { Do whatever with data });
+```
+
+Needs to be set BEFORE `openWS` is called.

@@ -13,11 +13,9 @@ class SpeercsApi {
     this.onclose = (() => { console.log("Connection Closed") });
     this.wsPushListener = ((data) => { console.log(JSON.stringify(data)) });
     this.wsIds = {
-      'auth': [],
-      'ping': {
-        'action': this.doPingRequest
-      }
+      
     }
+    this.authPromise;
     this.wsendpoint = endpoint.replace("http://", "ws://").replace("https://", "wss://") + "ws";
     this.axios = axios.create({
       baseURL: this.endpoint + "/a",
@@ -129,7 +127,7 @@ class SpeercsApi {
       this.websocket = new WebSocket(this.wsendpoint);
       this.websocket.parent = this;
       this.websocket.onopen = (event) => {
-        this.wsIds.auth = [resolve, reject];
+        this.authPromise = [resolve, reject];
         this.websocket.send(this.apiKey+"\n");
       }
       this.websocket.onmessage = this.onWsRecive;
@@ -142,10 +140,24 @@ class SpeercsApi {
       if (!this.websocket || this.websocket.readyState != 1) return reject(SpeercsErrors.WSError());
       this.websocket.parent = this;
       let thisReqId = this.wsId++;
-      this.wsIds.ping[thisReqId] = [resolve,reject];
+      this.wsIds[thisReqId] = [resolve,reject];
       this.websocket.send(JSON.stringify({
         request: "ping",
         data: {},
+        id: thisReqId
+      })+"\n");
+    });
+  }
+
+  sendWs(data, type) {
+    return new Promise((resolve, reject) => {
+      if (!this.websocket || this.websocket.readyState != 1) return reject(SpeercsErrors.WSError());
+      this.websocket.parent = this;
+      let thisReqId = this.wsId++;
+      this.wsIds[thisReqId] = [resolve,reject];
+      this.websocket.send(JSON.stringify({
+        request: type,
+        data: data,
         id: thisReqId
       })+"\n");
     });
@@ -188,13 +200,13 @@ class SpeercsApi {
   }
 
   onWsRecive(data) {
-    if (data.data == "true") return this.parent.wsIds.auth[0]();
-    if (data.data == "false") return this.parent.wsIds.auth[1]();
+    if (data.data == "true") return this.parent.authPromise[0]();
+    if (data.data == "false") return this.parent.authPromise[1]();
     data = JSON.parse(data.data);
     if (!data.id) { // Is `PUSH` notif, do stuff with this.
       return this.parent.wsPushListener(data.data);
     }
-    this.parent.wsIds[data.request][data.id][0](data.data);
+    this.parent.wsIds[data.id][0](data.data);
   }
 }
 
