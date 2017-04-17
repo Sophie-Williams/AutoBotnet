@@ -30,7 +30,7 @@ namespace Speercs.Server.Configuration
 
         public NotificationPipeline NotificationPipeline { get; }
 
-        public PlayerExecutors Executors { get; }
+        public PlayerExecutors Executors { get; private set; }
 
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
