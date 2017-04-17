@@ -12,7 +12,7 @@
             <v-divider v-else-if="item.divider" light />
             <v-list-item v-else>
               <template v-if="!item.authRequired || (item.authRequired && loggedIn) || (item.unauthRequired && !loggedIn)">
-                <v-list-tile ripple>
+                <v-list-tile router="true" :href="item.router" ripple>
                   <v-list-tile-avatar>
                     <v-icon>{{ item.avatar }}</v-icon>
                   </v-list-tile-avatar>
@@ -50,8 +50,14 @@
           //   ]
           // },
           { 
-            title: 'Dashboard',
+            title: 'Home',
             avatar: 'home',
+            router: '/'
+          },
+          { 
+            title: 'Dashboard',
+            avatar: 'dashboard',
+            router: '/dashboard',
             authRequired: true
           },
           {
@@ -62,6 +68,7 @@
           {
             title: 'Login',
             avatar: 'person',
+            router: '/login',
             unauthRequired: true
           },
           { divider: true },

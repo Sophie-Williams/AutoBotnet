@@ -1,11 +1,17 @@
 
 import Landing from './pages/Landing.vue'
+import Login from './pages/Login.vue'
 
 const main = [
   {
     path: '/',
     name: 'landing',
     component: Landing
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
   }
 ]
 
