@@ -108,6 +108,9 @@ namespace Speercs.Server
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            // add wwwroot/
+            app.UseStaticFiles();
+
             // set up Nancy OWIN hosting
             app.UseOwin(x => x.UseNancy(options =>
             {
