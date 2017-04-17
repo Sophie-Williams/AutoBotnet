@@ -11,12 +11,10 @@ export class SpeercsApi {
     this.entities = null
     this.globalEntities = null
     this.websocket = false
-    this.wsId = new Date().getTime()
-    this.onclose = () => { console.log('Connection Closed') }
-    this.wsPushListener = (data) => { console.log(JSON.stringify(data)) }
-    this.wsIds = {
-
-    }
+    this.wsockId = new Date().getTime()
+    this.onclose = () => { console.log('wsock connection closed') }
+    this.pushListener = (data) => { console.log(JSON.stringify(data)) }
+    this.wsockIds = {}
     this.authPromise = null
     this.wsendpoint = endpoint.replace('http://', 'ws://').replace('https://', 'wss://') + 'ws'
     this.axios = axios.create({
@@ -128,7 +126,7 @@ export class SpeercsApi {
 
   /* SECTION WEBSOCKETS */
 
-  openWS () {
+  openRealtime () {
     return new Promise((resolve, reject) => {
       if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError())
       this.websocket = new window.WebSocket(this.wsendpoint)
@@ -137,31 +135,31 @@ export class SpeercsApi {
         this.authPromise = [resolve, reject]
         this.websocket.send(this.apiKey + '\n')
       }
-      this.websocket.onmessage = this.onWsRecive
+      this.websocket.onmessage = this.onRealtimeReceive
       this.websocket.onclose = () => { console.log('F') }
     })
   }
 
-  pingWS () {
+  pingRealtime () {
     return new Promise((resolve, reject) => {
       if (!this.websocket || this.websocket.readyState !== 1) return reject(SpeercsErrors.WSError())
       this.websocket.parent = this
-      let thisReqId = this.wsId++
-      this.wsIds[thisReqId] = [resolve, reject]
+      let currentRqId = this.wsockId++
+      this.wsockIds[currentRqId] = [resolve, reject]
       this.websocket.send(JSON.stringify({
         request: 'ping',
         data: {},
-        id: thisReqId
+        id: currentRqId
       }) + '\n')
     })
   }
 
-  sendWs (data, type) {
+  sendRealtime (data, type) {
     return new Promise((resolve, reject) => {
       if (!this.websocket || this.websocket.readyState !== 1) return reject(SpeercsErrors.WSError())
       this.websocket.parent = this
-      let thisReqId = this.wsId++
-      this.wsIds[thisReqId] = [resolve, reject]
+      let thisReqId = this.wsockId++
+      this.wsockIds[thisReqId] = [resolve, reject]
       this.websocket.send(JSON.stringify({
         request: type,
         data: data,
@@ -170,19 +168,19 @@ export class SpeercsApi {
     })
   }
 
-  onWsRecive (data) {
+  onRealtimeReceive (data) {
     if (data.data === 'true') return this.parent.authPromise[0]()
     if (data.data === 'false') return this.parent.authPromise[1]()
     data = JSON.parse(data.data)
     if (!data.id) { // Is `PUSH` notif, do stuff with this.
-      return this.parent.wsPushListener(data.data)
+      return this.parent.pushListener(data.data)
     }
-    this.parent.wsIds[data.id][0](data.data)
+    this.parent.wsockIds[data.id][0](data.data)
   }
 
   /* SECTION POST ENDPOINTS */
 
-  updateUserCode (code) {
+  deployUserCode (code) {
     return new Promise((resolve, reject) => {
       if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError())
       this.axios.post('/game/code/deploy', {
