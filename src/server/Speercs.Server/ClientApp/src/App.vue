@@ -2,7 +2,7 @@
   <v-app top-toolbar>
     <header>
       <v-toolbar>
-        <v-toolbar-logo>Vuetify</v-toolbar-logo>
+        <v-toolbar-logo>{{ app_name }}</v-toolbar-logo>
         <v-toolbar-items>
           <v-toolbar-item>
             
@@ -82,7 +82,8 @@
       return {
         item: {
           text: 'Get Started'
-        }
+        },
+        app_name: "AutoBotnet"
       }
     }
   }
