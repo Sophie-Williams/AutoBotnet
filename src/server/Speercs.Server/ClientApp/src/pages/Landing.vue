@@ -1,6 +1,6 @@
 <template>
   <div>
-    Hello. Welcome to {{ appName }}!
+    Hello. Welcome to <b>{{ appName }}</b>!
   </div>
 </template>
 
@@ -12,11 +12,8 @@ export default {
   },
   computed: {
     appName: function () {
-      return this.$root.appName
+      return this.$store.state.data.appName
     }
-  },
-  mounted: function () {
-    console.log(this.$root.appName)
   }
 }
 </script>

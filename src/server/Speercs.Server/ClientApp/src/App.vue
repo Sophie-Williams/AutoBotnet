@@ -67,10 +67,15 @@
           { divider: true },
           { header: 'Support' },
           { title: 'Report Bugs', avatar: 'error' }
-        ],
-        appName: "AutoBotnet"
+        ]
       }
-    }
+    },
+    computed: {
+      appName: function() {
+        return this.$store.state.data.appName
+      }
+    },
+    methods: {}
   }
 </script>
 
