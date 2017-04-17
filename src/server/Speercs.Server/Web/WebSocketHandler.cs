@@ -8,6 +8,7 @@ using Speercs.Server.Web.Realtime;
 using System;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,24 +75,24 @@ namespace Speercs.Server.Web
             });
             try
             {
+                // require auth first
+                var authApiKey = await ReadLineAsync();
+                // attempt to authenticate
+                if (!rtContext.AuthenticateWith(authApiKey)) 
+                {
+                    await WriteLineAsync("false");
+                    await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "invalid authentication key", CancellationToken.None);
+                    throw new SecurityException();
+                }
+                await WriteLineAsync("true");
+                currentUser = await rtContext.GetCurrentUserAsync();
+                // attempt to add handler
+                ServerContext.NotificationPipeline
+                    .RetrieveUserPipeline(currentUser.Identifier)
+                    .AddItemToEnd(pipelineHandler);
+                pipelineRegistered = true;
                 while (_ws.State == WebSocketState.Open)
                 {
-                    // require auth first
-                    var authApiKey = await ReadLineAsync();
-                    // attempt to authenticate
-                    if (!rtContext.AuthenticateWith(authApiKey)) 
-                    {
-                        await WriteLineAsync("false");
-                        await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "invalid authentication key", CancellationToken.None);
-                        break;
-                    }
-                    await WriteLineAsync("true");
-                    currentUser = await rtContext.GetCurrentUserAsync();
-                    // attempt to add handler
-                    ServerContext.NotificationPipeline
-                        .RetrieveUserPipeline(currentUser.Identifier)
-                        .AddItemToEnd(pipelineHandler);
-                    pipelineRegistered = true;
                     var rawData = await ReadLineAsync();
                     var requestBundle = JObject.Parse(rawData);
                     try
