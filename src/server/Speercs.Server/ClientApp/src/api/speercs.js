@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export class SpeercsApi {
   constructor (endpoint, apiKey = null) {
     this.endpoint = endpoint
@@ -15,7 +17,7 @@ export class SpeercsApi {
     this.wsIds = {
 
     }
-    this.authPromise
+    this.authPromise = null
     this.wsendpoint = endpoint.replace('http://', 'ws://').replace('https://', 'wss://') + 'ws'
     this.axios = axios.create({
       baseURL: this.endpoint + '/a',
@@ -37,7 +39,7 @@ export class SpeercsApi {
       if (!this.apiKeyValid) return reject(new SpeercsErrors.KeyError())
       options['params'] = params
       this.axios.get(endpoint, options).then((res) => {
-        if (res.status != 200) return reject(new SpeercsErrors.WtfError())
+        if (res.status !== 200) return reject(new SpeercsErrors.WtfError())
         if (includeData) return resolve(res.data)
         resolve()
       }).catch((err) => {
@@ -91,7 +93,7 @@ export class SpeercsApi {
         username: username,
         password: password
       }).then((res) => {
-        if (res.status != 200) return reject(SpeercsErrors.CredentialError())
+        if (res.status !== 200) return reject(SpeercsErrors.CredentialError())
         this.apiKey = res.data.apikey
         this.apiKeyValid = true
         this.username = res.data.username
@@ -105,13 +107,13 @@ export class SpeercsApi {
 
   register (username, password, invitekey = false) {
     return new Promise((resolve, reject) => {
-      if (serverInfo.inviterequired && !invitekey) return reject(SpeercsErrors.NoInviteError())
+      if (this.serverInfo.inviterequired && !invitekey) return reject(SpeercsErrors.NoInviteError())
       this.axios.post('/auth/register', {
         username: username,
         password: password,
         invitekey: invitekey
       }).then((res) => {
-        if (res.status != 200) return reject(SpeercsErrors.WtfError())
+        if (res.status !== 200) return reject(SpeercsErrors.WtfError())
         this.apiKey = res.data.apikey
         this.apiKeyValid = true
         this.username = res.data.username
@@ -129,7 +131,7 @@ export class SpeercsApi {
   openWS () {
     return new Promise((resolve, reject) => {
       if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError())
-      this.websocket = new WebSocket(this.wsendpoint)
+      this.websocket = new window.WebSocket(this.wsendpoint)
       this.websocket.parent = this
       this.websocket.onopen = (event) => {
         this.authPromise = [resolve, reject]
@@ -142,7 +144,7 @@ export class SpeercsApi {
 
   pingWS () {
     return new Promise((resolve, reject) => {
-      if (!this.websocket || this.websocket.readyState != 1) return reject(SpeercsErrors.WSError())
+      if (!this.websocket || this.websocket.readyState !== 1) return reject(SpeercsErrors.WSError())
       this.websocket.parent = this
       let thisReqId = this.wsId++
       this.wsIds[thisReqId] = [resolve, reject]
@@ -156,7 +158,7 @@ export class SpeercsApi {
 
   sendWs (data, type) {
     return new Promise((resolve, reject) => {
-      if (!this.websocket || this.websocket.readyState != 1) return reject(SpeercsErrors.WSError())
+      if (!this.websocket || this.websocket.readyState !== 1) return reject(SpeercsErrors.WSError())
       this.websocket.parent = this
       let thisReqId = this.wsId++
       this.wsIds[thisReqId] = [resolve, reject]
@@ -169,8 +171,8 @@ export class SpeercsApi {
   }
 
   onWsRecive (data) {
-    if (data.data == 'true') return this.parent.authPromise[0]()
-    if (data.data == 'false') return this.parent.authPromise[1]()
+    if (data.data === 'true') return this.parent.authPromise[0]()
+    if (data.data === 'false') return this.parent.authPromise[1]()
     data = JSON.parse(data.data)
     if (!data.id) { // Is `PUSH` notif, do stuff with this.
       return this.parent.wsPushListener(data.data)
@@ -186,7 +188,7 @@ export class SpeercsApi {
       this.axios.post('/game/code/deploy', {
         Source: code
       }).then((res) => {
-        if (res.status != 200) return reject(SpeercsErrors.WtfError())
+        if (res.status !== 200) return reject(SpeercsErrors.WtfError())
         this.code = code
         resolve()
       }).catch((err) => {
