@@ -103,6 +103,10 @@ namespace Speercs.Server
                     ConfigFile = $"{ClientAppPath}webpack.config.js"
                 });
             }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
 
             // set up Nancy OWIN hosting
             app.UseOwin(x => x.UseNancy(options =>
