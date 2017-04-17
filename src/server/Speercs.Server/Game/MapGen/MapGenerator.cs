@@ -63,10 +63,6 @@ namespace Speercs.Server.Game.MapGen
                             if (GetTileAt(x + 1, y) is TileFloor) return true;
                             if (GetTileAt(x, y - 1) is TileFloor) return true;
                             if (GetTileAt(x, y + 1) is TileFloor) return true;
-                            if (GetTileAt(x - 1, y - 1) is TileFloor) return true;
-                            if (GetTileAt(x - 1, y + 1) is TileFloor) return true;
-                            if (GetTileAt(x + 1, y - 1) is TileFloor) return true;
-                            if (GetTileAt(x + 1, y + 1) is TileFloor) return true;
                             return false;
                         }
                     }
