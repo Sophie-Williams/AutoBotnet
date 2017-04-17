@@ -84,6 +84,9 @@ namespace Speercs.Server
             // load persistent state
             SConfigurator.LoadState(context, StateStorageDatabaseFileName);
 
+            // load database
+            context.ConnectDatabase();
+
             // register SIGTERM handler
             AssemblyLoadContext.Default.Unloading += (c) => OnUnload(c, context);
 
