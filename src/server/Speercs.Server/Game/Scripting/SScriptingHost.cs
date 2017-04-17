@@ -9,7 +9,7 @@ namespace Speercs.Server.Game.Scripting
         {
             var engine = new JSEngine(
                 cfg => {
-                    // TODO: ...
+                    cfg.LimitRecursion(10);
                 }
             );
             engine.VariableContext.Game = new SpeercsUserApi();
