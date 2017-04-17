@@ -10,8 +10,6 @@ namespace Speercs.Server.Models.Game.Entities
 
         public Point Location { get; set; }
 
-        public int Size { get; set; }
-
         public GameEntity(ISContext serverContext) : base(serverContext)
         {
             ServerContext.AppState.Entities.Insert(this);
@@ -19,12 +17,7 @@ namespace Speercs.Server.Models.Game.Entities
 
         public Point Move(Point point)
         {
-            if (point.X >= Room.MapEdgeSize) point = new Point(Room.MapEdgeSize - 1, point.Y);
-            if (point.X < 0) point = new Point(0, point.Y);
-            if (point.Y >= Room.MapEdgeSize) point = new Point(point.X, Room.MapEdgeSize - 1);
-            if (point.Y < 0) point = new Point(point.X, 0);
-            Location = point;
-            return Location;
+            return Move(point.X, point.Y);
         }
 
         public Point Move(int x, int y)
@@ -61,7 +54,8 @@ namespace Speercs.Server.Models.Game.Entities
             }
             (int roomX, int roomY) = RoomIdentifier;
 
-            if (!ServerContext.AppState.WorldMap[roomX, roomY].Tiles[newX, newY].IsWalkable()) return Location;
+            if (!ServerContext.AppState.WorldMap[roomX, roomY].Tiles[newX, newY].IsWalkable())
+                return Location; // not Walkable; don't move
 
             if (newX >= Room.MapEdgeSize)
             {
@@ -117,15 +111,13 @@ namespace Speercs.Server.Models.Game.Entities
 
         public Point MoveRelative(int x, int y)
         {
-            int newX = Location.X + x;
-            int newY = Location.Y + y;
-            Point newLoc = new Point(Location.X + x, Location.Y + y);
             Location = new Point(Location.X + x, Location.Y + y);
             return Location;
         }
 
         public bool AttemptMoveRoom((int, int) roomIdentifier)
         {
+            // only allow moving to an adjacent room that exists
             (int nRoomX, int nRoomY) = roomIdentifier;
             (int roomX, int roomY) = RoomIdentifier;
             if (ServerContext.AppState.WorldMap[nRoomX, nRoomY] != null)
