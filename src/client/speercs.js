@@ -32,10 +32,10 @@ class SpeercsApi {
 
   promiseFromGETRequest (endpoint, params = {}, includeData = true, options = {}) {
     return new Promise((resolve, reject) => {
-      if (!this.apiKeyValid) return reject(new SpeercsErrors.KeyError())
+      if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError())
       options['params'] = params
       this.axios.get(endpoint, options).then((res) => {
-        if (res.status !== 200) return reject(new SpeercsErrors.WtfError())
+        if (res.status !== 200) return reject(SpeercsErrors.WtfError())
         if (includeData) return resolve(res.data)
         resolve()
       }).catch((err) => {
@@ -196,23 +196,18 @@ class SpeercsApi {
 
 class SpeercsErrors {
   static NoInviteError () {
-    this.message = 'Invite key is required, but not provided.'
-    this.name = 'ErrNoInvite'
+    return new Error('Invite key is required, but not provided.')
   }
   static WtfError () {
-    this.message = 'Your reject message is in annother castle.'
-    this.name = 'ErrSomethingHappened'
+    return new Error('Your reject message is in annother castle.')
   }
   static CredentialError () {
-    this.message = 'Invalid credentials provided'
-    this.name = 'ErrInvalidCredentials'
+    return new Error('Invalid credentials provided')
   }
   static KeyError () {
-    this.message = 'apiKey is not set or invalid'
-    this.name = 'ErrapiKey'
+    return new Error('apiKey is not set or invalid')
   }
   static WSError () {
-    this.message = 'WebSocket is not initialized or connecter'
-    this.name = 'ErrNoWS'
+    return new Error('WebSocket is not initialized or connecter')
   }
 }
