@@ -2,6 +2,7 @@ using CookieIoC;
 using LiteDB;
 using Osmium.PluginEngine;
 using Speercs.Server.Extensibility;
+using Speercs.Server.Game.Scripting;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
 using Speercs.Server.Services;
@@ -29,6 +30,8 @@ namespace Speercs.Server.Configuration
 
         public NotificationPipeline NotificationPipeline { get; }
 
+        public PlayerExecutors Executors { get; }
+
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
 
@@ -39,6 +42,7 @@ namespace Speercs.Server.Configuration
             ServiceTable = new UserServiceTable(this);
             ExtensibilityContainer = new CookieJar();
             PluginLoader = new PluginLoader<ISpeercsPlugin>();
+            Executors = new PlayerExecutors(this);
         }
 
         public void ConnectDatabase()

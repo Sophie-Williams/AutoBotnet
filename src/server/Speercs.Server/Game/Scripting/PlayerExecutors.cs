@@ -1,6 +1,8 @@
 using IridiumJS;
+using Speercs.Server.Configuration;
 using Speercs.Server.Services.Game;
 using Speercs.Server.Game.Scripting.Api;
+using System.Collections.Concurrent;
 
 namespace Speercs.Server.Game.Scripting
 {
@@ -28,7 +30,7 @@ namespace Speercs.Server.Game.Scripting
 
                 PlayerEngines.TryAdd(userIdentifier, engine);
             } 
-            return UserPipelines[userIdentifier];
+            return PlayerEngines[userIdentifier];
         }
     }
 }
