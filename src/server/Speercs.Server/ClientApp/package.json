@@ -15,6 +15,7 @@
     "vuex-router-sync": "^4.1.2"
   },
   "devDependencies": {
+    "aspnet-webpack": "^1.0.28",
     "buble": "^0.15.1",
     "buble-loader": "^0.4.0",
     "cross-env": "^3.0.0",
@@ -27,6 +28,7 @@
     "vue-template-compiler": "^2.2.6",
     "vuetify": "^0.10.0",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.2.0-rc.0"
+    "webpack-dev-server": "^2.2.0-rc.0",
+    "webpack-hot-middleware": "^2.18.0"
   }
 }
