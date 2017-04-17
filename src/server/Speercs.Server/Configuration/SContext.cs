@@ -42,13 +42,19 @@ namespace Speercs.Server.Configuration
             ServiceTable = new UserServiceTable(this);
             ExtensibilityContainer = new CookieJar();
             PluginLoader = new PluginLoader<ISpeercsPlugin>();
-            Executors = new PlayerExecutors(this);
         }
 
         public void ConnectDatabase()
         {
             // Create database
             Database = new LiteDatabase(Configuration.DatabaseConfiguration.FileName);
+            // load dependent services
+            LoadDatabaseDependentServices();
+        }
+
+        protected void LoadDatabaseDependentServices()
+        {
+            Executors = new PlayerExecutors(this);
         }
     }
 }
