@@ -1,4 +1,4 @@
-import SpeercsApi from '../api/speercs'
+import { SpeercsApi } from '../api/speercs'
 
 const state = {
   all: []
