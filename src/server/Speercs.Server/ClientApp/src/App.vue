@@ -62,8 +62,8 @@
           //     { title: 'Child' }
           //   ]
           // },
-          { title: 'Dashboard', avatar: 'home' },
-          { title: 'Account', avatar: 'person' },
+          { title: 'Dashboard', avatar: 'home', authRequired: true },
+          { title: 'Account', avatar: 'person', authRequired: true },
           { divider: true },
           { header: 'Support' },
           { title: 'Report Bugs', avatar: 'error' }
@@ -73,6 +73,9 @@
     computed: {
       appName: function() {
         return this.$store.state.data.appName
+      },
+      loggedIn: function() {
+        return this.$store.state.auth.loggedIn
       }
     },
     methods: {}
