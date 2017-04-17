@@ -56,8 +56,12 @@ namespace Speercs.Server
         {
             // Adds services required for using options.
             services.AddOptions();
+
             // Register IConfiguration
             services.Configure<SConfiguration>(fileConfig);
+
+            // Add AspNetCore MVC
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,6 +113,18 @@ namespace Speercs.Server
                 );
                 options.Bootstrapper = new SpeercsBootstrapper(context);
             }));
+
+            // set up MVC fallback
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
+            });
             
             // start game services
             GameBootstrapper = new SGameBootstrapper(context);
