@@ -21,6 +21,8 @@ namespace Speercs.Server
         private const string ConfigFileName = "speercs.json";
         private const string StateStorageDatabaseFileName = "speercs_state.lidb";
         private readonly IConfigurationRoot fileConfig;
+        
+        private string ClientAppPath = "ClientApp/";
 
         public SGameBootstrapper GameBootstrapper { get; private set; }
 
@@ -85,12 +87,16 @@ namespace Speercs.Server
             app.UseWebSockets();
             app.Map("/ws", (ab) => WebSocketHandler.Map(ab, context));
 
+            ClientAppPath = Path.Combine(Directory.GetCurrentDirectory(), ClientAppPath);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
-                    HotModuleReplacement = true
+                    HotModuleReplacement = true,
+                    ProjectPath = ClientAppPath,
+                    ConfigFile = $"{ClientAppPath}webpack.config.js"
                 });
             }
 

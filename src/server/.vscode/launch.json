@@ -38,7 +38,7 @@
             "preLaunchTask": "build",
             "program": "${workspaceRoot}/Speercs.Server/bin/Debug/netcoreapp1.1/Speercs.Server.dll",
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/Speercs.Server",
             "stopAtEntry": false,
             "launchBrowser": {
                 "enabled": false,
