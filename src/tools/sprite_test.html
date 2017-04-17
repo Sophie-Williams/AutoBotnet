@@ -1,0 +1,144 @@
+<html>
+<head>
+    <title>Sprite testing</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        
+        canvas {
+            /*   Source: http://stackoverflow.com/a/7665647/1848578   */
+            image-rendering: optimizeSpeed;             /* Older versions of FF          */
+            image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+            image-rendering: -webkit-optimize-contrast; /* Safari                        */
+            image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+            image-rendering: pixelated;                 /* Awesome future-browsers       */
+            -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
+        }
+    </style>
+    <script>
+
+var canvas, ctx//: CanvasRenderingContext2D;
+window.addEventListener("load", function(e) {
+    canvas = document.querySelector("canvas");
+    ctx = canvas.getContext("2d");
+    
+    loadSprites();
+});
+
+var sprites = [];
+function loadSprites() {
+    var numLeft = 5;
+    
+    loadImg(0, "Floor.png");
+    loadImg(1, "Wall.png");
+    loadImg(2, "Bedrock.png");
+    loadImg(3, "Ore.png");
+    loadImg(4, "Rare_Ore.png");
+    
+    function loadImg(i, src) {
+        var img = sprites[i] = new Image();
+        img.onload = function() {
+            console.log("Loaded "+src);
+            if (--numLeft == 0)
+                render();
+        };
+        img.onerror = function(e) {
+            alert("Failed to load "+src+"\n\n(make sure it's in the same folder as sprite_test.html)");
+        };
+        img.src = src;
+    }
+}
+
+function render() {
+    console.log("Rendering");
+    
+    // set canvas size
+    var tileSize = sprites[0].width;
+    canvas.width = canvas.height = tileSize*map.length;
+    canvas.style.width = canvas.style.height = (canvas.width*1)+"px";
+    
+    // draw map
+    for (var x = 0; x < map.length; x++) {
+        for (var y = 0; y < map[0].length; y++) {
+            var img = sprites[map[x][y]];
+            ctx.drawImage(img, x*tileSize, y*tileSize);
+        }
+    }
+    
+    console.log("Done");
+}
+
+var map = `##########......................################################
+#######O*.......................OO##############################
+#######O*.......................OO#############OOOOOOOOO########
+#######O**......................OOOOOOOOOOOOOOOOOOOOOOOOO#######
+#######OO**....................OOOOOOOOOOOOOOOOOO.....OOO#######
+########OO*..................OOOO........OOOO..........OOO######
+#########O*.................OOOO..........OO...........OOO######
+#########O**..........OO....OOOO..........**............OO######
+#########OOOOO......OOOO*....OO...*OOOO..****...........OO######
+##OOOOOOO#OOOOO....OOOOO*........**OOOOO**OO*OOOO......OOO######
+#OO*****OO##OOO....OOO#O**......**OO#OOOOOOOOOOOOO....OOOO######
+#OO*...**OOOOOO....OOOOOO****O***OO############OOO....OOO#######
+#OO.....*OOOOO......OOOOOOOOOOOOOO##############OO....OOOO######
+#OO......OOOO..........OOO######################OOO....OOOO#####
+#OO.......OO............OO###############OOOOOO#OOOO....OOO#####
+#OOO....................OO##############OOOOOOOOOOOOO....OO#####
+#OOOO............**.....OO#############OOOO..OOOOOOOOO...OO#####
+##OOOO..........****....OO############OOOO......**OOOOOOOOO#####
+###OOO.........**OOO....OO###########OOOO........*OOOOOOOOO#####
+##OOO......O****OOOO....OO##########OOOO..........OOO###########
+##OOO.....OOOOO**OO....OOO###OOOOOO#OOO............OOO##########
+##OO.....OOOOO**.......OOOOOOOOOOOOOOO.............OOOO#########
+##OO.....OOOOO*........OOOOOOOO..OOOOO..............OOOOOO######
+##OO....OOOOOO........OOO..........OOOO..............OOOOOO#####
+##OO....OOOOO........OOO............OOOO................OOO#####
+##OOO..OOOOO........OOO..............OO..................OOO####
+##OOOOOOOOOO..OO...OOOO.....OOOO.........................OOO####
+###OOOOOOOO..OOOOOOOOO.....OOOOOO.........................OO####
+#######OOOO..OOOOOOOOO....OOOOOOO.........................OO####
+#OOOOOOOOO....OO####+OO..OOOOOOO..................OOO.....OO####
+#OOOOOOOO.....OO#OOO++OOOOOOOOO..................OOOOO...OOO####
+#O............OOOOOOOOOOOOO......................OOOOOOOOOOO####
+#.............OOOOO..OOOO........................OOOOOOOOOO#####
+...............OOO....OO..........................OOO###########
+...............OOO......................OO.........OO###########
+..............OOOO....................OOOO*........OO###########
+.............OOOOOO..................OOOOO**OO....OOOOOOOO######
+.............OOOOOOO...............OOOO...**OOO..OOOOOOOOOO#####
+..............OOOOOOO.........OOOOOOOO.....***OOOOOOOO..OOO#####
+................OOOOOO.......*OOOOOOOO.........OOOOOO....OO#####
+..................OOOO......**OO###OOO..........OOOOO....OO#####
+...................OO......**OOOOOOOOO..........OOOOOO..OOO#####
+..........................**OOOOOOOOO............OOOOOOOOOO#####
+.........................O*OOOOO..OO........OO....OOOOOOOO######
+.........................OOO#+O...........OOOOO.......OOOO######
+........................OOO##+O..........OOOOOO........OOOO#####
+.......................OO+O#OOO........OOOOOOOO.........OOOOO###
+.......................OO+OOOOO.......OOOOOOOOO..........OOOOOO#
+#O......................OOOOOO.......OOOOOOOOO.............OOOO#
+#OO...........OOOO...................OOOO..OO.................O#
+#OO.......OOOO*OOOO.................OOOO........................
+#O.......OOO***OOOO.................OOOO........................
+#O......OOOO..**+OOO...OOO....OO....OOOO........................
+#O.....OOOO....**OOOOOOOOOOOOOOOO....OO.........................
+#OO....OOOO.....*OOOOOOOOOOOOOOOO...............................
+#+OO..OOOOO.........OOO########OO......................OO.......
+#OOOOOOOOOO..........OOOOOOOOO#OOO.............OO.....OOOO......
+##OOOOOO#OO..........OOOOOOOOOOOOOO...........OOOO...OOOOOO.....
+#########OOO..........OO....OOOOOOO...........OOOOOOOOOOOOOOO..#
+#########OOOO................OOOOO...........OOOOOOOOOO##OOOOOO#
+##########OOOO............................OOOOOO###########OOOO#
+###########OOOO..........................OOOOOO#################
+############OOO.........................OOOO####################
+###############........................#########################`
+    .split("\n")
+    .map( row => row.split("").map(c => ".O#*+".indexOf(c)) );
+
+    </script>
+</head>
+<body>
+    <canvas>git a gud browzur plox</canvas>
+</body>
+</html>
