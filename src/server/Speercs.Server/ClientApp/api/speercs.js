@@ -198,23 +198,18 @@ export class SpeercsApi {
 
 class SpeercsErrors {
   static NoInviteError () {
-    this.message = 'Invite key is required, but not provided.'
-    this.name = 'ErrNoInvite'
+    return new Error('Invite key is required, but not provided.')
   }
   static WtfError () {
-    this.message = 'Your reject message is in annother castle.'
-    this.name = 'ErrSomethingHappened'
+    return new Error('Your reject message is in annother castle.')
   }
   static CredentialError () {
-    this.message = 'Invalid credentials provided'
-    this.name = 'ErrInvalidCredentials'
+    return new Error('Invalid credentials provided')
   }
   static KeyError () {
-    this.message = 'apiKey is not set or invalid'
-    this.name = 'ErrapiKey'
+    return new Error('apiKey is not set or invalid')
   }
   static WSError () {
-    this.message = 'WebSocket is not initialized or connecter'
-    this.name = 'ErrNoWS'
+    return new Error('WebSocket is not initialized or connecter')
   }
 }
