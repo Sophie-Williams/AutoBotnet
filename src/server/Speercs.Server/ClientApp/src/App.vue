@@ -2,7 +2,7 @@
   <v-app class="elevation-1" top-toolbar left-sidebar>
     <v-toolbar>
       <v-toolbar-side-icon class="hidden-lg-and-up" @click.native.stop="sidebar_v = !sidebar_vsss" />
-      <v-toolbar-title>{{ app_name }}</v-toolbar-title>
+      <v-toolbar-title>{{ appName }}</v-toolbar-title>
     </v-toolbar>
     <main>
       <v-sidebar v-model="sidebar_v" height="auto">
@@ -37,7 +37,11 @@
         </v-list>
       </v-sidebar>
       <v-content>
-        <v-container fluid></v-container>
+        <v-container fluid>
+          <div class="content-container">
+            <router-view></router-view>
+          </div>
+        </v-container>
       </v-content>
     </main>
   </v-app>
@@ -64,7 +68,7 @@
           { header: 'Support' },
           { title: 'Report Bugs', avatar: 'error' }
         ],
-        app_name: "AutoBotnet"
+        appName: "AutoBotnet"
       }
     }
   }
