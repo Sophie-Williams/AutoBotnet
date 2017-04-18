@@ -35,7 +35,16 @@ namespace Speercs.Server.Game.Scripting
 
                 // load player code into engine
                 var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
-                engine.Execute(playerSource);
+                try
+                {
+                    engine.Execute(playerSource);
+                }
+                catch
+                {
+                    // invalid code
+                    // ...
+                    playerSource = null; // suppress annoying warning
+                }
 
                 PlayerEngines.TryAdd(userIdentifier, engine);
             } 
