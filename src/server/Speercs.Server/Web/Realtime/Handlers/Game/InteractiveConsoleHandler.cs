@@ -25,7 +25,7 @@ namespace Speercs.Server.Web.Realtime.Handlers
                     .ToObject();
                 if (result != null) 
                 {
-                    jsonResult = JObject.FromObject(result);
+                    jsonResult = JToken.FromObject(result);
                 }
                 error = false;
             }
