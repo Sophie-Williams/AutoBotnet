@@ -27,7 +27,10 @@ namespace Speercs.Server.Services.Game
         {
             await Task.Run(() => 
             {
-                var persistentData = new UserPersistentData(ownerId);
+                var persistentData = new UserPersistentData(ownerId)
+                {
+                    Program = new UserProgram(string.Empty)
+                };
                 persistentPlayerDataCollection.Upsert(persistentData);
                 persistentPlayerDataCollection.EnsureIndex(x => x.OwnerId);
             });
