@@ -9,6 +9,7 @@
             "program": "${workspaceRoot}/Speercs.DevTests/bin/Debug/netcoreapp1.1/Speercs.DevTests.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
+            "enableStepFiltering": false,
             "stopAtEntry": false,
             "launchBrowser": {
                 "enabled": false,
