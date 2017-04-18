@@ -21,8 +21,14 @@ namespace Speercs.DevTests
             Console.WriteLine("Starting mapgen test");
 
             var generator = new MapGenerator(ServerContext);
-            var room = generator.GenerateRoom(0, 0);
-            room.Print();
+            
+            for (var x = 0; x < 2; x++) {
+                for (var y = 0; y < 2; y++) {
+                    Console.WriteLine(x+", "+y);
+                    var room = ServerContext.AppState.WorldMap[x, y] = generator.GenerateRoom(x, y);
+                    room.Print();
+                }
+            }
         }
 
         public static ISContext ServerContext;
