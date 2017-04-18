@@ -25,7 +25,7 @@ namespace Speercs.Server.Web.Realtime.Handlers
             }
             return Task.FromResult<JToken>(
                 JValue.FromObject(
-                    new JProperty("value", result),
+                    new JProperty("value", JValue.FromObject(result)),
                     new JProperty("error", result == null)
                 )
             );
