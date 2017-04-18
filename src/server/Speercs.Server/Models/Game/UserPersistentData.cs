@@ -2,7 +2,7 @@ using Speercs.Server.Models.Game.Program;
 
 namespace Speercs.Server.Models.Game
 {
-    public class UserPersistentData
+    public class UserPersistentData : DatabaseObject
     {
         public UserPersistentData(string ownerId)
         {
