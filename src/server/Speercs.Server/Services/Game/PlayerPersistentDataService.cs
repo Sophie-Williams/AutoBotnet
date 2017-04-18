@@ -15,5 +15,12 @@ namespace Speercs.Server.Services.Game
         }
 
         public UserPersistentData this[string ownerId] => persistentPlayerDataCollection.FindOne(x => x.OwnerId == ownerId);
+
+        public async Task CreatePersistentData(string ownerId)
+        {
+            var persistentData = new UserPersistentData(ownerId);
+            persistentPlayerDataCollection.Upsert(persistentData);
+            persistentPlayerDataCollection.EnsureIndex(x => x.OwnerId);
+        }
     }
 }
