@@ -8,7 +8,8 @@ namespace Speercs.Server.Game.Scripting.Api
     public class SpeercsUserApi : ProtectedDependencyObject
     {
         public string UserId { get; }
-        public (int, int) RoomLocation { get; set; } = (0,0);
+        public int CurrentRoomX { get; set; } = 0;
+        public int CurrentRoomY { get; set; } = 0;
 
         public SpeercsUserApi(ISContext serverContext, string userId) : base(serverContext)
         {
@@ -24,8 +25,18 @@ namespace Speercs.Server.Game.Scripting.Api
         }*/
 
         public Room GetCurrentRoom() {
-            var (roomX, roomY) = RoomLocation;
-            return ServerContext.AppState.WorldMap[roomX,roomY];
+            return ServerContext.AppState.WorldMap[CurrentRoomX,CurrentRoomY];
+        }
+
+        public Room MoveToRoom(int x, int y) {
+            Room newRoom = ServerContext.AppState.WorldMap[x,y];
+            if (newRoom == null) return null;
+            (CurrentRoomX, CurrentRoomY) = (x,y);
+            return newRoom;
+        }
+
+        public string Test() {
+            return "This is a test.";
         }
     }
 }
