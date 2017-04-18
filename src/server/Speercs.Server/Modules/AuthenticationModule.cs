@@ -4,6 +4,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Requests;
 using Speercs.Server.Services.Auth;
+using Speercs.Server.Services.Game;
 using Speercs.Server.Utilities;
 using System;
 using System.Security;
@@ -76,6 +77,10 @@ namespace Speercs.Server.Modules
 
                     // create team data
                     ServerContext.AppState.PlayerData[newUser.Identifier] = new UserTeam();
+
+                    // create persistent data
+                    var persistentDataService = new PlayerPersistentDataService(ServerContext);
+                    await persistentDataService.CreatePersistentData(newUser.Identifier);
 
                     // Return user details
                     return Response.AsJsonNet(newUser);
