@@ -15,7 +15,7 @@ export default {
       return this.$store.state.data.appName
     },
     username: function () {
-      return this.$store.state.data.authData.un;
+      return this.$store.getters.auth_data.un;
     }
   }
 }

@@ -28,30 +28,40 @@ const actions = {
       .then(() => {
         resultData.success = true
         resultData.un = auth.un
-        resultData.key = state.api.apiKey
+        resultData.key = state.api.getApiKey()
         commit('login_result', resultData)
         resolve()
       })
-      .catch(() => {
+      .catch((e) => {
         commit('login_result', resultData)
+        console.log(e)
         reject(new Error('login failed'))
       })
     })
   },
   register_account ({commit, state}, auth) {
-    let resultData = {
-      success: false
-    }
-    state.api.register(auth.un, auth.pw, auth.invite)
+    return new Promise((resolve, reject) => {
+      let resultData = {
+        success: false
+      }
+      state.api.register(auth.un, auth.pw, auth.invite)
       .then(() => {
         resultData.success = true
         resultData.un = auth.un
-        resultData.key = state.api.apiKey
+        resultData.key = state.api.getApiKey()
         commit('login_result', resultData)
       })
       .catch(() => {
         commit('login_result', resultData)
+        reject(new Error('register failed'))
       })
+    })
+  },
+  logout ({commit, state}) {
+    return new Promise((resolve, reject) => {
+      state.api.logout()
+      commit('login_result', { success: false })
+    })
   }
 }
 
@@ -75,6 +85,9 @@ const mutations = {
 const getters = {
   api_available (state) {
     return state.api !== null
+  },
+  auth_data (state) {
+    return state.authData
   }
 }
 

@@ -3,25 +3,8 @@ import axios from 'axios'
 export class SpeercsApi {
   constructor (endpoint, apiKey = null) {
     this.endpoint = endpoint
-    this.username = null
-    this.apiKeyValid = false
-    this.serverInfo = null
-    this.apiKey = apiKey
-    this.program = null
-    this.entities = null
-    this.globalEntities = null
-    this.websocket = false
-    this.wsockId = new Date().getTime()
-    this.onclose = () => { console.log('wsock connection closed') }
-    this.pushListener = (data) => { console.log(JSON.stringify(data)) }
-    this.wsockIds = {}
-    this.authPromise = null
+    this.initialize(apiKey)
     this.wsendpoint = endpoint.replace('http://', 'ws://').replace('https://', 'wss://') + 'ws'
-    this.axios = axios.create({
-      baseURL: this.endpoint + '/a',
-      headers: { Authorization: this.apiKey },
-      responseType: 'json'
-    })
 
     this.getMeta()
     if (this.apiKey) {
@@ -31,6 +14,28 @@ export class SpeercsApi {
   }
 
   /* SECTION HELPERS */
+
+  initialize (apiKey = null) {
+    this.apiKey = apiKey
+    this.username = null
+    this.apiKeyValid = false
+    this.serverInfo = null
+    this.program = null
+    this.entities = null
+    this.globalEntities = null
+    this.websocket = false
+    this.wsockId = new Date().getTime()
+    this.onclose = () => { console.log('wsock connection closed') }
+    this.pushListener = (data) => { console.log(JSON.stringify(data)) }
+    this.wsockIds = {}
+    this.authPromise = null
+
+    this.axios = axios.create({
+      baseURL: this.endpoint + '/a',
+      headers: { Authorization: this.apiKey },
+      responseType: 'json'
+    })
+  }
 
   promiseFromGETRequest (endpoint, params = {}, includeData = true, options = {}) {
     return new Promise((resolve, reject) => {
@@ -85,6 +90,11 @@ export class SpeercsApi {
 
   /* SECTION AUTH */
 
+  logout () {
+    this.apiKey = null
+    this.initialize()
+  }
+
   login (username, password) {
     return new Promise((resolve, reject) => {
       this.axios.post('/auth/login', {
@@ -116,7 +126,7 @@ export class SpeercsApi {
         this.apiKeyValid = true
         this.username = res.data.username
         this.regenAxios()
-        this.GetUserCode()
+        this.getUserCode()
         resolve()
       }).catch((err) => {
         reject(err)
@@ -193,6 +203,12 @@ export class SpeercsApi {
         reject(err)
       })
     })
+  }
+
+  /* Getters */
+
+  getApiKey () {
+    return this.apiKey
   }
 }
 

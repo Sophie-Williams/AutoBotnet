@@ -1,6 +1,7 @@
 
 import Landing from './pages/Landing.vue'
 import Login from './pages/Login.vue'
+import Logout from './pages/Logout.vue'
 import Dashboard from './pages/Dashboard.vue'
 
 const main = [
@@ -13,6 +14,11 @@ const main = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    component: Logout
   },
   {
     path: '/dashboard',
