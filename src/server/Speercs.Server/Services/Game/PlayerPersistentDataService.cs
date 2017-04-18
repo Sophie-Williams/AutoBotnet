@@ -1,6 +1,7 @@
 using LiteDB;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game;
+using System.Threading.Tasks;
 
 namespace Speercs.Server.Services.Game
 {
@@ -18,9 +19,12 @@ namespace Speercs.Server.Services.Game
 
         public async Task CreatePersistentData(string ownerId)
         {
-            var persistentData = new UserPersistentData(ownerId);
-            persistentPlayerDataCollection.Upsert(persistentData);
-            persistentPlayerDataCollection.EnsureIndex(x => x.OwnerId);
+            await Task.Run(() => 
+            {
+                var persistentData = new UserPersistentData(ownerId);
+                persistentPlayerDataCollection.Upsert(persistentData);
+                persistentPlayerDataCollection.EnsureIndex(x => x.OwnerId);
+            });
         }
     }
 }
