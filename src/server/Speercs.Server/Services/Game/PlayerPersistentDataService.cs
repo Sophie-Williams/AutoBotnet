@@ -15,7 +15,12 @@ namespace Speercs.Server.Services.Game
             persistentPlayerDataCollection = serverContext.Database.GetCollection<UserPersistentData>(PlayerDataKey);
         }
 
-        public UserPersistentData this[string ownerId] => persistentPlayerDataCollection.FindOne(x => x.OwnerId == ownerId);
+        public UserPersistentData this[string ownerId] => FindPersistentData(ownerId);
+
+        private UserPersistentData FindPersistentData(string ownerId)
+        {
+            return persistentPlayerDataCollection.FindOne(x => x.OwnerId == ownerId);
+        }
 
         public async Task CreatePersistentDataAsync(string ownerId)
         {

@@ -9,7 +9,12 @@ namespace Speercs.Server.Models.Game
             OwnerId = ownerId;
         }
 
-        public string OwnerId { get; }
+        // BSON Constructor
+        public UserPersistentData()
+        {
+        }
+
+        public string OwnerId { get; set; }
 
         public UserProgram Program { get; set; }
     }
