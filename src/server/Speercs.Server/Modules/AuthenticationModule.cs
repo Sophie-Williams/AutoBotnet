@@ -80,7 +80,7 @@ namespace Speercs.Server.Modules
 
                     // create persistent data
                     var persistentDataService = new PlayerPersistentDataService(ServerContext);
-                    await persistentDataService.CreatePersistentData(newUser.Identifier);
+                    await persistentDataService.CreatePersistentDataAsync(newUser.Identifier);
 
                     // Return user details
                     return Response.AsJsonNet(newUser);
