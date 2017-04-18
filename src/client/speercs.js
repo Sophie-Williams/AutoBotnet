@@ -114,7 +114,7 @@ class SpeercsApi {
         this.apiKeyValid = true
         this.username = res.data.username
         this.regenAxios()
-        this.GetUserCode()
+        this.getUserCode()
         resolve()
       }).catch((err) => {
         reject(err)
