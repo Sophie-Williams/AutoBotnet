@@ -10,12 +10,20 @@ const state = {
 }
 
 const actions = {
+  ensure_api ({commit, state}, endpoint) {
+    return new Promise((resolve, reject) => {
+      if (state.api === null) {
+        commit('create_api', endpoint)
+        resolve(true)
+      }
+      resolve(false)
+    })
+  },
   authenticate ({commit, state}, auth) {
     return new Promise((resolve, reject) => {
       let resultData = {
         success: false
       }
-      console.log(state)
       state.api.login(auth.un, auth.pw)
       .then(() => {
         resultData.un = auth.un
@@ -33,8 +41,6 @@ const actions = {
     let resultData = {
       success: false
     }
-    commit('create_api')
-    console.log('aa', state.api_available)
     state.api.register(auth.un, auth.pw, auth.invite)
       .then(() => {
         resultData.un = auth.un
