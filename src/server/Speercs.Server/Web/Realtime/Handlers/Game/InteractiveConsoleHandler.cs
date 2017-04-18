@@ -13,25 +13,31 @@ namespace Speercs.Server.Web.Realtime.Handlers
 
         public override Task<JToken> HandleRequestAsync(long id, JToken data, RealtimeContext rtContext)
         {
-            object result;
+            JToken jsonResult = JValue.CreateNull();
+            bool error;
             try
             {
                 var executor = ServerContext.Executors.RetrieveExecutor(rtContext.UserIdentifier);
                 var command = data["command"].ToString();
-                result = executor
+                var result = executor
                     .Execute(command)
                     .GetCompletionValue()
                     .ToObject();
+                if (result != null) 
+                {
+                    jsonResult = JObject.FromObject(result);
+                }
+                error = false;
             }
             catch
             {
                 // there was an error
-                result = null;
+                error = true;
             }
             return Task.FromResult<JToken>(
                 new JObject(
-                    new JProperty("value", result),
-                    new JProperty("error", result == null)
+                    new JProperty("value", jsonResult),
+                    new JProperty("error", error)
                 )
             );
         }
