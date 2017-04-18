@@ -1,6 +1,7 @@
 using LiteDB;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game;
+using Speercs.Server.Models.Game.Program;
 using System.Threading.Tasks;
 
 namespace Speercs.Server.Services.Game
@@ -30,6 +31,13 @@ namespace Speercs.Server.Services.Game
                 persistentPlayerDataCollection.Upsert(persistentData);
                 persistentPlayerDataCollection.EnsureIndex(x => x.OwnerId);
             });
+        }
+
+        public bool DeployProgram(string ownerId, UserProgram program)
+        {
+            var data = FindPersistentData(ownerId);
+            data.Program = program;
+            return persistentPlayerDataCollection.Update(data);
         }
     }
 }

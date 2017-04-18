@@ -21,7 +21,7 @@ namespace Speercs.Server.Modules.Game
             {
                 var req = this.Bind<CodeDeployRequest>();
 
-                PlayerDataService[CurrentUser.Identifier].Program = new UserProgram(req.Source);
+                PlayerDataService.DeployProgram(CurrentUser.Identifier, new UserProgram(req.Source));
                 return HttpStatusCode.OK;
             });
         }
