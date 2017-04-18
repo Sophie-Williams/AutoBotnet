@@ -14,6 +14,7 @@ namespace Speercs.Server.Models.Game.Program
         public UserProgram(string programSource)
         {
             Source = programSource;
+            DeployTime = DateTime.Now;
         }
 
         // BSON Property
