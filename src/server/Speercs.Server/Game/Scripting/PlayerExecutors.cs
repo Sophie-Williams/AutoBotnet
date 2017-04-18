@@ -31,7 +31,7 @@ namespace Speercs.Server.Game.Scripting
         {
             if (!PlayerEngines.ContainsKey(userIdentifier))
             {
-                var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine();
+                var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userIdentifier);
 
                 // load player code into engine
                 var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
