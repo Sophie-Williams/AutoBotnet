@@ -1,6 +1,4 @@
-import axios from 'axios'
-
-export class SpeercsApi {
+class SpeercsApi {
   constructor (endpoint, apiKey = null) {
     this.endpoint = endpoint
     this.username = null
@@ -34,10 +32,10 @@ export class SpeercsApi {
 
   promiseFromGETRequest (endpoint, params = {}, includeData = true, options = {}) {
     return new Promise((resolve, reject) => {
-      if (!this.apiKeyValid) return reject(new SpeercsErrors.KeyError())
+      if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError())
       options['params'] = params
       this.axios.get(endpoint, options).then((res) => {
-        if (res.status !== 200) return reject(new SpeercsErrors.WtfError())
+        if (res.status !== 200) return reject(SpeercsErrors.WtfError())
         if (includeData) return resolve(res.data)
         resolve()
       }).catch((err) => {
