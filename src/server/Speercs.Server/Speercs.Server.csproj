@@ -15,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha5-00069" />
     <PackageReference Include="CookieIoC" Version="2.0.1" />
-    <PackageReference Include="IridiumJS" Version="2.10.3.1" />
+    <PackageReference Include="IridiumJS" Version="2.10.3.2" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
     <PackageReference Include="System.ValueTuple" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
