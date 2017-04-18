@@ -38,19 +38,23 @@ export default {
     }
   },
   methods: {
-    proceed: function () {
+    proceed () {
       this.canProceed = false
       let b = {
         un: this.un,
         pw: this.pw
       }
-      this.$store.dispatch('authenticate', b)
+      this.$store.dispatch('ensure_api', `${window.location.origin}/`)
         .then(() => {
-          // todo
-          console.log('login successful')
-        })
-        .catch(() => {
-          this.canProceed = true
+          this.$store.dispatch('authenticate', b)
+            .then(() => {
+              // todo
+              console.log('login successful')
+            })
+            .catch((e) => {
+              this.canProceed = true
+              console.log('login failure', e)
+            })
         })
     }
   }
