@@ -17,7 +17,7 @@ namespace Speercs.Server.Services.Game
 
         public UserPersistentData this[string ownerId] => persistentPlayerDataCollection.FindOne(x => x.OwnerId == ownerId);
 
-        public async Task CreatePersistentData(string ownerId)
+        public async Task CreatePersistentDataAsync(string ownerId)
         {
             await Task.Run(() => 
             {
