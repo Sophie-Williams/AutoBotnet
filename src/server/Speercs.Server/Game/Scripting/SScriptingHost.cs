@@ -20,7 +20,7 @@ namespace Speercs.Server.Game.Scripting
                     cfg.TimeoutInterval(TimeSpan.FromMilliseconds(ServerContext.Configuration.CodeLoadTimeLimit));
                 }
             );
-            engine.SetValue("Game", new SpeercsUserApi(userId, ServerContext));
+            engine.SetValue("Game", new SpeercsUserApi(ServerContext, userId));
             return engine;
         }
     }

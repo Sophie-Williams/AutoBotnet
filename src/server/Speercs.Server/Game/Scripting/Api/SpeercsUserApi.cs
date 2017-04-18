@@ -1,27 +1,31 @@
 using System.Collections.Generic;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game.Entities;
+using Speercs.Server.Models.Game.Map;
 
 namespace Speercs.Server.Game.Scripting.Api
 {
-    public class SpeercsUserApi
+    public class SpeercsUserApi : ProtectedDependencyObject
     {
         public string UserId { get; }
-        public string RoomLocation { get; set; }
-        private ISContext ServerContext { get; set; }
+        public (int, int) RoomLocation { get; set; } = (0,0);
 
-        public SpeercsUserApi(string userId, ISContext serverContext)
+        public SpeercsUserApi(ISContext serverContext, string userId) : base(serverContext)
         {
             UserId = userId;
-            ServerContext = serverContext;
         }
 
-        public List<GameEntity> Entities
+        /*public List<GameEntity> Entities
         {
             get
             {
                 return ServerContext.AppState.Entities.GetAllByUser(ServerContext.AppState.PlayerData[UserId]);
             }
+        }*/
+
+        public Room GetCurrentRoom() {
+            var (roomX, roomY) = RoomLocation;
+            return ServerContext.AppState.WorldMap[roomX,roomY];
         }
     }
 }

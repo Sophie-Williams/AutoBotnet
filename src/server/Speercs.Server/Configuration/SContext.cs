@@ -5,7 +5,6 @@ using Speercs.Server.Extensibility;
 using Speercs.Server.Game.Scripting;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
-using Speercs.Server.Services;
 
 namespace Speercs.Server.Configuration
 {
