@@ -22,11 +22,6 @@ export default {
   },
   components: {
     loginForm
-  },
-  computed: {
-    appName: function () {
-      return this.$store.state.data.appName
-    }
   }
 }
 </script>

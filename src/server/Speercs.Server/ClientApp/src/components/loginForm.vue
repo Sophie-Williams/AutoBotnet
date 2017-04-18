@@ -48,8 +48,9 @@ export default {
         .then(() => {
           this.$store.dispatch('authenticate', b)
             .then(() => {
-              // todo
               console.log('login successful')
+              // proceed
+              this.$router.push('/dashboard')
             })
             .catch((e) => {
               this.canProceed = true

@@ -1,6 +1,7 @@
 
 import Landing from './pages/Landing.vue'
 import Login from './pages/Login.vue'
+import Dashboard from './pages/Dashboard.vue'
 
 const main = [
   {
@@ -12,6 +13,11 @@ const main = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard
   }
 ]
 

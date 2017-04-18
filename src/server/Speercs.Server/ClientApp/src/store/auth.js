@@ -26,6 +26,7 @@ const actions = {
       }
       state.api.login(auth.un, auth.pw)
       .then(() => {
+        resultData.success = true
         resultData.un = auth.un
         resultData.key = state.api.apiKey
         commit('login_result', resultData)
@@ -43,6 +44,7 @@ const actions = {
     }
     state.api.register(auth.un, auth.pw, auth.invite)
       .then(() => {
+        resultData.success = true
         resultData.un = auth.un
         resultData.key = state.api.apiKey
         commit('login_result', resultData)
