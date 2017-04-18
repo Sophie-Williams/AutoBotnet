@@ -18,6 +18,15 @@ namespace Speercs.Server.Game.Scripting
             PlayerPersistentData = new PlayerPersistentDataService(context);
         }
 
+        public JSEngine ReloadExecutor(string userIdentifier)
+        {
+            if (PlayerEngines.TryRemove(userIdentifier, out JSEngine removed))
+            {
+                return RetrieveExecutor(userIdentifier);
+            }
+            return null;
+        }
+
         public JSEngine RetrieveExecutor(string userIdentifier)
         {
             if (!PlayerEngines.ContainsKey(userIdentifier))

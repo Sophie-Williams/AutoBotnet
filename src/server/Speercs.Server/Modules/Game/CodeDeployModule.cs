@@ -17,6 +17,14 @@ namespace Speercs.Server.Modules.Game
                 return Response.AsJsonNet(program);
             });
 
+            Patch("/reload", _ =>
+            {
+                // reload cached engine for that user
+                ServerContext.Executors.ReloadExecutor(CurrentUser.Identifier);
+
+                return HttpStatusCode.OK;
+            });
+
             Post("/deploy", _ =>
             {
                 var req = this.Bind<CodeDeployRequest>();
