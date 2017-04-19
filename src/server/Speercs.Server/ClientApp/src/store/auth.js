@@ -13,10 +13,17 @@ const actions = {
   ensure_api ({commit, state}, endpoint) {
     return new Promise((resolve, reject) => {
       if (state.api === null) {
-        commit('create_api', endpoint)
-        resolve(true)
+        SpeercsApi.create(endpoint)
+          .then((api) => {
+            commit('save_api', api)
+            resolve(true)
+          })
+          .catch((e) => {
+            reject(e)
+          })
+      } else {
+        resolve(false)
       }
-      resolve(false)
     })
   },
   authenticate ({commit, state}, auth) {
@@ -50,9 +57,11 @@ const actions = {
         resultData.un = auth.un
         resultData.key = state.api.getApiKey()
         commit('login_result', resultData)
+        resolve()
       })
-      .catch(() => {
+      .catch((e) => {
         commit('login_result', resultData)
+        console.log(e)
         reject(new Error('register failed'))
       })
     })
@@ -77,8 +86,8 @@ const mutations = {
       state.loggedIn = false
     }
   },
-  create_api (state, endpoint) {
-    state.api = new SpeercsApi(endpoint)
+  save_api (state, api) {
+    state.api = api
   }
 }
 

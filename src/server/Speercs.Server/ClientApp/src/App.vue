@@ -75,6 +75,13 @@
             autoHide: true
           },
           {
+            title: 'Register',
+            avatar: 'create',
+            router: '/register',
+            unauthRequired: true,
+            autoHide: true
+          },
+          {
             title: 'Logout',
             avatar: 'exit_to_app',
             router: '/logout',

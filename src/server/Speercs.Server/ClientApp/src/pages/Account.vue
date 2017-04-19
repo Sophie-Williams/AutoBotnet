@@ -1,6 +1,6 @@
 <template>
   <div>
-    Hello. Welcome to your dashboard, {{ username }}, to <b>{{ appName }}</b>!
+    Hello. Welcome to your account page, {{ username }}, to <b>{{ appName }}</b>!
   </div>
 </template>
 

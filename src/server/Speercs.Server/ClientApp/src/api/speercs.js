@@ -5,12 +5,25 @@ export class SpeercsApi {
     this.endpoint = endpoint
     this.initialize(apiKey)
     this.wsendpoint = endpoint.replace('http://', 'ws://').replace('https://', 'wss://') + 'ws'
+  }
 
-    this.getMeta()
-    if (this.apiKey) {
-      this.getUserInfo()
-      this.getUserCode()
-    }
+  static create (endpoint, apiKey = null) {
+    return new Promise((resolve, reject) => {
+      let api = new SpeercsApi(endpoint)
+      let creation = []
+      creation.push(api.getMeta())
+      if (api.apiKey) {
+        creation.push(api.getUserInfo())
+        creation.push(api.getUserCode())
+      }
+      Promise.all(creation)
+        .then(() => {
+          resolve(api)
+        })
+        .catch((e) => {
+          reject(e)
+        })
+    })
   }
 
   /* SECTION HELPERS */
@@ -25,14 +38,20 @@ export class SpeercsApi {
     this.globalEntities = null
     this.websocket = false
     this.wsockId = new Date().getTime()
-    this.onclose = () => { console.log('wsock connection closed') }
-    this.pushListener = (data) => { console.log(JSON.stringify(data)) }
+    this.onclose = () => {
+      console.log('wsock connection closed')
+    }
+    this.pushListener = (data) => {
+      console.log(JSON.stringify(data))
+    }
     this.wsockIds = {}
     this.authPromise = null
 
     this.axios = axios.create({
       baseURL: this.endpoint + '/a',
-      headers: { Authorization: this.apiKey },
+      headers: {
+        Authorization: this.apiKey
+      },
       responseType: 'json'
     })
   }
@@ -54,7 +73,9 @@ export class SpeercsApi {
   regenAxios () {
     this.axios = axios.create({
       baseURL: this.endpoint + '/a',
-      headers: { Authorization: this.apiKey },
+      headers: {
+        Authorization: this.apiKey
+      },
       responseType: 'json'
     })
   }
@@ -73,7 +94,9 @@ export class SpeercsApi {
   }
 
   getUserInfo () {
-    return this.promiseFromGETRequest('/game/umeta/me', {}, true, { responseType: 'text' })
+    return this.promiseFromGETRequest('/game/umeta/me', {}, true, {
+      responseType: 'text'
+    })
   }
 
   getUserCode () {
@@ -85,7 +108,10 @@ export class SpeercsApi {
   }
 
   getRoom (x, y) {
-    return this.promiseFromGETRequest('/game/map/room', { x: x, y: y })
+    return this.promiseFromGETRequest('/game/map/room', {
+      x: x,
+      y: y
+    })
   }
 
   /* SECTION AUTH */
@@ -146,7 +172,9 @@ export class SpeercsApi {
         this.websocket.send(this.apiKey + '\n')
       }
       this.websocket.onmessage = this.onRealtimeReceive
-      this.websocket.onclose = () => { console.log('F') }
+      this.websocket.onclose = () => {
+        console.log('F')
+      }
     })
   }
 

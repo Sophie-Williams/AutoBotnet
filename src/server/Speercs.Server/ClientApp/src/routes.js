@@ -1,8 +1,10 @@
 
 import Landing from './pages/Landing.vue'
 import Login from './pages/Login.vue'
+import Register from './pages/Register.vue'
 import Logout from './pages/Logout.vue'
 import Dashboard from './pages/Dashboard.vue'
+import Account from './pages/Account.vue'
 
 const main = [
   {
@@ -16,6 +18,11 @@ const main = [
     component: Login
   },
   {
+    path: '/register',
+    name: 'register',
+    component: Register
+  },
+  {
     path: '/logout',
     name: 'logout',
     component: Logout
@@ -24,6 +31,11 @@ const main = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard
+  },
+  {
+    path: '/u',
+    name: 'account',
+    component: Account
   }
 ]
 
