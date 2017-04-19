@@ -81,6 +81,7 @@ export default {
             })
             .catch((e) => {
               this.canProceed = true
+              this.err = 'invalid credentials'
               console.log('login failure', e)
             })
         })
@@ -102,6 +103,7 @@ export default {
             })
             .catch((e) => {
               this.canProceed = true
+              this.err = 'registration failed'
               console.log('registration failure', e)
             })
         })

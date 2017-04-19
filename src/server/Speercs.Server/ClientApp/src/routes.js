@@ -32,22 +32,26 @@ const main = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: Dashboard
+    component: Dashboard,
+    meta: { requiresAuth: true }
   },
   {
     path: '/g/map',
     name: 'worldmap',
-    component: WorldMap
+    component: WorldMap,
+    meta: { requiresAuth: true }
   },
   {
     path: '/g/editor',
     name: 'codeeditor',
-    component: CodeEditor
+    component: CodeEditor,
+    meta: { requiresAuth: true }
   },
   {
     path: '/u',
     name: 'account',
-    component: Account
+    component: Account,
+    meta: { requiresAuth: true }
   }
 ]
 

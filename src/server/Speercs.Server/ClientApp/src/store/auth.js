@@ -97,6 +97,9 @@ const getters = {
   },
   auth_data (state) {
     return state.authData
+  },
+  is_logged_in (state) {
+    return state.loggedIn
   }
 }
 
