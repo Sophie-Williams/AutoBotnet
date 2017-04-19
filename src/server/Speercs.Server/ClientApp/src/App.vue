@@ -11,7 +11,7 @@
             <v-subheader v-if="item.header" v-text="item.header" />
             <v-divider v-else-if="item.divider" light />
             <v-list-item v-else>
-              <template v-if="!item.authRequired || (item.authRequired && loggedIn) || (item.unauthRequired && !loggedIn)">
+              <template v-if="!item.autoHide || (item.unauthRequired && !loggedIn) || (item.authRequired && loggedIn)">
                 <v-list-tile :router="true" :href="item.router" ripple>
                   <v-list-tile-avatar>
                     <v-icon>{{ item.avatar }}</v-icon>
@@ -58,18 +58,50 @@
             title: 'Dashboard',
             avatar: 'dashboard',
             router: '/dashboard',
-            authRequired: true
+            authRequired: true,
+            autoHide: true
+          },
+          { 
+            title: 'World Map',
+            avatar: 'map',
+            router: '/g/map',
+            authRequired: true,
+            autoHide: true
+          },
+          { 
+            title: 'Code Editor',
+            avatar: 'code',
+            router: '/g/editor',
+            authRequired: true,
+            autoHide: true
           },
           {
             title: 'Account',
             avatar: 'person',
-            authRequired: true
+            router: '/u',
+            authRequired: true,
+            autoHide: true
           },
           {
             title: 'Login',
             avatar: 'person',
             router: '/login',
-            unauthRequired: true
+            unauthRequired: true,
+            autoHide: true
+          },
+          {
+            title: 'Register',
+            avatar: 'create',
+            router: '/register',
+            unauthRequired: true,
+            autoHide: true
+          },
+          {
+            title: 'Logout',
+            avatar: 'exit_to_app',
+            router: '/logout',
+            authRequired: true,
+            autoHide: true
           },
           { divider: true },
           { header: 'Support' },
