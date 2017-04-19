@@ -176,7 +176,7 @@ class SpeercsApi {
   }
 
   runCommand(command) {
-    return sendRealtime(JSON.stringify({
+    return this.sendRealtime(JSON.stringify({
       command: command
     }), "console");
   }
