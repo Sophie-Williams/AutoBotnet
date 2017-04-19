@@ -1,6 +1,13 @@
 <template>
   <div>
-    Hello. Welcome to <b>{{ appName }}</b>!
+    <div class="center">
+      <h2>{{ appName }}</h2>
+    </div>
+    <div>
+      <p>
+        {{ appName }} is a game.
+      </p>
+    </div>
   </div>
 </template>
 
