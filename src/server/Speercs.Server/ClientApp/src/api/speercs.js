@@ -1,3 +1,8 @@
+/**
+ * Speercs Client
+ * SPA app client version
+ */
+
 import axios from 'axios'
 
 export class SpeercsApi {
@@ -206,11 +211,17 @@ export class SpeercsApi {
     })
   }
 
+  runCommand (command) {
+    return this.sendRealtime(JSON.stringify({
+      command: command
+    }), 'console')
+  }
+
   onRealtimeReceive (data) {
     if (data.data === 'true') return this.parent.authPromise[0]()
     if (data.data === 'false') return this.parent.authPromise[1]()
     data = JSON.parse(data.data)
-    if (!data.id) { // Is `PUSH` notif, do stuff with this.
+    if (!data.id) {
       return this.parent.pushListener(data.data)
     }
     this.parent.wsockIds[data.id][0](data.data)
