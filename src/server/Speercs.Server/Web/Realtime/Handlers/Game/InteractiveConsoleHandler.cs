@@ -1,7 +1,6 @@
 using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
 using System.Threading.Tasks;
-using Speercs.Server.Game.Scripting;
 
 namespace Speercs.Server.Web.Realtime.Handlers
 {

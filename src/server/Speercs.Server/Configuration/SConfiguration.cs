@@ -34,7 +34,7 @@ namespace Speercs.Server.Configuration
         [JsonProperty("useDynamicTickRate")]
         public bool UseDynamicTickRate { get; set; } = false;
 
-        [JsonProperty("tickRate")]
+        [JsonProperty("codeLimit")]
         public int CodeLoadTimeLimit { get; set; } = 200;        
     }
 }

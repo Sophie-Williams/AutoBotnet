@@ -11,7 +11,7 @@ namespace Speercs.Server.Game.Scripting
         {
         }
 
-        public JSEngine CreateSandboxedEngine()
+        public JSEngine CreateSandboxedEngine(string userId)
         {
             var engine = new JSEngine(
                 cfg =>
@@ -20,7 +20,7 @@ namespace Speercs.Server.Game.Scripting
                     cfg.TimeoutInterval(TimeSpan.FromMilliseconds(ServerContext.Configuration.CodeLoadTimeLimit));
                 }
             );
-            engine.SetValue("Game", new SpeercsUserApi());
+            engine.SetValue("Game", new SpeercsUserApi(ServerContext, userId));
             return engine;
         }
     }
