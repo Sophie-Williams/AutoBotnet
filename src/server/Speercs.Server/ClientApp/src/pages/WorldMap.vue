@@ -1,6 +1,6 @@
 <template>
   <div>
-    Hello. Welcome to the code editor, {{ username }}!
+    Hello. Welcome to the world map, {{ username }}!
   </div>
 </template>
 

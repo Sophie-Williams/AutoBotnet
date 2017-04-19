@@ -4,6 +4,8 @@ import Login from './pages/Login.vue'
 import Register from './pages/Register.vue'
 import Logout from './pages/Logout.vue'
 import Dashboard from './pages/Dashboard.vue'
+import CodeEditor from './pages/CodeEditor.vue'
+import WorldMap from './pages/WorldMap.vue'
 import Account from './pages/Account.vue'
 
 const main = [
@@ -31,6 +33,16 @@ const main = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard
+  },
+  {
+    path: '/g/map',
+    name: 'worldmap',
+    component: WorldMap
+  },
+  {
+    path: '/g/editor',
+    name: 'codeeditor',
+    component: CodeEditor
   },
   {
     path: '/u',

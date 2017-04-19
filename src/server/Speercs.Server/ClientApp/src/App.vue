@@ -61,6 +61,20 @@
             authRequired: true,
             autoHide: true
           },
+          { 
+            title: 'World Map',
+            avatar: 'map',
+            router: '/g/map',
+            authRequired: true,
+            autoHide: true
+          },
+          { 
+            title: 'Code Editor',
+            avatar: 'code',
+            router: '/g/editor',
+            authRequired: true,
+            autoHide: true
+          },
           {
             title: 'Account',
             avatar: 'person',
