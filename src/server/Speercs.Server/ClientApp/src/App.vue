@@ -64,6 +64,7 @@
           {
             title: 'Account',
             avatar: 'person',
+            router: '/u',
             authRequired: true,
             autoHide: true
           },
