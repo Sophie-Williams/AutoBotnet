@@ -71,18 +71,18 @@ class SpeercsApi {
   }
 
   getUserCode() {
-    return this.promiseFromGETRequest('/game/code/get');
-  }
-
-  getUserEntities() {
     return new Promise((resolve, reject) => {
-      this.promiseFromGETRequest('/game/units').then((data) => {
-        this.code = source;
+      this.promiseFromGETRequest('/game/code/get').then((data) => {
+        this.code = data.source;
         resolve(data);
       }).catch((err) => {
         reject(err);
       })
     });
+  }
+
+  getUserEntities() {
+    return this.promiseFromGETRequest('/game/units');
   }
 
   getRoom(x, y) {
