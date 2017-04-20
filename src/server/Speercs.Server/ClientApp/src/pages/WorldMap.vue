@@ -1,14 +1,6 @@
 <template>
   <div>
-    <div class="center">
-      <img src="public/icon.png" />
-      <h2>{{ appName }}</h2>
-    </div>
-    <div>
-      <p>
-        {{ appName }} is a game.
-      </p>
-    </div>
+    Hello. Welcome to the world map, {{ username }}!
   </div>
 </template>
 
@@ -21,6 +13,9 @@ export default {
   computed: {
     appName: function () {
       return this.$store.state.data.appName
+    },
+    username: function () {
+      return this.$store.getters.auth_data.un;
     }
   }
 }

@@ -1,7 +1,6 @@
 using IridiumJS;
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Game;
-using Speercs.Server.Game.Scripting.Api;
 using System.Collections.Concurrent;
 
 namespace Speercs.Server.Game.Scripting
@@ -31,7 +30,7 @@ namespace Speercs.Server.Game.Scripting
         {
             if (!PlayerEngines.ContainsKey(userIdentifier))
             {
-                var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine();
+                var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userIdentifier);
 
                 // load player code into engine
                 var playerSource = PlayerPersistentData[userIdentifier].Program.Source;

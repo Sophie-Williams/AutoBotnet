@@ -4,21 +4,46 @@
       <v-container fluid>
         <v-row row>
           <v-col xs10 offset-xs1 lg6 offset-lg3>
-            <v-text-field
-              name="username-input"
-              label="Username"
-              v-model="un"
-            ></v-text-field>
-            <v-text-field
-              name="password-input"
-              label="Password"
-              type="password"
-              v-model="pw"
-            ></v-text-field>
-            <v-subheader v-if="err !== null">{{ err }}</v-subheader>
-            <div class="center">
-              <v-btn @click.native="proceed" :disabled="!canProceed" primary raised ripple>Login</v-btn>
-            </div>
+            <template v-if="mode === 'login'">
+              <v-text-field
+                name="username-input"
+                label="Username"
+                v-model="un"
+              ></v-text-field>
+              <v-text-field
+                name="password-input"
+                label="Password"
+                type="password"
+                v-model="pw"
+              ></v-text-field>
+              <v-subheader v-if="err !== null">{{ err }}</v-subheader>
+              <div class="center">
+                <v-btn @click.native="proceed_login" :disabled="!canProceed" primary raised ripple>Login</v-btn>
+              </div>
+            </template>
+            <template v-else-if="mode === 'register'">
+              <v-text-field
+                name="username-input"
+                label="Username"
+                v-model="un"
+              ></v-text-field>
+              <v-text-field
+                name="password-input"
+                label="Password"
+                type="password"
+                v-model="pw"
+              ></v-text-field>
+              <v-text-field
+                name="ikey-input"
+                label="Invite Key"
+                type="password"
+                v-model="ikey"
+              ></v-text-field>
+              <v-subheader v-if="err !== null">{{ err }}</v-subheader>
+              <div class="center">
+                <v-btn @click.native="proceed_register" :disabled="!canProceed" primary raised ripple>Register</v-btn>
+              </div>
+            </template>
           </v-col>
         </v-row>
       </v-container>
@@ -29,16 +54,18 @@
 <script>
 export default {
   name: 'loginForm',
+  props: ['mode'],
   data () {
     return {
       un: null,
       pw: null,
+      ikey: null,
       err: null,
       canProceed: true
     }
   },
   methods: {
-    proceed () {
+    proceed_login () {
       this.canProceed = false
       let b = {
         un: this.un,
@@ -54,7 +81,30 @@ export default {
             })
             .catch((e) => {
               this.canProceed = true
+              this.err = 'invalid credentials'
               console.log('login failure', e)
+            })
+        })
+    },
+    proceed_register () {
+      this.canProceed = false
+      let b = {
+        un: this.un,
+        pw: this.pw,
+        invite: this.ikey
+      }
+      this.$store.dispatch('ensure_api', `${window.location.origin}/`)
+        .then((rs) => {
+          this.$store.dispatch('register_account', b)
+            .then(() => {
+              console.log('registration successful')
+              // proceed
+              this.$router.push('/dashboard')
+            })
+            .catch((e) => {
+              this.canProceed = true
+              this.err = 'registration failed'
+              console.log('registration failure', e)
             })
         })
     }

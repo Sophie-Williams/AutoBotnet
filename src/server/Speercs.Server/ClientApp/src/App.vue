@@ -26,7 +26,9 @@
       <v-content>
         <v-container fluid>
           <div class="content-container">
-            <router-view></router-view>
+            <transition name="slide" mode="out-in">
+              <router-view></router-view>
+            </transition>
           </div>
         </v-container>
       </v-content>
@@ -61,9 +63,24 @@
             authRequired: true,
             autoHide: true
           },
+          { 
+            title: 'World Map',
+            avatar: 'map',
+            router: '/g/map',
+            authRequired: true,
+            autoHide: true
+          },
+          { 
+            title: 'Code Editor',
+            avatar: 'code',
+            router: '/g/editor',
+            authRequired: true,
+            autoHide: true
+          },
           {
             title: 'Account',
             avatar: 'person',
+            router: '/u',
             authRequired: true,
             autoHide: true
           },
@@ -71,6 +88,13 @@
             title: 'Login',
             avatar: 'person',
             router: '/login',
+            unauthRequired: true,
+            autoHide: true
+          },
+          {
+            title: 'Register',
+            avatar: 'create',
+            router: '/register',
             unauthRequired: true,
             autoHide: true
           },
