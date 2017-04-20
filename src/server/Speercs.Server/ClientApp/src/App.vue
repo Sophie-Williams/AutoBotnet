@@ -26,7 +26,9 @@
       <v-content>
         <v-container fluid>
           <div class="content-container">
-            <router-view></router-view>
+            <transition name="slide" mode="out-in">
+              <router-view></router-view>
+            </transition>
           </div>
         </v-container>
       </v-content>
