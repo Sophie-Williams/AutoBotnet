@@ -12,7 +12,7 @@ export default {
       code: 'function loop() {\n}',
       editorOptions: {
         // codemirror options
-        tabSize: 4,
+        tabSize: 2,
         mode: 'text/javascript',
         theme: 'paraiso-dark',
         lineNumbers: true,
