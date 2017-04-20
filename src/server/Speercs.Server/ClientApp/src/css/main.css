@@ -6,6 +6,15 @@
   text-align: center;
 }
 
+
 /*.content {
   background: #303030
 }*/
+
+.intro {
+  margin-bottom: 5%;
+}
+
+.fill {
+  height: 100%;
+}
