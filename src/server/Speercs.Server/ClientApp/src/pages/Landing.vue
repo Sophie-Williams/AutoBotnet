@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="center">
+      <img src="public/icon.png" />
       <h2>{{ appName }}</h2>
     </div>
     <div>
