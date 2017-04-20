@@ -9,6 +9,7 @@
             "program": "${workspaceRoot}/Speercs.DevTests/bin/Debug/netcoreapp1.1/Speercs.DevTests.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
+            "enableStepFiltering": false,
             "stopAtEntry": false,
             "launchBrowser": {
                 "enabled": false,
@@ -38,7 +39,7 @@
             "preLaunchTask": "build",
             "program": "${workspaceRoot}/Speercs.Server/bin/Debug/netcoreapp1.1/Speercs.Server.dll",
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/Speercs.Server",
             "stopAtEntry": false,
             "launchBrowser": {
                 "enabled": false,

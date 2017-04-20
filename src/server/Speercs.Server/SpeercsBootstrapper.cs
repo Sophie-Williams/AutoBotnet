@@ -20,9 +20,6 @@ namespace Speercs.Server
         {
             base.ApplicationStartup(container, pipelines);
 
-            // TODO: Load database, etc.
-            ServerContext.ConnectDatabase();
-
             // Enable stateless authentication
             StatelessAuthentication.Enable(pipelines, new StatelessAuthenticationConfiguration(ctx =>
             {

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace Speercs.Server.Configuration
 {
@@ -65,10 +64,10 @@ namespace Speercs.Server.Configuration
             savedState.Persist();
             // Update references
             serverContext.AppState = savedState;
-            var timedPersistTask = StartTimedPersist(savedState);
+            var timedPersistTask = StartTimedPersistAsync(savedState);
         }
 
-        private static async Task StartTimedPersist(SAppState state)
+        private static async Task StartTimedPersistAsync(SAppState state)
         {
             while (true)
             {

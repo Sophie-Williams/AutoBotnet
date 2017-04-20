@@ -1,18 +1,26 @@
 using IridiumJS;
+using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting.Api;
+using System;
 
 namespace Speercs.Server.Game.Scripting
 {
-    public class SScriptingHost
+    public class SScriptingHost : DependencyObject
     {
-        public JSEngine CreateSandboxedEngine()
+        public SScriptingHost(ISContext context) : base(context)
+        {
+        }
+
+        public JSEngine CreateSandboxedEngine(string userId)
         {
             var engine = new JSEngine(
-                cfg => {
-                    // TODO: ...
+                cfg =>
+                {
+                    cfg.LimitRecursion(10);
+                    cfg.TimeoutInterval(TimeSpan.FromMilliseconds(ServerContext.Configuration.CodeLoadTimeLimit));
                 }
             );
-            engine.VariableContext.Game = new SpeercsUserApi();
+            engine.SetValue("Game", new SpeercsUserApi(ServerContext, userId));
             return engine;
         }
     }

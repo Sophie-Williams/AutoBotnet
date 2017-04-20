@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,8 @@ namespace Speercs.Server
         private const string ConfigFileName = "speercs.json";
         private const string StateStorageDatabaseFileName = "speercs_state.lidb";
         private readonly IConfigurationRoot fileConfig;
+        
+        private string ClientAppPath = "ClientApp/";
 
         public SGameBootstrapper GameBootstrapper { get; private set; }
 
@@ -53,19 +56,18 @@ namespace Speercs.Server
         {
             // Adds services required for using options.
             services.AddOptions();
+
             // Register IConfiguration
             services.Configure<SConfiguration>(fileConfig);
+
+            // Add AspNetCore MVC
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
 
             // create default configuration
             var serverConfig = new SConfiguration();
@@ -82,12 +84,35 @@ namespace Speercs.Server
             // load persistent state
             SConfigurator.LoadState(context, StateStorageDatabaseFileName);
 
+            // load database
+            context.ConnectDatabase();
+
             // register SIGTERM handler
             AssemblyLoadContext.Default.Unloading += (c) => OnUnload(c, context);
 
             // map websockets
             app.UseWebSockets();
             app.Map("/ws", (ab) => WebSocketHandler.Map(ab, context));
+
+            ClientAppPath = Path.Combine(Directory.GetCurrentDirectory(), ClientAppPath);
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true,
+                    ProjectPath = ClientAppPath,
+                    ConfigFile = $"{ClientAppPath}webpack.config.js"
+                });
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
+            // add wwwroot/
+            app.UseStaticFiles();
 
             // set up Nancy OWIN hosting
             app.UseOwin(x => x.UseNancy(options =>
@@ -98,6 +123,18 @@ namespace Speercs.Server
                 );
                 options.Bootstrapper = new SpeercsBootstrapper(context);
             }));
+
+            // set up MVC fallback
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
+            });
             
             // start game services
             GameBootstrapper = new SGameBootstrapper(context);
