@@ -13,6 +13,9 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="ClientApp\**\*" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha5-00069" />
     <PackageReference Include="CookieIoC" Version="2.0.1" />
     <PackageReference Include="IridiumJS" Version="2.10.3.2" />
