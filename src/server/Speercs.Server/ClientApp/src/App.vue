@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :dark="dark_theme">
     <v-navigation-drawer
       persistent
       :clipped="true"
@@ -48,6 +48,7 @@
     data () {
       return {
         sidebar_v: true,
+        dark_theme: false,
         sidebar: [
           { header: 'Quick Links' },
           // {
@@ -133,4 +134,6 @@
 <style lang="stylus">
   @import '../node_modules/vuetify/src/stylus/main'
   @import './css/main.css'
+
+  // $material-theme := $material-dark
 </style>
