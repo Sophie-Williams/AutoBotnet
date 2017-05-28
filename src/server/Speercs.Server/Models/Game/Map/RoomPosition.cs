@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
+using MoreLinq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility;
+using Speercs.Server.Models.Game.Entities;
 
 namespace Speercs.Server.Models.Game.Map
 {
@@ -9,7 +13,7 @@ namespace Speercs.Server.Models.Game.Map
         public int Y { get; }
         public int RoomX { get; }
         public int RoomY { get; }
-        
+                
         // Constructors
         
         public RoomPosition(int roomX, int roomY, int x, int y)
@@ -29,6 +33,25 @@ namespace Speercs.Server.Models.Game.Map
         }
         
         // Methods
+        
+        public int Distance(RoomPosition other)
+        {
+            return Room.MapEdgeSize*((RoomX-other.RoomX) + (RoomY-other.RoomY)) +
+                   (X-other.X) + (Y-other.Y);
+        }
+        public int Distance(GameEntity entity)
+        {
+            return Distance(entity.Position);
+        }
+        
+        public T GetClosestEntity<T>(ISContext context) where T : GameEntity
+        {
+            var _this = this;
+            return GetRoom(context).Entities
+                    .Select(entry => entry.Value)
+                    .OfType<T>()
+                    .MinBy(entity => _this.Distance(entity));
+        }
         
         public Room GetRoom(ISContext context)
         {

@@ -7,33 +7,36 @@ namespace Speercs.Server.Models.Game.Entities
     public abstract class GameEntity : DependencyObject
     {
         public (int, int) RoomIdentifier { get; set; }
+        
+        public readonly string ID;
 
-        public Point Location { get; set; }
+        public RoomPosition Position { get; set; }
 
         public GameEntity(ISContext serverContext) : base(serverContext)
         {
+            ID = System.Guid.NewGuid().ToString("N");
             ServerContext.AppState.Entities.Insert(this);
         }
 
-        public Point Move(Point point)
+        public RoomPosition Move(Point point)
         {
             return Move(point.X, point.Y);
         }
 
-        public Point Move(int x, int y)
+        public RoomPosition Move(int x, int y)
         {
             if (x >= Room.MapEdgeSize) x = Room.MapEdgeSize - 1;
             if (x < 0) x = 0;
             if (y >= Room.MapEdgeSize) y = Room.MapEdgeSize - 1;
             if (y < 0) y = 0;
-            Location = new Point(x, y);
-            return Location;
+            Position = new RoomPosition(Position.RoomX, Position.RoomY, x, y);
+            return Position;
         }
 
-        public Point MoveRelative(int direction)
+        public RoomPosition MoveRelative(int direction)
         {
-            int newX = Location.X;
-            int newY = Location.Y;
+            int newX = Position.X;
+            int newY = Position.Y;
             switch (direction)
             {
                 case 0:
@@ -55,7 +58,7 @@ namespace Speercs.Server.Models.Game.Entities
             (int roomX, int roomY) = RoomIdentifier;
 
             if (!ServerContext.AppState.WorldMap[roomX, roomY].Tiles[newX, newY].IsWalkable())
-                return Location; // not Walkable; don't move
+                return Position; // not Walkable; don't move
 
             if (newX >= Room.MapEdgeSize)
             {
@@ -105,14 +108,14 @@ namespace Speercs.Server.Models.Game.Entities
                     newY++;
                 }
             }
-            Location = new Point(newX, newY);
-            return Location;
+            Position = new RoomPosition(Position.RoomX, Position.RoomY, newX, newY);
+            return Position;
         }
 
-        public Point MoveRelative(int x, int y)
+        public RoomPosition MoveRelative(int x, int y)
         {
-            Location = new Point(Location.X + x, Location.Y + y);
-            return Location;
+            Position = new RoomPosition(Position.RoomX, Position.RoomY, Position.X + x, Position.Y + y);
+            return Position;
         }
 
         public bool AttemptMoveRoom((int, int) roomIdentifier)
