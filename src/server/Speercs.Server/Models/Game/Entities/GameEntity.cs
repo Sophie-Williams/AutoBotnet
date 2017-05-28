@@ -6,8 +6,6 @@ namespace Speercs.Server.Models.Game.Entities
 {
     public abstract class GameEntity : DependencyObject
     {
-        public (int, int) RoomIdentifier { get; set; }
-        
         public readonly string ID;
 
         public RoomPosition Position { get; set; }
@@ -33,83 +31,73 @@ namespace Speercs.Server.Models.Game.Entities
             return Position;
         }
 
-        public RoomPosition MoveRelative(int direction)
+        public bool MoveRelative(int direction)
         {
+            var roomX = Position.RoomX;
+            var roomY = Position.RoomY;
             int newX = Position.X;
             int newY = Position.Y;
+            
             switch (direction)
             {
                 case 0:
                     newY--;
+                    if (newY < 0)
+                    {
+                        if (ServerContext.AppState.WorldMap[roomX, roomY - 1] != null)
+                        {
+                            roomY--;
+                            newY = Room.MapEdgeSize - 1;
+                        }
+                        else return false;
+                    }
                     break;
 
                 case 1:
                     newX++;
+                    if (newX >= Room.MapEdgeSize)
+                    {
+                        if (ServerContext.AppState.WorldMap[roomX + 1, roomY] != null)
+                        {
+                            roomX++;
+                            newX = 0;
+                        }
+                        else return false;
+                    }
                     break;
 
                 case 2:
                     newY++;
+                    if (newY >= Room.MapEdgeSize)
+                    {
+                        if (ServerContext.AppState.WorldMap[roomX, roomY + 1] != null)
+                        {
+                            roomY++;
+                            newY = 0;
+                        }
+                        else return false;
+                    }
                     break;
 
                 case 3:
                     newX--;
+                    if (newX < 0)
+                    {
+                        if (ServerContext.AppState.WorldMap[roomX - 1, roomY] != null)
+                        {
+                            roomX--;
+                            newX = Room.MapEdgeSize - 1;
+                        }
+                        else return false;
+                    }
                     break;
             }
-            (int roomX, int roomY) = RoomIdentifier;
 
             if (!ServerContext.AppState.WorldMap[roomX, roomY].Tiles[newX, newY].IsWalkable())
-                return Position; // not Walkable; don't move
-
-            if (newX >= Room.MapEdgeSize)
-            {
-                if (ServerContext.AppState.WorldMap[roomX + 1, roomY] != null)
-                {
-                    RoomIdentifier = (roomX + 1, roomY);
-                    newX = 0;
-                }
-                else
-                {
-                    newX--;
-                }
-            }
-            if (newX < 0)
-            {
-                if (ServerContext.AppState.WorldMap[roomX - 1, roomY] != null)
-                {
-                    RoomIdentifier = (roomX - 1, roomY);
-                    newX = Room.MapEdgeSize - 1;
-                }
-                else
-                {
-                    newX++;
-                }
-            }
-            if (newY >= Room.MapEdgeSize)
-            {
-                if (ServerContext.AppState.WorldMap[roomX, roomY + 1] != null)
-                {
-                    RoomIdentifier = (roomX, roomY + 1);
-                    newY = 0;
-                }
-                else
-                {
-                    newY--;
-                }
-            }
-            if (newY < 0)
-            {
-                if (ServerContext.AppState.WorldMap[roomX, roomY - 1] != null)
-                {
-                    RoomIdentifier = (roomX, roomY - 1);
-                    newY = Room.MapEdgeSize - 1;
-                }
-                else
-                {
-                    newY++;
-                }
-            }
-            Position = new RoomPosition(Position.RoomX, Position.RoomY, newX, newY);
-            return Position;
+                return false; // not Walkable; don't move
+            
+            Position = new RoomPosition(roomX, roomY, newX, newY);
+            return true;
         }
 
         public RoomPosition MoveRelative(int x, int y)
@@ -118,17 +106,18 @@ namespace Speercs.Server.Models.Game.Entities
             return Position;
         }
 
-        public bool AttemptMoveRoom((int, int) roomIdentifier)
+        public bool AttemptMoveRoom((int, int) newRoom)
         {
             // only allow moving to an adjacent room that exists
-            (int nRoomX, int nRoomY) = roomIdentifier;
-            (int roomX, int roomY) = RoomIdentifier;
+            (int nRoomX, int nRoomY) = newRoom;
+            var roomX = Position.RoomX;
+            var roomY = Position.RoomY;
             if (ServerContext.AppState.WorldMap[nRoomX, nRoomY] != null)
             {
                 if (roomX + 1 == nRoomX || roomX - 1 == nRoomX ||
                     roomY + 1 == nRoomY || roomY - 1 == nRoomY)
                 {
-                    RoomIdentifier = roomIdentifier;
+                    Position = new RoomPosition(nRoomX, nRoomY, Position.X, Position.Y);
                     return true;
                 }
             }
