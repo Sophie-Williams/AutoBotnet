@@ -11,7 +11,7 @@
           <v-divider v-else-if="item.divider" light />
           <v-list-item v-else>
             <template v-if="!item.autoHide || (item.unauthRequired && !loggedIn) || (item.authRequired && loggedIn)">
-              <v-list-tile :router="true" :href="item.router" ripple>
+              <v-list-tile :router="item.router != null" :href="item.router || item.link" ripple>
                 <v-list-tile-avatar>
                   <v-icon>{{ item.avatar }}</v-icon>
                 </v-list-tile-avatar>
@@ -115,7 +115,11 @@
           },
           { divider: true },
           { header: 'Support' },
-          { title: 'Report Bugs', avatar: 'error' }
+          { 
+            title: 'Report Bugs',
+            avatar: 'error',
+            link: 'https://github.com/CookieEaters/autobotnet_t/issues'
+          }
         ]
       }
     },
