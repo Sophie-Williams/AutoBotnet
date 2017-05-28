@@ -20,19 +20,6 @@
             </template>
           </v-list-item>
         </template>
-
-        <!--
-          <v-subheader v-if="item.header" v-text="item.header" />
-          <v-divider v-else-if="item.divider" light />
-          <v-list-item v-else>
-            <template v-if="!item.autoHide || (item.unauthRequired && !loggedIn) || (item.authRequired && loggedIn)">
-              <v-list-tile :router="true" :href="item.router" ripple>
-                <v-list-tile-avatar>
-                  <v-icon>{{ item.avatar }}</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-title v-text="item.title" />    
-              </v-list-tile>
-              -->
       </v-list>
     </v-navigation-drawer>
     <v-toolbar>
