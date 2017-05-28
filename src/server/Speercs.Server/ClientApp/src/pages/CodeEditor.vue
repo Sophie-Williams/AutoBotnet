@@ -4,18 +4,18 @@
       <h3>Code Editor</h3>
     </div>
     <div>
-      <v-row row>
-        <v-col xs12 lg8>
+      <v-layout row>
+        <v-flex xs12 lg8>
           <div class="editor">
             <codemirror v-model="code" :options="editorOptions"></codemirror>
           </div>
-        </v-col>
-        <v-col xs12 lg4>
+        </v-flex>
+        <v-flex xs12 lg4>
           <div class="actions">
             <v-btn primary raised ripple>Deploy Code</v-btn>
           </div>
-        </v-col>
-      </v-row>
+        </v-flex>
+      </v-layout>
     </div>
   </div>
 </template>

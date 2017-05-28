@@ -2,8 +2,8 @@
   <v-card class="grey lighten-4 elevation-0">
     <v-card-text>
       <v-container fluid>
-        <v-row row>
-          <v-col xs10 offset-xs1 lg6 offset-lg3>
+        <v-layout row>
+          <v-flex xs10 offset-xs1 lg6 offset-lg3>
             <template v-if="mode === 'login'">
               <v-text-field
                 name="username-input"
@@ -44,8 +44,8 @@
                 <v-btn @click.native="proceed_register" :disabled="!canProceed" primary raised ripple>Register</v-btn>
               </div>
             </template>
-          </v-col>
-        </v-row>
+          </v-flex>
+        </v-layout>
       </v-container>
     </v-card-text>
   </v-card>

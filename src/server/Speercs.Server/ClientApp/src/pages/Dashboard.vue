@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-row row>
-      <v-col xs6>
+    <v-layout row>
+      <v-flex xs6>
         <v-card>
           <v-card-row class="primary">
             <v-card-title>
@@ -27,8 +27,8 @@
             </template>
           </v-list>
         </v-card>
-      </v-col>
-      <v-col xs6>
+      </v-flex>
+      <v-flex xs6>
         <v-card>
           <v-card-row class="secondary">
             <v-card-title>
@@ -54,8 +54,8 @@
             </template>
           </v-list>
         </v-card>
-      </v-col>
-    </v-row>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
