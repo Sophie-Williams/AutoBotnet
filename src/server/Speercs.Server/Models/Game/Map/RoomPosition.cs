@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
@@ -32,6 +33,14 @@ namespace Speercs.Server.Models.Game.Map
             Y = y;
         }
         
+        public RoomPosition(RoomPosition room, int x, int y)
+        {
+            RoomX = room.RoomX;
+            RoomY = room.RoomY;
+            X = x;
+            Y = y;
+        }
+        
         // Methods
         
         public int Distance(RoomPosition other)
@@ -50,6 +59,16 @@ namespace Speercs.Server.Models.Game.Map
             return GetRoom(context).Entities
                     .Select(entry => entry.Value)
                     .OfType<T>()
+                    .MinBy(entity => _this.Distance(entity));
+        }
+        
+        public T GetClosestEntity<T>(ISContext context, Func<T, bool> predicate) where T : GameEntity
+        {
+            var _this = this;
+            return GetRoom(context).Entities
+                    .Select(entry => entry.Value)
+                    .OfType<T>()
+                    .Where(predicate)
                     .MinBy(entity => _this.Distance(entity));
         }
         

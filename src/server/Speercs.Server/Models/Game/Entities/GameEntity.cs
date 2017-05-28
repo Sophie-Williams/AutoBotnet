@@ -27,7 +27,7 @@ namespace Speercs.Server.Models.Game.Entities
             if (x < 0) x = 0;
             if (y >= Room.MapEdgeSize) y = Room.MapEdgeSize - 1;
             if (y < 0) y = 0;
-            Position = new RoomPosition(Position.RoomX, Position.RoomY, x, y);
+            Position = new RoomPosition(Position, x, y);
             return Position;
         }
 
@@ -102,7 +102,7 @@ namespace Speercs.Server.Models.Game.Entities
 
         public RoomPosition MoveRelative(int x, int y)
         {
-            Position = new RoomPosition(Position.RoomX, Position.RoomY, Position.X + x, Position.Y + y);
+            Position = new RoomPosition(Position, Position.X + x, Position.Y + y);
             return Position;
         }
 
