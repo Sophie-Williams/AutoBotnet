@@ -11,9 +11,9 @@ namespace Speercs.Server.Game.Scripting.Api
     {
         public string UserId { get; }
         private UserTeam MyTeam { get; set; }
+        // Placeholder untill these are in proper classes
         public int CurrentRoomX { get; set; } = 0;
         public int CurrentRoomY { get; set; } = 0;
-        // Placeholder untill these are in proper classes
         public int NRG
         {
             get
@@ -36,7 +36,8 @@ namespace Speercs.Server.Game.Scripting.Api
             }
         }
 
-        public Room CurrentRoom {
+        public Room CurrentRoom
+        {
             get
             {
                 return ServerContext.AppState.WorldMap[CurrentRoomX, CurrentRoomY];
@@ -45,16 +46,16 @@ namespace Speercs.Server.Game.Scripting.Api
 
         public ITile GetTile(int x, int y)
         {
-            return ServerContext.AppState.WorldMap[CurrentRoomX, CurrentRoomY].Tiles[x, y];
+            return CurrentRoom.Tiles[x, y];
         }
 
         public bool MineTile(int x, int y)
         {
-            //TODO: Make sure entity is near tile
-            ITile tile = ServerContext.AppState.WorldMap[CurrentRoomX, CurrentRoomY].Tiles[x, y];
+            // TODO: Make sure entity is near tile
+            ITile tile = CurrentRoom.Tiles[x, y];
             if (tile.IsMinable())
             {
-                //TODO: Mine tile
+                // TODO: Mine tile
                 return true;
             }
             return false;
@@ -68,15 +69,16 @@ namespace Speercs.Server.Game.Scripting.Api
             return newRoom;
         }
 
-        public string Test()
-        {
-            return "This is a test.";
-        }
-
         // To run after modifying MyTeam
         private void UpdateData()
         {
             ServerContext.AppState.PlayerData[UserId] = MyTeam;
+        }
+
+        public bool SpawnEntity()
+        {
+            // TODO: Stuff
+            return false;
         }
     }
 }
