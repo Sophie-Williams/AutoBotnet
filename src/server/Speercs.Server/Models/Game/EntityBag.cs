@@ -20,7 +20,7 @@ namespace Speercs.Server.Models.Game
         public List<GameEntity> GetAllByUser(UserTeam user)
         {
             var entities = new List<GameEntity>();
-            user.ownedEntities.ForEach((entId) =>
+            user.OwnedEntities.ForEach((entId) =>
             {
                 entities.Add(this.EntityData[entId]);
             });

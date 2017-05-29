@@ -10,8 +10,10 @@ namespace Speercs.Server.Models.Game.Entities
 
         public RoomPosition Position { get; set; }
 
-        public GameEntity(ISContext serverContext) : base(serverContext)
+        public GameEntity(ISContext serverContext, RoomPosition pos) : base(serverContext)
         {
+            Position = pos;
+            
             ID = System.Guid.NewGuid().ToString("N");
             ServerContext.AppState.Entities.Insert(this);
         }
