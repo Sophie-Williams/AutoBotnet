@@ -73,32 +73,14 @@ namespace Speercs.Server.Models.Game.Map
                     .MinBy(entity => _this.Distance(entity));
         }
         
-        private class Node : IComparable<Node>
+        public List<RoomPosition> PathTo(RoomPosition goal)
         {
-            public bool open;
-            public Node parent;
-            public int X, Y;
-            public int G, H;
-            public int F { get { return G + H; } }
-            
-            public int CompareTo(Node other)
-            {
-                return this.F - other.F;
-            }
+            return new Pathfinder().FindPath(this, goal);
         }
         
         public List<RoomPosition> PathTo(RoomPosition goal, Func<ITile, bool> passable)
         {
-            if (this == goal) return new List<RoomPosition>();
-            
-            var nodeGrid = new Node[Room.MapEdgeSize, Room.MapEdgeSize];
-            var openList = new IntervalHeap<Node>();
-            var closedList = new List<Node>();
-            
-            
-            
-            var path = new List<RoomPosition>();
-            return path;
+            return new Pathfinder().FindPath(this, goal, passable);
         }
         
         public Room GetRoom(ISContext context)
