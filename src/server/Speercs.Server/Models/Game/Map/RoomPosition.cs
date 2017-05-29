@@ -46,8 +46,8 @@ namespace Speercs.Server.Models.Game.Map
         
         public int Distance(RoomPosition other)
         {
-            return Room.MapEdgeSize*((RoomX-other.RoomX) + (RoomY-other.RoomY)) +
-                   (X-other.X) + (Y-other.Y);
+            return Room.MapEdgeSize*(System.Math.Abs(RoomX-other.RoomX) + System.Math.Abs(RoomY-other.RoomY)) +
+                   System.Math.Abs(X-other.X) + System.Math.Abs(Y-other.Y);
         }
         public int Distance(GameEntity entity)
         {
@@ -75,12 +75,12 @@ namespace Speercs.Server.Models.Game.Map
         
         public List<RoomPosition> PathTo(RoomPosition goal)
         {
-            return new Pathfinder().FindPath(this, goal);
+            return new Pathfinder(this, goal).FindPath();
         }
         
         public List<RoomPosition> PathTo(RoomPosition goal, Func<ITile, bool> passable)
         {
-            return new Pathfinder().FindPath(this, goal, passable);
+            return new Pathfinder(this, goal, passable).FindPath();
         }
         
         public Room GetRoom(ISContext context)
