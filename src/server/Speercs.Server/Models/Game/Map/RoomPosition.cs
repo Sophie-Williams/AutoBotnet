@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using C5;
 using MoreLinq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility;
@@ -72,6 +73,22 @@ namespace Speercs.Server.Models.Game.Map
                     .MinBy(entity => _this.Distance(entity));
         }
         
+        private class Node
+        {
+            bool open;
+            Node parent;
+        }
+        
+        public List<RoomPosition> PathTo(RoomPosition goal, Func<ITile, bool> passable)
+        {
+            if (this == goal) return new List<RoomPosition>();
+            
+            var nodeGrid = new Node[Room.MapEdgeSize, Room.MapEdgeSize];
+            var openList = new IntervalHeap<Node>();
+            var closedList = new List<Node>();
+            
+        }
+        
         public Room GetRoom(ISContext context)
         {
             return context.AppState.WorldMap[RoomX, RoomY];
@@ -80,6 +97,34 @@ namespace Speercs.Server.Models.Game.Map
         public ITile GetTile(ISContext context)
         {
             return GetRoom(context).Tiles[X, Y];
+        }
+        
+        
+        public override bool Equals(object obj)
+        {
+            return obj is RoomPosition && this == (RoomPosition)obj;
+        }
+        
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 31 + X;
+                hash = hash * 31 + Y;
+                hash = hash * 31 + RoomX;
+                hash = hash * 31 + RoomY;
+                return hash;
+            }
+        }
+        
+        public static bool operator==(RoomPosition a, RoomPosition b)
+        {
+            return a.X==b.X && a.Y==b.Y && a.RoomX==b.RoomX && a.RoomY==b.RoomY;
+        }
+        public static bool operator!=(RoomPosition a, RoomPosition b)
+        {
+            return a.X!=b.X || a.Y!=b.Y || a.RoomX!=b.RoomX || a.RoomY!=b.RoomY;
         }
     }
 }
