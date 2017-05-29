@@ -11,12 +11,12 @@ namespace Speercs.Server.Game.Subsystems
 
         public async Task OnTickAsync()
         {
-            await Task.Delay(0);
-            
             foreach (var entry in ServerContext.AppState.PlayerData)
             {
                 var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.User.Identifier);
-                engine.Invoke("loop");
+                await Task.Run(() => {
+                    engine.Invoke("loop");
+                });
             }
         }
     }
