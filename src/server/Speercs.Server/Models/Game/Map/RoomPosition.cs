@@ -73,14 +73,14 @@ namespace Speercs.Server.Models.Game.Map
                     .MinBy(entity => _this.Distance(entity));
         }
         
-        public List<RoomPosition> PathTo(RoomPosition goal)
+        public List<RoomPosition> PathTo(ISContext context, RoomPosition goal)
         {
-            return new Pathfinder(this, goal).FindPath();
+            return new Pathfinder(context, this, goal).FindPath();
         }
         
-        public List<RoomPosition> PathTo(RoomPosition goal, Func<ITile, bool> passable)
+        public List<RoomPosition> PathTo(ISContext context, RoomPosition goal, Func<ITile, bool> passable)
         {
-            return new Pathfinder(this, goal, passable).FindPath();
+            return new Pathfinder(context, this, goal, passable).FindPath();
         }
         
         public Room GetRoom(ISContext context)

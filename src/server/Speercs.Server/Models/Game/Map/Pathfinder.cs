@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using C5;
+using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility;
 
 namespace Speercs.Server.Models.Game.Map
 {
-    public class Pathfinder
+    public class Pathfinder : DependencyObject
     {
         private class Node : IComparable<Node>
         {
@@ -15,6 +16,7 @@ namespace Speercs.Server.Models.Game.Map
             public int X, Y;
             public int G, H;
             public int F { get { return G + H; } }
+            public IPriorityQueueHandle<Node> pqHandle;
             
             public Node(int x, int y, int g, int h, Node parent)
             {
@@ -31,8 +33,10 @@ namespace Speercs.Server.Models.Game.Map
             }
         }
         
-        public Pathfinder(RoomPosition start, RoomPosition goal) : this(start, goal, tile => tile.IsWalkable()) {}
-        public Pathfinder(RoomPosition start, RoomPosition goal, Func<ITile, bool> passable)
+        public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal)
+            : this(context, start, goal, tile => tile.IsWalkable()) {}
+        public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal, Func<ITile, bool> passable)
+            : base(context)
         {
             this.start    = start;
             this.goal     = goal;
@@ -46,7 +50,7 @@ namespace Speercs.Server.Models.Game.Map
                 throw new NotImplementedException("Inter-room pathfinding not implemented yet");
             
             // add the start node to the open list
-            openList.Add(nodeGrid[start.X, start.Y] = new Node(start.X, start.Y, 0, start.Distance(goal), null));
+            openList.Add(nodeGrid[start.X, start.Y] = new Node(start.X, start.Y, 0, goal.Distance(start), null));
             
             while (!openList.IsEmpty)
             {
@@ -83,19 +87,24 @@ namespace Speercs.Server.Models.Game.Map
         
         private void tryOpenNode(int x, int y, int g, Node parent)
         {
-            if (nodeGrid[x, y] == null)
+            var node = nodeGrid[x, y];
+            if (node == null)
             {
-                // unvisited node; add to open list
-                nodeGrid[x, y] = new Node(x, y, g, goal.Distance(new RoomPosition(goal, x, y)), parent);
-                openList.Add(nodeGrid[x, y]);
+                if (passable(new RoomPosition(start, x, y).GetTile(ServerContext)))
+                {
+                    // unvisited node; add to open list
+                    node = nodeGrid[x, y] = new Node(x, y, g, goal.Distance(new RoomPosition(goal, x, y)), parent);
+                    openList.Add(ref node.pqHandle, node);
+                }
             }
-            else if (nodeGrid[x, y].open)
+            else if (node.open)
             {
-                if (g < nodeGrid[x, y].G)
+                if (g < node.G)
                 {
                     // this route is better
-                    nodeGrid[x, y].G = g;
-                    nodeGrid[x, y].parent = parent;
+                    node.G = g;
+                    node.parent = parent;
+                    openList.Replace(node.pqHandle, node);
                 }
             }
         }
