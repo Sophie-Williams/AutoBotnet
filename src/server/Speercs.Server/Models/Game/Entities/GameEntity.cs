@@ -1,9 +1,18 @@
+using System;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game.Map;
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Game.Entities
 {
+    public enum Direction
+    {
+        North,
+        East,
+        South,
+        West
+    }
+    
     public abstract class GameEntity : DependencyObject
     {
         public readonly string ID;
@@ -18,22 +27,19 @@ namespace Speercs.Server.Models.Game.Entities
             ServerContext.AppState.Entities.Insert(this);
         }
 
-        public RoomPosition Move(Point point)
-        {
-            return Move(point.X, point.Y);
-        }
-
         public RoomPosition Move(int x, int y)
         {
-            if (x >= Room.MapEdgeSize) x = Room.MapEdgeSize - 1;
-            if (x < 0) x = 0;
-            if (y >= Room.MapEdgeSize) y = Room.MapEdgeSize - 1;
-            if (y < 0) y = 0;
-            Position = new RoomPosition(Position, x, y);
-            return Position;
+            if (x<0 || y<0 || x>=Room.MapEdgeSize || y>=Room.MapEdgeSize)
+                throw new ArgumentException("Cannot move outside of the Room's boundaries");
+            return Move(new RoomPosition(Position, x, y));
+        }
+        
+        public RoomPosition Move(RoomPosition pos)
+        {
+            return Position = pos;
         }
 
-        public bool MoveRelative(int direction)
+        public bool MoveRelative(Direction direction)
         {
             var roomX = Position.RoomX;
             var roomY = Position.RoomY;
@@ -42,7 +48,7 @@ namespace Speercs.Server.Models.Game.Entities
             
             switch (direction)
             {
-                case 0:
+                case Direction.North:
                     newY--;
                     if (newY < 0)
                     {
@@ -55,7 +61,7 @@ namespace Speercs.Server.Models.Game.Entities
                     }
                     break;
 
-                case 1:
+                case Direction.East:
                     newX++;
                     if (newX >= Room.MapEdgeSize)
                     {
@@ -68,7 +74,7 @@ namespace Speercs.Server.Models.Game.Entities
                     }
                     break;
 
-                case 2:
+                case Direction.South:
                     newY++;
                     if (newY >= Room.MapEdgeSize)
                     {
@@ -81,7 +87,7 @@ namespace Speercs.Server.Models.Game.Entities
                     }
                     break;
 
-                case 3:
+                case Direction.West:
                     newX--;
                     if (newX < 0)
                     {
@@ -95,17 +101,17 @@ namespace Speercs.Server.Models.Game.Entities
                     break;
             }
 
-            if (!ServerContext.AppState.WorldMap[roomX, roomY].Tiles[newX, newY].IsWalkable())
+            var newPos = new RoomPosition(roomX, roomY, newX, newY);
+            if (!newPos.GetTile(ServerContext).IsWalkable())
                 return false; // not Walkable; don't move
             
-            Position = new RoomPosition(roomX, roomY, newX, newY);
+            Position = newPos;
             return true;
         }
 
         public RoomPosition MoveRelative(int x, int y)
         {
-            Position = new RoomPosition(Position, Position.X + x, Position.Y + y);
-            return Position;
+            return Move(Position.X + x, Position.Y + y);
         }
 
         public bool AttemptMoveRoom((int, int) newRoom)

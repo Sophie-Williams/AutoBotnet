@@ -44,5 +44,7 @@ namespace Speercs.Server.Configuration
         public WorldMap WorldMap { get; set; } = new WorldMap();
 
         public EntityBag Entities { get; set; } = new EntityBag();
+        
+        public long TickCount { get; set; }
     }
 }

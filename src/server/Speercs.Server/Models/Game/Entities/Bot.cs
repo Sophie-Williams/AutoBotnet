@@ -10,6 +10,10 @@ namespace Speercs.Server.Models.Game.Entities
             Team = team;
         }
         
+        // TODO: override Move to enforce one-per-tick
+        
+        protected long lastMove;
+        
         public UserTeam Team { get; }
     }
 }
