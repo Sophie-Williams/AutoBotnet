@@ -35,7 +35,7 @@ namespace Speercs.Server.Models.Game.Map
         
         public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal)
             : this(context, start, goal, tile => tile.IsWalkable()) {}
-        public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal, Func<ITile, bool> passable)
+        public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal, Predicate<ITile> passable)
             : base(context)
         {
             this.start    = start;
@@ -104,12 +104,12 @@ namespace Speercs.Server.Models.Game.Map
                     // this route is better
                     node.G = g;
                     node.parent = parent;
-                    openList.Replace(node.pqHandle, node);
+                    openList.Replace(node.pqHandle, node); // update in the priority queue
                 }
             }
         }
         
-        private Func<ITile, bool> passable;
+        private Predicate<ITile> passable;
         private RoomPosition start, goal;
     
         private Node[,] nodeGrid = new Node[Room.MapEdgeSize, Room.MapEdgeSize];

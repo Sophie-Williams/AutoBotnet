@@ -78,7 +78,7 @@ namespace Speercs.Server.Models.Game.Map
             return new Pathfinder(context, this, goal).FindPath();
         }
         
-        public List<RoomPosition> PathTo(ISContext context, RoomPosition goal, Func<ITile, bool> passable)
+        public List<RoomPosition> PathTo(ISContext context, RoomPosition goal, Predicate<ITile> passable)
         {
             return new Pathfinder(context, this, goal, passable).FindPath();
         }
