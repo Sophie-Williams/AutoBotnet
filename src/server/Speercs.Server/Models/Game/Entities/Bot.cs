@@ -15,8 +15,12 @@ namespace Speercs.Server.Models.Game.Entities
             if (ServerContext.AppState.TickCount <= lastMove)
                 return false; // already moved this tick
             
-            lastMove = ServerContext.AppState.TickCount;
-            return base.MoveRelative(direction);
+            if (base.MoveRelative(direction))
+            {
+                lastMove = ServerContext.AppState.TickCount;
+                return true;
+            }
+            else return false;
         }
         
         protected long lastMove = long.MinValue;
