@@ -11,6 +11,8 @@ namespace Speercs.Server.Game.Subsystems
 
         public async Task OnTickAsync()
         {
+            ServerContext.AppState.TickCount++;
+            
             foreach (var entry in ServerContext.AppState.PlayerData)
             {
                 var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.User.Identifier);
