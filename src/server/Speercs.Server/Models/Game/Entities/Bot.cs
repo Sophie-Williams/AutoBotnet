@@ -10,9 +10,16 @@ namespace Speercs.Server.Models.Game.Entities
             Team = team;
         }
         
-        // TODO: override Move to enforce one-per-tick
+        public override bool MoveRelative(Direction direction)
+        {
+            if (ServerContext.AppState.TickCount <= lastMove)
+                return false; // already moved this tick
+            
+            lastMove = ServerContext.AppState.TickCount;
+            return base.MoveRelative(direction);
+        }
         
-        protected long lastMove;
+        protected long lastMove = long.MinValue;
         
         public UserTeam Team { get; }
     }

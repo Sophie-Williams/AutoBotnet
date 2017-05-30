@@ -39,7 +39,7 @@ namespace Speercs.Server.Models.Game.Entities
             return Position = pos;
         }
 
-        public bool MoveRelative(Direction direction)
+        public virtual bool MoveRelative(Direction direction)
         {
             var roomX = Position.RoomX;
             var roomY = Position.RoomY;
