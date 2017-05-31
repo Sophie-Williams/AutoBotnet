@@ -45,7 +45,7 @@ namespace Speercs.DevTests
             ));
             engine.Execute(@"
                 function loop() {
-                    log = 'toast';
+                    // log = 'toast';
                     
                     var kek = 2;
                     log(kek + 3, 'tickles');
