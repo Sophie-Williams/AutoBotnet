@@ -37,6 +37,7 @@ const actions = {
         resultData.un = auth.un
         resultData.key = state.api.getKey()
         commit('login_result', resultData)
+        commit('persist_auth', resultData)
         resolve()
       })
       .catch((e) => {
@@ -56,6 +57,7 @@ const actions = {
         key: window.localStorage.getItem('auth.key')
       }
       if (auth.un && auth.key) {
+        console.log('reauthenticating as ' + auth.un)
         state.api.reauth(auth.un, auth.key)
         .then(() => {
           resultData.success = true
@@ -85,6 +87,7 @@ const actions = {
         resultData.un = auth.un
         resultData.key = state.api.getKey()
         commit('login_result', resultData)
+        commit('persist_auth', resultData)
         resolve()
       })
       .catch((e) => {
@@ -120,6 +123,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       state.api.logout()
       commit('login_result', { success: false })
+      commit('persist_auth', resultData)
     })
   }
 }
