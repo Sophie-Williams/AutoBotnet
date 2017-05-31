@@ -65,6 +65,17 @@ export default {
     }
   },
   methods: {
+    attempt_relogin () {
+      this.$store.dispatch('ensure_api', `${window.location.origin}/`)
+        .then(() => {
+          this.$store.dispatch('attempt_reauthenticate')
+            .then(() => {
+              console.log('reauthenticated successfully')
+              // proceed
+              this.onProceed()
+            })
+        })
+    },
     proceed_login () {
       this.canProceed = false
       let b = {
@@ -110,6 +121,9 @@ export default {
             })
         })
     }
+  },
+  mounted () {
+    this.attempt_relogin()
   }
 }
 </script>
