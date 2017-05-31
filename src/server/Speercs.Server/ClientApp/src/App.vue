@@ -64,7 +64,7 @@
           { 
             title: 'Dashboard',
             avatar: 'dashboard',
-            router: '/dashboard',
+            router: '/d',
             authRequired: true,
             autoHide: true
           },
