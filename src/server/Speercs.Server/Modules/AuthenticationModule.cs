@@ -160,6 +160,36 @@ namespace Speercs.Server.Modules
                         .WithStatusCode(HttpStatusCode.Unauthorized);
                 }
             });
+
+            Post("/reauth", async args =>
+            {
+                var req = this.Bind<UserReauthRequest>();
+                var selectedUser = await userManager.FindUserByUsernameAsync(req.Username);
+
+                if (selectedUser == null) return HttpStatusCode.Unauthorized;
+
+                try
+                {
+                    // Validate key
+                    if (selectedUser.Enabled && selectedUser.ApiKey == req.ApiKey)
+                    {
+                        // Return user details
+                        return Response.AsJsonNet(selectedUser);
+                    }
+                    return HttpStatusCode.Unauthorized;
+                }
+                catch (NullReferenceException)
+                {
+                    // A parameter was not provided
+                    return HttpStatusCode.BadRequest;
+                }
+                catch (SecurityException secEx)
+                {
+                    // Blocked for security reasons
+                    return Response.AsText(secEx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
+            });
         }
     }
 }
