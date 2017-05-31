@@ -1699,7 +1699,7 @@ namespace C5
             //A much more efficient version is possible if items is sorted like this.
             //Well, it is unclear how efficient it would be.
             //We could use a marking method!?
-#warning how does this work together with persistence?
+// #warning how does this work together with persistence?
             TreeSet<T> t = (TreeSet<T>)MemberwiseClone();
 
             T jtem = default(T);
@@ -1712,7 +1712,7 @@ namespace C5
             if (size == t.size)
                 return;
 
-#warning improve (mainly for bag) by using a Node iterator instead of ItemMultiplicities()
+// #warning improve (mainly for bag) by using a Node iterator instead of ItemMultiplicities()
             CircularQueue<KeyValuePair<T, int>> wasRemoved = null;
             if ((ActiveEvents & EventTypeEnum.Removed) != 0)
             {
