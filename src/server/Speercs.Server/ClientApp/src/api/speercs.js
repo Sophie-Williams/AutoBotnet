@@ -6,137 +6,45 @@
 import axios from 'axios'
 
 export class SpeercsApi {
-  constructor (endpoint, apiKey = null) {
-    this.endpoint = endpoint
-    this.initialize(apiKey)
-    this.wsendpoint = endpoint.replace('http://', 'ws://').replace('https://', 'wss://') + 'ws'
+  constructor (endpoint, key = null) {
+    this.ep = endpoint
+    this.init(key)
   }
 
-  static create (endpoint, apiKey = null) {
+  static create (endpoint, apikey = null) {
     return new Promise((resolve, reject) => {
-      let api = new SpeercsApi(endpoint)
-      let creation = []
-      creation.push(api.getMeta())
-      if (api.apiKey) {
-        creation.push(api.getUserInfo())
-        creation.push(api.getUserCode())
-      }
-      Promise.all(creation)
-        .then(() => {
-          resolve(api)
-        })
-        .catch((e) => {
-          reject(e)
-        })
+      let api = new SpeercsApi(endpoint, apikey)
+      resolve(api)
     })
   }
 
-  /* SECTION HELPERS */
-
-  initialize (apiKey = null) {
-    this.apiKey = apiKey
+  init (key = null) {
+    this.key = key
     this.username = null
-    this.apiKeyValid = false
-    this.serverInfo = null
-    this.program = null
-    this.entities = null
-    this.globalEntities = null
-    this.websocket = false
-    this.wsockId = new Date().getTime()
-    this.onclose = () => {
-      console.log('wsock connection closed')
-    }
-    this.pushListener = (data) => {
-      console.log(JSON.stringify(data))
-    }
-    this.wsockIds = {}
-    this.authPromise = null
+    this.ax()
+  }
 
+  ax () {
     this.axios = axios.create({
-      baseURL: this.endpoint + '/a',
+      baseURL: this.ep,
       headers: {
-        Authorization: this.apiKey
+        Authorization: this.key
       },
       responseType: 'json'
     })
   }
 
-  promiseFromGETRequest (endpoint, params = {}, includeData = true, options = {}) {
+  /* actions */
+  login (un, pw) {
     return new Promise((resolve, reject) => {
-      if (!this.apiKeyValid) return reject(new SpeercsErrors.KeyError())
-      options['params'] = params
-      this.axios.get(endpoint, options).then((res) => {
-        if (res.status !== 200) return reject(new SpeercsErrors.WtfError())
-        if (includeData) return resolve(res.data)
-        resolve()
-      }).catch((err) => {
-        reject(err)
-      })
-    })
-  }
-
-  regenAxios () {
-    this.axios = axios.create({
-      baseURL: this.endpoint + '/a',
-      headers: {
-        Authorization: this.apiKey
-      },
-      responseType: 'json'
-    })
-  }
-
-  /* SECTION GET ENDPOINTS */
-
-  getMeta () {
-    return new Promise((resolve, reject) => {
-      axios.get(this.endpoint + '/meta').then((res) => {
-        this.serverInfo = res.data
-        resolve()
-      }).catch((err) => {
-        reject(err)
-      })
-    })
-  }
-
-  getUserInfo () {
-    return this.promiseFromGETRequest('/game/umeta/me', {}, true, {
-      responseType: 'text'
-    })
-  }
-
-  getUserCode () {
-    return this.promiseFromGETRequest('/game/code/get')
-  }
-
-  getUserEntities () {
-    return this.promiseFromGETRequest('/game/units')
-  }
-
-  getRoom (x, y) {
-    return this.promiseFromGETRequest('/game/map/room', {
-      x: x,
-      y: y
-    })
-  }
-
-  /* SECTION AUTH */
-
-  logout () {
-    this.apiKey = null
-    this.initialize()
-  }
-
-  login (username, password) {
-    return new Promise((resolve, reject) => {
+      this.ax()
       this.axios.post('/auth/login', {
-        username: username,
-        password: password
+        username: un,
+        password: pw
       }).then((res) => {
         if (res.status !== 200) return reject(SpeercsErrors.CredentialError())
-        this.apiKey = res.data.apikey
-        this.apiKeyValid = true
-        this.username = res.data.username
-        this.regenAxios()
+        this.key = res.data.apikey
+        this.username = res.data.user.username
         resolve()
       }).catch((err) => {
         reject(err)
@@ -144,127 +52,80 @@ export class SpeercsApi {
     })
   }
 
-  register (username, password, invitekey = false) {
+  reauth (un, key) {
     return new Promise((resolve, reject) => {
-      if (this.serverInfo.inviterequired && !invitekey) return reject(SpeercsErrors.NoInviteError())
+      this.ax()
+      this.axios.post('/auth/reauth', {
+        username: un,
+        apikey: key
+      }).then((res) => {
+        if (res.status !== 200) return reject(SpeercsErrors.CredentialError())
+        this.key = res.data.apikey
+        this.username = res.data.user.username
+        resolve()
+      }).catch((err) => {
+        reject(err)
+      })
+    })
+  }
+
+  register (un, pw, i = null) {
+    return new Promise((resolve, reject) => {
+      this.ax()
       this.axios.post('/auth/register', {
-        username: username,
-        password: password,
-        invitekey: invitekey
+        username: un,
+        password: pw,
+        invitekey: i
       }).then((res) => {
-        if (res.status !== 200) return reject(SpeercsErrors.WtfError())
-        this.apiKey = res.data.apikey
-        this.apiKeyValid = true
-        this.username = res.data.username
-        this.regenAxios()
-        this.getUserCode()
-        resolve()
+        if (res.status !== 200) return reject(SpeercsErrors.CredentialError())
+        this.login(un, pw)
+          .then(() => {
+            resolve()
+          })
       }).catch((err) => {
         reject(err)
       })
     })
   }
 
-  /* SECTION WEBSOCKETS */
-
-  openRealtime () {
+  logout () {
     return new Promise((resolve, reject) => {
-      if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError())
-      this.websocket = new window.WebSocket(this.wsendpoint)
-      this.websocket.parent = this
-      this.websocket.onopen = (event) => {
-        this.authPromise = [resolve, reject]
-        this.websocket.send(this.apiKey + '\n')
-      }
-      this.websocket.onmessage = this.onRealtimeReceive
-      this.websocket.onclose = () => {
-        console.log('F')
-      }
+      this.key = null
+      this.init()
+      resolve()
     })
   }
 
-  pingRealtime () {
+  regenApiKey () {
+    this.ax()
+    return this.axios.patch('/auth/newkey')
+  }
+
+  changePassword (old, newp) {
     return new Promise((resolve, reject) => {
-      if (!this.websocket || this.websocket.readyState !== 1) return reject(SpeercsErrors.WSError())
-      this.websocket.parent = this
-      let currentRqId = this.wsockId++
-      this.wsockIds[currentRqId] = [resolve, reject]
-      this.websocket.send(JSON.stringify({
-        request: 'ping',
-        data: {},
-        id: currentRqId
-      }) + '\n')
-    })
-  }
-
-  sendRealtime (data, type) {
-    return new Promise((resolve, reject) => {
-      if (!this.websocket || this.websocket.readyState !== 1) return reject(SpeercsErrors.WSError())
-      this.websocket.parent = this
-      let thisReqId = this.wsockId++
-      this.wsockIds[thisReqId] = [resolve, reject]
-      this.websocket.send(JSON.stringify({
-        request: type,
-        data: data,
-        id: thisReqId
-      }) + '\n')
-    })
-  }
-
-  runCommand (command) {
-    return this.sendRealtime(JSON.stringify({
-      command: command
-    }), 'console')
-  }
-
-  onRealtimeReceive (data) {
-    if (data.data === 'true') return this.parent.authPromise[0]()
-    if (data.data === 'false') return this.parent.authPromise[1]()
-    data = JSON.parse(data.data)
-    if (!data.id) {
-      return this.parent.pushListener(data.data)
-    }
-    this.parent.wsockIds[data.id][0](data.data)
-  }
-
-  /* SECTION POST ENDPOINTS */
-
-  deployUserCode (code) {
-    return new Promise((resolve, reject) => {
-      if (!this.apiKeyValid) return reject(SpeercsErrors.KeyError())
-      this.axios.post('/game/code/deploy', {
-        Source: code
-      }).then((res) => {
-        if (res.status !== 200) return reject(SpeercsErrors.WtfError())
-        this.code = code
-        resolve()
-      }).catch((err) => {
-        reject(err)
+      this.ax()
+      this.axios.patch('/auth/changepassword', {
+        username: this.username,
+        oldPassword: old,
+        newPassword: newp
       })
+        .then((res) => {
+          resolve(res)
+        })
+        .catch((e) => reject(e))
     })
   }
 
-  /* Getters */
+  /* getters */
+  getKey() { return this.key }
 
-  getApiKey () {
-    return this.apiKey
-  }
 }
 
 class SpeercsErrors {
-  static NoInviteError () {
-    return new Error('Invite key is required, but not provided.')
-  }
-  static WtfError () {
-    return new Error('Your reject message is in annother castle.')
-  }
   static CredentialError () {
-    return new Error('Invalid credentials provided')
+    return new Error('invalid credentials')
   }
   static KeyError () {
-    return new Error('apiKey is not set or invalid')
-  }
-  static WSError () {
-    return new Error('WebSocket is not initialized or connecter')
+    return new Error('invalid api key')
   }
 }
