@@ -16,6 +16,7 @@
     <Compile Remove="ClientApp\**\*" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="C5.NetCore" Version="2.4.5947.17249" />
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha5-00069" />
     <PackageReference Include="CookieIoC" Version="2.0.1" />
     <PackageReference Include="IridiumJS" Version="2.10.3.3" />
@@ -33,6 +34,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dependencies\Osmium.PluginEngine\src\Osmium.PluginEngine\Osmium.PluginEngine.csproj" />
-    <ProjectReference Include="..\C5\C5.csproj" />
   </ItemGroup>
 </Project>
