@@ -121,6 +121,45 @@ namespace Speercs.Server.Modules
                         .WithStatusCode(HttpStatusCode.Unauthorized);
                 }
             });
+
+            Patch("/changepassword", async args =>
+            {
+                var req = this.Bind<UserPasswordChangeRequest>();
+                var selectedUser = await userManager.FindUserByUsernameAsync(req.Username);
+
+                try
+                {
+                    // Validate password
+                    if (req.NewPassword.Length < 8)
+                    {
+                        throw new SecurityException("Password must be at least 8 characters.");
+                    }
+
+                    if (req.NewPassword.Length > 128)
+                    {
+                        throw new SecurityException("Password may not exceed 128 characters.");
+                    }
+
+                    if (selectedUser.Enabled && await userManager.CheckPasswordAsync(req.OldPassword, selectedUser))
+                    {
+                        // Update password
+                        await userManager.ChangeUserPasswordAsync(selectedUser, req.NewPassword);
+                        return HttpStatusCode.OK;
+                    }
+                    return HttpStatusCode.Unauthorized;
+                }
+                catch (NullReferenceException)
+                {
+                    // A parameter was not provided
+                    return new Response().WithStatusCode(HttpStatusCode.BadRequest);
+                }
+                catch (SecurityException secEx)
+                {
+                    // Registration blocked for security reasons
+                    return Response.AsText(secEx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
+            });
         }
     }
 }
