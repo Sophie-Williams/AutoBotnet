@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (DevTests)",
+            "name": ".NET Core - DevTests",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -33,7 +33,7 @@
             }
         },
         {
-            "name": ".NET Core Launch (web)",
+            "name": ".NET Core + Node.js - Speercs Server",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
