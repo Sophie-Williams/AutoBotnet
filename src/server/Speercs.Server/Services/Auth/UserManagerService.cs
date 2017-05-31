@@ -118,5 +118,25 @@ namespace Speercs.Server.Services.Auth
                 await UpdateUserInDatabaseAsync(user);
             }));
         }
+
+        public async Task GenerateNewApiKeyAsync(RegisteredUser user)
+        {
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            await lockEntry.WithExclusiveWriteAsync(Task.Run(async () =>
+            {
+                // Recompute key
+                user.ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength);
+                await UpdateUserInDatabaseAsync(user);
+            }));
+        }
+
+        public async Task SetEnabledAsync(RegisteredUser user, bool status)
+        {
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            await lockEntry.ObtainExclusiveWriteAsync();
+            user.Enabled = status;
+            await UpdateUserInDatabaseAsync(user);
+            lockEntry.ReleaseExclusiveWrite();
+        }
     }
 }
