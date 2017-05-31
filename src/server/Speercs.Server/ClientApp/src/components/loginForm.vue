@@ -88,12 +88,11 @@ export default {
             .then(() => {
               console.log('login successful')
               // proceed
-              this.$router.push('/dashboard')
+              this.onProceed()
             })
             .catch((e) => {
               this.canProceed = true
               this.err = 'invalid credentials'
-              if (e) this.err = e.message
               console.log('login failure', e)
             })
         })
@@ -111,15 +110,24 @@ export default {
             .then(() => {
               console.log('registration successful')
               // proceed
-              this.$router.push('/dashboard')
+              this.onProceed()
             })
             .catch((e) => {
               this.canProceed = true
               this.err = 'registration failed'
-              if (e) this.err = e.message
+              if (e.response) {
+                this.err += `: ${e.response.data}`
+              }
               console.log('registration failure', e)
             })
         })
+    },
+    onProceed () {
+      if (this.$route.query.r) {
+        this.$router.push(this.$route.query.r)
+      } else {
+        this.$router.push('/d')
+      }
     }
   },
   mounted () {
