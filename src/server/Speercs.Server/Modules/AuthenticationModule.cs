@@ -70,7 +70,7 @@ namespace Speercs.Server.Modules
                         // Validate invite key
                         if (req.InviteKey != ServerContext.Configuration.InviteKey)
                         {
-                            throw new SecurityException("The invite key is not recognized.");
+                            return HttpStatusCode.PaymentRequired;
                         }
                     }
 
