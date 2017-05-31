@@ -35,14 +35,14 @@ const actions = {
       .then(() => {
         resultData.success = true
         resultData.un = auth.un
-        resultData.key = state.api.getApiKey()
+        resultData.key = state.api.getKey()
         commit('login_result', resultData)
         resolve()
       })
       .catch((e) => {
         commit('login_result', resultData)
         console.log(e)
-        reject(new Error('login failed'))
+        reject(new Error(e.message ? e.message.toLowerCase() : 'login failed'))
       })
     })
   },
@@ -55,14 +55,14 @@ const actions = {
       .then(() => {
         resultData.success = true
         resultData.un = auth.un
-        resultData.key = state.api.getApiKey()
+        resultData.key = state.api.getKey()
         commit('login_result', resultData)
         resolve()
       })
       .catch((e) => {
         commit('login_result', resultData)
         console.log(e)
-        reject(new Error('registration failed'))
+        reject(new Error(e.message ? e.message.toLowerCase() : 'registration failed'))
       })
     })
   },

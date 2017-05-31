@@ -7,7 +7,7 @@ import axios from 'axios'
 
 export class SpeercsApi {
   constructor (endpoint, key = null) {
-    this.ep = endpoint
+    this.ep = endpoint + '/a'
     this.init(key)
   }
 
@@ -29,8 +29,7 @@ export class SpeercsApi {
       baseURL: this.ep,
       headers: {
         Authorization: this.key
-      },
-      responseType: 'json'
+      }
     })
   }
 
@@ -43,10 +42,14 @@ export class SpeercsApi {
         password: pw
       }).then((res) => {
         this.key = res.data.apikey
-        this.username = res.data.user.username
+        this.username = res.data.username
         resolve()
       }).catch((err) => {
-        reject(err)
+        if (err.response && err.response.data) {
+          reject(new SpeercsApiErrors.CredentialError(err, err.response.data))
+        } else {
+          reject(new SpeercsApiErrors.CredentialError(err))
+        }
       })
     })
   }
@@ -59,10 +62,10 @@ export class SpeercsApi {
         apikey: key
       }).then((res) => {
         this.key = res.data.apikey
-        this.username = res.data.user.username
+        this.username = res.data.username
         resolve()
       }).catch((err) => {
-        reject(err)
+        reject(new SpeercsApiErrors.CredentialError(err))
       })
     })
   }
@@ -75,12 +78,15 @@ export class SpeercsApi {
         password: pw,
         invitekey: i
       }).then((res) => {
-        this.login(un, pw)
-          .then(() => {
-            resolve()
-          })
+        this.key = res.data.apikey
+        this.username = res.dataname
+        resolve()
       }).catch((err) => {
-        reject(err)
+        if (err.response && err.response.data) {
+          reject(new SpeercsApiErrors.CredentialError(err, err.response.data))
+        } else {
+          reject(new SpeercsApiErrors.CredentialError(err))
+        }
       })
     })
   }
@@ -118,11 +124,19 @@ export class SpeercsApi {
 
 }
 
-class SpeercsErrors {
-  static CredentialError () {
-    return new Error('invalid credentials')
+class SpeercsError {
+  constructor (data = null, dsc, msg = null) {
+    this.data = data
+    this.description = dsc
+    this.message = msg
   }
-  static KeyError () {
-    return new Error('invalid api key')
+}
+
+class SpeercsApiErrors {
+  static CredentialError (d, m) {
+    return new SpeercsError(d, 'invalid credentials', m)
+  }
+  static KeyError (d, m) {
+    return new SpeercsError(d, 'invalid api key', m)
   }
 }

@@ -88,6 +88,10 @@ namespace Speercs.Server.Modules
                     // Return user details
                     return Response.AsJsonNet(newUser);
                 }
+                catch (NullReferenceException)
+                {
+                    return HttpStatusCode.BadRequest;
+                }
                 catch (SecurityException sx)
                 {
                     return Response.AsText(sx.Message)

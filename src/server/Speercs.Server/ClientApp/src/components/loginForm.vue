@@ -16,7 +16,7 @@
                 type="password"
                 v-model="pw"
               ></v-text-field>
-              <v-subheader v-if="err !== null">{{ err }}</v-subheader>
+              <v-subheader class="red--text" v-if="err !== null">{{ err }}</v-subheader>
               <div class="center">
                 <v-btn @click.native="proceed_login" :disabled="!canProceed" primary raised ripple>Login</v-btn>
               </div>
@@ -39,7 +39,7 @@
                 type="password"
                 v-model="ikey"
               ></v-text-field>
-              <v-subheader v-if="err !== null">{{ err }}</v-subheader>
+              <v-subheader class="red--text" v-if="err !== null">{{ err }}</v-subheader>
               <div class="center">
                 <v-btn @click.native="proceed_register" :disabled="!canProceed" primary raised ripple>Register</v-btn>
               </div>
@@ -82,6 +82,7 @@ export default {
             .catch((e) => {
               this.canProceed = true
               this.err = 'invalid credentials'
+              if (e) this.err = e.message
               console.log('login failure', e)
             })
         })
@@ -104,6 +105,7 @@ export default {
             .catch((e) => {
               this.canProceed = true
               this.err = 'registration failed'
+              if (e) this.err = e.message
               console.log('registration failure', e)
             })
         })
