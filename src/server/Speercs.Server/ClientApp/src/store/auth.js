@@ -62,7 +62,7 @@ const actions = {
       .catch((e) => {
         commit('login_result', resultData)
         console.log(e)
-        reject(new Error('register failed'))
+        reject(new Error('registration failed'))
       })
     })
   },
@@ -94,6 +94,9 @@ const mutations = {
 const getters = {
   api_available (state) {
     return state.api !== null
+  },
+  api (state) {
+    return state.api
   },
   auth_data (state) {
     return state.authData
