@@ -26,6 +26,8 @@ namespace Speercs.Server.Modules
                 userManager = new UserManagerService(ServerContext);
                 return null;
             };
+
+            // Register account
             Post("/register", async args =>
             {
                 Regex charsetRegex = new Regex(@"^[a-zA-Z0-9._-]{3,24}$");
@@ -92,6 +94,7 @@ namespace Speercs.Server.Modules
                 }
             });
 
+            // Log in with username and password
             Post("/login", async args =>
             {
                 var req = this.Bind<UserLoginRequest>();
@@ -122,6 +125,7 @@ namespace Speercs.Server.Modules
                 }
             });
 
+            // Allow changing passswords
             Patch("/changepassword", async args =>
             {
                 var req = this.Bind<UserPasswordChangeRequest>();
@@ -161,6 +165,7 @@ namespace Speercs.Server.Modules
                 }
             });
 
+            // Authenticate with API key (used to validate a key during auto-login)
             Post("/reauth", async args =>
             {
                 var req = this.Bind<UserReauthRequest>();
@@ -175,6 +180,38 @@ namespace Speercs.Server.Modules
                     {
                         // Return user details
                         return Response.AsJsonNet(selectedUser);
+                    }
+                    return HttpStatusCode.Unauthorized;
+                }
+                catch (NullReferenceException)
+                {
+                    // A parameter was not provided
+                    return HttpStatusCode.BadRequest;
+                }
+                catch (SecurityException secEx)
+                {
+                    // Blocked for security reasons
+                    return Response.AsText(secEx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
+            });
+
+            // Request generation of a new API key
+            Patch("/newkey", async _ =>
+            {
+                var req = this.Bind<UserKeyResetRequest>();
+                var selectedUser = await userManager.FindUserByUsernameAsync(req.Username);
+
+                if (selectedUser == null) return HttpStatusCode.Unauthorized;
+
+                try
+                {
+                    // Validate key
+                    if (selectedUser.Enabled && selectedUser.ApiKey == req.ApiKey)
+                    {                        
+                        // Update key
+                        await userManager.GenerateNewApiKeyAsync(selectedUser);
+                        return HttpStatusCode.NoContent;
                     }
                     return HttpStatusCode.Unauthorized;
                 }
