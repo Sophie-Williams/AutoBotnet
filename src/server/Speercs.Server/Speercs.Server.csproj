@@ -33,5 +33,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dependencies\Osmium.PluginEngine\src\Osmium.PluginEngine\Osmium.PluginEngine.csproj" />
+    <ProjectReference Include="..\C5\C5.csproj" />
   </ItemGroup>
 </Project>
