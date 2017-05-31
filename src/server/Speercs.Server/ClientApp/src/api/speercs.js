@@ -105,17 +105,11 @@ export class SpeercsApi {
   }
 
   changePassword (old, newp) {
-    return new Promise((resolve, reject) => {
-      this.ax()
-      this.axios.patch('/auth/changepassword', {
-        username: this.username,
-        oldPassword: old,
-        newPassword: newp
-      })
-        .then((res) => {
-          resolve(res)
-        })
-        .catch((e) => reject(e))
+    this.ax()
+    return this.axios.patch('/auth/changepassword', {
+      username: this.username,
+      oldPassword: old,
+      newPassword: newp
     })
   }
 

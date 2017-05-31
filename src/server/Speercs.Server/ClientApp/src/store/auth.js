@@ -46,6 +46,34 @@ const actions = {
       })
     })
   },
+  attempt_reauthenticate ({commit, state}) {
+    return new Promise((resolve, reject) => {
+      let resultData = {
+        success: false
+      }
+      let auth = {
+        un: window.localStorage.getItem('auth.un'),
+        key: window.localStorage.getItem('auth.key')
+      }
+      if (auth.un && auth.key) {
+        state.api.reauth(auth.un, auth.key)
+        .then(() => {
+          resultData.success = true
+          resultData.un = auth.un
+          resultData.key = state.api.getKey()
+          commit('login_result', resultData)
+          resolve()
+        })
+        .catch((e) => {
+          commit('login_result', resultData)
+          console.log(e)
+          reject(new Error('login failed'))
+        })
+      } else {
+        reject('no stored auth available')
+      }
+    })
+  },
   register_account ({commit, state}, auth) {
     return new Promise((resolve, reject) => {
       let resultData = {
@@ -66,6 +94,28 @@ const actions = {
       })
     })
   },
+  change_password ({commit, state}, pw) {
+    return new Promise((resolve, reject) => {
+      state.api.changePassword(pw.o, pw.n)
+        .then((r) => {
+          commit('login_result', { success: false })
+          commit('persist_auth', false)
+          resolve()
+        })
+        .catch((e) => reject(e))
+    })
+  },
+  regenerate_api_key ({commit, state}) {
+    return new Promise((resolve, reject) => {
+      state.api.regenApiKey()
+        .then((r) => {
+          commit('login_result', { success: false })
+          commit('persist_auth', false)
+          resolve()
+        })
+        .catch((e) => reject(e))
+    })
+  },
   logout ({commit, state}) {
     return new Promise((resolve, reject) => {
       state.api.logout()
@@ -84,6 +134,16 @@ const mutations = {
       state.authData.un = null
       state.authData.key = null
       state.loggedIn = false
+    }
+  },
+  persist_auth (state, data) {
+    if (data && data.success) {
+      window.localStorage.setItem('auth.un', data.un)
+      window.localStorage.setItem('auth.key', data.key)
+      console.log('saved auth')
+    } else {
+      window.localStorage.setItem('auth.un', null)
+      window.localStorage.setItem('auth.key', null)
     }
   },
   save_api (state, api) {
