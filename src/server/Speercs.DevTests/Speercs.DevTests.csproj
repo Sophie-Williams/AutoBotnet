@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
     <ProjectReference Include="..\Speercs.Server\Speercs.Server.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="IridiumJS" Version="2.10.3.2" />
+  </ItemGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
-
 </Project>

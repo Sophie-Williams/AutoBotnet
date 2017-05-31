@@ -2,6 +2,7 @@ using IridiumJS;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting.Api;
 using System;
+using IridiumJS.Native;
 
 namespace Speercs.Server.Game.Scripting
 {
@@ -20,7 +21,8 @@ namespace Speercs.Server.Game.Scripting
                     cfg.TimeoutInterval(TimeSpan.FromMilliseconds(ServerContext.Configuration.CodeLoadTimeLimit));
                 }
             );
-            engine.SetValue("Game", new SpeercsUserApi(ServerContext, userId));
+            var gameObj = JsValue.FromObject(engine, new SpeercsUserApi(ServerContext, userId));
+            engine.Global.FastAddProperty("Game", gameObj, false, true, false);
             return engine;
         }
     }

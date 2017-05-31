@@ -17,7 +17,15 @@ namespace Speercs.Server.Game.Subsystems
             {
                 var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.User.Identifier);
                 await Task.Run(() => {
-                    engine.Invoke("loop");
+                    try
+                    {
+                        engine.Invoke("loop");
+                    }
+                    catch
+                    {
+                        // thrown if 'loop' isn't a function:
+                        //   System.ArgumentException: Can only invoke functions
+                    }
                 });
             }
         }
