@@ -40,7 +40,9 @@ namespace Speercs.DevTests
             );
             
             Console.WriteLine("EXECUTING");
-            AddGlobalFunction(engine, "log", Log);
+            engine.SetValue("log", new Action<string>(
+                (s) => Console.WriteLine(s)
+            ));
             engine.Execute(@"
                 function loop() {
                     log = 'toast';
@@ -52,28 +54,6 @@ namespace Speercs.DevTests
             ");
             Console.WriteLine(engine.Invoke("loop"));
             Console.WriteLine("DONE");
-        }
-        
-        private static JsValue Log(JsValue thisObj, JsValue[] arguments)
-        {
-            string str = "";
-            for (int i = 0; i < arguments.Length; i++)
-            {
-                if (i != 0) str += " ";
-                str += arguments[i];
-            }
-            Console.WriteLine(str);
-
-            return JsValue.Undefined;
-        }
-        
-        private static void AddGlobalFunction(JSEngine engine, string name, Func<JsValue, JsValue[], JsValue> func)
-        {
-            engine.Global.FastAddProperty(
-                name,
-                new ClrFunctionInstance(engine, func, 1),
-                false, true, false
-            );
         }
 
         public static ISContext ServerContext;
