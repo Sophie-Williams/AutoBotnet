@@ -42,7 +42,6 @@ export class SpeercsApi {
         username: un,
         password: pw
       }).then((res) => {
-        if (res.status !== 200) return reject(SpeercsErrors.CredentialError())
         this.key = res.data.apikey
         this.username = res.data.user.username
         resolve()
@@ -59,7 +58,6 @@ export class SpeercsApi {
         username: un,
         apikey: key
       }).then((res) => {
-        if (res.status !== 200) return reject(SpeercsErrors.CredentialError())
         this.key = res.data.apikey
         this.username = res.data.user.username
         resolve()
@@ -77,7 +75,6 @@ export class SpeercsApi {
         password: pw,
         invitekey: i
       }).then((res) => {
-        if (res.status !== 200) return reject(SpeercsErrors.CredentialError())
         this.login(un, pw)
           .then(() => {
             resolve()
