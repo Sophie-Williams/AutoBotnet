@@ -3,6 +3,7 @@ using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Requests;
+using Speercs.Server.Modules.Exceptions;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Services.Game;
 using Speercs.Server.Utilities;
@@ -39,29 +40,29 @@ namespace Speercs.Server.Modules
                     // Valdiate username length
                     if (req.Username.Length < 2)
                     {
-                        throw new SecurityException("Username must be at least 2 characters.");
+                        throw new InvalidParameterException("Username must be at least 2 characters.");
                     }
 
                     if (req.Username.Length > 24)
                     {
-                        throw new SecurityException("Username may not exceed 24 characters.");
+                        throw new InvalidParameterException("Username may not exceed 24 characters.");
                     }
 
                     // Validate username charset
                     if (charsetRegex.Matches(req.Username).Count <= 0)
                     {
-                        throw new SecurityException("Invalid character in username.");
+                        throw new InvalidParameterException("Invalid character in username.");
                     }
 
                     // Validate password
                     if (req.Password.Length < 8)
                     {
-                        throw new SecurityException("Password must be at least 8 characters.");
+                        throw new InvalidParameterException("Password must be at least 8 characters.");
                     }
                     
                     if (req.Password.Length > 128)
                     {
-                        throw new SecurityException("Password may not exceed 128 characters.");
+                        throw new InvalidParameterException("Password may not exceed 128 characters.");
                     }
 
                     // Check invite key if enabled
@@ -91,6 +92,11 @@ namespace Speercs.Server.Modules
                 {
                     return Response.AsText(sx.Message)
                         .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
+                catch (InvalidParameterException sx)
+                {
+                    return Response.AsText(sx.Message)
+                        .WithStatusCode(HttpStatusCode.UnprocessableEntity);
                 }
             });
 
@@ -136,12 +142,12 @@ namespace Speercs.Server.Modules
                     // Validate password
                     if (req.NewPassword.Length < 8)
                     {
-                        throw new SecurityException("Password must be at least 8 characters.");
+                        throw new InvalidParameterException("Password must be at least 8 characters.");
                     }
 
                     if (req.NewPassword.Length > 128)
                     {
-                        throw new SecurityException("Password may not exceed 128 characters.");
+                        throw new InvalidParameterException("Password may not exceed 128 characters.");
                     }
 
                     if (selectedUser.Enabled && await userManager.CheckPasswordAsync(req.OldPassword, selectedUser))
@@ -162,6 +168,11 @@ namespace Speercs.Server.Modules
                     // Registration blocked for security reasons
                     return Response.AsText(secEx.Message)
                         .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
+                catch (InvalidParameterException sx)
+                {
+                    return Response.AsText(sx.Message)
+                        .WithStatusCode(HttpStatusCode.UnprocessableEntity);
                 }
             });
 
