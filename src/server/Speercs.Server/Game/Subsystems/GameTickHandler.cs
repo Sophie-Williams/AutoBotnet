@@ -1,5 +1,6 @@
 using Speercs.Server.Configuration;
 using System.Threading.Tasks;
+using System;
 
 namespace Speercs.Server.Game.Subsystems
 {
@@ -16,10 +17,15 @@ namespace Speercs.Server.Game.Subsystems
             foreach (var entry in ServerContext.AppState.PlayerData)
             {
                 var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.UserIdentifier);
-                await Task.Run(() => {
+                await Task.Run(() => 
+                {
                     try
                     {
                         engine.Invoke("loop");
+                    }
+                    catch (TimeoutException)
+                    {
+                        // code timed out
                     }
                     catch
                     {
