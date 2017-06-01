@@ -34,7 +34,16 @@ namespace Speercs.Server.Configuration
         [JsonProperty("useDynamicTickRate")]
         public bool UseDynamicTickRate { get; set; } = false;
 
-        [JsonProperty("codeLimit")]
-        public int CodeLoadTimeLimit { get; set; } = 200;        
+        /// <summary>
+        /// The maximum amount of time (in ms) to wait for loading user code
+        /// </summary>
+        [JsonProperty("codeLoadTimeLimit")]
+        public int CodeLoadTimeLimit { get; set; } = 200;
+
+        /// <summary>
+        /// The limit (in chars) of the raw user source code length
+        /// </summary>
+        [JsonProperty("codeSizeLimit")]
+        public int CodeSizeLimit { get; set; } = 24000;
     }
 }
