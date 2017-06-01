@@ -64,6 +64,9 @@ export default {
       pending: false
     }
   },
+  computed: {
+    canProceed () { return !this.pending }
+  },
   methods: {
     attempt_relogin () {
       this.pending = true
