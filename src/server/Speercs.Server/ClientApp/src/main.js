@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
-import AnimatedVue from 'animated-vue'
 import VueCodeMirror from 'vue-codemirror'
 
 // app
@@ -20,7 +19,6 @@ import './stylus/main.styl'
 // register plugins
 Vue.use(VueRouter)
 Vue.use(Vuetify)
-Vue.use(AnimatedVue)
 Vue.use(VueCodeMirror)
 
 // router setup
