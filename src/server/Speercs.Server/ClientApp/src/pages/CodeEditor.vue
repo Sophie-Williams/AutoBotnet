@@ -21,6 +21,14 @@
               <v-icon right light>send</v-icon>
             </v-btn>
           </div>
+          <v-btn info raised ripple
+              @click.native="reloadCode"
+              :loading="reloading"
+              :disabled="reloading"
+            >
+              Request Reload
+              <v-icon right light>refresh</v-icon>
+            </v-btn>
         </v-flex>
       </v-layout>
     </div>
@@ -54,7 +62,8 @@ export default {
       },
       ready: false,
       loadError: false,
-      deploying: false
+      deploying: false,
+      reloading: false
     }
   },
   computed: {
@@ -73,12 +82,22 @@ export default {
         source: this.code
       })
         .then(() => {
-          // TODO: Show user feedback
           this.deploying = false
         })
         .catch(() => {
-          // TODO: Show user feedback
           this.deploying = false
+        })
+    },
+    reloadCode () {
+      this.reloading = true
+      this.$store.dispatch('reload_user_code', {
+        api: this.$store.getters.api
+      })
+        .then(() => {
+          this.reloading = false
+        })
+        .catch(() => {
+          this.reloading = false
         })
     }
   },

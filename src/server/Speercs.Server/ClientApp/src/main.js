@@ -45,9 +45,10 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-const app = new Vue({
+let FFVApp = Vue.component('app', App)
+
+const app = new FFVApp({
   el: '#app',
-  render: h => h(App),
   router,
   store
 })
