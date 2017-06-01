@@ -12,7 +12,14 @@
         </v-flex>
         <v-flex xs12 lg4>
           <div class="actions">
-            <v-btn primary raised ripple @click.native="deployCode">Deploy Code</v-btn>
+            <v-btn primary raised ripple
+              @click.native="deployCode"
+              :loading="deploying"
+              :disabled="deploying"
+            >
+              Deploy Code
+              <v-icon right light>send</v-icon>
+            </v-btn>
           </div>
         </v-flex>
       </v-layout>
@@ -45,7 +52,9 @@ export default {
         styleSelectedText: true,
         highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true },
       },
-      ready: false
+      ready: false,
+      loadError: false,
+      deploying: false
     }
   },
   computed: {
@@ -58,15 +67,18 @@ export default {
   },
   methods: {
     deployCode () {
+      this.deploying = true
       this.$store.dispatch('deploy_user_code', {
         api: this.$store.getters.api,
         source: this.code
       })
         .then(() => {
           // TODO: Show user feedback
+          this.deploying = false
         })
         .catch(() => {
           // TODO: Show user feedback
+          this.deploying = false
         })
     }
   },
