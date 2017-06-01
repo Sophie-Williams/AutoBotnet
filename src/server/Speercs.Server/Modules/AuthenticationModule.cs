@@ -85,6 +85,9 @@ namespace Speercs.Server.Modules
                     var persistentDataService = new PlayerPersistentDataService(ServerContext);
                     await persistentDataService.CreatePersistentDataAsync(newUser.Identifier);
 
+                    // queue persist
+                    ServerContext.AppState.QueuePersist();
+
                     // Return user details
                     return Response.AsJsonNet(newUser);
                 }
