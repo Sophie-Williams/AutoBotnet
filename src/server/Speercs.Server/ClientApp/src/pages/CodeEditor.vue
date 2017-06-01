@@ -3,7 +3,7 @@
     <div class="center intro">
       <h3>Code Editor</h3>
     </div>
-    <div>
+    <div v-if="ready">
       <v-layout row>
         <v-flex xs12 lg8>
           <div class="editor">
@@ -16,6 +16,9 @@
           </div>
         </v-flex>
       </v-layout>
+    </div>
+    <div class="center" v-else>
+      
     </div>
   </div>
 </template>
