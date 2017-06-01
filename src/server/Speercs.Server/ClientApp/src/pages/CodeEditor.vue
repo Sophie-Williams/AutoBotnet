@@ -18,7 +18,8 @@
       </v-layout>
     </div>
     <div class="center" v-else>
-      
+      <v-progress-circular indeterminate v-bind:size="60" class="primary--text"></v-progress-circular>
+      <h5>Loading Data</h5>
     </div>
   </div>
 </template>
@@ -43,7 +44,8 @@ export default {
         // gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
         styleSelectedText: true,
         highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true },
-      }
+      },
+      ready: false
     }
   },
   computed: {
