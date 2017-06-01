@@ -55,6 +55,16 @@ export default {
     username: function () {
       return this.$store.getters.auth_data.un;
     }
+  },
+  mounted () {
+    // fetch code
+    this.$store.dispatch('get_user_code', {
+      api: this.$store.getters.api
+    })
+      .then((usrc) => {
+        this.code = usrc
+      })
+
   }
 }
 </script>

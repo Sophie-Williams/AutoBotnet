@@ -6,7 +6,13 @@ const actions = {
     return args.api.deployUserCode(args.source)
   },
   get_user_code ({commit, state}, args) {
-    return args.api.getUserCode()
+    return new Promise((resolve, reject) => {
+      args.api.getUserCode()
+        .then((rs) => {
+          resolve(rs.data)
+        })
+        .catch((e) => reject(e))
+    })
   },
   reload_user_code ({commit, state}, args) {
     return args.api.reloadUserCode()
