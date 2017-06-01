@@ -26,8 +26,8 @@ namespace Speercs.Server.Game.Scripting.Api
 */
         public SpeercsUserApi(ISContext serverContext, string userId) : base(serverContext)
         {
-            UserId = userId;
-            MyTeam = ServerContext.AppState.PlayerData[UserId];
+            //UserId = userId;
+            //MyTeam = ServerContext.AppState.PlayerData[UserId];
         }
 /*
         public List<GameEntity> Entities
