@@ -18,7 +18,7 @@
               ></v-text-field>
               <v-subheader class="red--text" v-if="err !== null">{{ err }}</v-subheader>
               <div class="center">
-                <v-btn @click.native="proceed_login" :disabled="!canProceed" primary raised ripple>Login</v-btn>
+                <v-btn @click.native="proceed_login" :loading="pending" :disabled="!canProceed" primary raised ripple>Login</v-btn>
               </div>
             </template>
             <template v-else-if="mode === 'register'">
@@ -41,7 +41,7 @@
               ></v-text-field>
               <v-subheader class="red--text" v-if="err !== null">{{ err }}</v-subheader>
               <div class="center">
-                <v-btn @click.native="proceed_register" :disabled="!canProceed" primary raised ripple>Register</v-btn>
+                <v-btn @click.native="proceed_register" :loading="pending" :disabled="!canProceed" primary raised ripple>Register</v-btn>
               </div>
             </template>
           </v-flex>
@@ -61,11 +61,12 @@ export default {
       pw: null,
       ikey: null,
       err: null,
-      canProceed: true
+      pending: false
     }
   },
   methods: {
     attempt_relogin () {
+      this.pending = true
       this.$store.dispatch('ensure_api', `${window.location.origin}/`)
         .then(() => {
           this.$store.dispatch('attempt_reauthenticate')
@@ -74,10 +75,11 @@ export default {
               // proceed
               this.onProceed()
             })
+            .catch(() => this.pending = false)
         })
     },
     proceed_login () {
-      this.canProceed = false
+      this.pending = true
       let b = {
         un: this.un,
         pw: this.pw
@@ -91,14 +93,14 @@ export default {
               this.onProceed()
             })
             .catch((e) => {
-              this.canProceed = true
+              this.pending = false
               this.err = 'invalid credentials'
               console.log('login failure', e)
             })
         })
     },
     proceed_register () {
-      this.canProceed = false
+      this.pending = true
       let b = {
         un: this.un,
         pw: this.pw,
@@ -113,7 +115,7 @@ export default {
               this.onProceed()
             })
             .catch((e) => {
-              this.canProceed = true
+              this.pending = false
               this.err = 'registration failed'
               if (e.response) {
                 this.err += `: ${e.response.data}`

@@ -123,7 +123,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       state.api.logout()
       commit('login_result', { success: false })
-      commit('persist_auth', resultData)
+      commit('persist_auth', false)
     })
   }
 }
