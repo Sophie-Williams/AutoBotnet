@@ -13,7 +13,7 @@ const actions = {
 function loop () {
   // hello world!
 }
-          `
+          `.trim()
           resolve(rs.data.source || sampleProgram)
         })
         .catch((e) => reject(e))
