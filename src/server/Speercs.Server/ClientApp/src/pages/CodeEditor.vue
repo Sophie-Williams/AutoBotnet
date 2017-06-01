@@ -29,7 +29,7 @@
               <v-icon right light>refresh</v-icon>
             </v-btn>
             <v-checkbox :disabled="true"
-              label="Enable Transpiler" v-model="transpile" dark
+              label="Enable ES6 Transpiler" v-model="transpile" dark
             ></v-checkbox>
           </div>
         </v-flex>
