@@ -9,7 +9,12 @@ const actions = {
     return new Promise((resolve, reject) => {
       args.api.getUserCode()
         .then((rs) => {
-          resolve(rs.data)
+          let sampleProgram = `
+function loop () {
+  // hello world!
+}
+          `
+          resolve(rs.data.source || sampleProgram)
         })
         .catch((e) => reject(e))
     })
