@@ -131,7 +131,46 @@
         return this.$store.state.auth.loggedIn
       }
     },
-    methods: {}
+    methods: {
+      showConfirm (tx, ti, cb, y, n) {
+        y = y || 'OK'
+        n = n || 'Cancel'
+        this.confirmDialog.ok = y
+        this.confirmDialog.cancel = n
+        this.confirmDialog.content = tx
+        this.confirmDialog.title = ti
+        this.confirmDialog.callback = cb
+        this.confirmDialogOpen = true
+      },
+      showPrompt: function (ti, h, cb, y, n) {
+        y = y || 'OK'
+        n = n || 'Cancel'
+        this.promptDialog.ok = y
+        this.promptDialog.cancel = n
+        this.promptDialog.hint = h
+        this.promptDialog.title = ti
+        this.promptDialog.callback = cb
+        this.promptDialogOpen = true
+      },
+      onConfirmResult (r) {
+        this.confirmDialogOpen = false
+        this.confirmDialog.callback(r)
+        this.confirmDialog.callback = null
+      },
+      onPromptResult (r) {
+        this.promptDialogOpen = false
+        if (r && this.promptDialog.resp) {
+          this.promptDialog.callback(this.promptDialog.resp)
+        } else {
+          this.promptDialog.callback(false)
+        }
+        this.promptDialog.resp = ''
+        this.promptDialog.callback = null
+      },
+      visitUrl (u) {
+        window.open(u, '_blank')
+      }
+    }
   }
 </script>
 
