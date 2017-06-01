@@ -9,7 +9,9 @@ namespace Speercs.Server.Game.Scripting.Api
 {
     public class SpeercsUserApi : ProtectedDependencyObject
     {
-        public string UserId { get; }
+
+	    // TODO: Non crappy code
+/*        public string UserId { get; }
         private UserTeam MyTeam { get; set; }
         // Placeholder untill these are in proper classes
         public int CurrentRoomX { get; set; } = 0;
@@ -21,13 +23,13 @@ namespace Speercs.Server.Game.Scripting.Api
                 return MyTeam.NRG;
             }
         }
-
+*/
         public SpeercsUserApi(ISContext serverContext, string userId) : base(serverContext)
         {
             UserId = userId;
             MyTeam = ServerContext.AppState.PlayerData[UserId];
         }
-
+/*
         public List<GameEntity> Entities
         {
             get
@@ -81,4 +83,5 @@ namespace Speercs.Server.Game.Scripting.Api
             return false;
         }
     }
+*/
 }
