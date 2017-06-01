@@ -79,7 +79,10 @@ namespace Speercs.Server.Modules
                     var newUser = await userManager.RegisterUserAsync(req);
 
                     // create team data
-                    ServerContext.AppState.PlayerData[newUser.Identifier] = new UserTeam();
+                    ServerContext.AppState.PlayerData[newUser.Identifier] = new UserTeam
+                    {
+                        UserIdentifier = newUser.Identifier
+                    };
 
                     // create persistent data
                     var persistentDataService = new PlayerPersistentDataService(ServerContext);
