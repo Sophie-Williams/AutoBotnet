@@ -4,7 +4,7 @@
       <h3>Code Editor</h3>
     </div>
     <div v-if="ready">
-      <v-layout row>
+      <v-layout row wrap>
         <v-flex xs12 lg8>
           <div class="editor">
             <codemirror v-model="code" :options="editorOptions"></codemirror>
@@ -20,15 +20,18 @@
               Deploy Code
               <v-icon right light>send</v-icon>
             </v-btn>
-          </div>
-          <v-btn info raised ripple
-              @click.native="reloadCode"
-              :loading="reloading"
-              :disabled="reloading"
-            >
-              Request Reload
+            <v-btn info raised ripple
+                @click.native="reloadCode"
+                :loading="reloading"
+                :disabled="reloading"
+              >
+              Reload Engine
               <v-icon right light>refresh</v-icon>
             </v-btn>
+            <v-checkbox :disabled="true"
+              label="Enable Transpiler" v-model="transpile" dark
+            ></v-checkbox>
+          </div>
         </v-flex>
       </v-layout>
     </div>
@@ -60,6 +63,7 @@ export default {
         styleSelectedText: true,
         highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true },
       },
+      transpile: false,
       ready: false,
       loadError: false,
       deploying: false,
