@@ -40,6 +40,38 @@
         </v-slide-y-transition>
       </v-container>
     </main>
+
+    <v-dialog persistent v-model="confirmDialogOpen" ref="confirmDialog">
+      <v-card>
+        <v-card-row>
+          <v-card-title>{{ confirmDialog.title }}</v-card-title>
+        </v-card-row>
+        <v-card-row>
+          <v-card-text v-html="confirmDialog.content"></v-card-text>
+        </v-card-row>
+        <v-card-row actions>
+          <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(false)">{{ confirmDialog.cancel }}</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(true)">{{ confirmDialog.ok }}</v-btn>
+        </v-card-row>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog persistent v-model="promptDialogOpen" ref="promptDialog">
+      <v-card>
+        <v-card-row>
+          <v-card-title>{{ promptDialog.title }}</v-card-title>
+        </v-card-row>
+        <v-card-row>
+          <v-card-text>
+            <v-text-field :label="promptDialog.hint"  v-model="promptDialog.resp" required></v-text-field>
+          </v-card-text>
+        </v-card-row>
+        <v-card-row actions>
+          <v-btn class="blue--text darken-1" flat @click.native="onPromptResult(false)">{{ promptDialog.cancel }}</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="onPromptResult(true)">{{ promptDialog.ok }}</v-btn>
+        </v-card-row>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -120,7 +152,24 @@
             avatar: 'error',
             link: 'https://github.com/CookieEaters/autobotnet_t/issues'
           }
-        ]
+        ],
+        confirmDialog: {
+          title: '',
+          content: '',
+          ok: 'OK',
+          cancel: 'Cancel',
+          callback: null
+        },
+        promptDialog: {
+          title: '',
+          ok: 'OK',
+          cancel: 'Cancel',
+          hint: '',
+          resp: '',
+          callback: null
+        },
+        confirmDialogOpen: false,
+        promptDialogOpen: false
       }
     },
     computed: {
