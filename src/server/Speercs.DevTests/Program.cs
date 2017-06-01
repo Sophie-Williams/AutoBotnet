@@ -54,6 +54,29 @@ namespace Speercs.DevTests
             ");
             Console.WriteLine(engine.Invoke("loop"));
             Console.WriteLine("DONE");
+
+            Console.WriteLine("kekloop");
+            var timeoutEngine = new JSEngine(
+                cfg =>
+                {
+                    cfg.LimitRecursion(10);
+                    cfg.TimeoutInterval(TimeSpan.FromMilliseconds(500));
+                }
+            );
+            try
+            {
+                timeoutEngine.Execute(@"
+                    function loop() {
+                        for (let kek = 0;;kek++) { }
+                    }
+                ");
+                Console.WriteLine(timeoutEngine.Invoke("loop"));
+            }
+            catch (TimeoutException)
+            {
+                Console.WriteLine("kek ran out of time kek");
+            }
+            Console.WriteLine("DONE");
         }
 
         public static ISContext ServerContext;
