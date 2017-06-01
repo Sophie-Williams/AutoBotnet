@@ -25,6 +25,9 @@
     <v-toolbar>
       <v-toolbar-side-icon @click.native.stop="sidebar_v = !sidebar_v"></v-toolbar-side-icon>
       <v-toolbar-title v-text="appName"></v-toolbar-title>
+      <v-btn icon light @click.native="visitUrl('https://cookieeaters.xyz')">
+        <v-icon>favorite</v-icon>
+      </v-btn>
     </v-toolbar>
     <main>
       <v-container fluid>
