@@ -82,6 +82,6 @@ namespace Speercs.Server.Game.Scripting.Api
             // TODO: Stuff
             return false;
         }
+	*/
     }
-*/
 }
