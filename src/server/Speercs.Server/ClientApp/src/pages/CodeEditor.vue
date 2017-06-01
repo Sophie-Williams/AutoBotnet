@@ -77,6 +77,7 @@ export default {
   methods: {
     deployCode () {
       this.deploying = true
+      let vm = this
       this.$store.dispatch('deploy_user_code', {
         api: this.$store.getters.api,
         source: this.code
@@ -86,18 +87,22 @@ export default {
         })
         .catch(() => {
           this.deploying = false
+          vm.$root.showPopup('An error occurred while performing the requested action.', 'Request Failed')
         })
     },
     reloadCode () {
       this.reloading = true
+      let vm = this
       this.$store.dispatch('reload_user_code', {
         api: this.$store.getters.api
       })
         .then(() => {
           this.reloading = false
+          vm.$root.showPopup('A full reload of the execution engine for your code has been requested.', 'Reload Requested')
         })
         .catch(() => {
           this.reloading = false
+          vm.$root.showPopup('An error occurred while performing the requested action.', 'Request Failed')
         })
     }
   },

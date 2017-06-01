@@ -50,7 +50,7 @@
           <v-card-text v-html="confirmDialog.content"></v-card-text>
         </v-card-row>
         <v-card-row actions>
-          <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(false)">{{ confirmDialog.cancel }}</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(false)" v-if="!confirmDialog.popup">{{ confirmDialog.cancel }}</v-btn>
           <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(true)">{{ confirmDialog.ok }}</v-btn>
         </v-card-row>
       </v-card>
@@ -158,7 +158,8 @@
           content: '',
           ok: 'OK',
           cancel: 'Cancel',
-          callback: null
+          callback: null,
+          popup: false
         },
         promptDialog: {
           title: '',
@@ -181,9 +182,13 @@
       }
     },
     methods: {
-      showConfirm (tx, ti, cb, y, n) {
+      showPopup (tx, ti, y) {
+        this.showConfirm(tx, ti, null, y, null, true)
+      },
+      showConfirm (tx, ti, cb, y, n, p = false) {
         y = y || 'OK'
         n = n || 'Cancel'
+        this.confirmDialog.popup = p
         this.confirmDialog.ok = y
         this.confirmDialog.cancel = n
         this.confirmDialog.content = tx
@@ -203,7 +208,9 @@
       },
       onConfirmResult (r) {
         this.confirmDialogOpen = false
-        this.confirmDialog.callback(r)
+        if (this.confirmDialog.callback) {
+          this.confirmDialog.callback(r)
+        }
         this.confirmDialog.callback = null
       },
       onPromptResult (r) {
