@@ -113,6 +113,26 @@ export class SpeercsApi {
     })
   }
 
+  /* -------- game -------- */
+
+  /* user code */
+
+  getUserCode () {
+    this.ax()
+    return this.axios.get('/game/code/get')
+  }
+
+  reloadUserCode () {
+    return this.axios.patch('/game/code/reload')
+  }
+
+  deployUserCode (src) {
+    this.ax()
+    return this.axios.post('/game/code/deploy', {
+      source: src
+    })
+  }
+
   /* getters */
   getKey() { return this.key }
 

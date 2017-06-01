@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 // store modules
 import auth from './auth'
+import gamecode from './gamecode'
 import data from './data'
 
 Vue.use(Vuex)
