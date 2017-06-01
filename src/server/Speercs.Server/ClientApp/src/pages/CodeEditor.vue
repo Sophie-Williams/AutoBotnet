@@ -12,7 +12,7 @@
         </v-flex>
         <v-flex xs12 lg4>
           <div class="actions">
-            <v-btn primary raised ripple>Deploy Code</v-btn>
+            <v-btn primary raised ripple @click.native="deployCode">Deploy Code</v-btn>
           </div>
         </v-flex>
       </v-layout>
@@ -56,6 +56,20 @@ export default {
       return this.$store.getters.auth_data.un;
     }
   },
+  methods: {
+    deployCode () {
+      this.$store.dispatch('deploy_user_code', {
+        api: this.$store.getters.api,
+        source: this.code
+      })
+        .then(() => {
+          // TODO: Show user feedback
+        })
+        .catch(() => {
+          // TODO: Show user feedback
+        })
+    }
+  },
   mounted () {
     // fetch code
     this.$store.dispatch('get_user_code', {
@@ -63,6 +77,7 @@ export default {
     })
       .then((usrc) => {
         this.code = usrc
+        this.ready = true
       })
 
   }
