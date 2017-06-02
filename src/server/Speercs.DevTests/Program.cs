@@ -8,6 +8,8 @@ using IridiumJS;
 using IridiumJS.Runtime.Interop;
 using IridiumJS.Native;
 using IridiumJS.Runtime;
+using Speercs.Server.Models.Game.Entities;
+using Speercs.Server.Game.Scripting;
 
 namespace Speercs.DevTests
 {
@@ -31,24 +33,29 @@ namespace Speercs.DevTests
             Console.WriteLine();
             
             // JS engine testing
-            var engine = new JSEngine(
-                cfg =>
-                {
-                    cfg.LimitRecursion(10);
-                    cfg.TimeoutInterval(TimeSpan.FromMilliseconds(500));
-                }
-            );
+            var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine("<userid>");
             
             Console.WriteLine("EXECUTING");
-            engine.SetValue("log", new Action<string>(
-                (s) => Console.WriteLine(s)
+            engine.SetValue("log", (Action<object>)Console.WriteLine);
+            engine.SetValue("test", new Action<Direction>(
+                x => {
+                    Console.WriteLine("it werkd: "+x);
+                }
             ));
             engine.Execute(@"
                 function loop() {
-                    // log = 'toast';
-                    
                     var kek = 2;
                     log(kek + 3, 'tickles');
+                    
+                    log();
+                    test(0);
+                    test(1);
+                    test(2);
+                    log(EAST);
+                    log(typeof EAST);
+                    test(6);
+                    log();
+                    
                     return 'corn?';
                 }
             ");
@@ -56,21 +63,11 @@ namespace Speercs.DevTests
             Console.WriteLine("DONE");
 
             Console.WriteLine("kekloop");
-            var timeoutEngine = new JSEngine(
-                cfg =>
-                {
-                    cfg.LimitRecursion(10);
-                    cfg.TimeoutInterval(TimeSpan.FromMilliseconds(500));
-                }
-            );
             try
             {
-                timeoutEngine.Execute(@"
-                    function loop() {
-                        for (let kek = 0;;kek++) { }
-                    }
+                engine.Execute(@"
+                    for (let kek = 0;;kek++) { }
                 ");
-                Console.WriteLine(timeoutEngine.Invoke("loop"));
             }
             catch (TimeoutException)
             {

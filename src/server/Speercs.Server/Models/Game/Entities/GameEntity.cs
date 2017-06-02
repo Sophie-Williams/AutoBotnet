@@ -7,10 +7,10 @@ namespace Speercs.Server.Models.Game.Entities
 {
     public enum Direction
     {
-        North,
-        East,
-        South,
-        West
+        North = 0,
+        East = 1,
+        South = 2,
+        West = 3
     }
     
     public abstract class GameEntity : DependencyObject
@@ -99,6 +99,9 @@ namespace Speercs.Server.Models.Game.Entities
                         else return false;
                     }
                     break;
+                default:
+                    // this can happen if an int is casted to Direction
+                    throw new ArgumentException("direction must be one of the four cardinal directions", "direction");
             }
 
             var newPos = new RoomPosition(roomX, roomY, newX, newY);
