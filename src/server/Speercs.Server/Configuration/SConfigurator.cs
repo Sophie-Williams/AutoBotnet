@@ -52,10 +52,12 @@ namespace Speercs.Server.Configuration
                 // If needed...
                 if (savedState.PersistNeeded)
                 {
+                    savedState.PersistAvailable = false;
                     // Update in database
                     stateStorage.Upsert(savedState);
                     // And unset needed flag
                     savedState.PersistNeeded = false;
+                    savedState.PersistAvailable = true;
                 }
             };
             // TODO: Merge API keys, etc.
@@ -71,8 +73,11 @@ namespace Speercs.Server.Configuration
         {
             while (true)
             {
-                await Task.Delay(state.PersistenceInterval);
-                state.Persist();
+                if (state.PersistAvailable)
+                {
+                    await Task.Delay(state.PersistenceInterval);
+                    state.Persist();
+                }
             }
         }
     }

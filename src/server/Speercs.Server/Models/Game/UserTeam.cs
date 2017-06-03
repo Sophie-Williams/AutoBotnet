@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Speercs.Server.Models.User;
 
 namespace Speercs.Server.Models.Game
 {
@@ -9,5 +10,8 @@ namespace Speercs.Server.Models.Game
     {
         public List<string> ownedEntities { get; set; }
         public int NRG { get; set; }
+        public string UserIdentifier { get; set; }
+        
+        public List<string> OwnedEntities { get; set; } = new List<string>();
     }
 }

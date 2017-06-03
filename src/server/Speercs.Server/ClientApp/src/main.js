@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
-import AnimatedVue from 'animated-vue'
 import VueCodeMirror from 'vue-codemirror'
 
 // app
@@ -20,7 +19,6 @@ import './stylus/main.styl'
 // register plugins
 Vue.use(VueRouter)
 Vue.use(Vuetify)
-Vue.use(AnimatedVue)
 Vue.use(VueCodeMirror)
 
 // router setup
@@ -35,7 +33,7 @@ router.beforeEach((to, from, next) => {
     if (!store.getters.is_logged_in) {
       next({
         path: '/login',
-        query: { redirect: to.fullPath }
+        query: { r: to.fullPath }
       })
     } else {
       next()
@@ -45,9 +43,10 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-const app = new Vue({
+let FFVApp = Vue.component('app', App)
+
+const app = new FFVApp({
   el: '#app',
-  render: h => h(App),
   router,
   store
 })

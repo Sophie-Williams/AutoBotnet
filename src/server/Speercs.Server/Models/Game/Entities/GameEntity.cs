@@ -1,131 +1,134 @@
+using System;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game.Map;
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Game.Entities
 {
+    public enum Direction
+    {
+        North = 0,
+        East = 1,
+        South = 2,
+        West = 3
+    }
+    
     public abstract class GameEntity : DependencyObject
     {
-        public (int, int) RoomIdentifier { get; set; }
+        public readonly string ID;
 
-        public Point Location { get; set; }
+        public RoomPosition Position { get; set; }
 
-        public GameEntity(ISContext serverContext) : base(serverContext)
+        public GameEntity(ISContext serverContext, RoomPosition pos) : base(serverContext)
         {
+            Position = pos;
+            
+            ID = System.Guid.NewGuid().ToString("N");
             ServerContext.AppState.Entities.Insert(this);
         }
 
-        public Point Move(Point point)
+        public RoomPosition Move(int x, int y)
         {
-            return Move(point.X, point.Y);
+            if (x<0 || y<0 || x>=Room.MapEdgeSize || y>=Room.MapEdgeSize)
+                throw new ArgumentException("Cannot move outside of the Room's boundaries");
+            return Move(new RoomPosition(Position, x, y));
+        }
+        
+        public RoomPosition Move(RoomPosition pos)
+        {
+            return Position = pos;
         }
 
-        public Point Move(int x, int y)
+        public virtual bool MoveRelative(Direction direction)
         {
-            if (x >= Room.MapEdgeSize) x = Room.MapEdgeSize - 1;
-            if (x < 0) x = 0;
-            if (y >= Room.MapEdgeSize) y = Room.MapEdgeSize - 1;
-            if (y < 0) y = 0;
-            Location = new Point(x, y);
-            return Location;
-        }
-
-        public Point MoveRelative(int direction)
-        {
-            int newX = Location.X;
-            int newY = Location.Y;
+            var roomX = Position.RoomX;
+            var roomY = Position.RoomY;
+            int newX = Position.X;
+            int newY = Position.Y;
+            
             switch (direction)
             {
-                case 0:
+                case Direction.North:
                     newY--;
+                    if (newY < 0)
+                    {
+                        if (ServerContext.AppState.WorldMap[roomX, roomY - 1] != null)
+                        {
+                            roomY--;
+                            newY = Room.MapEdgeSize - 1;
+                        }
+                        else return false;
+                    }
                     break;
 
-                case 1:
+                case Direction.East:
                     newX++;
+                    if (newX >= Room.MapEdgeSize)
+                    {
+                        if (ServerContext.AppState.WorldMap[roomX + 1, roomY] != null)
+                        {
+                            roomX++;
+                            newX = 0;
+                        }
+                        else return false;
+                    }
                     break;
 
-                case 2:
+                case Direction.South:
                     newY++;
+                    if (newY >= Room.MapEdgeSize)
+                    {
+                        if (ServerContext.AppState.WorldMap[roomX, roomY + 1] != null)
+                        {
+                            roomY++;
+                            newY = 0;
+                        }
+                        else return false;
+                    }
                     break;
 
-                case 3:
+                case Direction.West:
                     newX--;
+                    if (newX < 0)
+                    {
+                        if (ServerContext.AppState.WorldMap[roomX - 1, roomY] != null)
+                        {
+                            roomX--;
+                            newX = Room.MapEdgeSize - 1;
+                        }
+                        else return false;
+                    }
                     break;
+                default:
+                    // this can happen if an int is casted to Direction
+                    throw new ArgumentException("direction must be one of the four cardinal directions", "direction");
             }
-            (int roomX, int roomY) = RoomIdentifier;
 
-            if (!ServerContext.AppState.WorldMap[roomX, roomY].Tiles[newX, newY].IsWalkable())
-                return Location; // not Walkable; don't move
-
-            if (newX >= Room.MapEdgeSize)
-            {
-                if (ServerContext.AppState.WorldMap[roomX + 1, roomY] != null)
-                {
-                    RoomIdentifier = (roomX + 1, roomY);
-                    newX = 0;
-                }
-                else
-                {
-                    newX--;
-                }
-            }
-            if (newX < 0)
-            {
-                if (ServerContext.AppState.WorldMap[roomX - 1, roomY] != null)
-                {
-                    RoomIdentifier = (roomX - 1, roomY);
-                    newX = Room.MapEdgeSize - 1;
-                }
-                else
-                {
-                    newX++;
-                }
-            }
-            if (newY >= Room.MapEdgeSize)
-            {
-                if (ServerContext.AppState.WorldMap[roomX, roomY + 1] != null)
-                {
-                    RoomIdentifier = (roomX, roomY + 1);
-                    newY = 0;
-                }
-                else
-                {
-                    newY--;
-                }
-            }
-            if (newY < 0)
-            {
-                if (ServerContext.AppState.WorldMap[roomX, roomY - 1] != null)
-                {
-                    RoomIdentifier = (roomX, roomY - 1);
-                    newY = Room.MapEdgeSize - 1;
-                }
-                else
-                {
-                    newY++;
-                }
-            }
-            Location = new Point(newX, newY);
-            return Location;
+            var newPos = new RoomPosition(roomX, roomY, newX, newY);
+            if (!newPos.GetTile(ServerContext).IsWalkable())
+                return false; // not Walkable; don't move
+            
+            Position = newPos;
+            return true;
         }
 
-        public Point MoveRelative(int x, int y)
+        public RoomPosition MoveRelative(int x, int y)
         {
-            Location = new Point(Location.X + x, Location.Y + y);
-            return Location;
+            return Move(Position.X + x, Position.Y + y);
         }
 
-        public bool AttemptMoveRoom((int, int) roomIdentifier)
+        public bool AttemptMoveRoom((int, int) newRoom)
         {
             // only allow moving to an adjacent room that exists
-            (int nRoomX, int nRoomY) = roomIdentifier;
-            (int roomX, int roomY) = RoomIdentifier;
+            (int nRoomX, int nRoomY) = newRoom;
+            var roomX = Position.RoomX;
+            var roomY = Position.RoomY;
             if (ServerContext.AppState.WorldMap[nRoomX, nRoomY] != null)
             {
                 if (roomX + 1 == nRoomX || roomX - 1 == nRoomX ||
                     roomY + 1 == nRoomY || roomY - 1 == nRoomY)
                 {
-                    RoomIdentifier = roomIdentifier;
+                    Position = new RoomPosition(nRoomX, nRoomY, Position.X, Position.Y);
                     return true;
                 }
             }

@@ -30,7 +30,7 @@ const main = [
     component: Logout
   },
   {
-    path: '/dashboard',
+    path: '/d',
     name: 'dashboard',
     component: Dashboard,
     meta: { requiresAuth: true }

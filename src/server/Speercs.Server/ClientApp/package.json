@@ -8,7 +8,6 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "animated-vue": "^0.4.0",
     "axios": "^0.16.1",
     "vue": "^2.2.6",
     "vue-codemirror": "^3.0.5",
@@ -29,7 +28,7 @@
     "stylus-loader": "^2.5.1",
     "vue-loader": "^11.3.3",
     "vue-template-compiler": "^2.2.6",
-    "vuetify": "^0.10.0",
+    "vuetify": "^0.12.2",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.2.0-rc.0",
     "webpack-hot-middleware": "^2.18.0"

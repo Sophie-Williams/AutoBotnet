@@ -29,6 +29,12 @@ namespace Speercs.Server.Modules.Game
             {
                 var req = this.Bind<CodeDeployRequest>();
 
+                // Validate code size (for security reasons)
+                if (req.Source.Length > ServerContext.Configuration.CodeSizeLimit)
+                {
+                    return HttpStatusCode.UnprocessableEntity;
+                }
+
                 PlayerDataService.DeployProgram(CurrentUser.Identifier, new UserProgram(req.Source));
                 return HttpStatusCode.OK;
             });

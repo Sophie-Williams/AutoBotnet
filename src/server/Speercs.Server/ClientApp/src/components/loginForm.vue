@@ -2,8 +2,8 @@
   <v-card class="grey lighten-4 elevation-0">
     <v-card-text>
       <v-container fluid>
-        <v-row row>
-          <v-col xs10 offset-xs1 lg6 offset-lg3>
+        <v-layout row>
+          <v-flex xs10 offset-xs1 lg6 offset-lg3>
             <template v-if="mode === 'login'">
               <v-text-field
                 name="username-input"
@@ -16,9 +16,9 @@
                 type="password"
                 v-model="pw"
               ></v-text-field>
-              <v-subheader v-if="err !== null">{{ err }}</v-subheader>
+              <v-subheader class="red--text" v-if="err !== null">{{ err }}</v-subheader>
               <div class="center">
-                <v-btn @click.native="proceed_login" :disabled="!canProceed" primary raised ripple>Login</v-btn>
+                <v-btn @click.native="proceed_login" :loading="pending" :disabled="!canProceed" primary raised ripple>Login</v-btn>
               </div>
             </template>
             <template v-else-if="mode === 'register'">
@@ -39,13 +39,13 @@
                 type="password"
                 v-model="ikey"
               ></v-text-field>
-              <v-subheader v-if="err !== null">{{ err }}</v-subheader>
+              <v-subheader class="red--text" v-if="err !== null">{{ err }}</v-subheader>
               <div class="center">
-                <v-btn @click.native="proceed_register" :disabled="!canProceed" primary raised ripple>Register</v-btn>
+                <v-btn @click.native="proceed_register" :loading="pending" :disabled="!canProceed" primary raised ripple>Register</v-btn>
               </div>
             </template>
-          </v-col>
-        </v-row>
+          </v-flex>
+        </v-layout>
       </v-container>
     </v-card-text>
   </v-card>
@@ -61,12 +61,28 @@ export default {
       pw: null,
       ikey: null,
       err: null,
-      canProceed: true
+      pending: false
     }
   },
+  computed: {
+    canProceed () { return !this.pending }
+  },
   methods: {
+    attempt_relogin () {
+      this.pending = true
+      this.$store.dispatch('ensure_api', `${window.location.origin}/`)
+        .then(() => {
+          this.$store.dispatch('attempt_reauthenticate')
+            .then(() => {
+              console.log('reauthenticated successfully')
+              // proceed
+              this.onProceed()
+            })
+            .catch(() => this.pending = false)
+        })
+    },
     proceed_login () {
-      this.canProceed = false
+      this.pending = true
       let b = {
         un: this.un,
         pw: this.pw
@@ -77,17 +93,17 @@ export default {
             .then(() => {
               console.log('login successful')
               // proceed
-              this.$router.push('/dashboard')
+              this.onProceed()
             })
             .catch((e) => {
-              this.canProceed = true
+              this.pending = false
               this.err = 'invalid credentials'
               console.log('login failure', e)
             })
         })
     },
     proceed_register () {
-      this.canProceed = false
+      this.pending = true
       let b = {
         un: this.un,
         pw: this.pw,
@@ -99,15 +115,28 @@ export default {
             .then(() => {
               console.log('registration successful')
               // proceed
-              this.$router.push('/dashboard')
+              this.onProceed()
             })
             .catch((e) => {
-              this.canProceed = true
+              this.pending = false
               this.err = 'registration failed'
+              if (e.response) {
+                this.err += `: ${e.response.data}`
+              }
               console.log('registration failure', e)
             })
         })
+    },
+    onProceed () {
+      if (this.$route.query.r) {
+        this.$router.push(this.$route.query.r)
+      } else {
+        this.$router.push('/d')
+      }
     }
+  },
+  mounted () {
+    this.attempt_relogin()
   }
 }
 </script>

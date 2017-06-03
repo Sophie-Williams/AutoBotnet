@@ -7,6 +7,7 @@
     <div>
       <p>
         {{ appName }} is a game.
+        It's in development.
       </p>
     </div>
   </div>

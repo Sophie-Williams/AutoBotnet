@@ -31,6 +31,9 @@ namespace Speercs.Server.Configuration
         [BsonIgnore]
         public bool PersistNeeded { get; set; }
 
+        [BsonIgnore]
+        public bool PersistAvailable { get; set; } = true;
+
         /// <summary>
         /// Call this to queue a persist.
         /// </summary>
@@ -44,5 +47,7 @@ namespace Speercs.Server.Configuration
         public WorldMap WorldMap { get; set; } = new WorldMap();
 
         public EntityBag Entities { get; set; } = new EntityBag();
+        
+        public long TickCount { get; set; }
     }
 }

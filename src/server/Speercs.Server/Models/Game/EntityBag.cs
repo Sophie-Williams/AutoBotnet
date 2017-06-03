@@ -12,17 +12,15 @@ namespace Speercs.Server.Models.Game
 
         public Dictionary<string, GameEntity> EntityData { get; set; } = new Dictionary<string, GameEntity>();
 
-        public string Insert(GameEntity entity)
+        public void Insert(GameEntity entity)
         {
-            string newGuid = Guid.NewGuid().ToString("N");
-            this.EntityData.Add(newGuid, entity);
-            return newGuid;
+            this.EntityData.Add(entity.ID, entity);
         }
 
         public List<GameEntity> GetAllByUser(UserTeam user)
         {
             var entities = new List<GameEntity>();
-            user.ownedEntities.ForEach((entId) =>
+            user.OwnedEntities.ForEach((entId) =>
             {
                 entities.Add(this.EntityData[entId]);
             });

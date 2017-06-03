@@ -72,6 +72,16 @@ namespace Speercs.Server.Services.Auth
             return await Task.Run(() => (userCollection.FindOne(x => x.Identifier == id)));
         }
 
+        /// <summary>
+        /// Warning: Callers are expected to use their own locks before calling this method!
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateUserInDatabaseAsync(RegisteredUser user)
+        {
+            return await Task.Run(() => userCollection.Update(user));
+        }
+
         public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
         {
             var ret = false;
@@ -85,6 +95,48 @@ namespace Speercs.Server.Services.Auth
                 ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.Crypto.Key);
             }));
             return ret;
+        }
+
+        public async Task ChangeUserPasswordAsync(RegisteredUser user, string newPassword)
+        {
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            await lockEntry.WithExclusiveWriteAsync(Task.Run(async () =>
+            {
+                // Recompute password crypto
+                var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
+                var cryptoHelper = new AuthCryptoHelper(cryptoConf);
+                var pwSalt = cryptoHelper.GenerateSalt();
+                var encryptedPassword =
+                    cryptoHelper.CalculateUserPasswordHash(newPassword, pwSalt);
+                user.Crypto = new ItemCrypto
+                {
+                    Salt = pwSalt,
+                    Conf = cryptoConf,
+                    Key = encryptedPassword
+                };
+                // Save changes
+                await UpdateUserInDatabaseAsync(user);
+            }));
+        }
+
+        public async Task GenerateNewApiKeyAsync(RegisteredUser user)
+        {
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            await lockEntry.WithExclusiveWriteAsync(Task.Run(async () =>
+            {
+                // Recompute key
+                user.ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength);
+                await UpdateUserInDatabaseAsync(user);
+            }));
+        }
+
+        public async Task SetEnabledAsync(RegisteredUser user, bool status)
+        {
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            await lockEntry.ObtainExclusiveWriteAsync();
+            user.Enabled = status;
+            await UpdateUserInDatabaseAsync(user);
+            lockEntry.ReleaseExclusiveWrite();
         }
     }
 }

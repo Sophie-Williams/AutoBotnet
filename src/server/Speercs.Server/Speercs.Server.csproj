@@ -7,16 +7,20 @@
     <Product>Speercs Server</Product>
     <Description>Speercs Server</Description>
     <Copyright>Copyright © 2017 The CookieEaters. All Rights Reserved.</Copyright>
-    <UserSecretsId>ebfc6db3-1aaa-42a1-8017-7771e4d8a168</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="ClientApp\**\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="C5.NetCore" Version="2.4.5947.17249" />
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha5-00069" />
     <PackageReference Include="CookieIoC" Version="2.0.1" />
-    <PackageReference Include="IridiumJS" Version="2.10.3.2" />
+    <PackageReference Include="IridiumJS" Version="2.10.3.3" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
+    <PackageReference Include="MoreLINQ" Version="2.4.1" />
     <PackageReference Include="System.ValueTuple" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.1" />
