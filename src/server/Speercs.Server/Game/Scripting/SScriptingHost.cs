@@ -27,11 +27,9 @@ namespace Speercs.Server.Game.Scripting
             );
             
             //-- configure globals
-            AddGlobal(engine, "Game", new SpeercsUserApi(ServerContext, userId));
+            AddGlobal(engine, "Game", new GameAPI(engine, ServerContext, userId));
             
-            var consoleObj = new ObjectInstance(engine);
-            consoleObj.FastAddProperty("log", new ClrFunctionInstance(engine, ConsoleLog, 0), false, true, false);
-            AddGlobal(engine, "console", consoleObj);
+            AddGlobal(engine, "console", new ConsoleAPI(engine));
             
             // these enum values become numbers (0-3)
             AddGlobal(engine, "NORTH", Direction.North);
@@ -46,18 +44,6 @@ namespace Speercs.Server.Game.Scripting
         private void AddGlobal(JSEngine engine, string name, object value)
         {
             engine.Global.FastAddProperty(name, JsValue.FromObject(engine, value), false, true, false);
-        }
-        
-        private static JsValue ConsoleLog(JsValue thisObj, JsValue[] args)
-        {
-            string str = "";
-            for (int i = 0; i < args.Length; i++)
-            {
-                if (i > 0) str += " ";
-                str += args[i].ToString();
-            }
-            Console.WriteLine(str);
-            return JsValue.Undefined;
         }
     }
 }

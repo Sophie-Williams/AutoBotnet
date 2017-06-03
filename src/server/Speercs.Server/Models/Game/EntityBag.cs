@@ -1,6 +1,7 @@
 using Speercs.Server.Models.Game.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Speercs.Server.Models.Game
 {
@@ -19,12 +20,7 @@ namespace Speercs.Server.Models.Game
 
         public List<GameEntity> GetAllByUser(UserTeam user)
         {
-            var entities = new List<GameEntity>();
-            user.OwnedEntities.ForEach((entId) =>
-            {
-                entities.Add(this.EntityData[entId]);
-            });
-            return entities;
+            return user.OwnedEntities.Select(entityID => EntityData[entityID]).ToList();
         }
     }
 }

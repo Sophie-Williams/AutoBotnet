@@ -8,10 +8,8 @@ namespace Speercs.Server.Models.Game
     /// </summary>
     public class UserTeam
     {
-        public List<string> ownedEntities { get; set; }
         public int NRG { get; set; }
         public string UserIdentifier { get; set; }
-        
         public List<string> OwnedEntities { get; set; } = new List<string>();
     }
 }
