@@ -33,16 +33,15 @@ namespace Speercs.Server.Game.Scripting
                 var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userIdentifier);
 
                 // load player code into engine
-                var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
                 try
                 {
+                var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
                     engine.Execute(playerSource);
                 }
                 catch
                 {
-                    // invalid code
-                    // ...
-                    playerSource = null; // suppress annoying warning
+                    // invalid code (syntax or other error on load)
+                    // TODO: let the user know
                 }
 
                 PlayerEngines.TryAdd(userIdentifier, engine);
