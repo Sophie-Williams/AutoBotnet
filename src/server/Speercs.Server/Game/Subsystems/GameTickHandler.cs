@@ -16,7 +16,7 @@ namespace Speercs.Server.Game.Subsystems
             
             foreach (var entry in ServerContext.AppState.PlayerData)
             {
-                var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.UserIdentifier);
+                var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.UserIdentifier).Engine;
                 await Task.Run(() => 
                 {
                     try

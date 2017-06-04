@@ -7,8 +7,8 @@ namespace Speercs.Server.Game.Scripting
 {
     public class PlayerExecutors : DependencyObject
     {
-        // cache of player engines
-        ConcurrentDictionary<string, JSEngine> PlayerEngines { get; } = new ConcurrentDictionary<string, JSEngine>();
+        // cache of player executors
+        ConcurrentDictionary<string, ScriptExecutor> Executors { get; } = new ConcurrentDictionary<string, ScriptExecutor>();
 
         public PlayerPersistentDataService PlayerPersistentData { get; }
 
@@ -17,18 +17,18 @@ namespace Speercs.Server.Game.Scripting
             PlayerPersistentData = new PlayerPersistentDataService(context);
         }
 
-        public JSEngine ReloadExecutor(string userIdentifier)
+        public ScriptExecutor ReloadExecutor(string userIdentifier)
         {
-            if (PlayerEngines.TryRemove(userIdentifier, out JSEngine removed))
+            if (Executors.TryRemove(userIdentifier, out ScriptExecutor removed))
             {
                 return RetrieveExecutor(userIdentifier);
             }
             return null;
         }
 
-        public JSEngine RetrieveExecutor(string userIdentifier)
+        public ScriptExecutor RetrieveExecutor(string userIdentifier)
         {
-            if (!PlayerEngines.ContainsKey(userIdentifier))
+            if (!Executors.ContainsKey(userIdentifier))
             {
                 var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userIdentifier);
 
@@ -44,9 +44,9 @@ namespace Speercs.Server.Game.Scripting
                     // TODO: let the user know
                 }
 
-                PlayerEngines.TryAdd(userIdentifier, engine);
+                Executors.TryAdd(userIdentifier, new ScriptExecutor(engine));
             } 
-            return PlayerEngines[userIdentifier];
+            return Executors[userIdentifier];
         }
     }
 }
