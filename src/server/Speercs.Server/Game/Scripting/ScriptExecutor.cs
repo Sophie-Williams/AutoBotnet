@@ -14,14 +14,19 @@ namespace Speercs.Server.Game.Scripting
         
         public BotAPI GetBotObject(Bot bot)
         {
-            return GetBotObject(bot.ID);
+            if (!botObjects.ContainsKey(bot.ID))
+                return botObjects[bot.ID] = new BotAPI(Engine, bot);
+            return botObjects[bot.ID];
         }
         
-        public BotAPI GetBotObject(string botID)
+        public bool RemoveBot(Bot bot)
         {
-            if (!botObjects.ContainsKey(botID))
-                return botObjects[botID] = new BotAPI(Engine);
-            return botObjects[botID];
+            return RemoveBot(bot.ID);
+        }
+        
+        public bool RemoveBot(string botID)
+        {
+            return botObjects.Remove(botID);
         }
         
         public JSEngine Engine { get; }

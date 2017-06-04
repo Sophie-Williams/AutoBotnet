@@ -14,12 +14,14 @@ namespace Speercs.Server.Game.Scripting.Api
     public class BotsDict : ObjectInstance
     {
         protected ISContext context;
+        protected ScriptExecutor executor;
         protected UserTeam team;
         
         public BotsDict(JSEngine engine, ISContext context, string userID) : base(engine)
         {
             this.context = context;
             team = context.AppState.PlayerData[userID];
+            executor = context.Executors.RetrieveExecutor(userID);
             
             Extensible = false;
         }
@@ -33,7 +35,7 @@ namespace Speercs.Server.Game.Scripting.Api
         {
             var bot = context.AppState.Entities.EntityData[propertyName] as Bot;
             if (bot?.Team == team)
-                return BotToJsValue(bot);
+                return executor.GetBotObject(bot);
             return JsValue.Undefined;
         }
         
@@ -49,7 +51,7 @@ namespace Speercs.Server.Game.Scripting.Api
                     .OfType<Bot>()
                     .Select(bot => new KeyValuePair<string, PropertyDescriptor>(
                         bot.ID,
-                        new PropertyDescriptor(BotToJsValue(bot), false, true, false)
+                        new PropertyDescriptor(executor.GetBotObject(bot), false, true, false)
                     ));
         }
         
@@ -81,12 +83,6 @@ namespace Speercs.Server.Game.Scripting.Api
             if (throwOnError)
                 throw new JavaScriptException(Engine.TypeError, "Not allowed to define properties on Game.bots");
             return false;
-        }
-        
-        public static JsValue BotToJsValue(Bot bot)
-        {
-            // TODO: make BotAPI.cs, and store an instance in each Bot object
-            return null;
         }
     }
 }
