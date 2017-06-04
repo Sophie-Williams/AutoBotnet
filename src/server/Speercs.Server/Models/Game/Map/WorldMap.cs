@@ -23,7 +23,7 @@ namespace Speercs.Server.Models.Game.Map
                 var roomKey = $"{x}:{y}";
                 var pos = new Point(x, y);
                 // register room position
-                if (!RoomPositions.Where(p => p.EqualTo(pos)).Any())
+                if (!RoomPositions.Any(p => p.EqualTo(pos)))
                 {
                     // register room position
                     RoomPositions.Add(pos);

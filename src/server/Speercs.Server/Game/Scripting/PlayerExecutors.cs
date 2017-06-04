@@ -28,14 +28,13 @@ namespace Speercs.Server.Game.Scripting
 
         public ScriptExecutor RetrieveExecutor(string userIdentifier)
         {
-            if (!Executors.ContainsKey(userIdentifier))
-            {
+            return Executors.GetOrAdd(userIdentifier, key => {
                 var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userIdentifier);
 
                 // load player code into engine
                 try
                 {
-                var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
+                    var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
                     engine.Execute(playerSource);
                 }
                 catch
@@ -44,9 +43,8 @@ namespace Speercs.Server.Game.Scripting
                     // TODO: let the user know
                 }
 
-                Executors.TryAdd(userIdentifier, new ScriptExecutor(engine));
-            } 
-            return Executors[userIdentifier];
+                return new ScriptExecutor(engine);
+            });
         }
     }
 }
