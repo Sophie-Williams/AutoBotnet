@@ -30,9 +30,13 @@ for (var id in Game.bots) {
 
 Represents a bot owned by some player.
 
+### `id` property
+
+The unique identifier string for the bot. (Read-only)
+
 ### `pos` property
 
-A [`RoomPosition`](#roomposition-objects) object, representing the bot's position.
+A [`RoomPosition`](#roomposition-objects) object, representing the bot's position. (Read-only)
 
 ## `RoomPosition` objects
 

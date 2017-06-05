@@ -13,6 +13,7 @@ namespace Speercs.Server.Game.Scripting.Api
             FastSetProperty("pos", new ClrAccessDescriptor(Engine, thisObj => {
                 return new RoomPositionAPI(executor, Bot.Position);
             }));
+            FastAddProperty("id", Bot.ID, false, false, false);
         }
         
         public override string Class
