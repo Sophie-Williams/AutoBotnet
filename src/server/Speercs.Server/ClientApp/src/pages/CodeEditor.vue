@@ -29,7 +29,7 @@
               <v-icon right light>refresh</v-icon>
             </v-btn>
             <v-checkbox :disabled="true"
-              label="Enable ES6 Transpiler" v-model="transpile" dark
+              label="ES6 Transpiler" v-model="transpile" dark
             ></v-checkbox>
           </div>
         </v-flex>
@@ -126,13 +126,11 @@ export default {
 
 <style>
   .editor {
-    height: 60%;
-    padding-bottom: 40%;
+    padding-bottom: 5%;
     position: relative;
   }
   .CodeMirror-scroll {
     overflow-y: hidden;
     overflow-x: auto;
-    min-height: 100%;
   }
 </style>
