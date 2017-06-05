@@ -28,32 +28,32 @@ namespace Speercs.Server.Utilities
             int worldMaxY = Int32.MinValue;
             int worldMinX = Int32.MaxValue;
             int worldMinY = Int32.MaxValue;
-            map.RoomPositions.ForEach((i) =>
+            foreach (var room in map.RoomDict.Values)
             {
-                if (i.X > worldMaxX) worldMaxX = i.X;
-                if (i.X < worldMinX) worldMinX = i.X;
+                if (room.X > worldMaxX) worldMaxX = room.X;
+                if (room.X < worldMinX) worldMinX = room.X;
 
-                if (i.Y > worldMaxY) worldMaxY = i.Y;
-                if (i.Y < worldMinY) worldMinY = i.Y;
-            });
+                if (room.Y > worldMaxY) worldMaxY = room.Y;
+                if (room.Y < worldMinY) worldMinY = room.Y;
+            }
             Image image = new Image((Math.Abs((worldMaxX - worldMinX) + 1) * Room.MapEdgeSize), (Math.Abs((worldMaxY - worldMinY) + 1) * Room.MapEdgeSize));
 
             image.BackgroundColor(Color.Black);
 
             using (var pixels = image.Lock())
             {
-                map.RoomPositions.ForEach((i) =>
+                foreach (var room in map.RoomDict.Values)
                 {
-                    var roomX = Room.MapEdgeSize * (i.X - worldMinX);
-                    var roomY = Room.MapEdgeSize * (i.Y - worldMinY);
+                    var roomX = Room.MapEdgeSize * (room.X - worldMinX);
+                    var roomY = Room.MapEdgeSize * (room.Y - worldMinY);
                     for (var y = 0; y < Room.MapEdgeSize; y++)
                     {
                         for (var x = 0; x < Room.MapEdgeSize; x++)
                         {
-                            pixels[roomX + x, roomY + y] = map[i.X, i.Y].Tiles[x, y].GetColor();
+                            pixels[roomX + x, roomY + y] = map[room.X, room.Y].Tiles[x, y].GetColor();
                         }
                     }
-                });
+                }
             }
 
             return image;

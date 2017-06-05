@@ -3,6 +3,7 @@ using IridiumJS;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting.Api;
 using Speercs.Server.Models.Game.Entities;
+using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Game.Scripting
 {
@@ -15,9 +16,9 @@ namespace Speercs.Server.Game.Scripting
         
         public BotAPI GetBotObject(Bot bot)
         {
-            if (!botObjects.ContainsKey(bot.ID))
-                return botObjects[bot.ID] = new BotAPI(this, bot);
-            return botObjects[bot.ID];
+            return botObjects.GetOrAdd(bot.ID, key => {
+                return new BotAPI(this, bot);
+            });
         }
         
         public bool RemoveBot(Bot bot)
@@ -32,10 +33,9 @@ namespace Speercs.Server.Game.Scripting
         
         public RoomAPI GetRoomObject(int roomX, int roomY)
         {
-            var key = $"{roomX}:{roomY}";
-            if (!roomObjects.ContainsKey(key))
-                return roomObjects[key] = new RoomAPI(this, ServerContext.AppState.WorldMap[roomX, roomY]);
-            return roomObjects[key];
+            return roomObjects.GetOrAdd($"{roomX}:{roomY}", key => {
+                return new RoomAPI(this, ServerContext.AppState.WorldMap[roomX, roomY]);
+            });
         }
         
         public JSEngine Engine { get; }
