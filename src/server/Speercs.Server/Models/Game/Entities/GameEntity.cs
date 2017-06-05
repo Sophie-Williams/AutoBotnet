@@ -15,7 +15,7 @@ namespace Speercs.Server.Models.Game.Entities
     
     public abstract class GameEntity : DependencyObject
     {
-        public readonly string ID;
+        public string ID { get; }
 
         public RoomPosition Position { get; set; }
 
