@@ -1649,6 +1649,10 @@ lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
 
+lodash.debounce@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+
 lodash.deburr@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/lodash.deburr/-/lodash.deburr-3.2.0.tgz#6da8f54334a366a7cf4c4c76ef8d80aa1b365ed5"
@@ -3092,6 +3096,13 @@ vue-loader@^11.3.3:
     vue-style-loader "^2.0.0"
     vue-template-es2015-compiler "^1.2.2"
 
+vue-monaco-editor@^0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/vue-monaco-editor/-/vue-monaco-editor-0.0.19.tgz#eadeff1b6f1dcd894b6766383cda31e5d682ad11"
+  dependencies:
+    lodash.debounce "^4.0.8"
+    vue "^2.1.0"
+
 vue-router@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-2.4.0.tgz#56a635e1434a1966ac095f2a485bebdcfc36cec5"
@@ -3134,13 +3145,13 @@ vue-template-es2015-compiler@^1.2.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.4.2.tgz#0bc595cda68fc27779568926fcead13553a335df"
 
+vue@^2.1.0, vue@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.3.3.tgz#d1eaa8fde5240735a4563e74f2c7fead9cbb064c"
+
 vue@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.2.6.tgz#451714b394dd6d4eae7b773c40c2034a59621aed"
-
-vue@^2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.3.3.tgz#d1eaa8fde5240735a4563e74f2c7fead9cbb064c"
 
 vuetify@^0.12.2:
   version "0.12.2"
