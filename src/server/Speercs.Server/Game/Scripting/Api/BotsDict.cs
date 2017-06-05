@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using IridiumJS;
@@ -5,6 +6,7 @@ using IridiumJS.Native;
 using IridiumJS.Native.Object;
 using IridiumJS.Runtime;
 using IridiumJS.Runtime.Descriptors;
+using IridiumJS.Runtime.Interop;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Game.Entities;
@@ -17,10 +19,16 @@ namespace Speercs.Server.Game.Scripting.Api
         protected ScriptExecutor executor;
         protected UserTeam team;
         
+        protected PropertyDescriptor toStringProperty;
+        
         public BotsDict(JSEngine engine, ISContext context, string userID) : base(engine)
         {
             this.context = context;
             team = context.AppState.PlayerData[userID];
+            
+            toStringProperty = GameAPI.MakeFunctionProperty(engine, () =>
+                $"[BotsDict ({context.AppState.Entities.GetAllByUser(team).Count(e => e is Bot)})]"
+            );
             
             Extensible = false;
         }
@@ -37,7 +45,8 @@ namespace Speercs.Server.Game.Scripting.Api
         
         public override JsValue Get(string propertyName)
         {
-            var bot = context.AppState.Entities.EntityData[propertyName] as Bot;
+            if (propertyName == "toString") return toStringProperty.Value;
+            var bot = context.AppState.Entities.Get<Bot>(propertyName);
             if (bot?.Team == team)
                 return getExecutor().GetBotObject(bot);
             return JsValue.Undefined;
@@ -61,6 +70,7 @@ namespace Speercs.Server.Game.Scripting.Api
         
         public override PropertyDescriptor GetOwnProperty(string propertyName)
         {
+            if (propertyName == "toString") return toStringProperty;
             var value = Get(propertyName);
             return value == JsValue.Undefined?
                         PropertyDescriptor.Undefined :
@@ -74,7 +84,8 @@ namespace Speercs.Server.Game.Scripting.Api
         
         public override bool HasOwnProperty(string propertyName)
         {
-            return (context.AppState.Entities.EntityData[propertyName] as Bot)?.Team == team;
+            if (propertyName == "toString") return true;
+            return context.AppState.Entities.Get<Bot>(propertyName)?.Team == team;
         }
         
         public override void RemoveOwnProperty(string propertyName)

@@ -31,6 +31,13 @@ namespace Speercs.Server.Game.Scripting.Api
                     Position.RoomY = room.Room.Y;
                 }
             }));
+            FastSetProperty("toString", GameAPI.MakeFunctionProperty(Engine, () =>
+                $"[{Position.X},{Position.Y}; room {Position.RoomX},{Position.RoomY}]"
+            ));
+        }
+        
+        public override string Class {
+            get { return "RoomPosition"; }
         }
         
         public RoomPosition Position;

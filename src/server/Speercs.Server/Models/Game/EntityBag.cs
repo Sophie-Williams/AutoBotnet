@@ -17,6 +17,13 @@ namespace Speercs.Server.Models.Game
         {
             this.EntityData.Add(entity.ID, entity);
         }
+        
+        public T Get<T>(string id) where T : GameEntity
+        {
+            GameEntity entity = null;
+            EntityData.TryGetValue(id, out entity);
+            return entity as T;
+        }
 
         public List<GameEntity> GetAllByUser(UserTeam user)
         {

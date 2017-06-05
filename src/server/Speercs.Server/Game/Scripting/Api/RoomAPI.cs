@@ -10,6 +10,11 @@ namespace Speercs.Server.Game.Scripting.Api
             Room = room;
             
             // TODO: properties, methods...
+            GameAPI.SetDefaultToString(this);
+        }
+        
+        public override string Class {
+            get { return "Room"; }
         }
         
         public Room Room { get; }

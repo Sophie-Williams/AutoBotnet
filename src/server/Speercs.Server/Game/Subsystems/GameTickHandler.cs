@@ -16,12 +16,16 @@ namespace Speercs.Server.Game.Subsystems
             
             foreach (var entry in ServerContext.AppState.PlayerData)
             {
-                var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.UserIdentifier).Engine;
                 await Task.Run(() => 
                 {
+                    var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.UserIdentifier).Engine;
                     try
                     {
-                        engine.Invoke("loop");
+                        var loopFunc = engine.GetValue("loop");
+                        Console.WriteLine("loopFunc: "+loopFunc);
+                        var res = loopFunc.Invoke(5);
+                        Console.WriteLine("returned: "+res);
+                        // engine.Invoke("loop");
                     }
                     catch (TimeoutException)
                     {

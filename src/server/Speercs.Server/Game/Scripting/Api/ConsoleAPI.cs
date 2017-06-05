@@ -10,6 +10,7 @@ namespace Speercs.Server.Game.Scripting.Api
         public ConsoleAPI(JSEngine engine) : base(engine)
         {
             FastAddProperty("log", new ClrFunctionInstance(Engine, Log, 0), false, true, false);
+            GameAPI.SetDefaultToString(this);
         }
         
         public override string Class

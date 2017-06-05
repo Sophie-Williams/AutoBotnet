@@ -14,6 +14,7 @@ namespace Speercs.Server.Game.Scripting.Api
                 return new RoomPositionAPI(executor, Bot.Position);
             }));
             FastAddProperty("id", Bot.ID, false, false, false);
+            GameAPI.SetDefaultToString(this);
         }
         
         public override string Class
