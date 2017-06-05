@@ -66,10 +66,6 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-animated-vue@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/animated-vue/-/animated-vue-0.4.0.tgz#09aa89104118223abab40fadeed11e132a2438ba"
-
 ansi-html@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/ansi-html/-/ansi-html-0.0.7.tgz#813584021962a9e9e6fd039f940d12f56ca7859e"
@@ -3069,9 +3065,9 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-codemirror@^3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/vue-codemirror/-/vue-codemirror-3.0.5.tgz#4299f922093cdd7231b5b9962689f3506649365a"
+vue-codemirror@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/vue-codemirror/-/vue-codemirror-3.0.7.tgz#a1cbcc73a522b82a32c00baccb6fd1fd50063982"
   dependencies:
     codemirror "^5.25.0"
 
