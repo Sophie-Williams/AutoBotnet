@@ -5,12 +5,44 @@ using System;
 using System.Linq;
 using Speercs.Server.Game.Scripting;
 using Speercs.Server.Models.Game;
+using System.Threading.Tasks;
+using Speercs.Server.Models.Game.Program;
 
 namespace Speercs.DevTests
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
+        {
+            var task = MainAsync(args);
+            task.Wait();
+            Console.WriteLine("PROGRAM DONE");
+        }
+        
+        private const string jsSource = @"
+            function loop(x) {
+                return x * x;
+            }
+            
+            console.log('code load');
+        ";
+        private const string userID = "foooooo";
+
+        private static async Task setupStuffAsync()
+        {
+            ServerContext.ConnectDatabase();
+            
+            Console.WriteLine("userID: " + userID);
+            ServerContext.AppState.PlayerData[userID] = new UserTeam
+            {
+                UserIdentifier = userID
+            };
+
+            await ServerContext.Executors.PlayerPersistentData.CreatePersistentDataAsync(userID);
+            ServerContext.Executors.PlayerPersistentData.DeployProgram(userID, new UserProgram(jsSource));
+        }
+
+        private static async Task MainAsync(string[] args)
         {
             Console.WriteLine("Initializing");
 
@@ -19,50 +51,32 @@ namespace Speercs.DevTests
                 AppState = new SAppState()
             };
             new BuiltinPluginBootstrapper(ServerContext).LoadAll();
-            // ServerContext.ConnectDatabase();
-            
-            var userID = "foooooooo";
-            Console.WriteLine("userID: "+userID);
-            ServerContext.AppState.PlayerData[userID] = new UserTeam
-            {
-                UserIdentifier = userID
-            };
+            await setupStuffAsync();
 
             Console.WriteLine("Starting test");
 
-            var generator = new MapGenerator(ServerContext);
-            
-            var room = ServerContext.AppState.WorldMap[0, 0] = generator.GenerateRoom(0, 0);
-            Console.WriteLine();
-            
+
+
             // JS engine testing
-            var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userID);
-            
-            Console.WriteLine("EXECUTING");
-            engine.SetValue("log", (Action<object>)Console.WriteLine);
-            engine.SetValue("test", new Action(
-                () => {
-                    Console.WriteLine("'test' called");
-                }
-            ));
-            engine.Execute(@"
-                function loop(x) {
-                    return x * x;
-                }
-            ");
-            
+            var engine = ServerContext.Executors.RetrieveExecutor(userID).Engine; // can be any JSEngine
+
             Console.WriteLine("INVOKING loop");
-            for (var i = 0; i < 10; i++)
+            
+            const int DELAY = 10;
+            for (var i = 0; i < 30; i++)
             {
+                await Task.Delay(DELAY);
                 try
                 {
-                    Console.WriteLine("loop returned: "+engine.Invoke("loop", 5));
+                    Console.WriteLine($"invoking (~{(i+1)*DELAY} ms elapsed)");
+                    Console.WriteLine($"  loop({i}) returned: " + engine.Invoke("loop", i));
                 }
                 catch (TimeoutException)
                 {
-                    Console.WriteLine("got a TimeoutException");
+                    Console.WriteLine("  [TimeoutException]");
                 }
             }
+            
             Console.WriteLine("DONE");
         }
 

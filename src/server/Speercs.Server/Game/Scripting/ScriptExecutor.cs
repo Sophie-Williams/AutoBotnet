@@ -1,9 +1,8 @@
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using IridiumJS;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting.Api;
 using Speercs.Server.Models.Game.Entities;
-using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Game.Scripting
 {
@@ -28,7 +27,7 @@ namespace Speercs.Server.Game.Scripting
         
         public bool RemoveBot(string botID)
         {
-            return botObjects.Remove(botID);
+            return botObjects.TryRemove(botID, out BotAPI removed);
         }
         
         public RoomAPI GetRoomObject(int roomX, int roomY)
@@ -40,7 +39,7 @@ namespace Speercs.Server.Game.Scripting
         
         public JSEngine Engine { get; }
         
-        private Dictionary<string, BotAPI> botObjects = new Dictionary<string, BotAPI>();
-        private Dictionary<string, RoomAPI> roomObjects = new Dictionary<string, RoomAPI>();
+        private ConcurrentDictionary<string, BotAPI> botObjects = new ConcurrentDictionary<string, BotAPI>();
+        private ConcurrentDictionary<string, RoomAPI> roomObjects = new ConcurrentDictionary<string, RoomAPI>();
     }
 }
