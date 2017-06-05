@@ -2,14 +2,9 @@
 using Speercs.Server.Game;
 using Speercs.Server.Game.MapGen;
 using System;
-using Speercs.Server.Models.Game.Map;
-using Speercs.Server.Game.MapGen.Tiles;
-using IridiumJS;
-using IridiumJS.Runtime.Interop;
-using IridiumJS.Native;
-using IridiumJS.Runtime;
-using Speercs.Server.Models.Game.Entities;
+using System.Linq;
 using Speercs.Server.Game.Scripting;
+using Speercs.Server.Models.Game;
 
 namespace Speercs.DevTests
 {
@@ -24,6 +19,14 @@ namespace Speercs.DevTests
                 AppState = new SAppState()
             };
             new BuiltinPluginBootstrapper(ServerContext).LoadAll();
+            // ServerContext.ConnectDatabase();
+            
+            var userID = "foooooooo";
+            Console.WriteLine("userID: "+userID);
+            ServerContext.AppState.PlayerData[userID] = new UserTeam
+            {
+                UserIdentifier = userID
+            };
 
             Console.WriteLine("Starting test");
 
@@ -33,49 +36,36 @@ namespace Speercs.DevTests
             Console.WriteLine();
             
             // JS engine testing
-            var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine("<userid>");
+            var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userID);
             
             Console.WriteLine("EXECUTING");
             engine.SetValue("log", (Action<object>)Console.WriteLine);
-            engine.SetValue("test", new Action<Direction>(
-                x => {
-                    Console.WriteLine("it werkd: "+x);
+            engine.SetValue("test", new Action(
+                () => {
+                    Console.WriteLine("'test' called");
                 }
             ));
             engine.Execute(@"
-                function loop() {
-                    var kek = 2;
-                    log(kek + 3, 'tickles');
-                    
-                    log();
-                    test(0);
-                    test(1);
-                    test(2);
-                    log(EAST);
-                    log(typeof EAST);
-                    test(6);
-                    log();
-                    
-                    return 'corn?';
+                function loop(x) {
+                    return x * x;
                 }
             ");
-            Console.WriteLine(engine.Invoke("loop"));
-            Console.WriteLine("DONE");
-
-            Console.WriteLine("kekloop");
-            try
+            
+            Console.WriteLine("INVOKING loop");
+            for (var i = 0; i < 10; i++)
             {
-                engine.Execute(@"
-                    for (let kek = 0;;kek++) { }
-                ");
-            }
-            catch (TimeoutException)
-            {
-                Console.WriteLine("kek ran out of time kek");
+                try
+                {
+                    Console.WriteLine("loop returned: "+engine.Invoke("loop", 5));
+                }
+                catch (TimeoutException)
+                {
+                    Console.WriteLine("got a TimeoutException");
+                }
             }
             Console.WriteLine("DONE");
         }
 
-        public static ISContext ServerContext;
+        public static SContext ServerContext;
     }
 }
