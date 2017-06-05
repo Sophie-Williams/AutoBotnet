@@ -9,7 +9,7 @@ namespace Speercs.Server.Game.Scripting.Api
     {
         public ConsoleAPI(JSEngine engine) : base(engine)
         {
-            FastAddProperty("log", new ClrFunctionInstance(engine, Log, 0), false, true, false);
+            FastAddProperty("log", new ClrFunctionInstance(Engine, Log, 0), false, true, false);
         }
         
         public override string Class

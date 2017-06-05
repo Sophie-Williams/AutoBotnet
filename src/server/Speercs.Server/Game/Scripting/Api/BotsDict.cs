@@ -21,9 +21,13 @@ namespace Speercs.Server.Game.Scripting.Api
         {
             this.context = context;
             team = context.AppState.PlayerData[userID];
-            executor = context.Executors.RetrieveExecutor(userID);
             
             Extensible = false;
+        }
+        
+        protected ScriptExecutor getExecutor()
+        {
+            return executor ?? (executor = context.Executors.RetrieveExecutor(team.UserIdentifier));
         }
         
         public override string Class
@@ -35,7 +39,7 @@ namespace Speercs.Server.Game.Scripting.Api
         {
             var bot = context.AppState.Entities.EntityData[propertyName] as Bot;
             if (bot?.Team == team)
-                return executor.GetBotObject(bot);
+                return getExecutor().GetBotObject(bot);
             return JsValue.Undefined;
         }
         
@@ -51,7 +55,7 @@ namespace Speercs.Server.Game.Scripting.Api
                     .OfType<Bot>()
                     .Select(bot => new KeyValuePair<string, PropertyDescriptor>(
                         bot.ID,
-                        new PropertyDescriptor(executor.GetBotObject(bot), false, true, false)
+                        new PropertyDescriptor(getExecutor().GetBotObject(bot), false, true, false)
                     ));
         }
         

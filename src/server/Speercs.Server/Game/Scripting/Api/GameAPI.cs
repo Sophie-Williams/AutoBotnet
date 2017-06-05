@@ -8,7 +8,7 @@ namespace Speercs.Server.Game.Scripting.Api
     {
         public GameAPI(JSEngine engine, ISContext context, string userID) : base(engine)
         {
-            FastAddProperty("bots", new BotsDict(engine, context, userID), false, true, false);
+            FastAddProperty("bots", new BotsDict(Engine, context, userID), false, true, false);
         }
         
         public override string Class

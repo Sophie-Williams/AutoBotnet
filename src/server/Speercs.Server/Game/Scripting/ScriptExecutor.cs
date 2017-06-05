@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using IridiumJS;
+using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting.Api;
 using Speercs.Server.Models.Game.Entities;
 
 namespace Speercs.Server.Game.Scripting
 {
-    public class ScriptExecutor
+    public class ScriptExecutor : DependencyObject
     {
-        public ScriptExecutor(JSEngine engine)
+        public ScriptExecutor(JSEngine engine, ISContext context) : base(context)
         {
             Engine = engine;
         }
@@ -15,7 +16,7 @@ namespace Speercs.Server.Game.Scripting
         public BotAPI GetBotObject(Bot bot)
         {
             if (!botObjects.ContainsKey(bot.ID))
-                return botObjects[bot.ID] = new BotAPI(Engine, bot);
+                return botObjects[bot.ID] = new BotAPI(this, bot);
             return botObjects[bot.ID];
         }
         
@@ -29,8 +30,17 @@ namespace Speercs.Server.Game.Scripting
             return botObjects.Remove(botID);
         }
         
+        public RoomAPI GetRoomObject(int roomX, int roomY)
+        {
+            var key = $"{roomX}:{roomY}";
+            if (!roomObjects.ContainsKey(key))
+                return roomObjects[key] = new RoomAPI(this, ServerContext.AppState.WorldMap[roomX, roomY]);
+            return roomObjects[key];
+        }
+        
         public JSEngine Engine { get; }
         
-        private Dictionary<string, BotAPI> botObjects { get; set; }
+        private Dictionary<string, BotAPI> botObjects = new Dictionary<string, BotAPI>();
+        private Dictionary<string, RoomAPI> roomObjects = new Dictionary<string, RoomAPI>();
     }
 }

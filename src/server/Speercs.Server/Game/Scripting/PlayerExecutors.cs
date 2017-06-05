@@ -43,7 +43,7 @@ namespace Speercs.Server.Game.Scripting
                     // TODO: let the user know
                 }
 
-                return new ScriptExecutor(engine);
+                return new ScriptExecutor(engine, ServerContext);
             });
         }
     }
