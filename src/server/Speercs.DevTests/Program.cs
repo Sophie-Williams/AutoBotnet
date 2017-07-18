@@ -21,8 +21,8 @@ namespace Speercs.DevTests
         
         private const string jsSource = @"
             function loop(x) {
-                return x * x;
-            }
+		return x * x;
+	    }
             
             console.log('code load');
         ";
