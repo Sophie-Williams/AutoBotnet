@@ -3,7 +3,7 @@
     <ProjectReference Include="..\Speercs.Server\Speercs.Server.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="IridiumJS" Version="2.10.3.3" />
+    <PackageReference Include="IridiumJS" Version="2.10.3.4" />
   </ItemGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
