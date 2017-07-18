@@ -2,13 +2,21 @@ using IridiumJS;
 using IridiumJS.Native;
 using IridiumJS.Native.Object;
 using IridiumJS.Runtime.Interop;
+using Speercs.Server.Configuration;
+using Speercs.Server.Models.Notifications;
+using Newtonsoft.Json.Linq;
+using System;
 
 namespace Speercs.Server.Game.Scripting.Api
 {
     public class ConsoleAPI : ObjectInstance
     {
-        public ConsoleAPI(JSEngine engine) : base(engine)
+        private ISContext ServerContext { get; set; }
+        private string UserId { get; set; }
+        public ConsoleAPI(JSEngine engine, ISContext serverContext, string userId) : base(engine)
         {
+            ServerContext = serverContext;
+            UserId = userId;
             FastAddProperty("log", new ClrFunctionInstance(Engine, Log, 0), false, true, false);
             GameAPI.SetDefaultToString(this);
         }
@@ -18,7 +26,7 @@ namespace Speercs.Server.Game.Scripting.Api
             get { return "Console"; }
         }
         
-        private static JsValue Log(JsValue thisObj, JsValue[] args)
+        private JsValue Log(JsValue thisObj, JsValue[] args)
         {
             string str = "";
             for (int i = 0; i < args.Length; i++)
@@ -26,8 +34,10 @@ namespace Speercs.Server.Game.Scripting.Api
                 if (i > 0) str += " ";
                 str += args[i].ToString();
             }
-            // TODO: Send `str` to user over WS
-            System.Console.WriteLine(str);
+            
+            var notif = JObject.FromObject(new PushNotification("log", str));
+            // TODO: Figure out why this times out
+            // ServerContext.NotificationPipeline.PushMessageAsync(notif, UserId);
             return JsValue.Undefined;
         }
     }

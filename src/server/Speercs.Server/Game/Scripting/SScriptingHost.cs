@@ -29,7 +29,7 @@ namespace Speercs.Server.Game.Scripting
             //-- configure globals
             AddGlobal(engine, "Game", new GameAPI(engine, ServerContext, userId));
             
-            AddGlobal(engine, "console", new ConsoleAPI(engine));
+            AddGlobal(engine, "console", new ConsoleAPI(engine, ServerContext, userId));
             
             // these enum values become numbers (0-3)
             AddGlobal(engine, "NORTH", Direction.North);

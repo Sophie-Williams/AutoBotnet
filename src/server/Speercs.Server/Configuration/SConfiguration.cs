@@ -46,6 +46,7 @@ namespace Speercs.Server.Configuration
 
         /// <summary>
         /// Dynamically set the TickRate based on server load
+        /// Not currently implemented
         /// </summary>
         [JsonProperty("useDynamicTickRate")]
         public bool UseDynamicTickRate { get; set; } = false;

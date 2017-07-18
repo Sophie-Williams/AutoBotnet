@@ -6,4 +6,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="IridiumJS" Version="2.10.3.4" />
+  </ItemGroup>
 </Project>

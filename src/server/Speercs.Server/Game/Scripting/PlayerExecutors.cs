@@ -31,7 +31,7 @@ namespace Speercs.Server.Game.Scripting
             return Executors.GetOrAdd(userIdentifier, key => {
                 var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userIdentifier);
 
-                // load player code into engine
+                // Load player code into engine
                 try
                 {
                     var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
@@ -39,7 +39,7 @@ namespace Speercs.Server.Game.Scripting
                 }
                 catch
                 {
-                    // invalid code (syntax or other error on load)
+                    // Invalid code (syntax or other error on load)
                     // TODO: let the user know
                 }
 

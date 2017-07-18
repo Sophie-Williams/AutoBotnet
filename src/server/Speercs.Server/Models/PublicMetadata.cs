@@ -21,6 +21,12 @@ namespace Speercs.Server.Models
         [JsonProperty("usercount")]
         public int UserCount { get; set; }
 
+        [JsonProperty("tickrate")]
+        public int TickRate { get; set; }
+
+        [JsonProperty("mapsize")]
+        public int MapSize { get; set; }
+
         public PublicMetadata(ISContext serverContext) : base(serverContext)
         {
             Name = serverContext.Configuration.GlobalName;
@@ -28,6 +34,8 @@ namespace Speercs.Server.Models
             Version = SContext.Version;
             InviteRequired = !string.IsNullOrWhiteSpace(serverContext.Configuration.InviteKey);
             UserCount = new UserManagerService(serverContext).RegisteredUserCount;
+            TickRate = serverContext.Configuration.TickRate;
+            MapSize = serverContext.AppState.WorldMap.RoomCount;
         }
     }
 }

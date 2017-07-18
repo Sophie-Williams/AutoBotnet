@@ -7,6 +7,7 @@ using Speercs.Server.Game.Scripting;
 using Speercs.Server.Models.Game;
 using System.Threading.Tasks;
 using Speercs.Server.Models.Game.Program;
+using IridiumJS;
 
 namespace Speercs.DevTests
 {
