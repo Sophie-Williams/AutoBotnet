@@ -4,7 +4,7 @@ using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server.Models
 {
-    public class PublicMetadata : DependencyObject
+    public class PublicMetadata : ProtectedDependencyObject
     {
         [JsonProperty("name")]
         public string Name { get; set; }
