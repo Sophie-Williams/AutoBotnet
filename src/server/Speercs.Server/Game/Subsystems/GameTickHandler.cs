@@ -22,19 +22,15 @@ namespace Speercs.Server.Game.Subsystems
                     try
                     {
                         var loopFunc = engine.GetValue("loop");
-                        Console.WriteLine("loopFunc: "+loopFunc);
                         var res = loopFunc.Invoke(5);
-                        Console.WriteLine("returned: "+res);
-                        // engine.Invoke("loop");
                     }
                     catch (TimeoutException)
                     {
-                        // code timed out
+                        var res = "Code took too long";
                     }
                     catch
                     {
-                        // thrown if 'loop' isn't a function:
-                        //   System.ArgumentException: Can only invoke functions
+                        var res = "Could not find loop function";
                     }
                 });
             }

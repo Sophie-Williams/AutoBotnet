@@ -26,6 +26,7 @@ namespace Speercs.Server.Game.Scripting.Api
                 if (i > 0) str += " ";
                 str += args[i].ToString();
             }
+            // TODO: Send `str` to user over WS
             System.Console.WriteLine(str);
             return JsValue.Undefined;
         }

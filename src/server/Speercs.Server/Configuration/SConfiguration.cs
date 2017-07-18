@@ -19,18 +19,34 @@ namespace Speercs.Server.Configuration
         [JsonIgnore]
         public string GameName { get; } = "AutoBotnet";
 
+        /// <summary>
+        /// Name of the server
+        /// </summary>
         [JsonProperty("globalName")]
         public string GlobalName { get; set; } = "AutoBotnet";
 
+        /// <summary>
+        /// Message to show all users
+        /// </summary>
         [JsonProperty("globalMessage")]
         public string GlobalMessage { get; set; } = "AutoBotnet server v{ver}\nThis message is configurable by the server admins.";
 
+        /// <summary>
+        /// List of origins to allow CORS requests from
+        /// </summary>
         [JsonProperty("corsOrigins")]
         public string[] CorsOrigins { get; set; } = new string[0];
 
+        /// <summary>
+        /// Interval (in MS) between running the loop function
+        /// If UseDynamicTickRate is enabled, this will be the minimum ammount of time between ticks
+        /// </summary>
         [JsonProperty("tickRate")]
         public int TickRate { get; set; } = 1000;
 
+        /// <summary>
+        /// Dynamically set the TickRate based on server load
+        /// </summary>
         [JsonProperty("useDynamicTickRate")]
         public bool UseDynamicTickRate { get; set; } = false;
 
@@ -45,5 +61,11 @@ namespace Speercs.Server.Configuration
         /// </summary>
         [JsonProperty("codeSizeLimit")]
         public int CodeSizeLimit { get; set; } = 24000;
+
+        /// <summary>
+        /// Maximum number of registered users
+        /// </summary>
+        [JsonProperty("maxUsers")]
+        public int MaxUsers { get; set; } = -1;
     }
 }

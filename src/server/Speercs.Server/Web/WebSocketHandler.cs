@@ -58,11 +58,11 @@ namespace Speercs.Server.Web
         {
             async Task<(JToken, string, long)> HandleRequestAsync(JObject requestBundle)
             {
-                // parse request
+                // Parse request
                 var rcommand = ((JValue)requestBundle["request"]).ToObject<string>();
                 var data = (JObject)requestBundle["data"];
                 var id = ((JValue)requestBundle["id"]).ToObject<long>();
-                // get handler
+                // Get handler
                 var handler = realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
                 return (await handler?.HandleRequestAsync(id, data, rtContext), rcommand, id);
             }
@@ -75,18 +75,18 @@ namespace Speercs.Server.Web
             });
             try
             {
-                // require auth first
+                // Require auth first
                 var authApiKey = await ReadLineAsync();
-                // attempt to authenticate
+                // Attempt to authenticate
                 if (!rtContext.AuthenticateWith(authApiKey)) 
                 {
                     await WriteLineAsync("false");
-                    await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "invalid authentication key", CancellationToken.None);
+                    await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "Invalid Authentication Key", CancellationToken.None);
                     throw new SecurityException();
                 }
                 await WriteLineAsync("true");
                 currentUser = await rtContext.GetCurrentUserAsync();
-                // attempt to add handler
+                // Attempt to add handler
                 ServerContext.NotificationPipeline
                     .RetrieveUserPipeline(currentUser.Identifier)
                     .AddItemToEnd(pipelineHandler);
@@ -101,14 +101,14 @@ namespace Speercs.Server.Web
                             .ContinueWith(async t =>
                             {
                                 (var response, var request, var id) = t.Result;
-                                // send result
+                                // Send result
                                 var resultBundle = new JObject(
                                     new JProperty("id", id),
                                     new JProperty("data", response),
                                     new JProperty("type", "response"),
                                     new JProperty("request", request)
                                 );
-                                // write result to websocket
+                                // Write result to websocket
                                 await WriteLineAsync(resultBundle.ToString(Formatting.None));
                             });
                     }
@@ -122,7 +122,7 @@ namespace Speercs.Server.Web
             {
                 if (pipelineRegistered)
                 {
-                    // unregister pipeline
+                    // Unregister pipeline
                     ServerContext.NotificationPipeline
                         .RetrieveUserPipeline(currentUser.Identifier)
                         .UnregisterHandler(pipelineHandler);

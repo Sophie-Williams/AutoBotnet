@@ -138,5 +138,11 @@ namespace Speercs.Server.Services.Auth
             await UpdateUserInDatabaseAsync(user);
             lockEntry.ReleaseExclusiveWrite();
         }
+
+        public int RegisteredUserCount {
+            get {
+                return userCollection.Count();
+            }
+        }
     }
 }

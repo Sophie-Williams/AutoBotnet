@@ -9,7 +9,7 @@ namespace Speercs.Server.Modules
     {
         public MetadataModule(ISContext serverContext) : base("/meta")
         {
-            Get("/", _ => Response.AsJsonNet(new PublicMetadata(serverContext.Configuration)));
+            Get("/", _ => Response.AsJsonNet(new PublicMetadata(serverContext)));
         }
     }
 }

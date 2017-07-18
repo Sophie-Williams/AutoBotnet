@@ -33,7 +33,7 @@ namespace Speercs.Server
                         apikey = authHeader;
                     }
                 }
-                // call authenticator
+                // Call authenticator
                 var auther = new ApiAuthenticator(ServerContext);
                 return auther.ResolveIdentity(apikey);
             }));
