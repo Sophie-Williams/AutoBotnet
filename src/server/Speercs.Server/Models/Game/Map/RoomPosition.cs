@@ -11,11 +11,11 @@ namespace Speercs.Server.Models.Game.Map
 {
     public struct RoomPosition
     {
-        public int X { get; }
-        public int Y { get; }
-        public int RoomX { get; }
-        public int RoomY { get; }
-                
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int RoomX { get; set; }
+        public int RoomY { get; set; }
+        
         // Constructors
         
         public RoomPosition(int roomX, int roomY, int x, int y)

@@ -1,5 +1,5 @@
 using Speercs.Server.Configuration;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Speercs.Server.Infrastructure.Concurrency
 {
@@ -9,20 +9,13 @@ namespace Speercs.Server.Infrastructure.Concurrency
         {
         }
 
-        private Dictionary<string, UserServices> ServiceTable = new Dictionary<string, UserServices>();
+        private ConcurrentDictionary<string, UserServices> serviceTable = new ConcurrentDictionary<string, UserServices>();
 
         public UserServices GetOrCreate(string username)
         {
-            lock (ServiceTable)
-            {
-                if (ServiceTable.ContainsKey(username))
-                {
-                    return ServiceTable[username];
-                }
-                var ret = new UserServices(username);
-                ServiceTable[username] = ret;
-                return ret;
-            }
+            return serviceTable.GetOrAdd(username, key => {
+                return new UserServices(username);
+            });
         }
 
         public UserServices this[string username] => GetOrCreate(username);

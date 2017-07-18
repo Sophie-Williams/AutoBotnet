@@ -28,8 +28,9 @@ namespace Speercs.Server.Infrastructure.Push
 
         public Pipelines<JObject, bool> RetrieveUserPipeline(string userIdentifier)
         {
-            if (!UserPipelines.ContainsKey(userIdentifier)) UserPipelines.TryAdd(userIdentifier, new Pipelines<JObject, bool>());
-            return UserPipelines[userIdentifier];
+            return UserPipelines.GetOrAdd(userIdentifier, key => {
+                return new Pipelines<JObject, bool>();
+            });
         }
     }
 }

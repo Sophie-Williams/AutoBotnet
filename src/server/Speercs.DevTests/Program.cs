@@ -2,18 +2,47 @@
 using Speercs.Server.Game;
 using Speercs.Server.Game.MapGen;
 using System;
-using Speercs.Server.Models.Game.Map;
-using Speercs.Server.Game.MapGen.Tiles;
-using IridiumJS;
-using IridiumJS.Runtime.Interop;
-using IridiumJS.Native;
-using IridiumJS.Runtime;
+using System.Linq;
+using Speercs.Server.Game.Scripting;
+using Speercs.Server.Models.Game;
+using System.Threading.Tasks;
+using Speercs.Server.Models.Game.Program;
 
 namespace Speercs.DevTests
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
+        {
+            var task = MainAsync(args);
+            task.Wait();
+            Console.WriteLine("PROGRAM DONE");
+        }
+        
+        private const string jsSource = @"
+            function loop(x) {
+                return x * x;
+            }
+            
+            console.log('code load');
+        ";
+        private const string userID = "foooooo";
+
+        private static async Task setupStuffAsync()
+        {
+            ServerContext.ConnectDatabase();
+            
+            Console.WriteLine("userID: " + userID);
+            ServerContext.AppState.PlayerData[userID] = new UserTeam
+            {
+                UserIdentifier = userID
+            };
+
+            await ServerContext.Executors.PlayerPersistentData.CreatePersistentDataAsync(userID);
+            ServerContext.Executors.PlayerPersistentData.DeployProgram(userID, new UserProgram(jsSource));
+        }
+
+        private static async Task MainAsync(string[] args)
         {
             Console.WriteLine("Initializing");
 
@@ -22,63 +51,35 @@ namespace Speercs.DevTests
                 AppState = new SAppState()
             };
             new BuiltinPluginBootstrapper(ServerContext).LoadAll();
+            await setupStuffAsync();
 
             Console.WriteLine("Starting test");
 
-            var generator = new MapGenerator(ServerContext);
-            
-            var room = ServerContext.AppState.WorldMap[0, 0] = generator.GenerateRoom(0, 0);
-            Console.WriteLine();
-            
-            // JS engine testing
-            var engine = new JSEngine(
-                cfg =>
-                {
-                    cfg.LimitRecursion(10);
-                    cfg.TimeoutInterval(TimeSpan.FromMilliseconds(500));
-                }
-            );
-            
-            Console.WriteLine("EXECUTING");
-            engine.SetValue("log", new Action<string>(
-                (s) => Console.WriteLine(s)
-            ));
-            engine.Execute(@"
-                function loop() {
-                    // log = 'toast';
-                    
-                    var kek = 2;
-                    log(kek + 3, 'tickles');
-                    return 'corn?';
-                }
-            ");
-            Console.WriteLine(engine.Invoke("loop"));
-            Console.WriteLine("DONE");
 
-            Console.WriteLine("kekloop");
-            var timeoutEngine = new JSEngine(
-                cfg =>
+
+            // JS engine testing
+            var engine = ServerContext.Executors.RetrieveExecutor(userID).Engine; // can be any JSEngine
+
+            Console.WriteLine("INVOKING loop");
+            
+            const int DELAY = 10;
+            for (var i = 0; i < 30; i++)
+            {
+                await Task.Delay(DELAY);
+                try
                 {
-                    cfg.LimitRecursion(10);
-                    cfg.TimeoutInterval(TimeSpan.FromMilliseconds(500));
+                    Console.WriteLine($"invoking (~{(i+1)*DELAY} ms elapsed)");
+                    Console.WriteLine($"  loop({i}) returned: " + engine.Invoke("loop", i));
                 }
-            );
-            try
-            {
-                timeoutEngine.Execute(@"
-                    function loop() {
-                        for (let kek = 0;;kek++) { }
-                    }
-                ");
-                Console.WriteLine(timeoutEngine.Invoke("loop"));
+                catch (TimeoutException)
+                {
+                    Console.WriteLine("  [TimeoutException]");
+                }
             }
-            catch (TimeoutException)
-            {
-                Console.WriteLine("kek ran out of time kek");
-            }
+            
             Console.WriteLine("DONE");
         }
 
-        public static ISContext ServerContext;
+        public static SContext ServerContext;
     }
 }

@@ -36,11 +36,15 @@ namespace Speercs.Server.Services.Game
             });
         }
 
-        public bool DeployProgram(string ownerId, UserProgram program)
+        public void DeployProgram(string ownerId, UserProgram program)
         {
+            // update the user's code in the database
             var data = FindPersistentData(ownerId);
             data.Program = program;
-            return persistentPlayerDataCollection.Update(data);
+            persistentPlayerDataCollection.Update(data);
+            
+            // reload the engine to apply changes
+            ServerContext.Executors.ReloadExecutor(ownerId);
         }
     }
 }
