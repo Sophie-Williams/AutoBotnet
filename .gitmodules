@@ -4,3 +4,6 @@
 [submodule "src/server/Dependencies/Osmium.PluginEngine"]
 	path = src/server/Dependencies/Osmium.PluginEngine
 	url = https://github.com/0xFireball/Osmium.PluginEngine.git
+[submodule "src/server/Dependencies/IridiumJS"]
+	path = src/server/Dependencies/IridiumJS
+	url = git@github.com:joonatoona/IridiumJS.git

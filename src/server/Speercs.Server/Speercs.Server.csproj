@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <Version>1.0.0</Version>
-    <Authors>Nihal Talur (@0xFireball);***REMOVED*** (@joonatoona);Quinn Tucker (@qxzcode)</Authors>
+    <Authors>Nihal Talur (@0xFireball);joonatoona (@joonatoona);Quinn Tucker (@qxzcode)</Authors>
     <Company>The CookieEaters</Company>
     <Product>Speercs Server</Product>
     <Description>Speercs Server</Description>
@@ -18,7 +18,6 @@
     <PackageReference Include="C5.NetCore" Version="2.4.5947.17249" />
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha5-00069" />
     <PackageReference Include="CookieIoC" Version="2.0.1" />
-    <PackageReference Include="IridiumJS" Version="2.10.3.3" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
     <PackageReference Include="MoreLINQ" Version="2.4.1" />
     <PackageReference Include="System.ValueTuple" Version="4.3.0" />
@@ -33,5 +32,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dependencies\Osmium.PluginEngine\src\Osmium.PluginEngine\Osmium.PluginEngine.csproj" />
+    <ProjectReference Include="..\Dependencies\IridiumJS\IridiumJS\IridiumJS.csproj" />
   </ItemGroup>
 </Project>
