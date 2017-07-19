@@ -6,6 +6,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Models.Notifications;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Threading.Tasks;
 
 namespace Speercs.Server.Game.Scripting.Api
 {
@@ -21,12 +22,12 @@ namespace Speercs.Server.Game.Scripting.Api
             FastAddProperty("notify", new ClrFunctionInstance(Engine, Notify, 0), false, true, false);
             GameApi.SetDefaultToString(this);
         }
-        
+
         public override string Class
         {
             get { return "Console"; }
         }
-        
+
         private JsValue Log(JsValue thisObj, JsValue[] args)
         {
             string str = "";
@@ -35,10 +36,10 @@ namespace Speercs.Server.Game.Scripting.Api
                 if (i > 0) str += " ";
                 str += args[i].ToString();
             }
-            
+
             var notif = JObject.FromObject(new PushNotification("log", str));
-            // TODO: Figure out why this times out
-            ServerContext.EventQueue.QueuePushAsync(notif, UserId);
+            // Queue the push notification
+            Task.Run(() => ServerContext.EventQueue.QueuePushAsync(notif, UserId));
             return JsValue.Undefined;
         }
 
@@ -50,9 +51,9 @@ namespace Speercs.Server.Game.Scripting.Api
                 if (i > 0) str += " ";
                 str += args[i].ToString();
             }
-            
+
             var notif = JObject.FromObject(new PushNotification("notif", str));
-            ServerContext.EventQueue.QueuePushAsync(notif, UserId);
+            Task.Run(() => ServerContext.EventQueue.QueuePushAsync(notif, UserId));
             return JsValue.Undefined;
         }
     }
