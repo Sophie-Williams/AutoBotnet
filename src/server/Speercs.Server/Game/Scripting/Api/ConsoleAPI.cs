@@ -52,7 +52,6 @@ namespace Speercs.Server.Game.Scripting.Api
             }
             
             var notif = JObject.FromObject(new PushNotification("notif", str));
-            // TODO: Figure out why this times out
             ServerContext.EventQueue.QueuePush(notif, UserId);
             return JsValue.Undefined;
         }
