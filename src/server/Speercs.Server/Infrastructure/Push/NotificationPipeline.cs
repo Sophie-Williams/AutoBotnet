@@ -20,9 +20,19 @@ namespace Speercs.Server.Infrastructure.Push
                 new JProperty("data", data),
                 new JProperty("type", "push")
             );
-            foreach (var handler in RetrieveUserPipeline(userIdentifier).GetHandlers())
+            var userPipeline = RetrieveUserPipeline(userIdentifier);
+            // make sure handlers are available to process the message
+            if (userPipeline.HandlerCount > 0)
             {
-                if (await handler.Invoke(dataBundle)) break;
+                foreach (var handler in userPipeline.GetHandlers())
+                {
+                    if (await handler.Invoke(dataBundle)) break;
+                }
+            }
+            else
+            {
+                // No handlers are currently available. Message should be added to persistent queue
+                // TODO: Queue message
             }
         }
 
