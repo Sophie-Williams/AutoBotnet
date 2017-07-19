@@ -12,6 +12,10 @@ namespace Speercs.Server.Game.Scripting
         {
         }
 
+        // Disable `Lack of Await` and `Avoid Async Void` compiler warnings
+        // The only reason these functions are async is to avoid blocking
+        // They also do not return anything, because there's nothing to return
+        #pragma warning disable 1998, AvoidAsyncVoid
         public async void QueuePush(JObject push, string userId) {
             Queue.Add(JObject.FromObject(new {
                 userId = userId,
@@ -26,5 +30,6 @@ namespace Speercs.Server.Game.Scripting
                 Queue.Remove(evt);
             }
         }
+        #pragma warning restore 1998, AvoidAsyncVoid
     }
 }

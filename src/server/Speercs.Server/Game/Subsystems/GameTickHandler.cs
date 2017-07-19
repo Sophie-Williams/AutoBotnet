@@ -26,11 +26,11 @@ namespace Speercs.Server.Game.Subsystems
                     }
                     catch (TimeoutException)
                     {
-                        var res = "Code took too long";
+                        //var res = "Code took too long";
                     }
                     catch
                     {
-                        var res = "Could not find loop function";
+                        //var res = "Could not find loop function";
                     }
                 });
             }
