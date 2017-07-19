@@ -13,8 +13,6 @@ namespace Speercs.Server.Game
         
         public GameTickHandler TickHandler { get; }
 
-        public EventQueue EventQueue { get; }
-
         public SGameBootstrapper(ISContext context) : base(context)
         {
             // Create tick handler
@@ -24,9 +22,6 @@ namespace Speercs.Server.Game
                 context.Configuration.UseDynamicTickRate,
                 TickHandler.OnTickAsync);
             TickSystemCancelToken = new CancellationTokenSource().Token;
-            // Create event queue
-            EventQueue = new EventQueue(context);
-            context.EventQueue = EventQueue;
         }
 
         public void OnStartup()

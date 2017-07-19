@@ -39,7 +39,7 @@ namespace Speercs.Server.Game.Scripting.Api
 
             var notif = JObject.FromObject(new PushNotification("log", str));
             // Queue the push notification
-            Task.Run(() => ServerContext.EventQueue.QueuePushAsync(notif, UserId));
+            Task.Run(() => ServerContext.NotificationPipeline.PushMessageAsync(notif, UserId));
             return JsValue.Undefined;
         }
 
@@ -53,7 +53,7 @@ namespace Speercs.Server.Game.Scripting.Api
             }
 
             var notif = JObject.FromObject(new PushNotification("notif", str));
-            Task.Run(() => ServerContext.EventQueue.QueuePushAsync(notif, UserId));
+            Task.Run(() => ServerContext.NotificationPipeline.PushMessageAsync(notif, UserId));
             return JsValue.Undefined;
         }
     }
