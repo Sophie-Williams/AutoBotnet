@@ -80,11 +80,11 @@ namespace Speercs.Server.Web
                 // Attempt to authenticate
                 if (!rtContext.AuthenticateWith(authApiKey)) 
                 {
-                    await WriteLineAsync("false");
+                    await WriteLineAsync("false"); // authentication failure
                     await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "Invalid Authentication Key", CancellationToken.None);
                     throw new SecurityException();
                 }
-                await WriteLineAsync("true");
+                await WriteLineAsync("true"); // websocket channel was authenticated successfully
                 currentUser = await rtContext.GetCurrentUserAsync();
                 // Attempt to add handler
                 ServerContext.NotificationPipeline
