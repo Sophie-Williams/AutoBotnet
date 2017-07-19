@@ -31,6 +31,8 @@ namespace Speercs.Server.Configuration
 
         public PlayerExecutors Executors { get; private set; }
 
+        public EventQueue EventQueue { get; set; }
+
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
 

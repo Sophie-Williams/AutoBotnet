@@ -1,6 +1,7 @@
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Subsystems;
 using System.Threading;
+using Speercs.Server.Game.Scripting;
 
 namespace Speercs.Server.Game
 {
@@ -12,15 +13,20 @@ namespace Speercs.Server.Game
         
         public GameTickHandler TickHandler { get; }
 
+        public EventQueue EventQueue { get; }
+
         public SGameBootstrapper(ISContext context) : base(context)
         {
-            // create tick handler
+            // Create tick handler
             TickHandler = new GameTickHandler(context);
-            // create tick system
+            // Create tick system
             TickSystem = new TickSystem(context.Configuration.TickRate,
                 context.Configuration.UseDynamicTickRate,
                 TickHandler.OnTickAsync);
             TickSystemCancelToken = new CancellationTokenSource().Token;
+            // Create event queue
+            EventQueue = new EventQueue(context);
+            context.EventQueue = EventQueue;
         }
 
         public void OnStartup()

@@ -25,5 +25,7 @@ namespace Speercs.Server.Configuration
         NotificationPipeline NotificationPipeline { get; }
 
         PlayerExecutors Executors { get; }
+
+        EventQueue EventQueue { get; set; }
     }
 }
