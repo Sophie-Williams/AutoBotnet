@@ -62,11 +62,5 @@ namespace Speercs.Server.Configuration
         /// </summary>
         [JsonProperty("codeSizeLimit")]
         public int CodeSizeLimit { get; set; } = 24000;
-
-        /// <summary>
-        /// Maximum number of registered users
-        /// </summary>
-        [JsonProperty("maxUsers")]
-        public int MaxUsers { get; set; } = -1;
     }
 }

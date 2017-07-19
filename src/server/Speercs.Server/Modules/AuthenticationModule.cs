@@ -37,9 +37,6 @@ namespace Speercs.Server.Modules
 
                 try
                 {
-                    if (ServerContext.Configuration.MaxUsers > -1 && userManager.RegisteredUserCount >= ServerContext.Configuration.MaxUsers) {
-                        throw new SecurityException("Maximum number of users for this server reached");
-                    }
                     // Valdiate username length
                     if (req.Username.Length < 2)
                     {
