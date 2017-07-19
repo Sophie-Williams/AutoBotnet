@@ -38,7 +38,7 @@ namespace Speercs.Server.Game.Scripting.Api
             
             var notif = JObject.FromObject(new PushNotification("log", str));
             // TODO: Figure out why this times out
-            ServerContext.EventQueue.QueuePush(notif, UserId);
+            ServerContext.EventQueue.QueuePushAsync(notif, UserId);
             return JsValue.Undefined;
         }
 
@@ -52,7 +52,7 @@ namespace Speercs.Server.Game.Scripting.Api
             }
             
             var notif = JObject.FromObject(new PushNotification("notif", str));
-            ServerContext.EventQueue.QueuePush(notif, UserId);
+            ServerContext.EventQueue.QueuePushAsync(notif, UserId);
             return JsValue.Undefined;
         }
     }
