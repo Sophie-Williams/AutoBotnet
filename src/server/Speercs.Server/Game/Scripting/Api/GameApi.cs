@@ -7,9 +7,9 @@ using Speercs.Server.Configuration;
 
 namespace Speercs.Server.Game.Scripting.Api
 {
-    public class GameAPI : ObjectInstance
+    public class GameApi : ObjectInstance
     {
-        public GameAPI(JSEngine engine, ISContext context, string userID) : base(engine)
+        public GameApi(JSEngine engine, ISContext context, string userID) : base(engine)
         {
             FastAddProperty("bots", new BotsDict(Engine, context, userID), false, true, false);
             SetDefaultToString(this);

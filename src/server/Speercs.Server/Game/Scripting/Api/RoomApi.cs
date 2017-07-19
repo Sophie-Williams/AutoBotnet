@@ -3,14 +3,14 @@ using Speercs.Server.Models.Game.Map;
 
 namespace Speercs.Server.Game.Scripting.Api
 {
-    public class RoomAPI : ObjectInstance
+    public class RoomApi : ObjectInstance
     {
-        public RoomAPI(ScriptExecutor executor, Room room) : base(executor.Engine)
+        public RoomApi(ScriptExecutor executor, Room room) : base(executor.Engine)
         {
             Room = room;
             
             // TODO: properties, methods...
-            GameAPI.SetDefaultToString(this);
+            GameApi.SetDefaultToString(this);
         }
         
         public override string Class {

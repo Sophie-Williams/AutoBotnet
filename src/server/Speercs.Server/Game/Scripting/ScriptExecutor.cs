@@ -13,10 +13,10 @@ namespace Speercs.Server.Game.Scripting
             Engine = engine;
         }
         
-        public BotAPI GetBotObject(Bot bot)
+        public BotApi GetBotObject(Bot bot)
         {
             return botObjects.GetOrAdd(bot.ID, key => {
-                return new BotAPI(this, bot);
+                return new BotApi(this, bot);
             });
         }
         
@@ -27,19 +27,19 @@ namespace Speercs.Server.Game.Scripting
         
         public bool RemoveBot(string botID)
         {
-            return botObjects.TryRemove(botID, out BotAPI removed);
+            return botObjects.TryRemove(botID, out BotApi removed);
         }
         
-        public RoomAPI GetRoomObject(int roomX, int roomY)
+        public RoomApi GetRoomObject(int roomX, int roomY)
         {
             return roomObjects.GetOrAdd($"{roomX}:{roomY}", key => {
-                return new RoomAPI(this, ServerContext.AppState.WorldMap[roomX, roomY]);
+                return new RoomApi(this, ServerContext.AppState.WorldMap[roomX, roomY]);
             });
         }
         
         public JSEngine Engine { get; }
         
-        private ConcurrentDictionary<string, BotAPI> botObjects = new ConcurrentDictionary<string, BotAPI>();
-        private ConcurrentDictionary<string, RoomAPI> roomObjects = new ConcurrentDictionary<string, RoomAPI>();
+        private ConcurrentDictionary<string, BotApi> botObjects = new ConcurrentDictionary<string, BotApi>();
+        private ConcurrentDictionary<string, RoomApi> roomObjects = new ConcurrentDictionary<string, RoomApi>();
     }
 }

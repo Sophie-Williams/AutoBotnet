@@ -9,17 +9,17 @@ using System;
 
 namespace Speercs.Server.Game.Scripting.Api
 {
-    public class ConsoleAPI : ObjectInstance
+    public class ConsoleApi : ObjectInstance
     {
         private ISContext ServerContext { get; set; }
         private string UserId { get; set; }
-        public ConsoleAPI(JSEngine engine, ISContext serverContext, string userId) : base(engine)
+        public ConsoleApi(JSEngine engine, ISContext serverContext, string userId) : base(engine)
         {
             ServerContext = serverContext;
             UserId = userId;
             FastAddProperty("log", new ClrFunctionInstance(Engine, Log, 0), false, true, false);
             FastAddProperty("notify", new ClrFunctionInstance(Engine, Notify, 0), false, true, false);
-            GameAPI.SetDefaultToString(this);
+            GameApi.SetDefaultToString(this);
         }
         
         public override string Class

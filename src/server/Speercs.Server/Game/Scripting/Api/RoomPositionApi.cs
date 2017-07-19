@@ -5,9 +5,9 @@ using Speercs.Server.Models.Game.Map;
 
 namespace Speercs.Server.Game.Scripting.Api
 {
-    public class RoomPositionAPI : ObjectInstance
+    public class RoomPositionApi : ObjectInstance
     {
-        public RoomPositionAPI(ScriptExecutor executor, RoomPosition pos) : base(executor.Engine)
+        public RoomPositionApi(ScriptExecutor executor, RoomPosition pos) : base(executor.Engine)
         {
             Position = pos;
             
@@ -24,14 +24,14 @@ namespace Speercs.Server.Game.Scripting.Api
             FastSetProperty("room", new ClrAccessDescriptor(Engine, thisObj => {
                 return executor.GetRoomObject(Position.RoomX, Position.RoomY);
             }, (thisObj, value) => {
-                var room = value.As<RoomAPI>();
+                var room = value.As<RoomApi>();
                 if (room != null)
                 {
                     Position.RoomX = room.Room.X;
                     Position.RoomY = room.Room.Y;
                 }
             }));
-            FastSetProperty("toString", GameAPI.MakeFunctionProperty(Engine, () =>
+            FastSetProperty("toString", GameApi.MakeFunctionProperty(Engine, () =>
                 $"[{Position.X},{Position.Y}; room {Position.RoomX},{Position.RoomY}]"
             ));
         }

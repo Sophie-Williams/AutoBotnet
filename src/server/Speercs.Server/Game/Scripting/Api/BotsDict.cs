@@ -26,7 +26,7 @@ namespace Speercs.Server.Game.Scripting.Api
             this.context = context;
             team = context.AppState.PlayerData[userID];
             
-            toStringProperty = GameAPI.MakeFunctionProperty(engine, () =>
+            toStringProperty = GameApi.MakeFunctionProperty(engine, () =>
                 $"[BotsDict ({context.AppState.Entities.GetAllByUser(team).Count(e => e is Bot)})]"
             );
             
