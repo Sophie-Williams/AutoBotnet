@@ -3,6 +3,9 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Game.Program;
 using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Speercs.Server.Services.Game
 {
@@ -46,5 +49,7 @@ namespace Speercs.Server.Services.Game
             // reload the engine to apply changes
             ServerContext.Executors.ReloadExecutor(ownerId);
         }
+
+        public Queue<JToken> RetrieveNotificationQueue(string userIdentifier) => this[userIdentifier].QueuedNotifications;
     }
 }

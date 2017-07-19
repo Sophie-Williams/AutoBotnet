@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using Speercs.Server.Utilities;
+using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Infrastructure.Push
 {
@@ -31,8 +32,11 @@ namespace Speercs.Server.Infrastructure.Push
             }
             else
             {
-                // No handlers are currently available. Message should be added to persistent queue
-                // TODO: Queue message
+                // No handlers are currently available. Message should be added to persistent queue of undelivered messages.
+                // get player data service, and retrieve queued notifications container
+                var userNotificationQueue = new PlayerPersistentDataService(ServerContext).RetrieveNotificationQueue(userIdentifier);
+                // Enqueue the data.
+                userNotificationQueue.Enqueue(data);
             }
         }
 

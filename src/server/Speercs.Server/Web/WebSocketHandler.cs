@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Speercs.Server.Models.User;
+using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Web
 {
@@ -91,6 +92,15 @@ namespace Speercs.Server.Web
                     .RetrieveUserPipeline(currentUser.Identifier)
                     .AddItemToEnd(pipelineHandler);
                 pipelineRegistered = true;
+                // pipeline is registered, send any queued, previously undelivered data
+                var userNotificationQueue = new PlayerPersistentDataService(ServerContext).RetrieveNotificationQueue(currentUser.Identifier);
+                while (userNotificationQueue.Count > 0)
+                {
+                    // send data back through pipelines
+                    // now that a pipeline is registered, the data will be sent through the channel
+                    // in the case of an exception or other delivery failure, the message will be queued again.
+                    await ServerContext.NotificationPipeline.PushMessageAsync(userNotificationQueue.Dequeue(), currentUser.Identifier);
+                }
                 while (_ws.State == WebSocketState.Open)
                 {
                     var rawData = await ReadLineAsync();
