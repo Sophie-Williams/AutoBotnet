@@ -15,10 +15,10 @@ namespace Speercs.Server.Models
         [JsonProperty("version")]
         public string Version { get; set; }
 
-        [JsonProperty("inviterequired")]
+        [JsonProperty("inviteRequired")]
         public bool InviteRequired { get; set; }
 
-        [JsonProperty("usercount")]
+        [JsonProperty("userCount")]
         public int UserCount { get; set; }
 
         [JsonProperty("tickrate")]

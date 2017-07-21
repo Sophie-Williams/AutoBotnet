@@ -25,13 +25,8 @@ namespace Speercs.Server.Modules.Admin
 
             Get("/active", _ => Response.AsJson(ServerContext.AppState.InviteKeys));
 
-            Delete("/delete", _ => {
-                var req = this.Bind<KeyDeletionRequest>();
-                if (req.Keys.Count < 1) return HttpStatusCode.BadRequest;
-                foreach (var key in req.Keys) {
-                    ServerContext.AppState.InviteKeys.Remove(key);
-                }
-                return true;
+            Delete("/delete/{key}", (parameters) => {
+                return ServerContext.AppState.InviteKeys.Remove(parameters.key);
             });
         }
     }
