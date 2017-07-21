@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "vue": "^2.2.6",
+    "vue-codemirror": "^3.1.0",
     "vue-router": "^2.4.0",
     "vue-server-renderer": "^2.1.10",
     "vuex": "^2.3.0",
