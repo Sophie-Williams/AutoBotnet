@@ -32,7 +32,7 @@ namespace Speercs.Server.Models
             Name = serverContext.Configuration.GlobalName;
             MOTD = serverContext.Configuration.GlobalMessage.Replace("{ver}", SContext.Version);
             Version = SContext.Version;
-            InviteRequired = !string.IsNullOrWhiteSpace(serverContext.Configuration.InviteKey);
+            InviteRequired = serverContext.Configuration.InviteRequired;
             UserCount = new UserManagerService(serverContext).RegisteredUserCount;
             TickRate = serverContext.Configuration.TickRate;
             MapSize = serverContext.AppState.WorldMap.RoomCount;
