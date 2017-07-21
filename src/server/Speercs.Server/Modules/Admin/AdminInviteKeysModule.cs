@@ -20,13 +20,14 @@ namespace Speercs.Server.Modules.Admin
                     newCodes.Add(StringUtils.SecureRandomString(16));
                 }
                 ServerContext.AppState.InviteKeys.AddRange(newCodes);
-                return Response.AsJson(newCodes);
+                return Response.AsJsonNet(newCodes);
             });
 
-            Get("/active", _ => Response.AsJson(ServerContext.AppState.InviteKeys));
+            Get("/active", _ => Response.AsJsonNet(ServerContext.AppState.InviteKeys));
 
-            Delete("/delete/{key}", (parameters) => {
-                return ServerContext.AppState.InviteKeys.Remove(parameters.key);
+            Delete("/delete/{key}", (args) => 
+            {
+                return ServerContext.AppState.InviteKeys.Remove(args.key);
             });
         }
     }
