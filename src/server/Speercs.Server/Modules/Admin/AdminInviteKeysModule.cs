@@ -14,9 +14,9 @@ namespace Speercs.Server.Modules.Admin
             Post("/gen", _ =>
             {
                 var req = this.Bind<KeyGenerationRequest>();
-                if (req.Ammount < 1) return HttpStatusCode.BadRequest;
+                if (req.Amount < 1) return HttpStatusCode.BadRequest;
                 var newCodes = new List<string>();
-                for (var i = 0; i < req.Ammount; i++)
+                for (var i = 0; i < req.Amount; i++)
                 {
                     newCodes.Add(StringUtils.SecureRandomString(16));
                 }
