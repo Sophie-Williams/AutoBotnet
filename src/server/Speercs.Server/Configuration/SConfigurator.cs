@@ -66,16 +66,16 @@ namespace Speercs.Server.Configuration
             savedState.Persist();
             // Update references
             serverContext.AppState = savedState;
-            var timedPersistTask = StartTimedPersistAsync(savedState);
+            var timedPersistTask = StartTimedPersistAsync(serverContext, savedState);
         }
 
-        private static async Task StartTimedPersistAsync(SAppState state)
+        private static async Task StartTimedPersistAsync(SContext serverContext, SAppState state)
         {
             while (true)
             {
                 if (state.PersistAvailable)
                 {
-                    await Task.Delay(state.PersistenceInterval);
+                    await Task.Delay(serverContext.Configuration.PersistenceInterval);
                     state.Persist();
                 }
             }

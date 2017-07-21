@@ -68,5 +68,11 @@ namespace Speercs.Server.Configuration
         /// </summary>
         [JsonProperty("maxUsers")]
         public int MaxUsers { get; set; } = -1;
+
+        /// <summary>
+        /// Database persistence interval in milliseconds
+        /// </summary>
+        [JsonProperty("persistenceInterval")]
+        public int PersistenceInterval { get; set; } = 1000 * 60;
     }
 }

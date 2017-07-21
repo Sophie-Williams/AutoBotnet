@@ -21,12 +21,7 @@ namespace Speercs.Server.Configuration
         /// <returns></returns>
         [BsonIgnore]
         public Action Persist { get; set; }
-
-        /// <summary>
-        /// Persistence interval in milliseconds
-        /// </summary>
-        /// <returns></returns>
-        public int PersistenceInterval { get; set; } = 1000 * 60;
+        
 
         [BsonIgnore]
         public bool PersistNeeded { get; set; }
