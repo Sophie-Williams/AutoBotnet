@@ -16,7 +16,8 @@ namespace Speercs.Server.Modules.Admin
                 var req = this.Bind<KeyGenerationRequest>();
                 if (req.Ammount < 1) return HttpStatusCode.BadRequest;
                 var newCodes = new List<string>();
-                for (var i=0; i < req.Ammount; i++) {
+                for (var i = 0; i < req.Ammount; i++)
+                {
                     newCodes.Add(StringUtils.SecureRandomString(16));
                 }
                 ServerContext.AppState.InviteKeys.AddRange(newCodes);
@@ -25,7 +26,7 @@ namespace Speercs.Server.Modules.Admin
 
             Get("/active", _ => Response.AsJsonNet(ServerContext.AppState.InviteKeys));
 
-            Delete("/delete/{key}", (args) => 
+            Delete("/delete/{key}", (args) =>
             {
                 return ServerContext.AppState.InviteKeys.Remove(args.key);
             });
