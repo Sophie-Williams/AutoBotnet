@@ -34,6 +34,12 @@ export class SpeercsApi {
   }
 
   /* actions */
+
+  getMeta() {
+    this.ax()
+    return this.axios.get('/meta')
+  }
+
   login (un, pw) {
     return new Promise((resolve, reject) => {
       this.ax()

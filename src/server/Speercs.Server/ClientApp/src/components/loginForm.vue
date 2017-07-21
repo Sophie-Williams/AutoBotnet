@@ -15,7 +15,7 @@
             <template v-else-if="mode === 'register'">
               <v-text-field name="username-input" label="Username" v-model="un"></v-text-field>
               <v-text-field name="password-input" label="Password" type="password" v-model="pw"></v-text-field>
-              <v-text-field name="ikey-input" label="Invite Key" type="password" v-model="ikey"></v-text-field>
+              <v-text-field v-if="meta.invite" name="ikey-input" label="Invite Key" type="password" v-model="ikey"></v-text-field>
               <v-subheader class="red--text" v-if="err !== null">{{ err }}</v-subheader>
               <div class="center">
                 <v-btn @click.native="proceed_register" :loading="pending" :disabled="!canProceed" primary raised ripple>Register</v-btn>
@@ -38,16 +38,36 @@ export default {
       pw: null,
       ikey: null,
       err: null,
-      pending: false
+      pending: false,
+      meta: {
+        invite: false
+      }
     }
   },
   computed: {
     canProceed() { return !this.pending }
   },
   methods: {
+    ensure_api() {
+      return this.$store.dispatch('ensure_api', window.location.origin)
+    },
+    get_meta() {
+      this.pending = true
+      this.ensure_api()
+        .then(() => {
+          this.$store.dispatch('get_meta')
+            .then((meta) => {
+              console.log('meta', meta)
+              // update meta stuff
+              this.meta.invite = meta.inviteRequired
+              this.pending = false
+            })
+            .catch(() => this.pending = false)
+        })
+    },
     attempt_relogin() {
       this.pending = true
-      this.$store.dispatch('ensure_api', `${window.location.origin}/`)
+      this.ensure_api()
         .then(() => {
           this.$store.dispatch('attempt_reauthenticate')
             .then(() => {
@@ -64,7 +84,7 @@ export default {
         un: this.un,
         pw: this.pw
       }
-      this.$store.dispatch('ensure_api', `${window.location.origin}/`)
+      this.ensure_api()
         .then(() => {
           this.$store.dispatch('authenticate', b)
             .then(() => {
@@ -86,7 +106,7 @@ export default {
         pw: this.pw,
         invite: this.ikey
       }
-      this.$store.dispatch('ensure_api', `${window.location.origin}/`)
+      this.ensure_api()
         .then((rs) => {
           this.$store.dispatch('register_account', b)
             .then(() => {
@@ -114,6 +134,10 @@ export default {
   },
   mounted() {
     this.attempt_relogin()
+    if (this.mode == 'register') {
+      // get meta
+      this.get_meta()
+    }
   }
 }
 </script>

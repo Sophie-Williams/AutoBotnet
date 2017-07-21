@@ -26,6 +26,17 @@ const actions = {
       }
     })
   },
+  get_meta({commit, state}) {
+    return new Promise((resolve, reject) => {
+      state.api.getMeta()
+        .then((res) => {
+          resolve(res.data)
+        })
+        .catch((e) => {
+          reject(e)
+        })
+    })
+  },
   authenticate ({commit, state}, auth) {
     return new Promise((resolve, reject) => {
       let resultData = {
