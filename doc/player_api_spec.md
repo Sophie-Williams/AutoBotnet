@@ -54,4 +54,22 @@ The [`Room`](#room-objects) that this position is in.
 
 Represents a room in the game world.
 
-...
+## Global `console` object
+
+This object contains methods for pushing data to the player
+
+### `log` method
+
+```js
+console.log(<Object>);
+```
+
+Sends the object to the player's console
+
+### `notify` method
+
+```js
+console.notify(<Object>)
+```
+
+Sends the object as a notification to the player's browser
