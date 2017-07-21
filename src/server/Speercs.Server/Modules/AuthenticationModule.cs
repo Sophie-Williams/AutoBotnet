@@ -69,10 +69,10 @@ namespace Speercs.Server.Modules
                     }
 
                     // Check invite key if enabled
-                    if (!string.IsNullOrWhiteSpace(ServerContext.Configuration.InviteKey))
+                    if (ServerContext.Configuration.InviteRequired)
                     {
                         // Validate invite key
-                        if (req.InviteKey != ServerContext.Configuration.InviteKey)
+                        if (ServerContext.AppState.InviteKeys.Remove(req.InviteKey))
                         {
                             return HttpStatusCode.PaymentRequired;
                         }

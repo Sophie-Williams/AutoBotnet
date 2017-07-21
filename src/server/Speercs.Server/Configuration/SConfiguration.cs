@@ -8,10 +8,10 @@ namespace Speercs.Server.Configuration
         public SDatabaseConfiguration DatabaseConfiguration { get; set; } = new SDatabaseConfiguration();
 
         /// <summary>
-        /// A master invite key that can be used to join the server. Set to null to enable global registration.
+        /// If an invite key is required for registration
         /// </summary>
-        [JsonProperty("inviteKey")]
-        public string InviteKey { get; set; } = null;
+        [JsonProperty("requireInvite")]
+        public bool InviteRequired { get; set; } = false;
 
         /// <summary>
         /// Special API keys that grant privileged admin access (keep these secret!)
