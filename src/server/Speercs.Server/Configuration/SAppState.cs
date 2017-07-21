@@ -45,6 +45,6 @@ namespace Speercs.Server.Configuration
 
         public EntityBag Entities { get; set; } = new EntityBag();
         
-        public long TickCount { get; set; }
+        public ulong TickCount { get; set; }
     }
 }
