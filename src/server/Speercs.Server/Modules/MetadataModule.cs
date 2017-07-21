@@ -5,7 +5,7 @@ using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules
 {
-    public class MetadataModule : NancyModule
+    public class MetadataModule : SBaseModule
     {
         public MetadataModule(ISContext serverContext) : base("/meta")
         {

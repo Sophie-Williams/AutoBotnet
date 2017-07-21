@@ -7,9 +7,9 @@ using System.IO;
 
 namespace Speercs.Server.Modules.Game
 {
-    public class MapImageModule : NancyModule
+    public class MapImageModule : SBaseModule
     {
-        public MapImageModule(ISContext serverContext)
+        public MapImageModule(ISContext serverContext) : base("/map")
         {
             Get("/map.png", _ =>
             {

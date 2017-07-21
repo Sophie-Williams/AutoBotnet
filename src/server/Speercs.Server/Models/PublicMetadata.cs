@@ -15,16 +15,16 @@ namespace Speercs.Server.Models
         [JsonProperty("version")]
         public string Version { get; set; }
 
-        [JsonProperty("inviterequired")]
+        [JsonProperty("inviteRequired")]
         public bool InviteRequired { get; set; }
 
-        [JsonProperty("usercount")]
+        [JsonProperty("userCount")]
         public int UserCount { get; set; }
 
-        [JsonProperty("tickrate")]
+        [JsonProperty("tickRate")]
         public int TickRate { get; set; }
 
-        [JsonProperty("mapsize")]
+        [JsonProperty("mapSize")]
         public int MapSize { get; set; }
 
         public PublicMetadata(ISContext serverContext) : base(serverContext)
