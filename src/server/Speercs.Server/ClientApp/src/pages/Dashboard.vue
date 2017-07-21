@@ -61,7 +61,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       server_status: [
         { header: 'Server Health' },

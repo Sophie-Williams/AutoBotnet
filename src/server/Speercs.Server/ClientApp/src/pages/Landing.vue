@@ -6,8 +6,7 @@
     </div>
     <div>
       <p>
-        {{ appName }} is a game.
-        It's in development.
+        {{ appName }} is a game. It's in development.
       </p>
     </div>
   </div>
@@ -15,7 +14,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
     }
   },

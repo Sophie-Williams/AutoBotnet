@@ -5,40 +5,17 @@
         <v-layout row>
           <v-flex xs10 offset-xs1 lg6 offset-lg3>
             <template v-if="mode === 'login'">
-              <v-text-field
-                name="username-input"
-                label="Username"
-                v-model="un"
-              ></v-text-field>
-              <v-text-field
-                name="password-input"
-                label="Password"
-                type="password"
-                v-model="pw"
-              ></v-text-field>
+              <v-text-field name="username-input" label="Username" v-model="un"></v-text-field>
+              <v-text-field name="password-input" label="Password" type="password" v-model="pw"></v-text-field>
               <v-subheader class="red--text" v-if="err !== null">{{ err }}</v-subheader>
               <div class="center">
                 <v-btn @click.native="proceed_login" :loading="pending" :disabled="!canProceed" primary raised ripple>Login</v-btn>
               </div>
             </template>
             <template v-else-if="mode === 'register'">
-              <v-text-field
-                name="username-input"
-                label="Username"
-                v-model="un"
-              ></v-text-field>
-              <v-text-field
-                name="password-input"
-                label="Password"
-                type="password"
-                v-model="pw"
-              ></v-text-field>
-              <v-text-field
-                name="ikey-input"
-                label="Invite Key"
-                type="password"
-                v-model="ikey"
-              ></v-text-field>
+              <v-text-field name="username-input" label="Username" v-model="un"></v-text-field>
+              <v-text-field name="password-input" label="Password" type="password" v-model="pw"></v-text-field>
+              <v-text-field name="ikey-input" label="Invite Key" type="password" v-model="ikey"></v-text-field>
               <v-subheader class="red--text" v-if="err !== null">{{ err }}</v-subheader>
               <div class="center">
                 <v-btn @click.native="proceed_register" :loading="pending" :disabled="!canProceed" primary raised ripple>Register</v-btn>
@@ -55,7 +32,7 @@
 export default {
   name: 'loginForm',
   props: ['mode'],
-  data () {
+  data() {
     return {
       un: null,
       pw: null,
@@ -65,10 +42,10 @@ export default {
     }
   },
   computed: {
-    canProceed () { return !this.pending }
+    canProceed() { return !this.pending }
   },
   methods: {
-    attempt_relogin () {
+    attempt_relogin() {
       this.pending = true
       this.$store.dispatch('ensure_api', `${window.location.origin}/`)
         .then(() => {
@@ -81,7 +58,7 @@ export default {
             .catch(() => this.pending = false)
         })
     },
-    proceed_login () {
+    proceed_login() {
       this.pending = true
       let b = {
         un: this.un,
@@ -102,7 +79,7 @@ export default {
             })
         })
     },
-    proceed_register () {
+    proceed_register() {
       this.pending = true
       let b = {
         un: this.un,
@@ -127,7 +104,7 @@ export default {
             })
         })
     },
-    onProceed () {
+    onProceed() {
       if (this.$route.query.r) {
         this.$router.push(this.$route.query.r)
       } else {
@@ -135,7 +112,7 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.attempt_relogin()
   }
 }

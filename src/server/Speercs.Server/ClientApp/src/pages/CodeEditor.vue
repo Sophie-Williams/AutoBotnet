@@ -12,25 +12,15 @@
         </v-flex>
         <v-flex xs12 lg4>
           <div class="actions">
-            <v-btn primary raised ripple
-              @click.native="deployCode"
-              :loading="deploying"
-              :disabled="deploying"
-            >
+            <v-btn primary raised ripple @click.native="deployCode" :loading="deploying" :disabled="deploying">
               Deploy Code
               <v-icon right light>send</v-icon>
             </v-btn>
-            <v-btn info raised ripple
-                @click.native="reloadCode"
-                :loading="reloading"
-                :disabled="reloading"
-              >
+            <v-btn info raised ripple @click.native="reloadCode" :loading="reloading" :disabled="reloading">
               Reload Engine
               <v-icon right light>refresh</v-icon>
             </v-btn>
-            <v-checkbox :disabled="true"
-              label="ES6 Transpiler" v-model="transpile" dark
-            ></v-checkbox>
+            <v-checkbox :disabled="true" label="ES6 Transpiler" v-model="transpile" dark></v-checkbox>
           </div>
         </v-flex>
       </v-layout>
@@ -44,7 +34,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       code: 'function loop() {\n}',
       editorOptions: {
@@ -79,7 +69,7 @@ export default {
     }
   },
   methods: {
-    deployCode () {
+    deployCode() {
       this.deploying = true
       let vm = this
       this.$store.dispatch('deploy_user_code', {
@@ -94,7 +84,7 @@ export default {
           vm.$root.showPopup('An error occurred while performing the requested action.', 'Request Failed')
         })
     },
-    reloadCode () {
+    reloadCode() {
       this.reloading = true
       let vm = this
       this.$store.dispatch('reload_user_code', {
@@ -110,7 +100,7 @@ export default {
         })
     }
   },
-  mounted () {
+  mounted() {
     // fetch code
     this.$store.dispatch('get_user_code', {
       api: this.$store.getters.api
@@ -125,12 +115,13 @@ export default {
 </script>
 
 <style>
-  .editor {
-    padding-bottom: 5%;
-    position: relative;
-  }
-  .CodeMirror-scroll {
-    overflow-y: hidden;
-    overflow-x: auto;
-  }
+.editor {
+  padding-bottom: 5%;
+  position: relative;
+}
+
+.CodeMirror-scroll {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
 </style>
