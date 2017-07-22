@@ -47,10 +47,10 @@ namespace Speercs.Server.Configuration
             }
             // Update context
             savedState.PersistenceMedium = stateStorage;
-            savedState.Persist = () =>
+            savedState.Persist = (forcePersist) =>
             {
                 // If needed...
-                if (savedState.PersistNeeded)
+                if (forcePersist || savedState.PersistNeeded)
                 {
                     savedState.PersistAvailable = false;
                     // Update in database
@@ -60,10 +60,8 @@ namespace Speercs.Server.Configuration
                     savedState.PersistAvailable = true;
                 }
             };
-            // TODO: Merge API keys, etc.
             // Save the state
-            //savedState.PersistenceMedium.Upsert(savedState);
-            savedState.Persist();
+            savedState.Persist(true);
             // Update references
             serverContext.AppState = savedState;
             var timedPersistTask = StartTimedPersistAsync(serverContext, savedState);
@@ -76,7 +74,7 @@ namespace Speercs.Server.Configuration
                 if (state.PersistAvailable)
                 {
                     await Task.Delay(serverContext.Configuration.PersistenceInterval);
-                    state.Persist();
+                    state.Persist(false);
                 }
             }
         }

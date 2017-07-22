@@ -144,9 +144,9 @@ namespace Speercs.Server
 
         private void OnUnload(ISContext sctx)
         {
-            Console.WriteLine("Server unloading, persisting state data.");
+            Console.WriteLine("Server unloading, force-persisting state data.");
             // persist on unload
-            sctx.AppState.Persist();
+            sctx.AppState.Persist(true);
         }
     }
 }

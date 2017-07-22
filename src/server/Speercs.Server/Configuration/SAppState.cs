@@ -20,7 +20,7 @@ namespace Speercs.Server.Configuration
         /// </summary>
         /// <returns></returns>
         [BsonIgnore]
-        public Action Persist { get; set; }
+        public Action<bool> Persist { get; set; }
         
 
         [BsonIgnore]
