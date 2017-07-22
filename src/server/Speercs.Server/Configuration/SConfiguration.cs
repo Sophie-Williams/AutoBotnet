@@ -11,7 +11,7 @@ namespace Speercs.Server.Configuration
         /// Controls whether the Webpack Dev Middleware is enabled for serving the
         /// web interface in development mode.
         /// </summary>
-        [JsonProperty("enableDevelopmentWebInterface")]
+        [JsonProperty("enableWebpackDevelopmentInterface")]
         public bool EnableDevelopmentWebInterface { get; set; } = true;
 
         /// <summary>
