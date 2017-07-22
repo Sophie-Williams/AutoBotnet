@@ -5,7 +5,7 @@ using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules
 {
-    public class InfoModule : NancyModule
+    public class InfoModule : SBaseModule
     {
         public InfoModule(ISContext serverContext) : base("/info")
         {
