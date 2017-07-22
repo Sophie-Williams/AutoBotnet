@@ -21,7 +21,7 @@ namespace Speercs.Server
         private const string ConfigFileName = "speercs.json";
         private const string StateStorageDatabaseFileName = "speercs_state.lidb";
         private readonly IConfigurationRoot fileConfig;
-        
+
         private string ClientAppPath = "ClientApp/";
 
         public SGameBootstrapper GameBootstrapper { get; private set; }
@@ -136,7 +136,7 @@ namespace Speercs.Server
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-            
+
             // start game services
             GameBootstrapper = new SGameBootstrapper(context);
             GameBootstrapper.OnStartup();
