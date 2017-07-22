@@ -18,18 +18,6 @@ namespace Speercs.Server.Models
         [JsonProperty("inviteRequired")]
         public bool InviteRequired { get; set; }
 
-<<<<<<< HEAD
-        [JsonProperty("userCount")]
-        public int UserCount { get; set; }
-
-        [JsonProperty("tickRate")]
-        public int TickRate { get; set; }
-
-        [JsonProperty("mapSize")]
-        public int MapSize { get; set; }
-
-=======
->>>>>>> api-impl
         public PublicMetadata(ISContext serverContext) : base(serverContext)
         {
             Name = serverContext.Configuration.GlobalName;
