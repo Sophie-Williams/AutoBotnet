@@ -33,6 +33,7 @@ namespace Speercs.Server
                 try
                 {
                     // Create config file
+                    Console.WriteLine($"Configuration file {ConfigFileName} does not exist, creating default.");
                     var confFileContent = JsonConvert.SerializeObject(new SConfiguration(), Formatting.Indented);
                     File.WriteAllText(ConfigFileName, confFileContent);
                 }
