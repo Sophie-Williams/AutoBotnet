@@ -9,10 +9,10 @@ namespace Speercs.Server.Models
         [JsonProperty("userCount")]
         public int UserCount { get; set; }
 
-        [JsonProperty("tickrate")]
+        [JsonProperty("tickRate")]
         public int TickRate { get; set; }
 
-        [JsonProperty("mapsize")]
+        [JsonProperty("mapSize")]
         public int MapSize { get; set; }
 
         public PublicInfo(ISContext serverContext) : base(serverContext)
