@@ -117,10 +117,10 @@ export default {
             .catch((e) => {
               this.pending = false
               this.err = 'registration failed'
-              if (e.response) {
-                this.err += `: ${e.response.data}`
+              if (e.message) {
+                this.err += `: ${e.message}`
               }
-              console.log('registration failure', e)
+              console.log('registration failure:', e.message)
             })
         })
     },
