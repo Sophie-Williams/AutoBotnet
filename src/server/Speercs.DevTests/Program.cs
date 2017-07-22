@@ -19,12 +19,12 @@ namespace Speercs.DevTests
             task.Wait();
             Console.WriteLine("PROGRAM DONE");
         }
-        
+
         private const string jsSource = @"
             function loop(x) {
 		return x * x;
 	    }
-            
+
             console.log('code load');
         ";
         private const string userID = "foooooo";
@@ -32,7 +32,7 @@ namespace Speercs.DevTests
         private static async Task setupStuffAsync()
         {
             ServerContext.ConnectDatabase();
-            
+
             Console.WriteLine("userID: " + userID);
             ServerContext.AppState.PlayerData[userID] = new UserTeam
             {
@@ -61,23 +61,57 @@ namespace Speercs.DevTests
             // JS engine testing
             var engine = ServerContext.Executors.RetrieveExecutor(userID).Engine; // can be any JSEngine
 
-            Console.WriteLine("INVOKING loop");
-            
-            const int DELAY = 10;
-            for (var i = 0; i < 30; i++)
+            // Console.WriteLine("INVOKING loop");
+
+            // const int delay = 10;
+            // for (var i = 0; i < 30; i++)
+            // {
+            //     await Task.Delay(delay);
+            //     try
+            //     {
+            //         Console.WriteLine($"invoking (~{(i + 1) * delay} ms elapsed)");
+            //         Console.WriteLine($"  loop({i}) returned: " + engine.Invoke("loop", i));
+            //     }
+            //     catch (TimeoutException)
+            //     {
+            //         Console.WriteLine("  [TimeoutException]");
+            //     }
+            // }
+
+            Console.WriteLine("Testing blockingWait. (With timeout tasks!)");
+            var timeLimit = 500;
+            var lolEngine = new JSEngine(cfg => {
+                cfg.LimitRecursion(4);
+            });
+            var blockingWait = new Action<int>((time) => System.Threading.Thread.Sleep(time));
+            lolEngine.SetValue("blockingWait", blockingWait);
+            lolEngine.Execute(@"
+function wat(t) {
+    blockingWait(t)
+}
+                ");
+            for (var i = 0; i < 10; i++)
             {
-                await Task.Delay(DELAY);
+                var ttaken = i * 100;
+                Console.Write($"Delay: {ttaken}...");
                 try
                 {
-                    Console.WriteLine($"invoking (~{(i+1)*DELAY} ms elapsed)");
-                    Console.WriteLine($"  loop({i}) returned: " + engine.Invoke("loop", i));
+                    var executeTask = Task.Run(() => lolEngine.Execute($"blockingWait({ttaken})"));
+                    if (executeTask == await Task.WhenAny(executeTask, Task.Delay(TimeSpan.FromMilliseconds(timeLimit))))
+                    {
+                        await executeTask;
+                    }
+                    else
+                        throw new TimeoutException();
+                    Console.WriteLine($"Code finished. [{i}]");
                 }
                 catch (TimeoutException)
                 {
-                    Console.WriteLine("  [TimeoutException]");
+                    Console.WriteLine($"Code timeout [{i}]");
                 }
             }
             
+
             Console.WriteLine("DONE");
         }
 
