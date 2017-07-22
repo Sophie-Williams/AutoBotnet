@@ -97,7 +97,7 @@ namespace Speercs.Server
 
             ClientAppPath = Path.Combine(Directory.GetCurrentDirectory(), ClientAppPath);
 
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() && context.Configuration.EnableDevelopmentWebInterface)
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
