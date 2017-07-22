@@ -21,7 +21,7 @@ namespace Speercs.Server
         private const string ConfigFileName = "speercs.json";
         private const string StateStorageDatabaseFileName = "speercs_state.lidb";
         private readonly IConfigurationRoot fileConfig;
-        
+
         private string ClientAppPath = "ClientApp/";
 
         public SGameBootstrapper GameBootstrapper { get; private set; }
@@ -100,12 +100,14 @@ namespace Speercs.Server
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                {
-                    HotModuleReplacement = true,
-                    ProjectPath = ClientAppPath,
-                    ConfigFile = $"{ClientAppPath}webpack.config.js"
-                });
+                if (context.Configuration.EnableDevelopmentWebInterface) {
+                    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                    {
+                        HotModuleReplacement = true,
+                        ProjectPath = ClientAppPath,
+                        ConfigFile = $"{ClientAppPath}webpack.config.js"
+                    });
+                }
             }
             else
             {
@@ -136,7 +138,7 @@ namespace Speercs.Server
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-            
+
             // start game services
             GameBootstrapper = new SGameBootstrapper(context);
             GameBootstrapper.OnStartup();
@@ -144,9 +146,9 @@ namespace Speercs.Server
 
         private void OnUnload(ISContext sctx)
         {
-            Console.WriteLine("Server unloading, persisting state data.");
+            Console.WriteLine("Server unloading, force-persisting state data.");
             // persist on unload
-            sctx.AppState.Persist();
+            sctx.AppState.Persist(true);
         }
     }
 }

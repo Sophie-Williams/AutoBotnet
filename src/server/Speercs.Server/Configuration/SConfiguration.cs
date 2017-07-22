@@ -8,10 +8,17 @@ namespace Speercs.Server.Configuration
         public SDatabaseConfiguration DatabaseConfiguration { get; set; } = new SDatabaseConfiguration();
 
         /// <summary>
-        /// A master invite key that can be used to join the server. Set to null to enable global registration.
+        /// Controls whether the Webpack Dev Middleware is enabled for serving the
+        /// web interface in development mode.
         /// </summary>
-        [JsonProperty("inviteKey")]
-        public string InviteKey { get; set; } = null;
+        [JsonProperty("enableWebpackDevelopmentInterface")]
+        public bool EnableDevelopmentWebInterface { get; set; } = true;
+
+        /// <summary>
+        /// If an invite key is required for registration
+        /// </summary>
+        [JsonProperty("requireInvite")]
+        public bool InviteRequired { get; set; } = false;
 
         /// <summary>
         /// Special API keys that grant privileged admin access (keep these secret!)

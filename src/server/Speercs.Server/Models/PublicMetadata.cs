@@ -18,6 +18,7 @@ namespace Speercs.Server.Models
         [JsonProperty("inviteRequired")]
         public bool InviteRequired { get; set; }
 
+<<<<<<< HEAD
         [JsonProperty("userCount")]
         public int UserCount { get; set; }
 
@@ -27,15 +28,14 @@ namespace Speercs.Server.Models
         [JsonProperty("mapSize")]
         public int MapSize { get; set; }
 
+=======
+>>>>>>> api-impl
         public PublicMetadata(ISContext serverContext) : base(serverContext)
         {
             Name = serverContext.Configuration.GlobalName;
             MOTD = serverContext.Configuration.GlobalMessage.Replace("{ver}", SContext.Version);
             Version = SContext.Version;
-            InviteRequired = !string.IsNullOrWhiteSpace(serverContext.Configuration.InviteKey);
-            UserCount = new UserManagerService(serverContext).RegisteredUserCount;
-            TickRate = serverContext.Configuration.TickRate;
-            MapSize = serverContext.AppState.WorldMap.RoomCount;
+            InviteRequired = serverContext.Configuration.InviteRequired;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Speercs.Server.Configuration
         /// </summary>
         /// <returns></returns>
         [BsonIgnore]
-        public Action Persist { get; set; }
+        public Action<bool> Persist { get; set; }
         
 
         [BsonIgnore]
@@ -39,10 +39,12 @@ namespace Speercs.Server.Configuration
 
         public Dictionary<string, UserTeam> PlayerData { get; set; } = new Dictionary<string, UserTeam>();
 
+        public List<string> InviteKeys { get; set; } = new List<string>();
+
         public WorldMap WorldMap { get; set; } = new WorldMap();
 
         public EntityBag Entities { get; set; } = new EntityBag();
         
-        public long TickCount { get; set; }
+        public ulong TickCount { get; set; }
     }
 }
