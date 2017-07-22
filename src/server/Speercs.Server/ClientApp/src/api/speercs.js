@@ -6,25 +6,25 @@
 import axios from 'axios'
 
 export class SpeercsApi {
-  constructor (endpoint, key = null) {
+  constructor(endpoint, key = null) {
     this.ep = endpoint + '/a'
     this.init(key)
   }
 
-  static create (endpoint, apikey = null) {
+  static create(endpoint, apikey = null) {
     return new Promise((resolve, reject) => {
       let api = new SpeercsApi(endpoint, apikey)
       resolve(api)
     })
   }
 
-  init (key = null) {
+  init(key = null) {
     this.key = key
     this.username = null
     this.ax()
   }
 
-  ax () {
+  ax() {
     this.axios = axios.create({
       baseURL: this.ep,
       headers: {
@@ -35,12 +35,7 @@ export class SpeercsApi {
 
   /* actions */
 
-  getMeta() {
-    this.ax()
-    return this.axios.get('/meta')
-  }
-
-  login (un, pw) {
+  login(un, pw) {
     return new Promise((resolve, reject) => {
       this.ax()
       this.axios.post('/auth/login', {
@@ -60,7 +55,7 @@ export class SpeercsApi {
     })
   }
 
-  reauth (un, key) {
+  reauth(un, key) {
     return new Promise((resolve, reject) => {
       this.ax()
       this.axios.post('/auth/reauth', {
@@ -76,7 +71,7 @@ export class SpeercsApi {
     })
   }
 
-  register (un, pw, i = null) {
+  register(un, pw, i = null) {
     return new Promise((resolve, reject) => {
       this.ax()
       this.axios.post('/auth/register', {
@@ -97,7 +92,7 @@ export class SpeercsApi {
     })
   }
 
-  logout () {
+  logout() {
     return new Promise((resolve, reject) => {
       this.key = null
       this.init()
@@ -105,12 +100,12 @@ export class SpeercsApi {
     })
   }
 
-  regenApiKey () {
+  regenApiKey() {
     this.ax()
     return this.axios.patch('/auth/newkey')
   }
 
-  changePassword (old, newp) {
+  changePassword(old, newp) {
     this.ax()
     return this.axios.patch('/auth/changepassword', {
       username: this.username,
@@ -119,20 +114,31 @@ export class SpeercsApi {
     })
   }
 
+  /* information */
+  getMeta() {
+    this.ax()
+    return this.axios.get('/meta')
+  }
+
+  getInfo() {
+    this.ax()
+    return this.axios.get('/info')
+  }
+
   /* -------- game -------- */
 
   /* user code */
 
-  getUserCode () {
+  getUserCode() {
     this.ax()
     return this.axios.get('/game/code/get')
   }
 
-  reloadUserCode () {
+  reloadUserCode() {
     return this.axios.patch('/game/code/reload')
   }
 
-  deployUserCode (src) {
+  deployUserCode(src) {
     this.ax()
     return this.axios.post('/game/code/deploy', {
       source: src
@@ -140,12 +146,13 @@ export class SpeercsApi {
   }
 
   /* getters */
+
   getKey() { return this.key }
 
 }
 
 class SpeercsError {
-  constructor (data = null, dsc, msg = null) {
+  constructor(data = null, dsc, msg = null) {
     this.data = data
     this.description = dsc
     this.message = msg
@@ -153,10 +160,10 @@ class SpeercsError {
 }
 
 class SpeercsApiErrors {
-  static CredentialError (d, m) {
+  static CredentialError(d, m) {
     return new SpeercsError(d, 'invalid credentials', m)
   }
-  static KeyError (d, m) {
+  static KeyError(d, m) {
     return new SpeercsError(d, 'invalid api key', m)
   }
 }
