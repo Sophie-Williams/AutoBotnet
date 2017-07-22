@@ -97,15 +97,17 @@ namespace Speercs.Server
 
             ClientAppPath = Path.Combine(Directory.GetCurrentDirectory(), ClientAppPath);
 
-            if (env.IsDevelopment() && context.Configuration.EnableDevelopmentWebInterface)
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                {
-                    HotModuleReplacement = true,
-                    ProjectPath = ClientAppPath,
-                    ConfigFile = $"{ClientAppPath}webpack.config.js"
-                });
+                if (context.Configuration.EnableDevelopmentWebInterface) {
+                    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                    {
+                        HotModuleReplacement = true,
+                        ProjectPath = ClientAppPath,
+                        ConfigFile = $"{ClientAppPath}webpack.config.js"
+                    });
+                }
             }
             else
             {
