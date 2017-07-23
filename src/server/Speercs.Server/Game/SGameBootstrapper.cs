@@ -18,8 +18,8 @@ namespace Speercs.Server.Game
             // Create tick handler
             TickHandler = new GameTickHandler(context);
             // Create tick system
-            TickSystem = new TickSystem(context.Configuration.TickRate,
-                context.Configuration.UseDynamicTickRate,
+            TickSystem = new TickSystem(context.Configuration.Tickrate,
+                context.Configuration.UseDynamicTickrate,
                 TickHandler.OnTickAsync);
             TickSystemCancelToken = new CancellationTokenSource().Token;
         }
