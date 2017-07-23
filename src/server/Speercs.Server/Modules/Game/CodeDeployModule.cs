@@ -36,9 +36,10 @@ namespace Speercs.Server.Modules.Game
                     return HttpStatusCode.UnprocessableEntity;
                 }
 
-                if (CurrentUser.AnalyticsEnabled) {
+                if (CurrentUser.AnalyticsEnabled)
+                {
                     var analyticsObject = ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier];
-                    analyticsObject.CodeDeploys += 1;
+                    analyticsObject.CodeDeploys ++;
                     var numLines = req.Source.Split('\n').Length;
                     analyticsObject.LineCount = numLines;
                     analyticsObject.TotalLineCount += numLines;

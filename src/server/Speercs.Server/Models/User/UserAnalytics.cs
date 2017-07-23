@@ -6,7 +6,7 @@ namespace Speercs.Server.Models.User
     public class UserAnalytics
     {
         [JsonProperty("playtime")]
-        public long Playtime { get; set; }
+        public ulong Playtime { get; set; }
 
         [JsonProperty("codeDeploys")]
         public int CodeDeploys { get; set; }

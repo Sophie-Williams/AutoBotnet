@@ -92,7 +92,8 @@ namespace Speercs.Server.Web
                     .RetrieveUserPipeline(currentUser.Identifier)
                     .AddItemToEnd(pipelineHandler);
                 pipelineRegistered = true;
-                if (currentUser.AnalyticsEnabled) {
+                if (currentUser.AnalyticsEnabled)
+                {
                     ServerContext.AppState.UserAnalyticsData[currentUser.Identifier].LastConnection = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 }
                 // pipeline is registered, send any queued, previously undelivered data
@@ -141,7 +142,7 @@ namespace Speercs.Server.Web
                         .UnregisterHandler(pipelineHandler);
                     if (currentUser.AnalyticsEnabled) {
                         var analyticsObject = ServerContext.AppState.UserAnalyticsData[currentUser.Identifier];
-                        analyticsObject.Playtime += DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()-analyticsObject.LastConnection;
+                        analyticsObject.Playtime += DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - analyticsObject.LastConnection;
                     }
                 }
             }

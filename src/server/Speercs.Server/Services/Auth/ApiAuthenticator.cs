@@ -35,7 +35,8 @@ namespace Speercs.Server.Services.Auth
             var userManager = new UserManagerService(ServerContext);
             var user = userManager.FindUserByApiKeyAsync(apikey).Result;
             if (user == null) return null;
-            if (user.AnalyticsEnabled) {
+            if (user.AnalyticsEnabled)
+            {
                 var analyticsObject = ServerContext.AppState.UserAnalyticsData[user.Identifier];
                 analyticsObject.ApiRequests++;
                 analyticsObject.LastRequest = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();

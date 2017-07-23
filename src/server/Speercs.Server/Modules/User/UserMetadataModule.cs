@@ -31,7 +31,7 @@ namespace Speercs.Server.Modules.User
                 return Response.AsJsonNet(new SelfUser(newUser));
             });
 
-            Get("/analytics", _ => ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier]);
+            Get("/analytics", _ => Response.AsJsonNet(ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier]));
 
             Delete("/analytics", _ =>
             {
