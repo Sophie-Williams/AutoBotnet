@@ -6,7 +6,7 @@ namespace Speercs.Server.Models.User
     public class UserAnalytics
     {
         [JsonProperty("playtime")]
-        public int Playtime { get; set; }
+        public long Playtime { get; set; }
 
         [JsonProperty("codeDeploys")]
         public int CodeDeploys { get; set; }
@@ -19,5 +19,8 @@ namespace Speercs.Server.Models.User
 
         [JsonProperty("lastRequest")]
         public long LastRequest { get; set; }
+
+        [JsonProperty("lastConnection")]
+        public long LastConnection { get; set; }
     }
 }

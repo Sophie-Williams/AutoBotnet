@@ -92,6 +92,9 @@ namespace Speercs.Server.Web
                     .RetrieveUserPipeline(currentUser.Identifier)
                     .AddItemToEnd(pipelineHandler);
                 pipelineRegistered = true;
+                if (currentUser.AnalyticsEnabled) {
+                    ServerContext.AppState.UserAnalyticsData[currentUser.Identifier].LastConnection = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                }
                 // pipeline is registered, send any queued, previously undelivered data
                 var userNotificationQueue = new PlayerPersistentDataService(ServerContext).RetrieveNotificationQueue(currentUser.Identifier);
                 while (userNotificationQueue.Count > 0)
@@ -136,6 +139,10 @@ namespace Speercs.Server.Web
                     ServerContext.NotificationPipeline
                         .RetrieveUserPipeline(currentUser.Identifier)
                         .UnregisterHandler(pipelineHandler);
+                    if (currentUser.AnalyticsEnabled) {
+                        var analyticsObject = ServerContext.AppState.UserAnalyticsData[currentUser.Identifier];
+                        analyticsObject.Playtime += DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()-analyticsObject.LastConnection;
+                    }
                 }
             }
         }
