@@ -58,17 +58,17 @@ namespace Speercs.Server.Configuration
 
         /// <summary>
         /// Interval (in milliseconds) between running the loop function
-        /// If UseDynamicTickRate is enabled, this will be the minimum amount of time between ticks
+        /// If UseDynamicTickrate is enabled, this will be the minimum amount of time between ticks
         /// </summary>
-        [JsonProperty("tickRate")]
-        public int TickRate { get; set; } = 1000;
+        [JsonProperty("tickrate")]
+        public int Tickrate { get; set; } = 1000;
 
         /// <summary>
-        /// Dynamically set the TickRate based on server load
+        /// Dynamically set the Tickrate based on server load
         /// (Not currently implemented)
         /// </summary>
-        [JsonProperty("useDynamicTickRate")]
-        public bool UseDynamicTickRate { get; set; } = false;
+        [JsonProperty("useDynamicTickrate")]
+        public bool UseDynamicTickrate { get; set; } = false;
 
         /// <summary>
         /// The maximum amount of time (in milliseconds) to wait for loading user code into the engine.
