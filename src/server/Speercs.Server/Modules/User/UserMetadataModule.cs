@@ -31,11 +31,11 @@ namespace Speercs.Server.Modules.User
                 return Response.AsJsonNet(new SelfUser(newUser));
             });
 
-            Get("/analytics", _ => ServerContext.AppState.UserAnalyticData[CurrentUser.Identifier]);
+            Get("/analytics", _ => ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier]);
 
             Delete("/analytics", _ =>
             {
-                ServerContext.AppState.UserAnalyticData[CurrentUser.Identifier] = new UserAnalytics();
+                ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier] = new UserAnalytics();
                 return HttpStatusCode.OK;
             });
 

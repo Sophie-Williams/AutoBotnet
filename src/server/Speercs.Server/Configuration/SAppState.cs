@@ -46,7 +46,7 @@ namespace Speercs.Server.Configuration
 
         public EntityBag Entities { get; set; } = new EntityBag();
 
-        public Dictionary<string, UserAnalytics> UserAnalyticData = new Dictionary<string, UserAnalytics>();
+        public Dictionary<string, UserAnalytics> UserAnalyticsData = new Dictionary<string, UserAnalytics>();
 
         public ulong TickCount { get; set; }
     }
