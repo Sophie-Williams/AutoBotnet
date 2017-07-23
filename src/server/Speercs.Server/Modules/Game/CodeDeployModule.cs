@@ -36,6 +36,14 @@ namespace Speercs.Server.Modules.Game
                     return HttpStatusCode.UnprocessableEntity;
                 }
 
+                if (CurrentUser.AnalyticsEnabled) {
+                    var analyticsObject = ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier];
+                    analyticsObject.CodeDeploys += 1;
+                    var numLines = req.Source.Split('\n').Length;
+                    analyticsObject.LineCount = numLines;
+                    analyticsObject.TotalLineCount += numLines;
+                }
+
                 PlayerDataService.DeployProgram(CurrentUser.Identifier, new UserProgram(req.Source));
                 return HttpStatusCode.OK;
             });

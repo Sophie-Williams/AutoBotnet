@@ -14,6 +14,9 @@ namespace Speercs.Server.Models.User
         [JsonProperty("lineCount")]
         public int LineCount { get; set; }
 
+        [JsonProperty("totalLineCount")]
+        public int TotalLineCount { get; set; }
+
         [JsonProperty("apiRequests")]
         public int ApiRequests { get; set; }
 
