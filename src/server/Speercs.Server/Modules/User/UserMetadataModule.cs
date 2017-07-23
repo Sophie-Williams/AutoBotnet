@@ -35,9 +35,8 @@ namespace Speercs.Server.Modules.User
 
             Delete("/analytics", _ =>
             {
-                var analyticsObject = ServerContext.AppState.UserAnalyticData[CurrentUser.Identifier];
-                analyticsObject = new UserAnalytics();
-                return Response.AsJsonNet(analyticsObject);
+                ServerContext.AppState.UserAnalyticData[CurrentUser.Identifier] = new UserAnalytics();
+                return HttpStatusCode.OK;
             });
 
             Get("/player/{id}", async args =>
