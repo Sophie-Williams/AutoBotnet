@@ -92,7 +92,7 @@ namespace Speercs.Server.Modules
                     var persistentDataService = new PlayerPersistentDataService(ServerContext);
                     await persistentDataService.CreatePersistentDataAsync(newUser.Identifier);
 
-                    ServerContext.AppState.UserAnalyticData[newUser.Identifier] = new UserAnalytics();
+                    ServerContext.AppState.UserAnalyticsData[newUser.Identifier] = new UserAnalytics();
 
                     // queue persist
                     ServerContext.AppState.QueuePersist();
