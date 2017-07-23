@@ -27,6 +27,11 @@ namespace Speercs.Server.Modules.User
                 return new SelfUser(newUser);
             });
             Get("/analytics", _ => ServerContext.AppState.UserAnalyticData[CurrentUser.Identifier]);
+            Delete("/analytics", _ => {
+                var analyticsObject = ServerContext.AppState.UserAnalyticData[CurrentUser.Identifier];
+                analyticsObject = new UserAnalytics();
+                return Response.AsJsonNet(analyticsObject);
+            });
             Get("/player/{id}", async args =>
             {
                 var user = await UserManager.FindUserByIdentifierAsync(((string)args.id));
