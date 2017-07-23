@@ -3,6 +3,7 @@ using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game.Program;
 using Speercs.Server.Models.Requests;
+using Speercs.Server.Modules.User;
 using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Game

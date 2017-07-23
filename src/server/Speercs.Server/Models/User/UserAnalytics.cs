@@ -17,6 +17,7 @@ namespace Speercs.Server.Models.User
         [JsonProperty("apiRequests")]
         public int ApiRequests { get; set; }
 
+        [JsonProperty("lastRequest")]
         public long LastRequest { get; set; }
     }
 }
