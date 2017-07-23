@@ -8,6 +8,8 @@ import CodeEditor from './pages/CodeEditor.vue'
 import WorldMap from './pages/WorldMap.vue'
 import Account from './pages/Account.vue'
 
+import NotFound from './pages/NotFound.vue'
+
 const main = [
   {
     path: '/',
@@ -56,11 +58,11 @@ const main = [
 ]
 
 const error = [
-//   {
-//     path: '*',
-//     name: 'error',
-//     component: NotFound
-//   }
+  {
+    path: '*',
+    name: 'error',
+    component: NotFound
+  }
 ]
 
 export default [].concat(main, error)
