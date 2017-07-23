@@ -22,9 +22,6 @@ namespace Speercs.Server.Configuration
         // Persistent State
         public SAppState AppState { get; set; }
 
-        // Analytics
-        public SAnalytics Analytics { get; set; }
-
         // Plugin/moddable stuff
         public CookieJar ExtensibilityContainer { get; }
 
