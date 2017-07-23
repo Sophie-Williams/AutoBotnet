@@ -5,6 +5,7 @@ using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Requests;
 using Speercs.Server.Modules.Exceptions;
 using Speercs.Server.Services.Auth;
+using Speercs.Server.Models.User;
 using Speercs.Server.Services.Game;
 using Speercs.Server.Utilities;
 using System;
@@ -90,6 +91,8 @@ namespace Speercs.Server.Modules
                     // create persistent data
                     var persistentDataService = new PlayerPersistentDataService(ServerContext);
                     await persistentDataService.CreatePersistentDataAsync(newUser.Identifier);
+
+                    ServerContext.AppState.UserAnalyticData[newUser.Identifier] = new UserAnalytics();
 
                     // queue persist
                     ServerContext.AppState.QueuePersist();

@@ -1,5 +1,6 @@
 using LiteDB;
 using Speercs.Server.Models;
+using Speercs.Server.Models.User;
 using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Game.Map;
 using System;
@@ -44,7 +45,9 @@ namespace Speercs.Server.Configuration
         public WorldMap WorldMap { get; set; } = new WorldMap();
 
         public EntityBag Entities { get; set; } = new EntityBag();
-        
+
+        public Dictionary<string, UserAnalytics> UserAnalyticData = new Dictionary<string, UserAnalytics>();
+
         public ulong TickCount { get; set; }
     }
 }

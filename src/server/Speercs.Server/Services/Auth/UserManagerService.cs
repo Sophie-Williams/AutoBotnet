@@ -36,6 +36,7 @@ namespace Speercs.Server.Services.Auth
                 {
                     Identifier = Guid.NewGuid().ToString(),
                     Username = regRequest.Username,
+                    Email = regRequest.Email,
                     ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength),
                     Crypto = new ItemCrypto
                     {
@@ -44,6 +45,7 @@ namespace Speercs.Server.Services.Auth
                         Key = encryptedPassword
                     },
                     Enabled = true,
+                    AnalyticsEnabled = false,
                 };
 
                 // Add the user to the database
