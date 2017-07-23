@@ -28,7 +28,7 @@ namespace Speercs.Server.Modules.User
                     newUser.AnalyticsEnabled = req.Analytics;
                 }
                 await userManager.UpdateUserInDatabaseAsync(newUser);
-                return new SelfUser(newUser);
+                return Response.AsJsonNet(new SelfUser(newUser));
             });
 
             Get("/analytics", _ => ServerContext.AppState.UserAnalyticData[CurrentUser.Identifier]);
