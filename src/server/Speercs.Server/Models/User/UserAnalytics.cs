@@ -9,21 +9,21 @@ namespace Speercs.Server.Models.User
         public ulong Playtime { get; set; }
 
         [JsonProperty("codeDeploys")]
-        public int CodeDeploys { get; set; }
+        public ulong CodeDeploys { get; set; }
     
         [JsonProperty("lineCount")]
-        public int LineCount { get; set; }
+        public ulong LineCount { get; set; }
 
         [JsonProperty("totalLineCount")]
-        public int TotalLineCount { get; set; }
+        public ulong TotalLineCount { get; set; }
 
         [JsonProperty("apiRequests")]
-        public int ApiRequests { get; set; }
+        public ulong ApiRequests { get; set; }
 
         [JsonProperty("lastRequest")]
-        public long LastRequest { get; set; }
+        public ulong LastRequest { get; set; }
 
         [JsonProperty("lastConnection")]
-        public long LastConnection { get; set; }
+        public ulong LastConnection { get; set; }
     }
 }

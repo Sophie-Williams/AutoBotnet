@@ -39,7 +39,7 @@ namespace Speercs.Server.Services.Auth
             {
                 var analyticsObject = ServerContext.AppState.UserAnalyticsData[user.Identifier];
                 analyticsObject.ApiRequests++;
-                analyticsObject.LastRequest = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                analyticsObject.LastRequest = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             }
             var userAuthClaims = new List<Claim>()
             {

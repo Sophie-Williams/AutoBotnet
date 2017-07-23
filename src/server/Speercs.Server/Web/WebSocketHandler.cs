@@ -94,7 +94,7 @@ namespace Speercs.Server.Web
                 pipelineRegistered = true;
                 if (currentUser.AnalyticsEnabled)
                 {
-                    ServerContext.AppState.UserAnalyticsData[currentUser.Identifier].LastConnection = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                    ServerContext.AppState.UserAnalyticsData[currentUser.Identifier].LastConnection = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 }
                 // pipeline is registered, send any queued, previously undelivered data
                 var userNotificationQueue = new PlayerPersistentDataService(ServerContext).RetrieveNotificationQueue(currentUser.Identifier);
@@ -142,7 +142,7 @@ namespace Speercs.Server.Web
                         .UnregisterHandler(pipelineHandler);
                     if (currentUser.AnalyticsEnabled) {
                         var analyticsObject = ServerContext.AppState.UserAnalyticsData[currentUser.Identifier];
-                        analyticsObject.Playtime += DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - analyticsObject.LastConnection;
+                        analyticsObject.Playtime += ((ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) - analyticsObject.LastConnection;
                     }
                 }
             }

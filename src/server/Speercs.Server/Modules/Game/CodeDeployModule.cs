@@ -40,7 +40,7 @@ namespace Speercs.Server.Modules.Game
                 {
                     var analyticsObject = ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier];
                     analyticsObject.CodeDeploys ++;
-                    var numLines = req.Source.Split('\n').Length;
+                    var numLines = (ulong)req.Source.Split('\n').Length;
                     analyticsObject.LineCount = numLines;
                     analyticsObject.TotalLineCount += numLines;
                 }
