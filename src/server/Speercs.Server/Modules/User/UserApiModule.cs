@@ -5,7 +5,7 @@ using Speercs.Server.Services.Auth.Security;
 using Speercs.Server.Services.Game;
 using System.Linq;
 
-namespace Speercs.Server.Modules.Game
+namespace Speercs.Server.Modules.User
 {
     /// <summary>
     /// Defines a module that is part of the **authenticated** user API.

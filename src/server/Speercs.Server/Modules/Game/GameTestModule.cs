@@ -1,4 +1,5 @@
 using Speercs.Server.Configuration;
+using Speercs.Server.Modules.User;
 
 namespace Speercs.Server.Modules.Game
 {

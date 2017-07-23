@@ -1,6 +1,7 @@
 using Nancy;
 using Speercs.Server.Configuration;
 using Speercs.Server.Utilities;
+using Speercs.Server.Modules.User;
 
 namespace Speercs.Server.Modules.Game
 {
