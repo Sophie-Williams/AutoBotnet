@@ -93,7 +93,7 @@ export default {
       .then((info) => {
         this.server_status.push({
           name: 'Tick Rate',
-          value: `${info.tickRate} ms`
+          value: `${info.tickrate} ms`
         })
         this.server_status.push({ divider: true, inset: true })
         this.server_status.push({
