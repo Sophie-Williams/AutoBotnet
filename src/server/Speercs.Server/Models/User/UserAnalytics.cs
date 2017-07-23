@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 
 namespace Speercs.Server.Models.User
 {
@@ -12,5 +13,10 @@ namespace Speercs.Server.Models.User
     
         [JsonProperty("lineCount")]
         public int LineCount { get; set; }
+
+        [JsonProperty("apiRequests")]
+        public int ApiRequests { get; set; }
+
+        public long LastRequest { get; set; }
     }
 }
