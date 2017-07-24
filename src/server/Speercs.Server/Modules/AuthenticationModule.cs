@@ -83,18 +83,6 @@ namespace Speercs.Server.Modules
                     // Attempt to register user
                     var newUser = await userManager.RegisterUserAsync(req);
 
-                    // create team data
-                    ServerContext.AppState.PlayerData[newUser.Identifier] = new UserTeam
-                    {
-                        UserIdentifier = newUser.Identifier
-                    };
-
-                    // create persistent data
-                    var persistentDataService = new PlayerPersistentDataService(ServerContext);
-                    await persistentDataService.CreatePersistentDataAsync(newUser.Identifier);
-
-                    ServerContext.AppState.UserAnalyticsData[newUser.Identifier] = new UserAnalytics();
-
                     // queue persist
                     ServerContext.AppState.QueuePersist();
 
@@ -163,7 +151,10 @@ namespace Speercs.Server.Modules
                     if (user.Enabled && await userManager.CheckPasswordAsync(req.Password, user))
                     {
                         // Password was correct, delete account
-                        // TODO
+                        await userManager.DeleteUserAsync(user.Identifier);
+
+                        // queue persist
+                        ServerContext.AppState.QueuePersist();
                     }
                     return HttpStatusCode.Unauthorized;
                 }
