@@ -28,7 +28,7 @@ namespace Speercs.Server.Modules.Admin
 
             Delete("/delete/{key}", (args) =>
             {
-                return ServerContext.AppState.InviteKeys.Remove(args.key);
+                return ServerContext.AppState.InviteKeys.Remove((string)args.key);
             });
         }
     }

@@ -38,7 +38,8 @@ namespace Speercs.Server.Modules
 
                 try
                 {
-                    if (ServerContext.Configuration.MaxUsers > -1 && userManager.RegisteredUserCount >= ServerContext.Configuration.MaxUsers) {
+                    if (ServerContext.Configuration.MaxUsers > -1 && userManager.RegisteredUserCount >= ServerContext.Configuration.MaxUsers)
+                    {
                         throw new SecurityException("Maximum number of users for this server reached");
                     }
                     // Valdiate username length
@@ -63,7 +64,7 @@ namespace Speercs.Server.Modules
                     {
                         throw new InvalidParameterException("Password must be at least 8 characters.");
                     }
-                    
+
                     if (req.Password.Length > 128)
                     {
                         throw new InvalidParameterException("Password may not exceed 128 characters.");
@@ -235,7 +236,7 @@ namespace Speercs.Server.Modules
                 {
                     // Validate key
                     if (selectedUser.Enabled && selectedUser.ApiKey == req.ApiKey)
-                    {                        
+                    {
                         // Update key
                         await userManager.GenerateNewApiKeyAsync(selectedUser);
                         return HttpStatusCode.NoContent;

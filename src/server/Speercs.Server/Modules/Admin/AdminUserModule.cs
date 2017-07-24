@@ -17,7 +17,7 @@ namespace Speercs.Server.Modules.Admin
                 var userManager = new UserManagerService(ServerContext);
                 var user = await userManager.FindUserByIdentifierAsync((string)args.id);
                 if (user == null) return HttpStatusCode.NotFound;
-                return Response.AsJsonNet((RegisteredUser) user);
+                return Response.AsJsonNet((RegisteredUser)user);
             });
 
             Put("/{id}", async args =>
