@@ -4,7 +4,7 @@ namespace Speercs.Server.Models.Requests
     {
         public string Email { get; set; } = string.Empty;
     
-        public bool Analytics { get; set; } = false;
+        public bool AnalyticsEnabled { get; set; } = false;
     }
 }
 

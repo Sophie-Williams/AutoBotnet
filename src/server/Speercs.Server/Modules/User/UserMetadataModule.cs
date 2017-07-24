@@ -19,14 +19,8 @@ namespace Speercs.Server.Modules.User
                 var userManager = new UserManagerService(ServerContext);
                 var req = this.Bind<UserModificationRequest>();
                 var newUser = CurrentUser;
-                if (Request.Form.Email.HasValue)
-                {
-                    newUser.Email = req.Email;
-                }
-                if (Request.Form.Analytics.HasValue)
-                {
-                    newUser.AnalyticsEnabled = req.Analytics;
-                }
+                newUser.Email = req.Email;
+                newUser.AnalyticsEnabled = req.AnalyticsEnabled;
                 await userManager.UpdateUserInDatabaseAsync(newUser);
                 return Response.AsJsonNet(new SelfUser(newUser));
             });

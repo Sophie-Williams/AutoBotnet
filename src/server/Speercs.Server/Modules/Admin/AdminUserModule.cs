@@ -15,7 +15,7 @@ namespace Speercs.Server.Modules.Admin
             Get("/{id}", async args =>
             {
                 var userManager = new UserManagerService(ServerContext);
-                var user = await userManager.FindUserByIdentifierAsync(args.id);
+                var user = await userManager.FindUserByIdentifierAsync((string)args.id);
                 if (user == null) return HttpStatusCode.NotFound;
                 return Response.AsJsonNet((RegisteredUser) user);
             });
@@ -24,34 +24,26 @@ namespace Speercs.Server.Modules.Admin
             {
                 var userManager = new UserManagerService(ServerContext);
                 var req = this.Bind<AdminUserModificationRequest>();
-                var newUser = userManager.FindUserByIdentifierAsync(args.id);
-                if (Request.Form.Email.HasValue)
-                {
-                    newUser.AnalyticsEnabled = req.Email;
-                }
-                if (Request.Form.Username.HasValue)
-                {
-                    newUser.Username = req.Email;
-                }
-                if (Request.Form.Enabled.HasValue)
-                {
-                    newUser.Enabled = req.Enabled;
-                }
-                await userManager.UpdateUserInDatabaseAsync(newUser);
-                return Response.AsJsonNet((RegisteredUser) newUser);
+                var user = await userManager.FindUserByIdentifierAsync((string)args.id);
+                user.AnalyticsEnabled = req.AnalyticsEnabled;
+                user.Email = req.Email;
+                user.Enabled = req.Enabled;
+                await userManager.UpdateUserInDatabaseAsync(user);
+                return Response.AsJsonNet(user);
             });
 
-            Delete("/{id}", async args => {
+            Delete("/{id}", async args =>
+            {
                 var userManager = new UserManagerService(ServerContext);
-                await userManager.DeleteUserAsync(args.id);
+                await userManager.DeleteUserAsync((string)args.id);
                 return HttpStatusCode.OK;
             });
 
-            Get("/{id}/analytics", args => Response.AsJsonNet((UserAnalytics) ServerContext.AppState.UserAnalyticsData[args.id]));
+            Get("/analytics/{id}", args => Response.AsJsonNet(ServerContext.AppState.UserAnalyticsData[(string)args.id]));
 
-            Delete("/{id}/analytics", args =>
+            Delete("/analytics/{id}", args =>
             {
-                ServerContext.AppState.UserAnalyticsData[args.id] = new UserAnalytics();
+                ServerContext.AppState.UserAnalyticsData[(string)args.id] = new UserAnalytics();
                 return HttpStatusCode.OK;
             });
         }
