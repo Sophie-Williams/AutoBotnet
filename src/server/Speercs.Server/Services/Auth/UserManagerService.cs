@@ -121,6 +121,19 @@ namespace Speercs.Server.Services.Auth
             }));
         }
 
+        public async Task DeleteUserAsync(string userID)
+        {
+            await Task.Run(() => 
+            {
+                userCollection.Delete(x => x.Identifier == userID);
+                ServerContext.AppState.UserAnalyticsData.Remove(userID);
+                ServerContext.AppState.UserUsageData.Remove(userID);
+                ServerContext.AppState.PlayerData.Remove(userID);
+                // TODO: Purge all entities
+            });
+            
+        }
+
         public async Task GenerateNewApiKeyAsync(RegisteredUser user)
         {
             var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
