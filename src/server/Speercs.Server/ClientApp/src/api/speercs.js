@@ -145,6 +145,23 @@ export class SpeercsApi {
     })
   }
 
+  /* map */
+  getMapRoom(x, y) {
+    this.ax()
+    return new Promise((resolve, reject) => {
+      this.axios.get('/a/game/map/room', {
+        params: {
+          x: x,
+          y: y
+        }
+      })
+        .then((rs) => {
+          resolve(rs.data)
+        })
+        .catch((e) => reject(e))
+    })
+  }
+
   /* getters */
 
   getKey() { return this.key }
