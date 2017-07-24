@@ -127,7 +127,6 @@ namespace Speercs.Server.Services.Auth
             {
                 userCollection.Delete(x => x.Identifier == userID);
                 ServerContext.AppState.UserAnalyticsData.Remove(userID);
-                ServerContext.AppState.UserUsageData.Remove(userID);
                 ServerContext.AppState.PlayerData.Remove(userID);
                 // TODO: Purge all entities
             });
