@@ -12,7 +12,8 @@ namespace Speercs.Server.Modules.Admin
     {
         public AdminUserModule(ISContext serverContext) : base("/user", serverContext)
         {
-            Get("/{id}", async args => {
+            Get("/{id}", async args =>
+            {
                 var userManager = new UserManagerService(ServerContext);
                 var user = await userManager.FindUserByIdentifierAsync(args.id);
                 if (user == null) return HttpStatusCode.NotFound;
