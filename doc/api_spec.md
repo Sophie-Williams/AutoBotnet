@@ -14,6 +14,8 @@ REST API route descriptions:
 
 ### Register
 
+> Register a new user
+
 `POST /a/auth/register`
 
 REQUEST:
@@ -40,6 +42,8 @@ RESPONSE:
 
 ### Login
 
+> Get an API key from credentials
+
 `POST /a/auth/login`
 
 REQUEST:
@@ -64,7 +68,9 @@ RESPONSE:
 
 ### Delete
 
-`POST /a/auth/delete`
+> Delete an user account
+
+`DELETE /a/auth/delete`
 
 REQUEST:
 
@@ -82,6 +88,8 @@ RESPONSE:
 ## Server Info
 
 # Info
+
+> Get static server information
 
 `GET /a/info`
 
