@@ -8,6 +8,6 @@ namespace Speercs.Server.Models.Requests
 
         public string Password { get; set; }
 
-        public string InviteKey { get; set; }
+        public string InviteKey { get; set; } = "";
     }
 }

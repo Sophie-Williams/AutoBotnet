@@ -5,11 +5,99 @@ REST API route descriptions:
 - Auth
   - Register
   - Login
-- Player code
-  - Get current code
-  - Deploy new code
-- Info requests
-  - Request some player data from identifier
+  - Delete
+- Server Info
+  - Info
+  - Meta
+
+## Auth
+
+### Register
+
+`POST /a/auth/register`
+
+REQUEST:
+
+```json
+{
+    "Username": "<USERNAME>",
+    "Email": "<EMAIL [OPTIONAL]>",
+    "Password": "<PASSWORD>",
+    "InviteKey": "<INVITE KEY> [ONLY REQIRED IF `inviteRequired` IS TRUE]>"
+}
+```
+
+RESPONSE:
+
+```json
+{
+    "username": "joonatoona",
+    "email": "",
+    "apikey": "jfgshiuoreb7c6w8s76ctbrsiu5su464",
+    "analyticsEnabled": false
+}
+```
+
+### Login
+
+`POST /a/auth/login`
+
+REQUEST:
+
+```json
+{
+    "Username": "<USERNAME>",
+    "Password": "<PASSWORD>"
+}
+```
+
+RESPONSE:
+
+```json
+{
+    "username": "joonatoona",
+    "email": "",
+    "apikey": "jfgshiuoreb7c6w8s76ctbrsiu5su464",
+    "analyticsEnabled": false
+}
+```
+
+### Delete
+
+`POST /a/auth/delete`
+
+REQUEST:
+
+```json
+{
+    "Username": "<USERNAME>",
+    "Password": "<PASSWORD>"
+}
+```
+
+RESPONSE:
+
+`200`
+
+## Server Info
+
+# Info
+
+`GET /a/info`
+
+RESPONSE:
+
+
+```json
+{
+    "name": "CookieEaters Official",
+    "motd": "AutoBotnet server v1.0.0.0\nThis message is configurable by the server admins.",
+    "version": "1.0.0.0",
+    "inviteRequired": false
+}
+```
+
+# Websockets
 
 Websocket API route descriptions:
 

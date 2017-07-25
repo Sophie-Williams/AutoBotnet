@@ -155,6 +155,8 @@ namespace Speercs.Server.Modules
 
                         // queue persist
                         ServerContext.AppState.QueuePersist();
+
+                        return HttpStatusCode.OK;
                     }
                     return HttpStatusCode.Unauthorized;
                 }
