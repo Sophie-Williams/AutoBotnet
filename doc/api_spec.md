@@ -6,6 +6,7 @@ REST API route descriptions:
   - Register
   - Login
   - Delete
+  - Change Password
 - Server Info
   - Info
   - Meta
@@ -68,7 +69,7 @@ RESPONSE:
 
 ### Delete
 
-> Delete an user account
+> Delete a user account
 
 `DELETE /a/auth/delete`
 
@@ -78,6 +79,26 @@ REQUEST:
 {
     "Username": "<USERNAME>",
     "Password": "<PASSWORD>"
+}
+```
+
+RESPONSE:
+
+`200`
+
+### Change Password
+
+> Change a password for a user
+
+`PATCH /a/auth/changepassword`
+
+REQUEST:
+
+```json
+{
+    "Username": "<USERNAME>",
+    "OldPassword": "<OLD_PASSWORD>",
+    "NewPassword": "<NEW_PASSWORD>"
 }
 ```
 
