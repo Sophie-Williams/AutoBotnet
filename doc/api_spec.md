@@ -110,9 +110,28 @@ RESPONSE:
 
 # Info
 
-> Get static server information
+> Get dynamic server information
 
 `GET /a/info`
+
+RESPONSE:
+
+
+```json
+{
+    "userCount": 1337, // Haha I wish
+    "tickrate": 1000,
+    "mapSize": 80085
+}
+```
+
+## Server Meta
+
+# Meta
+
+> Get static server information
+
+`GET /a/meta`
 
 RESPONSE:
 
