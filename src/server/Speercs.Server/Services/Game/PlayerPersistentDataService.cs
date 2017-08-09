@@ -39,6 +39,14 @@ namespace Speercs.Server.Services.Game
             });
         }
 
+        public async Task RemovePersistentDataAsync(string ownerId)
+        {
+            await Task.Run(() => 
+            {
+                persistentPlayerDataCollection.Delete(x => x.OwnerId == ownerId);
+            });
+        }
+
         public void DeployProgram(string ownerId, UserProgram program)
         {
             // update the user's code in the database

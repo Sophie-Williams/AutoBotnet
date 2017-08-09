@@ -15,10 +15,44 @@ namespace Speercs.Server.Modules.Admin
             Get("/{id}", async args =>
             {
                 var userManager = new UserManagerService(ServerContext);
+<<<<<<< HEAD
                 var user = await userManager.FindUserByIdentifierAsync(args.id);
                 if (user == null) return HttpStatusCode.NotFound;
                 return Response.AsJsonNet((RegisteredUser)user);
             });
+=======
+                var user = await userManager.FindUserByIdentifierAsync((string)args.id);
+                if (user == null) return HttpStatusCode.NotFound;
+                return Response.AsJsonNet((RegisteredUser)user);
+            });
+
+            Put("/{id}", async args =>
+            {
+                var userManager = new UserManagerService(ServerContext);
+                var req = this.Bind<AdminUserModificationRequest>();
+                var user = await userManager.FindUserByIdentifierAsync((string)args.id);
+                user.AnalyticsEnabled = req.AnalyticsEnabled;
+                user.Email = req.Email;
+                user.Enabled = req.Enabled;
+                await userManager.UpdateUserInDatabaseAsync(user);
+                return Response.AsJsonNet(user);
+            });
+
+            Delete("/{id}", async args =>
+            {
+                var userManager = new UserManagerService(ServerContext);
+                await userManager.DeleteUserAsync((string)args.id);
+                return HttpStatusCode.OK;
+            });
+
+            Get("/analytics/{id}", args => Response.AsJsonNet(ServerContext.AppState.UserAnalyticsData[(string)args.id]));
+
+            Delete("/analytics/{id}", args =>
+            {
+                ServerContext.AppState.UserAnalyticsData[(string)args.id] = new UserAnalytics();
+                return HttpStatusCode.OK;
+            });
+>>>>>>> api-impl
         }
     }
 }

@@ -38,7 +38,8 @@ namespace Speercs.Server.Modules
 
                 try
                 {
-                    if (ServerContext.Configuration.MaxUsers > -1 && userManager.RegisteredUserCount >= ServerContext.Configuration.MaxUsers) {
+                    if (ServerContext.Configuration.MaxUsers > -1 && userManager.RegisteredUserCount >= ServerContext.Configuration.MaxUsers)
+                    {
                         throw new SecurityException("Maximum number of users for this server reached");
                     }
                     // Valdiate username length
@@ -63,7 +64,7 @@ namespace Speercs.Server.Modules
                     {
                         throw new InvalidParameterException("Password must be at least 8 characters.");
                     }
-                    
+
                     if (req.Password.Length > 128)
                     {
                         throw new InvalidParameterException("Password may not exceed 128 characters.");
@@ -81,18 +82,6 @@ namespace Speercs.Server.Modules
 
                     // Attempt to register user
                     var newUser = await userManager.RegisterUserAsync(req);
-
-                    // create team data
-                    ServerContext.AppState.PlayerData[newUser.Identifier] = new UserTeam
-                    {
-                        UserIdentifier = newUser.Identifier
-                    };
-
-                    // create persistent data
-                    var persistentDataService = new PlayerPersistentDataService(ServerContext);
-                    await persistentDataService.CreatePersistentDataAsync(newUser.Identifier);
-
-                    ServerContext.AppState.UserAnalyticsData[newUser.Identifier] = new UserAnalytics();
 
                     // queue persist
                     ServerContext.AppState.QueuePersist();
@@ -120,17 +109,17 @@ namespace Speercs.Server.Modules
             Post("/login", async args =>
             {
                 var req = this.Bind<UserLoginRequest>();
-                var selectedUser = await userManager.FindUserByUsernameAsync(req.Username);
+                var user = await userManager.FindUserByUsernameAsync(req.Username);
 
-                if (selectedUser == null) return HttpStatusCode.Unauthorized;
+                if (user == null) return HttpStatusCode.Unauthorized;
 
                 try
                 {
                     // Validate password
-                    if (selectedUser.Enabled && await userManager.CheckPasswordAsync(req.Password, selectedUser))
+                    if (user.Enabled && await userManager.CheckPasswordAsync(req.Password, user))
                     {
                         // Return user details
-                        return Response.AsJsonNet(selectedUser);
+                        return Response.AsJsonNet(user);
                     }
                     return HttpStatusCode.Unauthorized;
                 }
@@ -147,11 +136,38 @@ namespace Speercs.Server.Modules
                 }
             });
 
+            Delete("/delete", async args =>
+            {
+                // Login fields are the same as those for account deletion
+                var req = this.Bind<UserLoginRequest>();
+
+                var user = await userManager.FindUserByUsernameAsync(req.Username);
+
+                if (user == null) return HttpStatusCode.Unauthorized;
+
+                try
+                {
+                    // Validate password
+                    if (user.Enabled && await userManager.CheckPasswordAsync(req.Password, user))
+                    {
+                        // Password was correct, delete account
+                        await userManager.DeleteUserAsync(user.Identifier);
+
+                        // queue persist
+                        ServerContext.AppState.QueuePersist();
+
+                        return HttpStatusCode.OK;
+                    }
+                    return HttpStatusCode.Unauthorized;
+                }
+                catch { return HttpStatusCode.Unauthorized; }
+            });
+
             // Allow changing passswords
             Patch("/changepassword", async args =>
             {
                 var req = this.Bind<UserPasswordChangeRequest>();
-                var selectedUser = await userManager.FindUserByUsernameAsync(req.Username);
+                var user = await userManager.FindUserByUsernameAsync(req.Username);
 
                 try
                 {
@@ -166,10 +182,10 @@ namespace Speercs.Server.Modules
                         throw new InvalidParameterException("Password may not exceed 128 characters.");
                     }
 
-                    if (selectedUser.Enabled && await userManager.CheckPasswordAsync(req.OldPassword, selectedUser))
+                    if (user.Enabled && await userManager.CheckPasswordAsync(req.OldPassword, user))
                     {
                         // Update password
-                        await userManager.ChangeUserPasswordAsync(selectedUser, req.NewPassword);
+                        await userManager.ChangeUserPasswordAsync(user, req.NewPassword);
                         return HttpStatusCode.OK;
                     }
                     return HttpStatusCode.Unauthorized;
@@ -196,17 +212,17 @@ namespace Speercs.Server.Modules
             Post("/reauth", async args =>
             {
                 var req = this.Bind<UserReauthRequest>();
-                var selectedUser = await userManager.FindUserByUsernameAsync(req.Username);
+                var user = await userManager.FindUserByUsernameAsync(req.Username);
 
-                if (selectedUser == null) return HttpStatusCode.Unauthorized;
+                if (user == null) return HttpStatusCode.Unauthorized;
 
                 try
                 {
                     // Validate key
-                    if (selectedUser.Enabled && selectedUser.ApiKey == req.ApiKey)
+                    if (user.Enabled && user.ApiKey == req.ApiKey)
                     {
                         // Return user details
-                        return Response.AsJsonNet(selectedUser);
+                        return Response.AsJsonNet(user);
                     }
                     return HttpStatusCode.Unauthorized;
                 }
@@ -227,17 +243,17 @@ namespace Speercs.Server.Modules
             Patch("/newkey", async _ =>
             {
                 var req = this.Bind<UserKeyResetRequest>();
-                var selectedUser = await userManager.FindUserByUsernameAsync(req.Username);
+                var user = await userManager.FindUserByUsernameAsync(req.Username);
 
-                if (selectedUser == null) return HttpStatusCode.Unauthorized;
+                if (user == null) return HttpStatusCode.Unauthorized;
 
                 try
                 {
                     // Validate key
-                    if (selectedUser.Enabled && selectedUser.ApiKey == req.ApiKey)
-                    {                        
+                    if (user.Enabled && user.ApiKey == req.ApiKey)
+                    {
                         // Update key
-                        await userManager.GenerateNewApiKeyAsync(selectedUser);
+                        await userManager.GenerateNewApiKeyAsync(user);
                         return HttpStatusCode.NoContent;
                     }
                     return HttpStatusCode.Unauthorized;
