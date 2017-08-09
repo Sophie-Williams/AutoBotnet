@@ -1,9 +1,9 @@
 
 # AutoBotnet
 
-**AutoBotnet - The Game**
-
 <img src="media/logo.png" width="128" height="128" />
+
+**AutoBotnet - The Game**
 
 ## Design
 
