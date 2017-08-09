@@ -1,5 +1,6 @@
 using Speercs.Server.Configuration;
 using System.Threading.Tasks;
+using System;
 
 namespace Speercs.Server.Game.Subsystems
 {
@@ -11,12 +12,27 @@ namespace Speercs.Server.Game.Subsystems
 
         public async Task OnTickAsync()
         {
-            await Task.Delay(0);
+            ServerContext.AppState.TickCount++;
             
             foreach (var entry in ServerContext.AppState.PlayerData)
             {
-                var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.User.Identifier);
-                engine.Invoke("loop");
+                await Task.Run(() => 
+                {
+                    var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.UserIdentifier).Engine;
+                    try
+                    {
+                        var loopFunc = engine.GetValue("loop");
+                        var res = loopFunc.Invoke(5);
+                    }
+                    catch (TimeoutException)
+                    {
+                        //var res = "Code took too long";
+                    }
+                    catch
+                    {
+                        //var res = "Could not find loop function";
+                    }
+                });
             }
         }
     }

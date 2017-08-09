@@ -9,7 +9,7 @@ namespace Speercs.Server.Models.Game.Program
         public DateTime DeployTime { get; set; }
 
         [JsonProperty("source")]
-        public string Source { get; set; }
+        public string Source { get; set; } = "\nfunction loop () {\n  // your code\n}\n";
 
         public UserProgram(string programSource)
         {

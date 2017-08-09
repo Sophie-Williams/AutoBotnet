@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Speercs.Server.Models.User;
+using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Web
 {
@@ -58,11 +59,11 @@ namespace Speercs.Server.Web
         {
             async Task<(JToken, string, long)> HandleRequestAsync(JObject requestBundle)
             {
-                // parse request
+                // Parse request
                 var rcommand = ((JValue)requestBundle["request"]).ToObject<string>();
                 var data = (JObject)requestBundle["data"];
                 var id = ((JValue)requestBundle["id"]).ToObject<long>();
-                // get handler
+                // Get handler
                 var handler = realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
                 return (await handler?.HandleRequestAsync(id, data, rtContext), rcommand, id);
             }
@@ -75,22 +76,35 @@ namespace Speercs.Server.Web
             });
             try
             {
-                // require auth first
+                // Require auth first
                 var authApiKey = await ReadLineAsync();
-                // attempt to authenticate
-                if (!rtContext.AuthenticateWith(authApiKey)) 
+                // Attempt to authenticate
+                if (!rtContext.AuthenticateWith(authApiKey))
                 {
-                    await WriteLineAsync("false");
-                    await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "invalid authentication key", CancellationToken.None);
+                    await WriteLineAsync("false"); // authentication failure
+                    await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "Invalid Authentication Key", CancellationToken.None);
                     throw new SecurityException();
                 }
-                await WriteLineAsync("true");
+                await WriteLineAsync("true"); // websocket channel was authenticated successfully
                 currentUser = await rtContext.GetCurrentUserAsync();
-                // attempt to add handler
+                // Attempt to add handler
                 ServerContext.NotificationPipeline
                     .RetrieveUserPipeline(currentUser.Identifier)
                     .AddItemToEnd(pipelineHandler);
                 pipelineRegistered = true;
+                if (currentUser.AnalyticsEnabled)
+                {
+                    ServerContext.AppState.UserAnalyticsData[currentUser.Identifier].LastConnection = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                }
+                // pipeline is registered, send any queued, previously undelivered data
+                var userNotificationQueue = new PlayerPersistentDataService(ServerContext).RetrieveNotificationQueue(currentUser.Identifier);
+                while (userNotificationQueue.Count > 0)
+                {
+                    // send data back through pipelines
+                    // now that a pipeline is registered, the data will be sent through the channel
+                    // in the case of an exception or other delivery failure, the message will be queued again.
+                    await ServerContext.NotificationPipeline.PushMessageAsync(userNotificationQueue.Dequeue(), currentUser.Identifier);
+                }
                 while (_ws.State == WebSocketState.Open)
                 {
                     var rawData = await ReadLineAsync();
@@ -101,14 +115,14 @@ namespace Speercs.Server.Web
                             .ContinueWith(async t =>
                             {
                                 (var response, var request, var id) = t.Result;
-                                // send result
+                                // Send result
                                 var resultBundle = new JObject(
                                     new JProperty("id", id),
                                     new JProperty("data", response),
                                     new JProperty("type", "response"),
                                     new JProperty("request", request)
                                 );
-                                // write result to websocket
+                                // Write result to websocket
                                 await WriteLineAsync(resultBundle.ToString(Formatting.None));
                             });
                     }
@@ -122,10 +136,14 @@ namespace Speercs.Server.Web
             {
                 if (pipelineRegistered)
                 {
-                    // unregister pipeline
+                    // Unregister pipeline
                     ServerContext.NotificationPipeline
                         .RetrieveUserPipeline(currentUser.Identifier)
                         .UnregisterHandler(pipelineHandler);
+                    if (currentUser.AnalyticsEnabled) {
+                        var analyticsObject = ServerContext.AppState.UserAnalyticsData[currentUser.Identifier];
+                        analyticsObject.Playtime += ((ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) - analyticsObject.LastConnection;
+                    }
                 }
             }
         }

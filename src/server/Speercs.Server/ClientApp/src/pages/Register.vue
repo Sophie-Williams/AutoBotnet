@@ -16,7 +16,7 @@
 import loginForm from '../components/loginForm.vue'
 
 export default {
-  data () {
+  data() {
     return {
     }
   },

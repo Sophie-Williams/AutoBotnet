@@ -4,8 +4,10 @@ namespace Speercs.Server.Models.Requests
     {
         public string Username { get; set; }
 
+        public string Email { get; set; } = "";
+
         public string Password { get; set; }
 
-        public string InviteKey { get; set; }
+        public string InviteKey { get; set; } = "";
     }
 }

@@ -21,7 +21,7 @@ namespace Speercs.Server
         private const string ConfigFileName = "speercs.json";
         private const string StateStorageDatabaseFileName = "speercs_state.lidb";
         private readonly IConfigurationRoot fileConfig;
-        
+
         private string ClientAppPath = "ClientApp/";
 
         public SGameBootstrapper GameBootstrapper { get; private set; }
@@ -33,6 +33,7 @@ namespace Speercs.Server
                 try
                 {
                     // Create config file
+                    Console.WriteLine($"Configuration file {ConfigFileName} does not exist, creating default.");
                     var confFileContent = JsonConvert.SerializeObject(new SConfiguration(), Formatting.Indented);
                     File.WriteAllText(ConfigFileName, confFileContent);
                 }
@@ -65,7 +66,7 @@ namespace Speercs.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
 
@@ -87,8 +88,9 @@ namespace Speercs.Server
             // load database
             context.ConnectDatabase();
 
-            // register SIGTERM handler
-            AssemblyLoadContext.Default.Unloading += (c) => OnUnload(c, context);
+            // register application stop handler
+            // AssemblyLoadContext.Default.Unloading += (c) => OnUnload(context);
+            applicationLifetime.ApplicationStopping.Register(() => OnUnload(context));
 
             // map websockets
             app.UseWebSockets();
@@ -99,12 +101,14 @@ namespace Speercs.Server
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                {
-                    HotModuleReplacement = true,
-                    ProjectPath = ClientAppPath,
-                    ConfigFile = $"{ClientAppPath}webpack.config.js"
-                });
+                if (context.Configuration.EnableDevelopmentWebInterface) {
+                    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                    {
+                        HotModuleReplacement = true,
+                        ProjectPath = ClientAppPath,
+                        ConfigFile = $"{ClientAppPath}webpack.config.js"
+                    });
+                }
             }
             else
             {
@@ -135,16 +139,17 @@ namespace Speercs.Server
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-            
+
             // start game services
             GameBootstrapper = new SGameBootstrapper(context);
             GameBootstrapper.OnStartup();
         }
 
-        private void OnUnload(AssemblyLoadContext alctx, ISContext sctx)
+        private void OnUnload(ISContext sctx)
         {
+            Console.WriteLine("Server unloading, force-persisting state data.");
             // persist on unload
-            sctx.AppState.Persist();
+            sctx.AppState.Persist(true);
         }
     }
 }

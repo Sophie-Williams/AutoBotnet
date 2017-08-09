@@ -47,32 +47,35 @@ namespace Speercs.Server.Configuration
             }
             // Update context
             savedState.PersistenceMedium = stateStorage;
-            savedState.Persist = () =>
+            savedState.Persist = (forcePersist) =>
             {
                 // If needed...
-                if (savedState.PersistNeeded)
+                if (forcePersist || savedState.PersistNeeded)
                 {
+                    savedState.PersistAvailable = false;
                     // Update in database
                     stateStorage.Upsert(savedState);
                     // And unset needed flag
                     savedState.PersistNeeded = false;
+                    savedState.PersistAvailable = true;
                 }
             };
-            // TODO: Merge API keys, etc.
             // Save the state
-            //savedState.PersistenceMedium.Upsert(savedState);
-            savedState.Persist();
+            savedState.Persist(true);
             // Update references
             serverContext.AppState = savedState;
-            var timedPersistTask = StartTimedPersistAsync(savedState);
+            var timedPersistTask = StartTimedPersistAsync(serverContext, savedState);
         }
 
-        private static async Task StartTimedPersistAsync(SAppState state)
+        private static async Task StartTimedPersistAsync(SContext serverContext, SAppState state)
         {
             while (true)
             {
-                await Task.Delay(state.PersistenceInterval);
-                state.Persist();
+                if (state.PersistAvailable)
+                {
+                    await Task.Delay(serverContext.Configuration.PersistenceInterval);
+                    state.Persist(false);
+                }
             }
         }
     }

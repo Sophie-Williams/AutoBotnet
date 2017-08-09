@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 using Speercs.Server.Configuration;
+using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server.Models
 {
-    public class PublicMetadata
+    public class PublicMetadata : ProtectedDependencyObject
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -14,15 +15,15 @@ namespace Speercs.Server.Models
         [JsonProperty("version")]
         public string Version { get; set; }
 
-        [JsonProperty("inviterequired")]
+        [JsonProperty("inviteRequired")]
         public bool InviteRequired { get; set; }
 
-        public PublicMetadata(SConfiguration configuration)
+        public PublicMetadata(ISContext serverContext) : base(serverContext)
         {
-            Name = configuration.GlobalName;
-            MOTD = configuration.GlobalMessage.Replace("{ver}", SContext.Version);
+            Name = serverContext.Configuration.GlobalName;
+            MOTD = serverContext.Configuration.GlobalMessage.Replace("{ver}", SContext.Version);
             Version = SContext.Version;
-            InviteRequired = !string.IsNullOrWhiteSpace(configuration.InviteKey);
+            InviteRequired = serverContext.Configuration.InviteRequired;
         }
     }
 }

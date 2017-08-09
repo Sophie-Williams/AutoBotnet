@@ -25,6 +25,9 @@
     <v-toolbar>
       <v-toolbar-side-icon @click.native.stop="sidebar_v = !sidebar_v"></v-toolbar-side-icon>
       <v-toolbar-title v-text="appName"></v-toolbar-title>
+      <v-btn icon light @click.native="visitUrl('https://cookieeaters.xyz')">
+        <v-icon>favorite</v-icon>
+      </v-btn>
     </v-toolbar>
     <main>
       <v-container fluid>
@@ -37,6 +40,38 @@
         </v-slide-y-transition>
       </v-container>
     </main>
+
+    <v-dialog persistent v-model="confirmDialogOpen" ref="confirmDialog">
+      <v-card>
+        <v-card-row>
+          <v-card-title>{{ confirmDialog.title }}</v-card-title>
+        </v-card-row>
+        <v-card-row>
+          <v-card-text v-html="confirmDialog.content"></v-card-text>
+        </v-card-row>
+        <v-card-row actions>
+          <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(false)" v-if="!confirmDialog.popup">{{ confirmDialog.cancel }}</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(true)">{{ confirmDialog.ok }}</v-btn>
+        </v-card-row>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog persistent v-model="promptDialogOpen" ref="promptDialog">
+      <v-card>
+        <v-card-row>
+          <v-card-title>{{ promptDialog.title }}</v-card-title>
+        </v-card-row>
+        <v-card-row>
+          <v-card-text>
+            <v-text-field :label="promptDialog.hint"  v-model="promptDialog.resp" required></v-text-field>
+          </v-card-text>
+        </v-card-row>
+        <v-card-row actions>
+          <v-btn class="blue--text darken-1" flat @click.native="onPromptResult(false)">{{ promptDialog.cancel }}</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="onPromptResult(true)">{{ promptDialog.ok }}</v-btn>
+        </v-card-row>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -64,7 +99,7 @@
           { 
             title: 'Dashboard',
             avatar: 'dashboard',
-            router: '/dashboard',
+            router: '/d',
             authRequired: true,
             autoHide: true
           },
@@ -117,7 +152,25 @@
             avatar: 'error',
             link: 'https://github.com/CookieEaters/autobotnet_t/issues'
           }
-        ]
+        ],
+        confirmDialog: {
+          title: '',
+          content: '',
+          ok: 'OK',
+          cancel: 'Cancel',
+          callback: null,
+          popup: false
+        },
+        promptDialog: {
+          title: '',
+          ok: 'OK',
+          cancel: 'Cancel',
+          hint: '',
+          resp: '',
+          callback: null
+        },
+        confirmDialogOpen: false,
+        promptDialogOpen: false
       }
     },
     computed: {
@@ -128,7 +181,52 @@
         return this.$store.state.auth.loggedIn
       }
     },
-    methods: {}
+    methods: {
+      showPopup (tx, ti, y) {
+        this.showConfirm(tx, ti, null, y, null, true)
+      },
+      showConfirm (tx, ti, cb, y, n, p = false) {
+        y = y || 'OK'
+        n = n || 'Cancel'
+        this.confirmDialog.popup = p
+        this.confirmDialog.ok = y
+        this.confirmDialog.cancel = n
+        this.confirmDialog.content = tx
+        this.confirmDialog.title = ti
+        this.confirmDialog.callback = cb
+        this.confirmDialogOpen = true
+      },
+      showPrompt: function (ti, h, cb, y, n) {
+        y = y || 'OK'
+        n = n || 'Cancel'
+        this.promptDialog.ok = y
+        this.promptDialog.cancel = n
+        this.promptDialog.hint = h
+        this.promptDialog.title = ti
+        this.promptDialog.callback = cb
+        this.promptDialogOpen = true
+      },
+      onConfirmResult (r) {
+        this.confirmDialogOpen = false
+        if (this.confirmDialog.callback) {
+          this.confirmDialog.callback(r)
+        }
+        this.confirmDialog.callback = null
+      },
+      onPromptResult (r) {
+        this.promptDialogOpen = false
+        if (r && this.promptDialog.resp) {
+          this.promptDialog.callback(this.promptDialog.resp)
+        } else {
+          this.promptDialog.callback(false)
+        }
+        this.promptDialog.resp = ''
+        this.promptDialog.callback = null
+      },
+      visitUrl (u) {
+        window.open(u, '_blank')
+      }
+    }
   }
 </script>
 

@@ -2,6 +2,7 @@ using Speercs.Server.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System;
 
 namespace Speercs.Server.Services.Auth
 {
@@ -34,6 +35,12 @@ namespace Speercs.Server.Services.Auth
             var userManager = new UserManagerService(ServerContext);
             var user = userManager.FindUserByApiKeyAsync(apikey).Result;
             if (user == null) return null;
+            if (user.AnalyticsEnabled)
+            {
+                var analyticsObject = ServerContext.AppState.UserAnalyticsData[user.Identifier];
+                analyticsObject.ApiRequests++;
+                analyticsObject.LastRequest = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            }
             var userAuthClaims = new List<Claim>()
             {
                 new Claim(AuthTypeClaimKey, ApiAccessScope.User.ToString()),

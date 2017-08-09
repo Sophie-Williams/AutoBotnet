@@ -26,6 +26,17 @@ const actions = {
       }
     })
   },
+  get_meta({commit, state}) {
+    return new Promise((resolve, reject) => {
+      state.api.getMeta()
+        .then((res) => {
+          resolve(res.data)
+        })
+        .catch((e) => {
+          reject(e)
+        })
+    })
+  },
   authenticate ({commit, state}, auth) {
     return new Promise((resolve, reject) => {
       let resultData = {
@@ -35,15 +46,45 @@ const actions = {
       .then(() => {
         resultData.success = true
         resultData.un = auth.un
-        resultData.key = state.api.getApiKey()
+        resultData.key = state.api.getKey()
         commit('login_result', resultData)
+        commit('persist_auth', resultData)
         resolve()
       })
       .catch((e) => {
         commit('login_result', resultData)
         console.log(e)
-        reject(new Error('login failed'))
+        reject(new Error(e.message ? e.message.toLowerCase() : 'login failed'))
       })
+    })
+  },
+  attempt_reauthenticate ({commit, state}) {
+    return new Promise((resolve, reject) => {
+      let resultData = {
+        success: false
+      }
+      let auth = {
+        un: window.localStorage.getItem('auth.un'),
+        key: window.localStorage.getItem('auth.key')
+      }
+      if (auth.un && auth.key) {
+        console.log('reauthenticating as ' + auth.un)
+        state.api.reauth(auth.un, auth.key)
+        .then(() => {
+          resultData.success = true
+          resultData.un = auth.un
+          resultData.key = state.api.getKey()
+          commit('login_result', resultData)
+          resolve()
+        })
+        .catch((e) => {
+          commit('login_result', resultData)
+          console.log(e)
+          reject(new Error('login failed'))
+        })
+      } else {
+        reject('no stored auth available')
+      }
     })
   },
   register_account ({commit, state}, auth) {
@@ -55,21 +96,45 @@ const actions = {
       .then(() => {
         resultData.success = true
         resultData.un = auth.un
-        resultData.key = state.api.getApiKey()
+        resultData.key = state.api.getKey()
         commit('login_result', resultData)
+        commit('persist_auth', resultData)
         resolve()
       })
       .catch((e) => {
         commit('login_result', resultData)
         console.log(e)
-        reject(new Error('register failed'))
+        reject(new Error(e.message ? e.message.toLowerCase() : 'registration failed'))
       })
+    })
+  },
+  change_password ({commit, state}, pw) {
+    return new Promise((resolve, reject) => {
+      state.api.changePassword(pw.o, pw.n)
+        .then((r) => {
+          commit('login_result', { success: false })
+          commit('persist_auth', false)
+          resolve()
+        })
+        .catch((e) => reject(e))
+    })
+  },
+  regenerate_api_key ({commit, state}) {
+    return new Promise((resolve, reject) => {
+      state.api.regenApiKey()
+        .then((r) => {
+          commit('login_result', { success: false })
+          commit('persist_auth', false)
+          resolve()
+        })
+        .catch((e) => reject(e))
     })
   },
   logout ({commit, state}) {
     return new Promise((resolve, reject) => {
       state.api.logout()
       commit('login_result', { success: false })
+      commit('persist_auth', false)
     })
   }
 }
@@ -86,6 +151,16 @@ const mutations = {
       state.loggedIn = false
     }
   },
+  persist_auth (state, data) {
+    if (data && data.success) {
+      window.localStorage.setItem('auth.un', data.un)
+      window.localStorage.setItem('auth.key', data.key)
+      console.log('saved auth')
+    } else {
+      window.localStorage.setItem('auth.un', null)
+      window.localStorage.setItem('auth.key', null)
+    }
+  },
   save_api (state, api) {
     state.api = api
   }
@@ -94,6 +169,9 @@ const mutations = {
 const getters = {
   api_available (state) {
     return state.api !== null
+  },
+  api (state) {
+    return state.api
   },
   auth_data (state) {
     return state.authData

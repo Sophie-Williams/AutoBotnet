@@ -3,6 +3,9 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Game.Program;
 using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Speercs.Server.Services.Game
 {
@@ -36,11 +39,25 @@ namespace Speercs.Server.Services.Game
             });
         }
 
-        public bool DeployProgram(string ownerId, UserProgram program)
+        public async Task RemovePersistentDataAsync(string ownerId)
         {
+            await Task.Run(() => 
+            {
+                persistentPlayerDataCollection.Delete(x => x.OwnerId == ownerId);
+            });
+        }
+
+        public void DeployProgram(string ownerId, UserProgram program)
+        {
+            // update the user's code in the database
             var data = FindPersistentData(ownerId);
             data.Program = program;
-            return persistentPlayerDataCollection.Update(data);
+            persistentPlayerDataCollection.Update(data);
+            
+            // reload the engine to apply changes
+            ServerContext.Executors.ReloadExecutor(ownerId);
         }
+
+        public Queue<JToken> RetrieveNotificationQueue(string userIdentifier) => this[userIdentifier].QueuedNotifications;
     }
 }

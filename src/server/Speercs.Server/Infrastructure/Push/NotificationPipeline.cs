@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using Speercs.Server.Utilities;
+using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Infrastructure.Push
 {
@@ -20,16 +21,31 @@ namespace Speercs.Server.Infrastructure.Push
                 new JProperty("data", data),
                 new JProperty("type", "push")
             );
-            foreach (var handler in RetrieveUserPipeline(userIdentifier).GetHandlers())
+            var userPipeline = RetrieveUserPipeline(userIdentifier);
+            // make sure handlers are available to process the message
+            if (userPipeline.HandlerCount > 0)
             {
-                if (await handler.Invoke(dataBundle)) break;
+                foreach (var handler in userPipeline.GetHandlers())
+                {
+                    if (await handler.Invoke(dataBundle)) break;
+                }
+            }
+            else
+            {
+                // No handlers are currently available. Message should be added to persistent queue of undelivered messages.
+                // get player data service, and retrieve queued notifications container
+                var userNotificationQueue = new PlayerPersistentDataService(ServerContext).RetrieveNotificationQueue(userIdentifier);
+                // Enqueue the data.
+                userNotificationQueue.Enqueue(data);
             }
         }
 
         public Pipelines<JObject, bool> RetrieveUserPipeline(string userIdentifier)
         {
-            if (!UserPipelines.ContainsKey(userIdentifier)) UserPipelines.TryAdd(userIdentifier, new Pipelines<JObject, bool>());
-            return UserPipelines[userIdentifier];
+            return UserPipelines.GetOrAdd(userIdentifier, key =>
+            {
+                return new Pipelines<JObject, bool>();
+            });
         }
     }
 }
