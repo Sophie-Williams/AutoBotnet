@@ -15,12 +15,6 @@ namespace Speercs.Server.Modules.Admin
             Get("/{id}", async args =>
             {
                 var userManager = new UserManagerService(ServerContext);
-<<<<<<< HEAD
-                var user = await userManager.FindUserByIdentifierAsync(args.id);
-                if (user == null) return HttpStatusCode.NotFound;
-                return Response.AsJsonNet((RegisteredUser)user);
-            });
-=======
                 var user = await userManager.FindUserByIdentifierAsync((string)args.id);
                 if (user == null) return HttpStatusCode.NotFound;
                 return Response.AsJsonNet((RegisteredUser)user);
@@ -52,7 +46,6 @@ namespace Speercs.Server.Modules.Admin
                 ServerContext.AppState.UserAnalyticsData[(string)args.id] = new UserAnalytics();
                 return HttpStatusCode.OK;
             });
->>>>>>> api-impl
         }
     }
 }
