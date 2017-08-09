@@ -1,13 +1,13 @@
 
 # AutoBotnet
 
-AutoBotnet - The Game
+**AutoBotnet - The Game**
 
-[![build status](https://gitlab.com/CookieEaters/speercs/badges/master/build.svg)](https://gitlab.com/CookieEaters/speercs/commits/master)
+<img src="media/logo.png" width="128" height="128" />
 
-we don't know much about it yet
+## Design
 
-but one thing for sure: it's not written in lolcode. #NotApple
+Design information can be found in [AutoBotnetDesign](https://github.com/CookieEaters/AutoBotnetDesign).
 
 ## Hacking
 
