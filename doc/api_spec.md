@@ -6,6 +6,7 @@ REST API route descriptions:
   - Register
   - Login
   - Delete
+  - Change Password
 - Server Info
   - Info
   - Meta
@@ -13,6 +14,8 @@ REST API route descriptions:
 ## Auth
 
 ### Register
+
+> Register a new user
 
 `POST /a/auth/register`
 
@@ -40,6 +43,8 @@ RESPONSE:
 
 ### Login
 
+> Get an API key from credentials
+
 `POST /a/auth/login`
 
 REQUEST:
@@ -64,7 +69,9 @@ RESPONSE:
 
 ### Delete
 
-`POST /a/auth/delete`
+> Delete a user account
+
+`DELETE /a/auth/delete`
 
 REQUEST:
 
@@ -79,11 +86,52 @@ RESPONSE:
 
 `200`
 
+### Change Password
+
+> Change a password for a user
+
+`PATCH /a/auth/changepassword`
+
+REQUEST:
+
+```json
+{
+    "Username": "<USERNAME>",
+    "OldPassword": "<OLD_PASSWORD>",
+    "NewPassword": "<NEW_PASSWORD>"
+}
+```
+
+RESPONSE:
+
+`200`
+
 ## Server Info
 
 # Info
 
+> Get dynamic server information
+
 `GET /a/info`
+
+RESPONSE:
+
+
+```json
+{
+    "userCount": 1337, // Haha I wish
+    "tickrate": 1000,
+    "mapSize": 80085
+}
+```
+
+## Server Meta
+
+# Meta
+
+> Get static server information
+
+`GET /a/meta`
 
 RESPONSE:
 

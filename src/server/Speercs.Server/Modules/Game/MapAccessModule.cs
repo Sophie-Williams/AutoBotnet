@@ -14,7 +14,7 @@ namespace Speercs.Server.Modules.Game
                 if (!int.TryParse(((string)Request.Query.x), out int x)) return HttpStatusCode.BadRequest;
                 if (!int.TryParse(((string)Request.Query.y), out int y)) return HttpStatusCode.BadRequest;
                 var room = ServerContext.AppState.WorldMap[x, y];
-                if (room == null) return HttpStatusCode.NotFound;
+                if (room == null) return HttpStatusCode.PreconditionFailed;
                 return Response.AsJsonNet(room);
             });
         }
