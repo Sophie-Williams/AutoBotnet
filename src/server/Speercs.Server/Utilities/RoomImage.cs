@@ -6,9 +6,9 @@ namespace Speercs.Server.Utilities
 {
     public class RoomImage
     {
-        public Image drawRoom(Room room)
+        public Image<Rgba32> drawRoom(Room room)
         {
-            Image image = new Image(Room.MapEdgeSize, Room.MapEdgeSize);
+            Image<Rgba32> image = new Image<Rgba32>(Room.MapEdgeSize, Room.MapEdgeSize);
             using (var pixels = image.Lock())
             {
                 for (var y = 0; y < Room.MapEdgeSize; y++)
@@ -22,7 +22,7 @@ namespace Speercs.Server.Utilities
             return image;
         }
 
-        public Image drawMap(WorldMap map)
+        public Image<Rgba32> drawMap(WorldMap map)
         {
             int worldMaxX = Int32.MinValue;
             int worldMaxY = Int32.MinValue;
@@ -36,9 +36,9 @@ namespace Speercs.Server.Utilities
                 if (room.Y > worldMaxY) worldMaxY = room.Y;
                 if (room.Y < worldMinY) worldMinY = room.Y;
             }
-            Image image = new Image((Math.Abs((worldMaxX - worldMinX) + 1) * Room.MapEdgeSize), (Math.Abs((worldMaxY - worldMinY) + 1) * Room.MapEdgeSize));
+            Image<Rgba32> image = new Image<Rgba32>((Math.Abs((worldMaxX - worldMinX) + 1) * Room.MapEdgeSize), (Math.Abs((worldMaxY - worldMinY) + 1) * Room.MapEdgeSize));
 
-            image.BackgroundColor(Color.Black);
+            image.BackgroundColor(Rgba32.Black);
 
             using (var pixels = image.Lock())
             {

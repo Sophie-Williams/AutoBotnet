@@ -10,6 +10,6 @@ namespace Speercs.Server.Extensibility
 
         char GetTileChar();
 
-        Color GetColor();
+        Rgba32 GetColor();
     }
 }

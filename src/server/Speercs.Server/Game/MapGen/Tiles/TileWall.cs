@@ -11,6 +11,6 @@ namespace Speercs.Server.Game.MapGen.Tiles
 
         public char GetTileChar() => 'O';
 
-        public Color GetColor() => Color.Gray;
+        public Rgba32 GetColor() => Rgba32.Gray;
     }
 }
