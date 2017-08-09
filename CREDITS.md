@@ -1,3 +1,8 @@
+
+# Credits
+
+## Libraries
+
 AutoBotnet was made using multiple open source libraries.
 
 * [.NET Core](https://github.com/dotnet/core)
@@ -7,3 +12,7 @@ AutoBotnet was made using multiple open source libraries.
 * [LiteDB](https://github.com/mbdavid/LiteDB)
 * [Nancy](https://github.com/NancyFx/Nancy)
 * [Osmium.PluginEngine](https://github.com/0xFireball/Osmium.PluginEngine)
+
+## Art/Assets
+
+**Ethan Black** - for creating the logo, tiles, and other art assets for AutoBotnet.

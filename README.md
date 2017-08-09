@@ -20,4 +20,9 @@ but one thing for sure: it's not written in lolcode. #NotApple
 
 Copyright © 2017 The CookieEaters. All Rights Reserved.
 
-Licensed under the AGPLv3.
+The source code of AutoBotnet is licensed under the **AGPLv3**, which can
+be found in `LICENSE`.
+
+Art and assets are licensed under the **CC BY-SA 4.0**.
+
+Additional information is available in `CREDITS.md`.
