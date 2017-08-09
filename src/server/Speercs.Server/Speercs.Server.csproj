@@ -9,10 +9,13 @@
     <Copyright>Copyright © 2017 The CookieEaters. All Rights Reserved.</Copyright>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Compile Remove="ClientApp\**" />
+    <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\**" />
+    <None Remove="ClientApp\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="ClientApp\**\*" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="C5.NetCore" Version="2.4.5947.17249" />
