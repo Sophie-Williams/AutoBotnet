@@ -74,7 +74,7 @@ namespace Speercs.Server.Modules
                     if (ServerContext.Configuration.InviteRequired)
                     {
                         // Validate invite key
-                        if (ServerContext.AppState.InviteKeys.Remove(req.InviteKey))
+                        if (!ServerContext.AppState.InviteKeys.Remove(req.InviteKey))
                         {
                             return HttpStatusCode.PaymentRequired;
                         }
