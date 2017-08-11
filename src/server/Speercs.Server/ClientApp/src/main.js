@@ -12,10 +12,6 @@ import routes from './routes'
 // store
 import store from './store/index'
 
-// ui styles
-
-import './stylus/main.styl'
-
 // register plugins
 Vue.use(VueRouter)
 Vue.use(Vuetify)
