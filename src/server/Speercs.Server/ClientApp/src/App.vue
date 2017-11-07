@@ -7,18 +7,20 @@
     >
       <v-list>
         <template v-for="(item, i) in sidebar">
-          <v-subheader v-if="item.header" v-text="item.header" />
-          <v-divider v-else-if="item.divider" light />
-          <v-list-item v-else>
-            <template v-if="!item.autoHide || (item.unauthRequired && !loggedIn) || (item.authRequired && loggedIn)">
-              <v-list-tile :router="item.router != null" :href="item.router || item.link" ripple>
-                <v-list-tile-avatar>
-                  <v-icon>{{ item.avatar }}</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-title v-text="item.title" />    
-              </v-list-tile>
-            </template>
-          </v-list-item>
+          <div :key="i">
+            <v-subheader v-if="item.header" v-text="item.header" />
+            <v-divider v-else-if="item.divider" light />
+            <v-list-item v-else>
+              <template v-if="!item.autoHide || (item.unauthRequired && !loggedIn) || (item.authRequired && loggedIn)">
+                <v-list-tile :router="item.router != null" :href="item.router || item.link" ripple>
+                  <v-list-tile-avatar>
+                    <v-icon>{{ item.avatar }}</v-icon>
+                  </v-list-tile-avatar>
+                  <v-list-tile-title v-text="item.title" />    
+                </v-list-tile>
+              </template>
+            </v-list-item>
+          </div>
         </template>
       </v-list>
     </v-navigation-drawer>
@@ -80,7 +82,7 @@
     data () {
       return {
         sidebar_v: true,
-        dark_theme: false,
+        dark_theme: true,
         sidebar: [
           { header: 'Quick Links' },
           // {
@@ -231,8 +233,9 @@
 </script>
 
 <style lang="stylus">
+  // @import './stylus/main.styl'
   @import '../node_modules/vuetify/src/stylus/main'
   @import './css/main.css'
 
-  // $material-theme := $material-dark
+  $material-theme := $material-dark
 </style>
