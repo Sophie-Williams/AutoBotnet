@@ -9,22 +9,22 @@ namespace Speercs.Server.Web.Realtime {
     public class RealtimeContext : DependencyObject {
         public RealtimeContext(ISContext context) : base(context) { }
 
-        public ClaimsPrincipal Identity { get; private set; }
+        public ClaimsPrincipal identity { get; private set; }
 
-        public string UserIdentifier { get; private set; }
+        public string userIdentifier { get; private set; }
 
-        public bool AuthenticateWith(string apikey) {
+        public bool authenticateWith(string apikey) {
             // call authenticator
-            var auther = new ApiAuthenticator(ServerContext);
-            Identity = auther.ResolveIdentity(apikey);
-            UserIdentifier = Identity.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey)
+            var auther = new ApiAuthenticator(serverContext);
+            identity = auther.resolveIdentity(apikey);
+            userIdentifier = identity.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.USER_IDENTIFIER_CLAIM_KEY)
                 .Value;
-            return Identity != null;
+            return identity != null;
         }
 
-        public async Task<RegisteredUser> GetCurrentUserAsync() {
-            var userManager = new UserManagerService(ServerContext);
-            return await userManager.FindUserByIdentifierAsync(UserIdentifier);
+        public async Task<RegisteredUser> getCurrentUserAsync() {
+            var userManager = new UserManagerService(serverContext);
+            return await userManager.findUserByIdentifierAsync(userIdentifier);
         }
     }
 }

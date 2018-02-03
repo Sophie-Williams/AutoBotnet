@@ -1,9 +1,9 @@
 namespace Speercs.Server.Models.Requests {
     public class RoomGenerationRequest {
-        public int X { get; set; }
+        public int x { get; set; }
 
-        public double Density { get; set; }
+        public double density { get; set; }
 
-        public int Y { get; set; }
+        public int y { get; set; }
     }
 }

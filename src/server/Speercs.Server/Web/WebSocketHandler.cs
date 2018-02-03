@@ -17,18 +17,18 @@ using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Web {
     public class WebSocketHandler : DependencyObject {
-        private static CookieJar realtimeCookieJar;
+        private static CookieJar _realtimeCookieJar;
 
         private WebSocket _ws;
 
-        private RealtimeContext rtContext;
+        private RealtimeContext _rtContext;
 
         public WebSocketHandler(ISContext serverContext, WebSocket websocket) : base(serverContext) {
             _ws = websocket;
-            rtContext = new RealtimeContext(serverContext);
+            _rtContext = new RealtimeContext(serverContext);
         }
 
-        private async Task<string> ReadLineAsync() {
+        private async Task<string> readLineAsync() {
             var data = string.Empty;
             while (true) {
                 var buf = new byte[1];
@@ -40,7 +40,7 @@ namespace Speercs.Server.Web {
             }
         }
 
-        private async Task WriteLineAsync(string data) {
+        private async Task writeLineAsync(string data) {
             await _ws.SendAsync(
                 new ArraySegment<byte>(Encoding.UTF8.GetBytes(data)),
                 WebSocketMessageType.Text,
@@ -49,62 +49,62 @@ namespace Speercs.Server.Web {
             );
         }
 
-        public async Task EventLoopAsync() {
-            async Task<(JToken, string, long)> HandleRequestAsync(JObject requestBundle) {
+        public async Task eventLoopAsync() {
+            async Task<(JToken, string, long)> handleRequestAsync(JObject requestBundle) {
                 // Parse request
                 var rcommand = ((JValue) requestBundle["request"]).ToObject<string>();
                 var data = (JObject) requestBundle["data"];
                 var id = ((JValue) requestBundle["id"]).ToObject<long>();
                 // Get handler
-                var handler = realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.Path == rcommand);
-                return (await handler?.HandleRequestAsync(id, data, rtContext), rcommand, id);
+                var handler = _realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.path == rcommand);
+                return (await handler?.handleRequestAsync(id, data, _rtContext), rcommand, id);
             }
 
             var pipelineRegistered = false;
             var currentUser = default(RegisteredUser);
             var pipelineHandler = new Func<JObject, Task<bool>>(async (bundle) => {
-                await WriteLineAsync(bundle.ToString(Formatting.None));
+                await writeLineAsync(bundle.ToString(Formatting.None));
                 return false;
             });
             try {
                 // Require auth first
-                var authApiKey = await ReadLineAsync();
+                var authApiKey = await readLineAsync();
                 // Attempt to authenticate
-                if (!rtContext.AuthenticateWith(authApiKey)) {
-                    await WriteLineAsync("false"); // authentication failure
+                if (!_rtContext.authenticateWith(authApiKey)) {
+                    await writeLineAsync("false"); // authentication failure
                     await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "Invalid Authentication Key",
                         CancellationToken.None);
                     throw new SecurityException();
                 }
 
-                await WriteLineAsync("true"); // websocket channel was authenticated successfully
-                currentUser = await rtContext.GetCurrentUserAsync();
+                await writeLineAsync("true"); // websocket channel was authenticated successfully
+                currentUser = await _rtContext.getCurrentUserAsync();
                 // Attempt to add handler
-                ServerContext.NotificationPipeline
-                    .RetrieveUserPipeline(currentUser.Identifier)
-                    .AddItemToEnd(pipelineHandler);
+                serverContext.notificationPipeline
+                    .retrieveUserPipeline(currentUser.identifier)
+                    .addItemToEnd(pipelineHandler);
                 pipelineRegistered = true;
-                if (currentUser.AnalyticsEnabled) {
-                    ServerContext.AppState.UserAnalyticsData[currentUser.Identifier].LastConnection =
+                if (currentUser.analyticsEnabled) {
+                    serverContext.appState.userAnalyticsData[currentUser.identifier].lastConnection =
                         (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 }
 
                 // pipeline is registered, send any queued, previously undelivered data
                 var userNotificationQueue =
-                    new PlayerPersistentDataService(ServerContext).RetrieveNotificationQueue(currentUser.Identifier);
+                    new PlayerPersistentDataService(serverContext).retrieveNotificationQueue(currentUser.identifier);
                 while (userNotificationQueue.Count > 0) {
                     // send data back through pipelines
                     // now that a pipeline is registered, the data will be sent through the channel
                     // in the case of an exception or other delivery failure, the message will be queued again.
-                    await ServerContext.NotificationPipeline.PushMessageAsync(userNotificationQueue.Dequeue(),
-                        currentUser.Identifier);
+                    await serverContext.notificationPipeline.pushMessageAsync(userNotificationQueue.Dequeue(),
+                        currentUser.identifier);
                 }
 
                 while (_ws.State == WebSocketState.Open) {
-                    var rawData = await ReadLineAsync();
+                    var rawData = await readLineAsync();
                     var requestBundle = JObject.Parse(rawData);
                     try {
-                        await HandleRequestAsync(requestBundle)
+                        await handleRequestAsync(requestBundle)
                             .ContinueWith(async t => {
                                 (var response, var request, var id) = t.Result;
                                 // Send result
@@ -115,7 +115,7 @@ namespace Speercs.Server.Web {
                                     new JProperty("request", request)
                                 );
                                 // Write result to websocket
-                                await WriteLineAsync(resultBundle.ToString(Formatting.None));
+                                await writeLineAsync(resultBundle.ToString(Formatting.None));
                             });
                     } catch (NullReferenceException) // Missing parameter
                     {
@@ -125,32 +125,32 @@ namespace Speercs.Server.Web {
             } finally {
                 if (pipelineRegistered) {
                     // Unregister pipeline
-                    ServerContext.NotificationPipeline
-                        .RetrieveUserPipeline(currentUser.Identifier)
+                    serverContext.notificationPipeline
+                        .retrieveUserPipeline(currentUser.identifier)
                         .UnregisterHandler(pipelineHandler);
-                    if (currentUser.AnalyticsEnabled) {
-                        var analyticsObject = ServerContext.AppState.UserAnalyticsData[currentUser.Identifier];
-                        analyticsObject.Playtime += ((ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) -
-                                                    analyticsObject.LastConnection;
+                    if (currentUser.analyticsEnabled) {
+                        var analyticsObject = serverContext.appState.userAnalyticsData[currentUser.identifier];
+                        analyticsObject.playtime += ((ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) -
+                                                    analyticsObject.lastConnection;
                     }
                 }
             }
         }
 
-        public static async Task AcceptWebSocketClientsAsync(HttpContext hc, Func<Task> n, ISContext sctx) {
+        public static async Task acceptWebSocketClientsAsync(HttpContext hc, Func<Task> n, ISContext sctx) {
             if (!hc.WebSockets.IsWebSocketRequest)
                 return;
 
             var ws = await hc.WebSockets.AcceptWebSocketAsync();
             var h = new WebSocketHandler(sctx, ws);
-            await h.EventLoopAsync();
+            await h.eventLoopAsync();
         }
 
-        public static void Map(IApplicationBuilder app, ISContext context) {
+        public static void map(IApplicationBuilder app, ISContext context) {
             // DI for websocket handlers
-            realtimeCookieJar = new RealtimeBootstrapper()
+            _realtimeCookieJar = new RealtimeBootstrapper()
                 .ConfigureRealtimeHandlerContainer(context);
-            app.Use(async (hc, n) => await WebSocketHandler.AcceptWebSocketClientsAsync(hc, n, context));
+            app.Use(async (hc, n) => await WebSocketHandler.acceptWebSocketClientsAsync(hc, n, context));
         }
     }
 }

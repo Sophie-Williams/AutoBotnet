@@ -5,25 +5,25 @@ using Speercs.Server.Game.Scripting;
 
 namespace Speercs.Server.Game {
     public class SGameBootstrapper : DependencyObject {
-        public TickSystem TickSystem { get; }
+        public TickSystem tickSystem { get; }
 
-        public CancellationToken TickSystemCancelToken { get; }
+        public CancellationToken tickSystemCancelToken { get; }
 
-        public GameTickHandler TickHandler { get; }
+        public GameTickHandler tickHandler { get; }
 
         public SGameBootstrapper(ISContext context) : base(context) {
             // Create tick handler
-            TickHandler = new GameTickHandler(context);
+            tickHandler = new GameTickHandler(context);
             // Create tick system
-            TickSystem = new TickSystem(context.Configuration.Tickrate,
-                context.Configuration.UseDynamicTickrate,
-                TickHandler.OnTickAsync);
-            TickSystemCancelToken = new CancellationTokenSource().Token;
+            tickSystem = new TickSystem(context.configuration.tickrate,
+                context.configuration.useDynamicTickrate,
+                tickHandler.onTickAsync);
+            tickSystemCancelToken = new CancellationTokenSource().Token;
         }
 
-        public void OnStartup() {
+        public void onStartup() {
             // start tick system
-            var tickLoopTask = TickSystem.StartAsync(TickSystemCancelToken);
+            var tickLoopTask = tickSystem.startAsync(tickSystemCancelToken);
         }
     }
 }

@@ -4,24 +4,24 @@ using System.Threading.Tasks;
 
 namespace Speercs.Server.Game.Subsystems {
     public class TickSystem {
-        public int Delay { get; }
+        public int delay { get; }
 
-        public bool AutoScaleTicks { get; }
+        public bool autoScaleTicks { get; }
 
-        public Func<Task> TickAction { get; }
+        public Func<Task> tickAction { get; }
 
         public TickSystem(int delay, bool autoScaleTicks, Func<Task> tickAction) {
-            Delay = delay;
-            AutoScaleTicks = autoScaleTicks;
-            TickAction = tickAction;
+            this.delay = delay;
+            this.autoScaleTicks = autoScaleTicks;
+            this.tickAction = tickAction;
         }
 
-        public async Task StartAsync(CancellationToken ctok) {
+        public async Task startAsync(CancellationToken ctok) {
             while (!ctok.IsCancellationRequested) {
                 // wait
-                await Task.Delay(Delay);
+                await Task.Delay(delay);
                 // run action
-                await TickAction();
+                await tickAction();
             }
         }
     }

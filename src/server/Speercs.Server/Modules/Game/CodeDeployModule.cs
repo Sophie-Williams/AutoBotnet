@@ -10,13 +10,13 @@ namespace Speercs.Server.Modules.Game {
     public class CodeDeployModule : UserApiModule {
         public CodeDeployModule(ISContext serverContext) : base("/game/code", serverContext) {
             Get("/get", _ => {
-                var program = PlayerDataService[CurrentUser.Identifier].Program;
-                return Response.AsJsonNet(program);
+                var program = playerDataService[currentUser.identifier].program;
+                return Response.asJsonNet(program);
             });
 
             Patch("/reload", _ => {
                 // reload cached engine for that user
-                ServerContext.Executors.ReloadExecutor(CurrentUser.Identifier);
+                base.serverContext.executors.reloadExecutor(currentUser.identifier);
 
                 return HttpStatusCode.OK;
             });
@@ -25,19 +25,19 @@ namespace Speercs.Server.Modules.Game {
                 var req = this.Bind<CodeDeployRequest>();
 
                 // Validate code size (for security reasons)
-                if (req.Source.Length > ServerContext.Configuration.CodeSizeLimit) {
+                if (req.source.Length > base.serverContext.configuration.codeSizeLimit) {
                     return HttpStatusCode.UnprocessableEntity;
                 }
 
-                if (CurrentUser.AnalyticsEnabled) {
-                    var analyticsObject = ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier];
-                    analyticsObject.CodeDeploys++;
-                    var numLines = (ulong) req.Source.Split('\n').Length;
-                    analyticsObject.LineCount = numLines;
-                    analyticsObject.TotalLineCount += numLines;
+                if (currentUser.analyticsEnabled) {
+                    var analyticsObject = base.serverContext.appState.userAnalyticsData[currentUser.identifier];
+                    analyticsObject.codeDeploys++;
+                    var numLines = (ulong) req.source.Split('\n').Length;
+                    analyticsObject.lineCount = numLines;
+                    analyticsObject.totalLineCount += numLines;
                 }
 
-                PlayerDataService.DeployProgram(CurrentUser.Identifier, new UserProgram(req.Source));
+                playerDataService.deployProgram(currentUser.identifier, new UserProgram(req.source));
                 return HttpStatusCode.OK;
             });
         }

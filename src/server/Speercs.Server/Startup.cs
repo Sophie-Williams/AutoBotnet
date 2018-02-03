@@ -16,88 +16,88 @@ using System.Runtime.Loader;
 
 namespace Speercs.Server {
     public class Startup {
-        private const string ConfigFileName = "speercs.json";
-        private const string StateStorageDatabaseFileName = "speercs_state.lidb";
-        private readonly IConfigurationRoot fileConfig;
+        private const string config_file_name = "speercs.json";
+        private const string state_storage_database_file_name = "speercs_state.lidb";
+        private readonly IConfigurationRoot _fileConfig;
 
-        private string ClientAppPath = "ClientApp/";
+        private string _clientAppPath = "ClientApp/";
 
-        public SGameBootstrapper GameBootstrapper { get; private set; }
+        public SGameBootstrapper gameBootstrapper { get; private set; }
 
         public Startup(IHostingEnvironment env) {
-            if (!File.Exists(ConfigFileName)) {
+            if (!File.Exists(config_file_name)) {
                 try {
                     // Create config file
-                    Console.WriteLine($"Configuration file {ConfigFileName} does not exist, creating default.");
+                    Console.WriteLine($"Configuration file {config_file_name} does not exist, creating default.");
                     var confFileContent = JsonConvert.SerializeObject(new SConfiguration(), Formatting.Indented);
-                    File.WriteAllText(ConfigFileName, confFileContent);
+                    File.WriteAllText(config_file_name, confFileContent);
                 } catch {
-                    Console.WriteLine($"Could not write to {ConfigFileName}");
+                    Console.WriteLine($"Could not write to {config_file_name}");
                 }
             }
 
             var builder = new ConfigurationBuilder()
-                .AddJsonFile(ConfigFileName,
+                .AddJsonFile(config_file_name,
                     optional: true,
                     reloadOnChange: true)
                 .SetBasePath(env.ContentRootPath);
 
-            fileConfig = builder.Build();
+            _fileConfig = builder.Build();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services) {
+        public void configureServices(IServiceCollection services) {
             // Adds services required for using options.
             services.AddOptions();
 
             // Register IConfiguration
-            services.Configure<SConfiguration>(fileConfig);
+            services.Configure<SConfiguration>(_fileConfig);
 
             // Add AspNetCore MVC
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime,
+        public void configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime,
             IHostingEnvironment env, ILoggerFactory loggerFactory) {
             loggerFactory.AddConsole();
 
             // create default configuration
             var serverConfig = new SConfiguration();
             // bind configuration
-            fileConfig.Bind(serverConfig);
+            _fileConfig.Bind(serverConfig);
 
             // build context
-            var context = SConfigurator.CreateContext(serverConfig);
+            var context = SConfigurator.createContext(serverConfig);
 
             // load plugins
             // load builtin; TODO: Make some builtin plugins external, load external plugins
-            new BuiltinPluginBootstrapper(context).LoadAll();
+            new BuiltinPluginBootstrapper(context).loadAll();
 
             // load persistent state
-            SConfigurator.LoadState(context, StateStorageDatabaseFileName);
+            SConfigurator.loadState(context, state_storage_database_file_name);
 
             // load database
-            context.ConnectDatabase();
+            context.connectDatabase();
 
             // register application stop handler
             // AssemblyLoadContext.Default.Unloading += (c) => OnUnload(context);
-            applicationLifetime.ApplicationStopping.Register(() => OnUnload(context));
+            applicationLifetime.ApplicationStopping.Register(() => onUnload(context));
 
             // map websockets
             app.UseWebSockets();
-            app.Map("/ws", (ab) => WebSocketHandler.Map(ab, context));
+            app.Map("/ws", (ab) => WebSocketHandler.map(ab, context));
 
-            ClientAppPath = Path.Combine(Directory.GetCurrentDirectory(), ClientAppPath);
+            _clientAppPath = Path.Combine(Directory.GetCurrentDirectory(), _clientAppPath);
 
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
-                if (context.Configuration.EnableDevelopmentWebInterface) {
+                if (context.configuration.enableDevelopmentWebInterface) {
                     app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
                         HotModuleReplacement = true,
-                        ProjectPath = ClientAppPath,
-                        ConfigFile = $"{ClientAppPath}webpack.config.js"
+                        ProjectPath = _clientAppPath,
+                        ConfigFile = $"{_clientAppPath}webpack.config.js"
                     });
                 }
             } else {
@@ -128,14 +128,14 @@ namespace Speercs.Server {
             });
 
             // start game services
-            GameBootstrapper = new SGameBootstrapper(context);
-            GameBootstrapper.OnStartup();
+            gameBootstrapper = new SGameBootstrapper(context);
+            gameBootstrapper.onStartup();
         }
 
-        private void OnUnload(ISContext sctx) {
+        private void onUnload(ISContext sctx) {
             Console.WriteLine("Server unloading, force-persisting state data.");
             // persist on unload
-            sctx.AppState.Persist(true);
+            sctx.appState.persist(true);
         }
     }
 }

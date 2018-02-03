@@ -2,12 +2,12 @@ using ImageSharp;
 
 namespace Speercs.Server.Extensibility {
     public interface ITile {
-        bool IsWalkable();
+        bool isWalkable();
 
-        bool IsMinable();
+        bool isMinable();
 
-        char GetTileChar();
+        char getTileChar();
 
-        Rgba32 GetColor();
+        Rgba32 getColor();
     }
 }

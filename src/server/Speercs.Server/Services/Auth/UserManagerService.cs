@@ -13,72 +13,72 @@ using Speercs.Server.Models.Game.Program;
 
 namespace Speercs.Server.Services.Auth {
     public class UserManagerService : DependencyObject {
-        public const string RegisteredUsersKey = "r_users";
-        private LiteCollection<RegisteredUser> userCollection;
+        public const string REGISTERED_USERS_KEY = "r_users";
+        private LiteCollection<RegisteredUser> _userCollection;
 
         public UserManagerService(ISContext serverContext) : base(serverContext) {
-            userCollection = serverContext.Database.GetCollection<RegisteredUser>(RegisteredUsersKey);
+            _userCollection = serverContext.database.GetCollection<RegisteredUser>(REGISTERED_USERS_KEY);
         }
 
-        public async Task<RegisteredUser> RegisterUserAsync(UserRegistrationRequest regRequest) {
-            if (await FindUserByUsernameAsync(regRequest.Username) != null)
+        public async Task<RegisteredUser> registerUserAsync(UserRegistrationRequest regRequest) {
+            if (await findUserByUsernameAsync(regRequest.username) != null)
                 throw new SecurityException("A user with the same username already exists!");
             return await Task.Run(async () => {
                 // Calculate cryptographic info
-                var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
+                var cryptoConf = PasswordCryptoConfiguration.createDefault();
                 var cryptoHelper = new AuthCryptoHelper(cryptoConf);
-                var pwSalt = cryptoHelper.GenerateSalt();
+                var pwSalt = cryptoHelper.generateSalt();
                 var encryptedPassword =
-                    cryptoHelper.CalculateUserPasswordHash(regRequest.Password, pwSalt);
+                    cryptoHelper.calculateUserPasswordHash(regRequest.password, pwSalt);
                 // Create user
                 var user = new RegisteredUser {
-                    Identifier = Guid.NewGuid().ToString(),
-                    Username = regRequest.Username,
-                    Email = regRequest.Email,
-                    ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength),
-                    Crypto = new ItemCrypto {
-                        Salt = pwSalt,
-                        Conf = cryptoConf,
-                        Key = encryptedPassword
+                    identifier = Guid.NewGuid().ToString(),
+                    username = regRequest.username,
+                    email = regRequest.email,
+                    apiKey = StringUtils.secureRandomString(AuthCryptoHelper.DEFAULT_API_KEY_LENGTH),
+                    crypto = new ItemCrypto {
+                        salt = pwSalt,
+                        conf = cryptoConf,
+                        key = encryptedPassword
                     },
-                    Enabled = true,
-                    AnalyticsEnabled = false,
+                    enabled = true,
+                    analyticsEnabled = false,
                 };
 
                 // Add the user to the database
-                userCollection.Insert(user);
+                _userCollection.Insert(user);
 
                 // Index database
-                userCollection.EnsureIndex(x => x.Identifier);
-                userCollection.EnsureIndex(x => x.ApiKey);
-                userCollection.EnsureIndex(x => x.Username);
+                _userCollection.EnsureIndex(x => x.identifier);
+                _userCollection.EnsureIndex(x => x.apiKey);
+                _userCollection.EnsureIndex(x => x.username);
 
                 // Create additional data containers
                 // create team data
-                ServerContext.AppState.PlayerData[user.Identifier] = new UserTeam {
-                    UserIdentifier = user.Identifier
+                serverContext.appState.playerData[user.identifier] = new UserTeam {
+                    userIdentifier = user.identifier
                 };
 
                 // create persistent data
-                var persistentDataService = new PlayerPersistentDataService(ServerContext);
-                await persistentDataService.CreatePersistentDataAsync(user.Identifier);
+                var persistentDataService = new PlayerPersistentDataService(serverContext);
+                await persistentDataService.createPersistentDataAsync(user.identifier);
 
-                ServerContext.AppState.UserAnalyticsData[user.Identifier] = new UserAnalytics();
+                serverContext.appState.userAnalyticsData[user.identifier] = new UserAnalytics();
 
                 return user;
             });
         }
 
-        public async Task<RegisteredUser> FindUserByApiKeyAsync(string apikey) {
-            return await Task.Run(() => (userCollection.FindOne(x => x.ApiKey == apikey)));
+        public async Task<RegisteredUser> findUserByApiKeyAsync(string apikey) {
+            return await Task.Run(() => (_userCollection.FindOne(x => x.apiKey == apikey)));
         }
 
-        public async Task<RegisteredUser> FindUserByUsernameAsync(string username) {
-            return await Task.Run(() => (userCollection.FindOne(x => x.Username == username)));
+        public async Task<RegisteredUser> findUserByUsernameAsync(string username) {
+            return await Task.Run(() => (_userCollection.FindOne(x => x.username == username)));
         }
 
-        public async Task<RegisteredUser> FindUserByIdentifierAsync(string id) {
-            return await Task.Run(() => (userCollection.FindOne(x => x.Identifier == id)));
+        public async Task<RegisteredUser> findUserByIdentifierAsync(string id) {
+            return await Task.Run(() => (_userCollection.FindOne(x => x.identifier == id)));
         }
 
         /// <summary>
@@ -86,77 +86,77 @@ namespace Speercs.Server.Services.Auth {
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateUserInDatabaseAsync(RegisteredUser user) {
-            return await Task.Run(() => userCollection.Update(user));
+        public async Task<bool> updateUserInDatabaseAsync(RegisteredUser user) {
+            return await Task.Run(() => _userCollection.Update(user));
         }
 
-        public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user) {
+        public async Task<bool> checkPasswordAsync(string password, RegisteredUser user) {
             var ret = false;
-            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
-            await lockEntry.WithConcurrentReadAsync(Task.Run(() => {
+            var lockEntry = serverContext.serviceTable.getOrCreate(user.username).userLock;
+            await lockEntry.withConcurrentReadAsync(Task.Run(() => {
                 //Calculate hash and compare
-                var cryptoHelper = new AuthCryptoHelper(user.Crypto.Conf);
+                var cryptoHelper = new AuthCryptoHelper(user.crypto.conf);
                 var pwKey =
-                    cryptoHelper.CalculateUserPasswordHash(password, user.Crypto.Salt);
-                ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.Crypto.Key);
+                    cryptoHelper.calculateUserPasswordHash(password, user.crypto.salt);
+                ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.crypto.key);
             }));
             return ret;
         }
 
-        public async Task ChangeUserPasswordAsync(RegisteredUser user, string newPassword) {
-            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
-            await lockEntry.WithExclusiveWriteAsync(Task.Run(async () => {
+        public async Task changeUserPasswordAsync(RegisteredUser user, string newPassword) {
+            var lockEntry = serverContext.serviceTable.getOrCreate(user.username).userLock;
+            await lockEntry.withExclusiveWriteAsync(Task.Run(async () => {
                 // Recompute password crypto
-                var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
+                var cryptoConf = PasswordCryptoConfiguration.createDefault();
                 var cryptoHelper = new AuthCryptoHelper(cryptoConf);
-                var pwSalt = cryptoHelper.GenerateSalt();
+                var pwSalt = cryptoHelper.generateSalt();
                 var encryptedPassword =
-                    cryptoHelper.CalculateUserPasswordHash(newPassword, pwSalt);
-                user.Crypto = new ItemCrypto {
-                    Salt = pwSalt,
-                    Conf = cryptoConf,
-                    Key = encryptedPassword
+                    cryptoHelper.calculateUserPasswordHash(newPassword, pwSalt);
+                user.crypto = new ItemCrypto {
+                    salt = pwSalt,
+                    conf = cryptoConf,
+                    key = encryptedPassword
                 };
                 // Save changes
-                await UpdateUserInDatabaseAsync(user);
+                await updateUserInDatabaseAsync(user);
             }));
         }
 
-        public async Task DeleteUserAsync(string userId) {
+        public async Task deleteUserAsync(string userId) {
             await Task.Run(async () => {
-                userCollection.Delete(x => x.Identifier == userId);
+                _userCollection.Delete(x => x.identifier == userId);
 
                 // purge additional data
                 // remove team data
-                ServerContext.AppState.PlayerData.Remove(userId);
+                serverContext.appState.playerData.Remove(userId);
 
                 // remove persistent data
-                var persistentDataService = new PlayerPersistentDataService(ServerContext);
-                await persistentDataService.RemovePersistentDataAsync(userId);
+                var persistentDataService = new PlayerPersistentDataService(serverContext);
+                await persistentDataService.removePersistentDataAsync(userId);
 
-                ServerContext.AppState.UserAnalyticsData.Remove(userId);
+                serverContext.appState.userAnalyticsData.Remove(userId);
 
                 // TODO: Purge all entities
             });
         }
 
-        public async Task GenerateNewApiKeyAsync(RegisteredUser user) {
-            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
-            await lockEntry.WithExclusiveWriteAsync(Task.Run(async () => {
+        public async Task generateNewApiKeyAsync(RegisteredUser user) {
+            var lockEntry = serverContext.serviceTable.getOrCreate(user.username).userLock;
+            await lockEntry.withExclusiveWriteAsync(Task.Run(async () => {
                 // Recompute key
-                user.ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength);
-                await UpdateUserInDatabaseAsync(user);
+                user.apiKey = StringUtils.secureRandomString(AuthCryptoHelper.DEFAULT_API_KEY_LENGTH);
+                await updateUserInDatabaseAsync(user);
             }));
         }
 
-        public async Task SetEnabledAsync(RegisteredUser user, bool status) {
-            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
-            await lockEntry.ObtainExclusiveWriteAsync();
-            user.Enabled = status;
-            await UpdateUserInDatabaseAsync(user);
-            lockEntry.ReleaseExclusiveWrite();
+        public async Task setEnabledAsync(RegisteredUser user, bool status) {
+            var lockEntry = serverContext.serviceTable.getOrCreate(user.username).userLock;
+            await lockEntry.obtainExclusiveWriteAsync();
+            user.enabled = status;
+            await updateUserInDatabaseAsync(user);
+            lockEntry.releaseExclusiveWrite();
         }
 
-        public int RegisteredUserCount => userCollection.Count();
+        public int registeredUserCount => _userCollection.Count();
     }
 }

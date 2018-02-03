@@ -10,30 +10,30 @@ namespace Speercs.Server.Utilities {
     /// <typeparam name="TInput">The input type to each pipeline handler</typeparam>
     /// <typeparam name="TResult">The result of the pipeline handler</typeparam>
     public class Pipelines<TInput, TResult> {
-        protected List<Func<TInput, Task<TResult>>> Handlers { get; } = new List<Func<TInput, Task<TResult>>>();
+        protected List<Func<TInput, Task<TResult>>> handlers { get; } = new List<Func<TInput, Task<TResult>>>();
 
-        public void AddItemToStart(Func<TInput, Task<TResult>> handler) {
-            lock (Handlers) {
-                Handlers.Insert(0, handler);
+        public void addItemToStart(Func<TInput, Task<TResult>> handler) {
+            lock (handlers) {
+                handlers.Insert(0, handler);
             }
         }
 
-        public void AddItemToEnd(Func<TInput, Task<TResult>> handler) {
-            lock (Handlers) {
-                Handlers.Add(handler);
+        public void addItemToEnd(Func<TInput, Task<TResult>> handler) {
+            lock (handlers) {
+                handlers.Add(handler);
             }
         }
 
         public IEnumerable<Func<TInput, Task<TResult>>> GetHandlers() {
-            lock (Handlers) {
-                foreach (var handler in Handlers) {
+            lock (handlers) {
+                foreach (var handler in handlers) {
                     yield return handler;
                 }
             }
         }
 
-        public int HandlerCount => Handlers.Count;
+        public int handlerCount => handlers.Count;
 
-        public bool UnregisterHandler(Func<TInput, Task<TResult>> pipelineHandler) => Handlers.Remove(pipelineHandler);
+        public bool UnregisterHandler(Func<TInput, Task<TResult>> pipelineHandler) => handlers.Remove(pipelineHandler);
     }
 }

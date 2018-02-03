@@ -12,39 +12,39 @@ namespace Speercs.Server.Configuration {
     /// </summary>
     public class SAppState : DatabaseObject {
         [BsonIgnore]
-        public LiteCollection<SAppState> PersistenceMedium { get; set; }
+        public LiteCollection<SAppState> persistenceMedium { get; set; }
 
         /// <summary>
         /// Persist the data container to disk. Call QueuePersist() if requesting a persist.
         /// </summary>
         /// <returns></returns>
         [BsonIgnore]
-        public Action<bool> Persist { get; set; }
+        public Action<bool> persist { get; set; }
 
 
         [BsonIgnore]
-        public bool PersistNeeded { get; set; }
+        public bool persistNeeded { get; set; }
 
         [BsonIgnore]
-        public bool PersistAvailable { get; set; } = true;
+        public bool persistAvailable { get; set; } = true;
 
         /// <summary>
         /// Call this to queue a persist.
         /// </summary>
-        public void QueuePersist() {
-            PersistNeeded = true;
+        public void queuePersist() {
+            persistNeeded = true;
         }
 
-        public Dictionary<string, UserTeam> PlayerData { get; set; } = new Dictionary<string, UserTeam>();
+        public Dictionary<string, UserTeam> playerData { get; set; } = new Dictionary<string, UserTeam>();
 
-        public List<string> InviteKeys { get; set; } = new List<string>();
+        public List<string> inviteKeys { get; set; } = new List<string>();
 
-        public WorldMap WorldMap { get; set; } = new WorldMap();
+        public WorldMap worldMap { get; set; } = new WorldMap();
 
-        public EntityBag Entities { get; set; } = new EntityBag();
+        public EntityBag entities { get; set; } = new EntityBag();
 
-        public Dictionary<string, UserAnalytics> UserAnalyticsData = new Dictionary<string, UserAnalytics>();
+        public Dictionary<string, UserAnalytics> userAnalyticsData = new Dictionary<string, UserAnalytics>();
 
-        public ulong TickCount { get; set; }
+        public ulong tickCount { get; set; }
     }
 }

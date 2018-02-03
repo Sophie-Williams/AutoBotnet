@@ -1,7 +1,7 @@
 namespace Speercs.Server.Models.Requests {
     public class UserKeyResetRequest {
-        public string Username { get; set; }
+        public string username { get; set; }
 
-        public string ApiKey { get; set; }
+        public string apiKey { get; set; }
     }
 }

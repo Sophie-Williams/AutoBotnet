@@ -9,31 +9,31 @@ using Speercs.Server.Services.Auth;
 namespace Speercs.Server.Modules.User {
     public class UserMetadataModule : UserApiModule {
         public UserMetadataModule(ISContext serverContext) : base("/user/meta", serverContext) {
-            Get("/", _ => Response.AsJsonNet(new SelfUser(CurrentUser)));
+            Get("/", _ => Response.asJsonNet(new SelfUser(currentUser)));
 
             Put("/", async _ => {
-                var userManager = new UserManagerService(ServerContext);
+                var userManager = new UserManagerService(base.serverContext);
                 var req = this.Bind<UserModificationRequest>();
-                var newUser = CurrentUser;
-                newUser.Email = req.Email;
-                newUser.AnalyticsEnabled = req.AnalyticsEnabled;
-                await userManager.UpdateUserInDatabaseAsync(newUser);
-                return Response.AsJsonNet(new SelfUser(newUser));
+                var newUser = currentUser;
+                newUser.email = req.email;
+                newUser.analyticsEnabled = req.analyticsEnabled;
+                await userManager.updateUserInDatabaseAsync(newUser);
+                return Response.asJsonNet(new SelfUser(newUser));
             });
 
             Get("/analytics",
-                _ => Response.AsJsonNet(ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier]));
+                _ => Response.asJsonNet(base.serverContext.appState.userAnalyticsData[currentUser.identifier]));
 
             Delete("/analytics", _ => {
-                ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier] = new UserAnalytics();
+                base.serverContext.appState.userAnalyticsData[currentUser.identifier] = new UserAnalytics();
                 return HttpStatusCode.OK;
             });
 
             Get("/player/{id}", async args => {
-                var user = await UserManager.FindUserByIdentifierAsync((string) args.id);
+                var user = await userManager.findUserByIdentifierAsync((string) args.id);
                 if (user == null) return HttpStatusCode.NotFound;
                 var publicProfile = new PublicUser(user);
-                return Response.AsJsonNet(publicProfile);
+                return Response.asJsonNet(publicProfile);
             });
         }
     }

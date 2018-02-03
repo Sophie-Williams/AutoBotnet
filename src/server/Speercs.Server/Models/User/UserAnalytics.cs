@@ -4,24 +4,24 @@ using System;
 namespace Speercs.Server.Models.User {
     public class UserAnalytics {
         [JsonProperty("playtime")]
-        public ulong Playtime { get; set; }
+        public ulong playtime { get; set; }
 
         [JsonProperty("codeDeploys")]
-        public ulong CodeDeploys { get; set; }
+        public ulong codeDeploys { get; set; }
 
         [JsonProperty("lineCount")]
-        public ulong LineCount { get; set; }
+        public ulong lineCount { get; set; }
 
         [JsonProperty("totalLineCount")]
-        public ulong TotalLineCount { get; set; }
+        public ulong totalLineCount { get; set; }
 
         [JsonProperty("apiRequests")]
-        public ulong ApiRequests { get; set; }
+        public ulong apiRequests { get; set; }
 
         [JsonProperty("lastRequest")]
-        public ulong LastRequest { get; set; }
+        public ulong lastRequest { get; set; }
 
         [JsonProperty("lastConnection")]
-        public ulong LastConnection { get; set; }
+        public ulong lastConnection { get; set; }
     }
 }

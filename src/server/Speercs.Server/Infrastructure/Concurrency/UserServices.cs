@@ -1,15 +1,15 @@
 namespace Speercs.Server.Infrastructure.Concurrency {
     public class UserServices {
-        public string Username { get; }
+        public string username { get; }
 
         /// <summary>
         /// Read/write concurrency lock system
         /// </summary>
-        public UserLock UserLock { get; }
+        public UserLock userLock { get; }
 
         public UserServices(string username) {
-            Username = username;
-            UserLock = new UserLock();
+            this.username = username;
+            userLock = new UserLock();
         }
     }
 }

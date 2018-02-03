@@ -9,46 +9,46 @@ using Speercs.Server.Infrastructure.Push;
 namespace Speercs.Server.Configuration {
     public class SContext : ISContext {
         // Configuration parameters
-        public SConfiguration Configuration { get; }
+        public SConfiguration configuration { get; }
 
         // Database access
-        public LiteDatabase Database { get; private set; }
+        public LiteDatabase database { get; private set; }
 
         // Service table
-        public UserServiceTable ServiceTable { get; }
+        public UserServiceTable serviceTable { get; }
 
         // Persistent State
-        public SAppState AppState { get; set; }
+        public SAppState appState { get; set; }
 
         // Plugin/moddable stuff
-        public CookieJar ExtensibilityContainer { get; }
+        public CookieJar extensibilityContainer { get; }
 
-        public PluginLoader<ISpeercsPlugin> PluginLoader { get; }
+        public PluginLoader<ISpeercsPlugin> pluginLoader { get; }
 
-        public NotificationPipeline NotificationPipeline { get; }
+        public NotificationPipeline notificationPipeline { get; }
 
-        public PlayerExecutors Executors { get; private set; }
+        public PlayerExecutors executors { get; private set; }
 
-        public static string Version = Microsoft.Extensions.PlatformAbstractions
+        public static string version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
 
         public SContext(SConfiguration config) {
-            Configuration = config;
-            NotificationPipeline = new NotificationPipeline(this);
-            ServiceTable = new UserServiceTable(this);
-            ExtensibilityContainer = new CookieJar();
-            PluginLoader = new PluginLoader<ISpeercsPlugin>();
+            configuration = config;
+            notificationPipeline = new NotificationPipeline(this);
+            serviceTable = new UserServiceTable(this);
+            extensibilityContainer = new CookieJar();
+            pluginLoader = new PluginLoader<ISpeercsPlugin>();
         }
 
-        public void ConnectDatabase() {
+        public void connectDatabase() {
             // Create database
-            Database = new LiteDatabase(Configuration.DatabaseConfiguration.FileName);
+            database = new LiteDatabase(configuration.databaseConfiguration.fileName);
             // load dependent services
-            LoadDatabaseDependentServices();
+            loadDatabaseDependentServices();
         }
 
-        protected void LoadDatabaseDependentServices() {
-            Executors = new PlayerExecutors(this);
+        protected void loadDatabaseDependentServices() {
+            executors = new PlayerExecutors(this);
         }
     }
 }

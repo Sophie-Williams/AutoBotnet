@@ -3,24 +3,24 @@ using System.Security.Claims;
 
 namespace Speercs.Server.Services.Auth.Security {
     public static class ApiAccessModuleSecurityExtensions {
-        private static Claim AdminClaim = new Claim(ApiAuthenticator.AuthTypeClaimKey, ApiAccessScope.Admin.ToString());
-        private static Claim UserClaim = new Claim(ApiAuthenticator.AuthTypeClaimKey, ApiAccessScope.User.ToString());
+        private static Claim _adminClaim = new Claim(ApiAuthenticator.AUTH_TYPE_CLAIM_KEY, ApiAccessScope.Admin.ToString());
+        private static Claim _userClaim = new Claim(ApiAuthenticator.AUTH_TYPE_CLAIM_KEY, ApiAccessScope.User.ToString());
 
-        public static void RequiresUserAuthentication(this NancyModule module) {
-            InjectAuthenticationHook(module, UserClaim);
+        public static void requiresUserAuthentication(this NancyModule module) {
+            injectAuthenticationHook(module, _userClaim);
         }
 
-        public static void RequiresAdminAuthentication(this NancyModule module) {
-            InjectAuthenticationHook(module, AdminClaim);
+        public static void requiresAdminAuthentication(this NancyModule module) {
+            injectAuthenticationHook(module, _adminClaim);
         }
 
-        public static void InjectAuthenticationHook(NancyModule module, Claim requiredClaim) {
+        public static void injectAuthenticationHook(NancyModule module, Claim requiredClaim) {
             module.Before.AddItemToEndOfPipeline((ctx) => {
                 if (ctx.CurrentUser == null) {
                     return HttpStatusCode.Unauthorized;
                 }
 
-                if (ctx.CurrentUser.EnsureClaim(requiredClaim)) {
+                if (ctx.CurrentUser.ensureClaim(requiredClaim)) {
                     return null;
                 }
 
@@ -34,7 +34,7 @@ namespace Speercs.Server.Services.Auth.Security {
         /// <param name="principal"></param>
         /// <param name="claim"></param>
         /// <returns></returns>
-        public static bool EnsureClaim(this ClaimsPrincipal principal, Claim claim) {
+        public static bool ensureClaim(this ClaimsPrincipal principal, Claim claim) {
             return principal.HasClaim(claim.Type, claim.Value);
         }
     }

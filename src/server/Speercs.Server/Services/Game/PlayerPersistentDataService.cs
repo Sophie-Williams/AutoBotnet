@@ -9,46 +9,46 @@ using Newtonsoft.Json.Linq;
 
 namespace Speercs.Server.Services.Game {
     public class PlayerPersistentDataService : DependencyObject {
-        public const string PlayerDataKey = "player_persistent_data";
-        private LiteCollection<UserPersistentData> persistentPlayerDataCollection;
+        public const string PLAYER_DATA_KEY = "player_persistent_data";
+        private LiteCollection<UserPersistentData> _persistentPlayerDataCollection;
 
         public PlayerPersistentDataService(ISContext serverContext) : base(serverContext) {
-            persistentPlayerDataCollection = serverContext.Database.GetCollection<UserPersistentData>(PlayerDataKey);
+            _persistentPlayerDataCollection = serverContext.database.GetCollection<UserPersistentData>(PLAYER_DATA_KEY);
         }
 
-        public UserPersistentData this[string ownerId] => FindPersistentData(ownerId);
+        public UserPersistentData this[string ownerId] => findPersistentData(ownerId);
 
-        private UserPersistentData FindPersistentData(string ownerId) {
-            return persistentPlayerDataCollection.FindOne(x => x.OwnerId == ownerId);
+        private UserPersistentData findPersistentData(string ownerId) {
+            return _persistentPlayerDataCollection.FindOne(x => x.ownerId == ownerId);
         }
 
-        public async Task CreatePersistentDataAsync(string ownerId) {
+        public async Task createPersistentDataAsync(string ownerId) {
             await Task.Run(() => {
                 var persistentData = new UserPersistentData(ownerId) {
-                    Program = new UserProgram(string.Empty)
+                    program = new UserProgram(string.Empty)
                 };
-                persistentPlayerDataCollection.Upsert(persistentData);
-                persistentPlayerDataCollection.EnsureIndex(x => x.OwnerId);
+                _persistentPlayerDataCollection.Upsert(persistentData);
+                _persistentPlayerDataCollection.EnsureIndex(x => x.ownerId);
             });
         }
 
-        public async Task RemovePersistentDataAsync(string ownerId) {
+        public async Task removePersistentDataAsync(string ownerId) {
             await Task.Run(() => {
-                persistentPlayerDataCollection.Delete(x => x.OwnerId == ownerId);
+                _persistentPlayerDataCollection.Delete(x => x.ownerId == ownerId);
             });
         }
 
-        public void DeployProgram(string ownerId, UserProgram program) {
+        public void deployProgram(string ownerId, UserProgram program) {
             // update the user's code in the database
-            var data = FindPersistentData(ownerId);
-            data.Program = program;
-            persistentPlayerDataCollection.Update(data);
+            var data = findPersistentData(ownerId);
+            data.program = program;
+            _persistentPlayerDataCollection.Update(data);
 
             // reload the engine to apply changes
-            ServerContext.Executors.ReloadExecutor(ownerId);
+            serverContext.executors.reloadExecutor(ownerId);
         }
 
-        public Queue<JToken> RetrieveNotificationQueue(string userIdentifier) =>
-            this[userIdentifier].QueuedNotifications;
+        public Queue<JToken> retrieveNotificationQueue(string userIdentifier) =>
+            this[userIdentifier].queuedNotifications;
     }
 }

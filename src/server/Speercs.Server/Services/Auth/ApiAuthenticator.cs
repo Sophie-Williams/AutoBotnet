@@ -6,18 +6,18 @@ using System;
 
 namespace Speercs.Server.Services.Auth {
     public class ApiAuthenticator : DependencyObject {
-        public const string AuthTypeClaimKey = "auth_type";
+        public const string AUTH_TYPE_CLAIM_KEY = "auth_type";
 
-        public const string UserIdentifierClaimKey = "user_id";
+        public const string USER_IDENTIFIER_CLAIM_KEY = "user_id";
 
         public ApiAuthenticator(ISContext context) : base(context) { }
 
-        public ClaimsPrincipal ResolveIdentity(string apikey) {
+        public ClaimsPrincipal resolveIdentity(string apikey) {
             // check admin keys
-            var adminKey = ServerContext.Configuration.AdminKeys.FirstOrDefault(x => x == apikey);
+            var adminKey = serverContext.configuration.adminKeys.FirstOrDefault(x => x == apikey);
             if (adminKey != null) {
                 var adminAuthClaims = new List<Claim>() {
-                    new Claim(AuthTypeClaimKey, ApiAccessScope.Admin.ToString()),
+                    new Claim(AUTH_TYPE_CLAIM_KEY, ApiAccessScope.Admin.ToString()),
                 };
                 var adminAuthIdentity = new ClaimsIdentity(adminAuthClaims);
                 var adminIdentity = new ClaimsPrincipal(adminAuthIdentity);
@@ -25,18 +25,18 @@ namespace Speercs.Server.Services.Auth {
             }
 
             // get user identity
-            var userManager = new UserManagerService(ServerContext);
-            var user = userManager.FindUserByApiKeyAsync(apikey).Result;
+            var userManager = new UserManagerService(serverContext);
+            var user = userManager.findUserByApiKeyAsync(apikey).Result;
             if (user == null) return null;
-            if (user.AnalyticsEnabled) {
-                var analyticsObject = ServerContext.AppState.UserAnalyticsData[user.Identifier];
-                analyticsObject.ApiRequests++;
-                analyticsObject.LastRequest = (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            if (user.analyticsEnabled) {
+                var analyticsObject = serverContext.appState.userAnalyticsData[user.identifier];
+                analyticsObject.apiRequests++;
+                analyticsObject.lastRequest = (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             }
 
             var userAuthClaims = new List<Claim>() {
-                new Claim(AuthTypeClaimKey, ApiAccessScope.User.ToString()),
-                new Claim(UserIdentifierClaimKey, user.Identifier)
+                new Claim(AUTH_TYPE_CLAIM_KEY, ApiAccessScope.User.ToString()),
+                new Claim(USER_IDENTIFIER_CLAIM_KEY, user.identifier)
             };
             var userAuthIdentity = new ClaimsIdentity(userAuthClaims);
             var userIdentity = new ClaimsPrincipal(userAuthIdentity);

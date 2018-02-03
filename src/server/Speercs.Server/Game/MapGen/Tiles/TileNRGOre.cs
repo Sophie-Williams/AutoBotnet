@@ -2,13 +2,13 @@ using ImageSharp;
 using Speercs.Server.Extensibility;
 
 namespace Speercs.Server.Game.MapGen.Tiles {
-    public class TileNRGOre : ITile {
-        public bool IsWalkable() => false;
+    public class TileNrgOre : ITile {
+        public bool isWalkable() => false;
 
-        public bool IsMinable() => true;
+        public bool isMinable() => true;
 
-        public char GetTileChar() => '*';
+        public char getTileChar() => '*';
 
-        public Rgba32 GetColor() => Rgba32.Gold;
+        public Rgba32 getColor() => Rgba32.Gold;
     }
 }

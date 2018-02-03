@@ -5,13 +5,13 @@ namespace Speercs.Server.Game {
     public class BuiltinPluginBootstrapper : DependencyObject {
         public BuiltinPluginBootstrapper(ISContext context) : base(context) { }
 
-        public void LoadAll() {
+        public void loadAll() {
             // Load plugins
-            ServerContext.PluginLoader.Load<DefaultFeaturesPlugin>();
+            serverContext.pluginLoader.load<DefaultFeaturesPlugin>();
 
             // Load containers
-            foreach (var plugin in ServerContext.PluginLoader.Plugins) {
-                plugin.BeforeActivation(ServerContext.ExtensibilityContainer);
+            foreach (var plugin in serverContext.pluginLoader.plugins) {
+                plugin.beforeActivation(serverContext.extensibilityContainer);
             }
         }
     }

@@ -7,20 +7,20 @@ namespace Speercs.Server.Models.Game {
     public class EntityBag {
         public EntityBag() { }
 
-        public Dictionary<string, GameEntity> EntityData { get; set; } = new Dictionary<string, GameEntity>();
+        public Dictionary<string, GameEntity> entityData { get; set; } = new Dictionary<string, GameEntity>();
 
-        public void Insert(GameEntity entity) {
-            this.EntityData.Add(entity.ID, entity);
+        public void insert(GameEntity entity) {
+            this.entityData.Add(entity.id, entity);
         }
 
-        public T Get<T>(string id) where T : GameEntity {
+        public T get<T>(string id) where T : GameEntity {
             GameEntity entity = null;
-            EntityData.TryGetValue(id, out entity);
+            entityData.TryGetValue(id, out entity);
             return entity as T;
         }
 
-        public List<GameEntity> GetAllByUser(UserTeam user) {
-            return user.OwnedEntities.Select(entityID => EntityData[entityID]).ToList();
+        public List<GameEntity> getAllByUser(UserTeam user) {
+            return user.ownedEntities.Select(entityId => entityData[entityId]).ToList();
         }
     }
 }

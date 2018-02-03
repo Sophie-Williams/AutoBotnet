@@ -8,20 +8,20 @@ using Speercs.Server.Infrastructure.Push;
 
 namespace Speercs.Server.Configuration {
     public interface ISContext {
-        LiteDatabase Database { get; }
+        LiteDatabase database { get; }
 
-        SConfiguration Configuration { get; }
+        SConfiguration configuration { get; }
 
-        UserServiceTable ServiceTable { get; }
+        UserServiceTable serviceTable { get; }
 
-        SAppState AppState { get; }
+        SAppState appState { get; }
 
-        CookieJar ExtensibilityContainer { get; }
+        CookieJar extensibilityContainer { get; }
 
-        PluginLoader<ISpeercsPlugin> PluginLoader { get; }
+        PluginLoader<ISpeercsPlugin> pluginLoader { get; }
 
-        NotificationPipeline NotificationPipeline { get; }
+        NotificationPipeline notificationPipeline { get; }
 
-        PlayerExecutors Executors { get; }
+        PlayerExecutors executors { get; }
     }
 }

@@ -4,7 +4,7 @@ using Speercs.Server.Configuration;
 namespace Speercs.Server.Game.Scripting.Api.Modules {
     public class GameApiModule : ScriptingApiModule {
         public GameApiModule(JSEngine engine, ISContext context, string userId) : base(engine, context, userId) {
-            DefineFunction("getUserIdentifier", () => _userId);
+            defineFunction("getUserIdentifier", () => base.userId);
         }
     }
 }

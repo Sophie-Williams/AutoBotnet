@@ -6,10 +6,10 @@ namespace Speercs.Server.Models.User {
     /// </summary>
     public class PublicUser : DatabaseObject {
         [JsonProperty("username")]
-        public string Username { get; set; }
+        public string username { get; set; }
 
         public PublicUser(RegisteredUser user) {
-            Username = user.Username;
+            username = user.username;
         }
     }
 }

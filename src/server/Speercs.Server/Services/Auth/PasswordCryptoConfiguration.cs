@@ -1,21 +1,21 @@
 namespace Speercs.Server.Services.Auth {
     public class PasswordCryptoConfiguration {
-        public int Iterations { get; set; }
+        public int iterations { get; set; }
 
-        public int Length { get; set; }
+        public int length { get; set; }
 
-        public int SaltLength { get; set; }
+        public int saltLength { get; set; }
 
-        public static PasswordCryptoConfiguration CreateDefault() {
+        public static PasswordCryptoConfiguration createDefault() {
             return new PasswordCryptoConfiguration {
-                Iterations = 10000,
-                Length = DefaultLength,
-                SaltLength = DefaultSaltLength
+                iterations = 10000,
+                length = DEFAULT_LENGTH,
+                saltLength = DEFAULT_SALT_LENGTH
             };
         }
 
-        public const int DefaultIterationCount = 10000;
-        public const int DefaultLength = 128;
-        public const int DefaultSaltLength = 64;
+        public const int DEFAULT_ITERATION_COUNT = 10000;
+        public const int DEFAULT_LENGTH = 128;
+        public const int DEFAULT_SALT_LENGTH = 64;
     }
 }

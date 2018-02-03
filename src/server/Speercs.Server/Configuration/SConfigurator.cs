@@ -7,32 +7,32 @@ using System.Threading.Tasks;
 
 namespace Speercs.Server.Configuration {
     public class SConfigurator {
-        internal static SContext CreateContext(SConfiguration config) {
+        internal static SContext createContext(SConfiguration config) {
             // load the parameters
-            config.BaseDirectory = Directory.GetCurrentDirectory();
+            config.baseDirectory = Directory.GetCurrentDirectory();
             var context = new SContext(config);
             return context;
         }
 
-        public const string StateStorageKey = "state";
+        public const string STATE_STORAGE_KEY = "state";
 
-        public static bool SerializationMappersRegistered { get; private set; }
+        public static bool serializationMappersRegistered { get; private set; }
 
-        public static void LoadState(SContext serverContext, string stateStorageFile) {
-            if (!SerializationMappersRegistered) {
+        public static void loadState(SContext serverContext, string stateStorageFile) {
+            if (!serializationMappersRegistered) {
                 BsonMapper.Global.RegisterType<WorldMap>(
-                    serialize: map => BsonMapper.Global.ToDocument(map.RoomDict),
+                    serialize: map => BsonMapper.Global.ToDocument(map.roomDict),
                     deserialize: bson => new WorldMap {
-                        RoomDict = (Dictionary<string, Room>) BsonMapper.Global
+                        roomDict = (Dictionary<string, Room>) BsonMapper.Global
                             .ToObject(typeof(Dictionary<string, Room>), bson.AsDocument)
                     }
                 );
-                SerializationMappersRegistered = true;
+                serializationMappersRegistered = true;
             }
 
             // Load the Server State into the context. This object also includes the OsmiumMine Core state
             var database = new LiteDatabase(stateStorageFile);
-            var stateStorage = database.GetCollection<SAppState>(StateStorageKey);
+            var stateStorage = database.GetCollection<SAppState>(STATE_STORAGE_KEY);
             var savedState = stateStorage.FindAll().FirstOrDefault();
             if (savedState == null) {
                 // Create and save new state
@@ -41,30 +41,30 @@ namespace Speercs.Server.Configuration {
             }
 
             // Update context
-            savedState.PersistenceMedium = stateStorage;
-            savedState.Persist = (forcePersist) => {
+            savedState.persistenceMedium = stateStorage;
+            savedState.persist = (forcePersist) => {
                 // If needed...
-                if (forcePersist || savedState.PersistNeeded) {
-                    savedState.PersistAvailable = false;
+                if (forcePersist || savedState.persistNeeded) {
+                    savedState.persistAvailable = false;
                     // Update in database
                     stateStorage.Upsert(savedState);
                     // And unset needed flag
-                    savedState.PersistNeeded = false;
-                    savedState.PersistAvailable = true;
+                    savedState.persistNeeded = false;
+                    savedState.persistAvailable = true;
                 }
             };
             // Save the state
-            savedState.Persist(true);
+            savedState.persist(true);
             // Update references
-            serverContext.AppState = savedState;
-            var timedPersistTask = StartTimedPersistAsync(serverContext, savedState);
+            serverContext.appState = savedState;
+            var timedPersistTask = startTimedPersistAsync(serverContext, savedState);
         }
 
-        private static async Task StartTimedPersistAsync(SContext serverContext, SAppState state) {
+        private static async Task startTimedPersistAsync(SContext serverContext, SAppState state) {
             while (true) {
-                if (state.PersistAvailable) {
-                    await Task.Delay(serverContext.Configuration.PersistenceInterval);
-                    state.Persist(false);
+                if (state.persistAvailable) {
+                    await Task.Delay(serverContext.configuration.persistenceInterval);
+                    state.persist(false);
                 }
             }
         }

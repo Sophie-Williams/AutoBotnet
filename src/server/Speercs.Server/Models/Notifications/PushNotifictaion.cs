@@ -4,18 +4,18 @@ using System;
 namespace Speercs.Server.Models.Notifications {
     public class PushNotification {
         [JsonProperty("notifTime")]
-        public DateTime NotifTime { get; set; }
+        public DateTime notifTime { get; set; }
 
         [JsonProperty("type")]
-        public string NotifType { get; set; }
+        public string notifType { get; set; }
 
         [JsonProperty("content")]
-        public string NotifContent { get; set; }
+        public string notifContent { get; set; }
 
         public PushNotification(string type, string contents) {
-            NotifType = type;
-            NotifContent = contents;
-            NotifTime = DateTime.Now;
+            notifType = type;
+            notifContent = contents;
+            notifTime = DateTime.Now;
         }
     }
 }

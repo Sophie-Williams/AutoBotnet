@@ -7,10 +7,10 @@ using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server {
     public class SpeercsBootstrapper : DefaultNancyBootstrapper {
-        public SContext ServerContext { get; }
+        public SContext serverContext { get; }
 
         public SpeercsBootstrapper(SContext context) {
-            ServerContext = context;
+            serverContext = context;
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines) {
@@ -29,13 +29,13 @@ namespace Speercs.Server {
                 }
 
                 // Call authenticator
-                var auther = new ApiAuthenticator(ServerContext);
-                return auther.ResolveIdentity(apikey);
+                var auther = new ApiAuthenticator(serverContext);
+                return auther.resolveIdentity(apikey);
             }));
 
             // Enable CORS
             pipelines.AfterRequest.AddItemToEndOfPipeline((ctx) => {
-                foreach (var origin in ServerContext.Configuration.CorsOrigins) {
+                foreach (var origin in serverContext.configuration.corsOrigins) {
                     ctx.Response.WithHeader("Access-Control-Allow-Origin", origin);
                 }
 
@@ -51,7 +51,7 @@ namespace Speercs.Server {
             base.ConfigureApplicationContainer(container);
 
             // Register IoC components
-            container.Register<ISContext>(ServerContext);
+            container.Register<ISContext>(serverContext);
         }
     }
 }

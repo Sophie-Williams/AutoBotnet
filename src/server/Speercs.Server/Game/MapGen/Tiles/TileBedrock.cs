@@ -3,12 +3,12 @@ using Speercs.Server.Extensibility;
 
 namespace Speercs.Server.Game.MapGen.Tiles {
     public class TileBedrock : ITile {
-        public bool IsWalkable() => false;
+        public bool isWalkable() => false;
 
-        public bool IsMinable() => false;
+        public bool isMinable() => false;
 
-        public char GetTileChar() => '#';
+        public char getTileChar() => '#';
 
-        public Rgba32 GetColor() => Rgba32.DarkGray;
+        public Rgba32 getColor() => Rgba32.DarkGray;
     }
 }

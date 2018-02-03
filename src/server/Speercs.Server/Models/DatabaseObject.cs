@@ -5,6 +5,6 @@ namespace Speercs.Server.Models {
     public class DatabaseObject {
         [JsonIgnore]
         [BsonId]
-        public ObjectId DatabaseId { get; set; }
+        public ObjectId databaseId { get; set; }
     }
 }

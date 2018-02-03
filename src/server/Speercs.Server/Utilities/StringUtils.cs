@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Speercs.Server.Utilities {
     public class StringUtils {
-        public static string SecureRandomString(int maxSize) {
+        public static string secureRandomString(int maxSize) {
             var chars = new char[62];
             chars =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
@@ -24,7 +24,7 @@ namespace Speercs.Server.Utilities {
         }
 
         //http://stackoverflow.com/a/29970789
-        public static bool IsPhoneNumber(string number) {
+        public static bool isPhoneNumber(string number) {
             if (string.IsNullOrEmpty(number)) return false;
             return Regex.Match(number, @"^(\+[0-9]{9})$").Success;
         }

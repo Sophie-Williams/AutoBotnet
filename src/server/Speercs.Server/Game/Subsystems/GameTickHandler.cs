@@ -9,14 +9,14 @@ namespace Speercs.Server.Game.Subsystems {
     public class GameTickHandler : DependencyObject {
         public GameTickHandler(ISContext context) : base(context) { }
 
-        public async Task OnTickAsync() {
-            ServerContext.AppState.TickCount++;
+        public async Task onTickAsync() {
+            serverContext.appState.tickCount++;
             var executors =
-                ServerContext.AppState.PlayerData.Select(x => ServerContext.Executors.RetrieveExecutor(x.Key))
+                serverContext.appState.playerData.Select(x => serverContext.executors.retrieveExecutor(x.Key))
                     .OrderBy(a => Guid.NewGuid()).ToList();
             foreach (var executor in executors) {
                 await Task.Run(() => {
-                    var engine = executor.Engine;
+                    var engine = executor.engine;
                     try {
                         var loopFunc = engine.GetValue("loop");
                         if (loopFunc != JsValue.Undefined) {

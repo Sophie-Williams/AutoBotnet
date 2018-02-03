@@ -6,7 +6,7 @@ using Speercs.Server.Utilities;
 namespace Speercs.Server.Modules {
     public class MetadataModule : SBaseModule {
         public MetadataModule(ISContext serverContext) : base("/meta") {
-            Get("/", _ => Response.AsJsonNet(new PublicMetadata(serverContext)));
+            Get("/", _ => Response.asJsonNet(new PublicMetadata(serverContext)));
         }
     }
 }

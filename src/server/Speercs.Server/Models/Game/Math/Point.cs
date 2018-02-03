@@ -1,31 +1,31 @@
 namespace Speercs.Server.Models.Math {
     public struct Point {
-        public int X { get; }
+        public int x { get; }
 
-        public int Y { get; }
+        public int y { get; }
 
         public Point(int x, int y) {
-            X = x;
-            Y = y;
+            this.x = x;
+            this.y = y;
         }
 
         public override bool Equals(object obj) {
             if (obj == null || GetType() != obj.GetType())
                 return false;
 
-            return EqualTo((Point) obj);
+            return equalTo((Point) obj);
         }
 
         public override int GetHashCode() {
             unchecked // Overflow is fine, just wrap
             {
                 int hash = 17;
-                hash = hash * 23 + X.GetHashCode();
-                hash = hash * 23 + Y.GetHashCode();
+                hash = hash * 23 + x.GetHashCode();
+                hash = hash * 23 + y.GetHashCode();
                 return hash;
             }
         }
 
-        public bool EqualTo(Point p) => (X == p.X) && (Y == p.Y);
+        public bool equalTo(Point p) => (x == p.x) && (y == p.y);
     }
 }

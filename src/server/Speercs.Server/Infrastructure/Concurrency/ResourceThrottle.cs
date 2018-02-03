@@ -10,22 +10,22 @@ namespace Speercs.Server.Infrastructure.Concurrency {
             _throttle = new Semaphore(maxConcurrent, maxConcurrent);
         }
 
-        public void Acquire() {
+        public void acquire() {
             _throttle.WaitOne();
         }
 
-        public async Task AcquireAsync() {
-            await Task.Run(() => Acquire());
+        public async Task acquireAsync() {
+            await Task.Run(() => acquire());
         }
 
-        public void Release() {
+        public void release() {
             _throttle.Release();
         }
 
-        public async Task WithResourceAsync(Func<Task> action) {
-            await AcquireAsync();
+        public async Task withResourceAsync(Func<Task> action) {
+            await acquireAsync();
             await action();
-            Release();
+            release();
         }
     }
 }

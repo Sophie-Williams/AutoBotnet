@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Speercs.Server.Controllers {
     public class HomeController : Controller {
-        public IActionResult Index() {
+        public IActionResult index() {
             return View();
         }
 
-        public IActionResult Error() {
+        public IActionResult error() {
             return View();
         }
     }

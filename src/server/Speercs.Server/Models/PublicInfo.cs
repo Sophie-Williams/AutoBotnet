@@ -5,18 +5,18 @@ using Speercs.Server.Services.Auth;
 namespace Speercs.Server.Models {
     public class PublicInfo : ProtectedDependencyObject {
         [JsonProperty("userCount")]
-        public int UserCount { get; set; }
+        public int userCount { get; set; }
 
         [JsonProperty("tickrate")]
-        public int Tickrate { get; set; }
+        public int tickrate { get; set; }
 
         [JsonProperty("mapSize")]
-        public int MapSize { get; set; }
+        public int mapSize { get; set; }
 
         public PublicInfo(ISContext serverContext) : base(serverContext) {
-            UserCount = new UserManagerService(serverContext).RegisteredUserCount;
-            Tickrate = serverContext.Configuration.Tickrate;
-            MapSize = serverContext.AppState.WorldMap.RoomCount;
+            userCount = new UserManagerService(serverContext).registeredUserCount;
+            tickrate = serverContext.configuration.tickrate;
+            mapSize = serverContext.appState.worldMap.roomCount;
         }
     }
 }

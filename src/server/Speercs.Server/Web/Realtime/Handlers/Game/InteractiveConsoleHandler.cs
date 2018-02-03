@@ -6,11 +6,11 @@ namespace Speercs.Server.Web.Realtime.Handlers {
     public class InteractiveConsoleHandler : RealtimeHandler {
         public InteractiveConsoleHandler(ISContext context) : base(context, "console") { }
 
-        public override Task<JToken> HandleRequestAsync(long id, JToken data, RealtimeContext rtContext) {
+        public override Task<JToken> handleRequestAsync(long id, JToken data, RealtimeContext rtContext) {
             JToken jsonResult = JValue.CreateNull();
             bool error;
             try {
-                var engine = ServerContext.Executors.RetrieveExecutor(rtContext.UserIdentifier).Engine;
+                var engine = serverContext.executors.retrieveExecutor(rtContext.userIdentifier).engine;
                 var command = data["command"].ToString();
                 var result = engine
                     .Execute(command)

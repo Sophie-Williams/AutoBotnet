@@ -11,13 +11,13 @@ using IridiumJS;
 
 namespace Speercs.DevTests {
     internal class Program {
-        public static void Main(string[] args) {
-            var task = MainAsync(args);
+        public static void main(string[] args) {
+            var task = mainAsync(args);
             task.Wait();
             Console.WriteLine("PROGRAM DONE");
         }
 
-        private const string jsSource = @"
+        private const string js_source = @"
             function loop(x) {
 		return x * x;
 	    }
@@ -25,34 +25,34 @@ namespace Speercs.DevTests {
             console.log('code load');
         ";
 
-        private const string userID = "foooooo";
+        private const string user_id = "foooooo";
 
         private static async Task setupStuffAsync() {
-            ServerContext.ConnectDatabase();
+            serverContext.connectDatabase();
 
-            Console.WriteLine("userID: " + userID);
-            ServerContext.AppState.PlayerData[userID] = new UserTeam {
-                UserIdentifier = userID
+            Console.WriteLine("userID: " + user_id);
+            serverContext.appState.playerData[user_id] = new UserTeam {
+                userIdentifier = user_id
             };
 
-            await ServerContext.Executors.PlayerPersistentData.CreatePersistentDataAsync(userID);
-            ServerContext.Executors.PlayerPersistentData.DeployProgram(userID, new UserProgram(jsSource));
+            await serverContext.executors.playerPersistentData.createPersistentDataAsync(user_id);
+            serverContext.executors.playerPersistentData.deployProgram(user_id, new UserProgram(js_source));
         }
 
-        private static async Task MainAsync(string[] args) {
+        private static async Task mainAsync(string[] args) {
             Console.WriteLine("Initializing");
 
-            ServerContext = new SContext(new SConfiguration()) {
-                AppState = new SAppState()
+            serverContext = new SContext(new SConfiguration()) {
+                appState = new SAppState()
             };
-            new BuiltinPluginBootstrapper(ServerContext).LoadAll();
+            new BuiltinPluginBootstrapper(serverContext).loadAll();
             await setupStuffAsync();
 
             Console.WriteLine("Starting test");
 
 
             // JS engine testing
-            var engine = ServerContext.Executors.RetrieveExecutor(userID).Engine; // can be any JSEngine
+            var engine = serverContext.executors.retrieveExecutor(user_id).engine; // can be any JSEngine
 
             // Console.WriteLine("INVOKING loop");
 
@@ -104,6 +104,6 @@ function wat(t) {
             Console.WriteLine("DONE");
         }
 
-        public static SContext ServerContext;
+        public static SContext serverContext;
     }
 }

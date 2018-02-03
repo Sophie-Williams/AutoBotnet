@@ -6,22 +6,22 @@ namespace Speercs.Server.Models.User {
     /// </summary>
     public class SelfUser : DatabaseObject {
         [JsonProperty("username")]
-        public string Username { get; set; }
+        public string username { get; set; }
 
         [JsonProperty("email")]
-        public string Email { get; set; }
+        public string email { get; set; }
 
         [JsonProperty("analyticsEnabled")]
-        public bool AnalyticsEnabled { get; set; }
+        public bool analyticsEnabled { get; set; }
 
         [JsonProperty("id")]
-        public string Identifier { get; set; }
+        public string identifier { get; set; }
 
         public SelfUser(RegisteredUser user) {
-            Username = user.Username;
-            Email = user.Email;
-            AnalyticsEnabled = user.AnalyticsEnabled;
-            Identifier = user.Identifier;
+            username = user.username;
+            email = user.email;
+            analyticsEnabled = user.analyticsEnabled;
+            identifier = user.identifier;
         }
     }
 }

@@ -5,10 +5,10 @@ namespace Speercs.Server.Configuration {
     public class ProtectedDependencyObject {
         [JsonIgnore]
         [BsonIgnore]
-        protected ISContext ServerContext { get; private set; }
+        protected ISContext serverContext { get; private set; }
 
         public ProtectedDependencyObject(ISContext context) {
-            ServerContext = context;
+            serverContext = context;
         }
     }
 }

@@ -5,22 +5,22 @@ using Speercs.Server.Services.Auth;
 namespace Speercs.Server.Models {
     public class PublicMetadata : ProtectedDependencyObject {
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string name { get; set; }
 
         [JsonProperty("motd")]
-        public string MOTD { get; set; }
+        public string motd { get; set; }
 
         [JsonProperty("version")]
-        public string Version { get; set; }
+        public string version { get; set; }
 
         [JsonProperty("inviteRequired")]
-        public bool InviteRequired { get; set; }
+        public bool inviteRequired { get; set; }
 
         public PublicMetadata(ISContext serverContext) : base(serverContext) {
-            Name = serverContext.Configuration.GlobalName;
-            MOTD = serverContext.Configuration.GlobalMessage.Replace("{ver}", SContext.Version);
-            Version = SContext.Version;
-            InviteRequired = serverContext.Configuration.InviteRequired;
+            name = serverContext.configuration.globalName;
+            motd = serverContext.configuration.globalMessage.Replace("{ver}", SContext.version);
+            version = SContext.version;
+            inviteRequired = serverContext.configuration.inviteRequired;
         }
     }
 }

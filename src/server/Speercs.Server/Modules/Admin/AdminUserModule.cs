@@ -10,34 +10,34 @@ namespace Speercs.Server.Modules.Admin {
     public class AdminUserModule : AdminApiModule {
         public AdminUserModule(ISContext serverContext) : base("/user", serverContext) {
             Get("/{id}", async args => {
-                var userManager = new UserManagerService(ServerContext);
-                var user = await userManager.FindUserByIdentifierAsync((string) args.id);
+                var userManager = new UserManagerService(base.serverContext);
+                var user = await userManager.findUserByIdentifierAsync((string) args.id);
                 if (user == null) return HttpStatusCode.NotFound;
-                return Response.AsJsonNet((RegisteredUser) user);
+                return Response.asJsonNet((RegisteredUser) user);
             });
 
             Put("/{id}", async args => {
-                var userManager = new UserManagerService(ServerContext);
+                var userManager = new UserManagerService(base.serverContext);
                 var req = this.Bind<AdminUserModificationRequest>();
-                var user = await userManager.FindUserByIdentifierAsync((string) args.id);
-                user.AnalyticsEnabled = req.AnalyticsEnabled;
-                user.Email = req.Email;
-                user.Enabled = req.Enabled;
-                await userManager.UpdateUserInDatabaseAsync(user);
-                return Response.AsJsonNet(user);
+                var user = await userManager.findUserByIdentifierAsync((string) args.id);
+                user.analyticsEnabled = req.analyticsEnabled;
+                user.email = req.email;
+                user.enabled = req.enabled;
+                await userManager.updateUserInDatabaseAsync(user);
+                return Response.asJsonNet(user);
             });
 
             Delete("/{id}", async args => {
-                var userManager = new UserManagerService(ServerContext);
-                await userManager.DeleteUserAsync((string) args.id);
+                var userManager = new UserManagerService(base.serverContext);
+                await userManager.deleteUserAsync((string) args.id);
                 return HttpStatusCode.OK;
             });
 
             Get("/analytics/{id}",
-                args => Response.AsJsonNet(ServerContext.AppState.UserAnalyticsData[(string) args.id]));
+                args => Response.asJsonNet(base.serverContext.appState.userAnalyticsData[(string) args.id]));
 
             Delete("/analytics/{id}", args => {
-                ServerContext.AppState.UserAnalyticsData[(string) args.id] = new UserAnalytics();
+                base.serverContext.appState.userAnalyticsData[(string) args.id] = new UserAnalytics();
                 return HttpStatusCode.OK;
             });
         }

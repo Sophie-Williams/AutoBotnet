@@ -6,37 +6,37 @@ using Speercs.Server.Services.Game;
 namespace Speercs.Server.Game.Scripting {
     public class PlayerExecutors : DependencyObject {
         // cache of player executors
-        ConcurrentDictionary<string, ScriptExecutor> Executors { get; } =
+        ConcurrentDictionary<string, ScriptExecutor> executors { get; } =
             new ConcurrentDictionary<string, ScriptExecutor>();
 
-        public PlayerPersistentDataService PlayerPersistentData { get; }
+        public PlayerPersistentDataService playerPersistentData { get; }
 
         public PlayerExecutors(ISContext context) : base(context) {
-            PlayerPersistentData = new PlayerPersistentDataService(context);
+            playerPersistentData = new PlayerPersistentDataService(context);
         }
 
-        public ScriptExecutor ReloadExecutor(string userIdentifier) {
-            if (Executors.TryRemove(userIdentifier, out ScriptExecutor removed)) {
-                return RetrieveExecutor(userIdentifier);
+        public ScriptExecutor reloadExecutor(string userIdentifier) {
+            if (executors.TryRemove(userIdentifier, out ScriptExecutor removed)) {
+                return retrieveExecutor(userIdentifier);
             }
 
             return null;
         }
 
-        public ScriptExecutor RetrieveExecutor(string userIdentifier) {
-            return Executors.GetOrAdd(userIdentifier, key => {
-                var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userIdentifier);
+        public ScriptExecutor retrieveExecutor(string userIdentifier) {
+            return executors.GetOrAdd(userIdentifier, key => {
+                var engine = new SScriptingHost(serverContext).createSandboxedEngine(userIdentifier);
 
                 // Load player code into engine
                 try {
-                    var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
+                    var playerSource = playerPersistentData[userIdentifier].program.source;
                     var result = engine.Execute(playerSource).GetCompletionValue();
                 } catch (Exception ex) {
                     // Invalid code (syntax or other error on load)
                     // TODO: let the user know
                 }
 
-                return new ScriptExecutor(engine, userIdentifier, ServerContext);
+                return new ScriptExecutor(engine, userIdentifier, serverContext);
             });
         }
     }

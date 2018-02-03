@@ -8,13 +8,13 @@ namespace Speercs.Server.Modules.Admin {
     public class AdminMapAccessModule : AdminApiModule {
         public AdminMapAccessModule(ISContext serverContext) : base("/map", serverContext) {
             Post("/genroom", _ => {
-                MapGenerator mapGen = new MapGenerator(ServerContext);
+                MapGenerator mapGen = new MapGenerator(base.serverContext);
                 var req = this.Bind<RoomGenerationRequest>();
-                if (ServerContext.AppState.WorldMap[req.X, req.Y] != null) return HttpStatusCode.BadRequest;
-                var newRoom = req.Density == 0
-                    ? mapGen.GenerateRoom(req.X, req.Y)
-                    : mapGen.GenerateRoom(req.X, req.Y, req.Density);
-                ServerContext.AppState.WorldMap[req.X, req.Y] = newRoom;
+                if (base.serverContext.appState.worldMap[req.x, req.y] != null) return HttpStatusCode.BadRequest;
+                var newRoom = req.density == 0
+                    ? mapGen.generateRoom(req.x, req.y)
+                    : mapGen.generateRoom(req.x, req.y, req.density);
+                base.serverContext.appState.worldMap[req.x, req.y] = newRoom;
                 return Response.AsJson(newRoom);
             });
         }

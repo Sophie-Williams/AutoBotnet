@@ -10,28 +10,28 @@ namespace Speercs.Server.Modules.User {
     /// Defines a module that is part of the **authenticated** user API.
     /// </summary>
     public abstract class UserApiModule : SBaseModule {
-        public UserManagerService UserManager { get; private set; }
+        public UserManagerService userManager { get; private set; }
 
-        public PlayerPersistentDataService PlayerDataService { get; private set; }
+        public PlayerPersistentDataService playerDataService { get; private set; }
 
-        public RegisteredUser CurrentUser { get; private set; }
+        public RegisteredUser currentUser { get; private set; }
 
-        public ISContext ServerContext { get; private set; }
+        public ISContext serverContext { get; private set; }
 
         internal UserApiModule(string path, ISContext serverContext) : base(path) {
-            ServerContext = serverContext;
+            this.serverContext = serverContext;
 
             // require claims from stateless auther, defined in bootstrapper
-            this.RequiresUserAuthentication();
+            this.requiresUserAuthentication();
 
             // add a pre-request hook to load the user manager
             Before += ctx => {
                 var userIdentifier = Context.CurrentUser.Claims
-                    .FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey).Value;
+                    .FirstOrDefault(x => x.Type == ApiAuthenticator.USER_IDENTIFIER_CLAIM_KEY).Value;
 
-                UserManager = new UserManagerService(ServerContext);
-                PlayerDataService = new PlayerPersistentDataService(ServerContext);
-                CurrentUser = UserManager.FindUserByIdentifierAsync(userIdentifier).Result;
+                userManager = new UserManagerService(this.serverContext);
+                playerDataService = new PlayerPersistentDataService(this.serverContext);
+                currentUser = userManager.findUserByIdentifierAsync(userIdentifier).Result;
                 return null;
             };
         }

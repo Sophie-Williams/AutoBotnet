@@ -8,22 +8,22 @@ namespace Speercs.Server.Modules.Admin {
     /// Defines a module that is part of the **authenticated** user API.
     /// </summary>
     public abstract class AdminApiModule : SBaseModule {
-        public UserManagerService UserManager { get; private set; }
+        public UserManagerService userManager { get; private set; }
 
-        public PlayerPersistentDataService PlayerDataService { get; private set; }
+        public PlayerPersistentDataService playerDataService { get; private set; }
 
-        public ISContext ServerContext { get; private set; }
+        public ISContext serverContext { get; private set; }
 
         internal AdminApiModule(string path, ISContext serverContext) : base($"/admin{path}") {
-            ServerContext = serverContext;
+            this.serverContext = serverContext;
 
             // require claims from stateless auther, defined in bootstrapper
-            this.RequiresAdminAuthentication();
+            this.requiresAdminAuthentication();
 
             // add a pre-request hook to load the user manager
             Before += ctx => {
-                UserManager = new UserManagerService(ServerContext);
-                PlayerDataService = new PlayerPersistentDataService(ServerContext);
+                userManager = new UserManagerService(this.serverContext);
+                playerDataService = new PlayerPersistentDataService(this.serverContext);
                 return null;
             };
         }

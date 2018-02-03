@@ -3,24 +3,24 @@ using Newtonsoft.Json;
 namespace Speercs.Server.Models.User {
     public class RegisteredUser : DatabaseObject {
         [JsonProperty("username")]
-        public string Username { get; set; }
+        public string username { get; set; }
 
         [JsonProperty("email")]
-        public string Email { get; set; }
+        public string email { get; set; }
 
         [JsonProperty("apikey")]
-        public string ApiKey { get; set; }
+        public string apiKey { get; set; }
 
         [JsonProperty("analyticsEnabled")]
-        public bool AnalyticsEnabled { get; set; }
+        public bool analyticsEnabled { get; set; }
 
         [JsonIgnore]
-        public ItemCrypto Crypto { get; set; }
+        public ItemCrypto crypto { get; set; }
 
         [JsonIgnore]
-        public string Identifier { get; set; }
+        public string identifier { get; set; }
 
         [JsonIgnore]
-        public bool Enabled { get; set; }
+        public bool enabled { get; set; }
     }
 }

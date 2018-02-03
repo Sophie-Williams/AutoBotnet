@@ -7,82 +7,82 @@ namespace Speercs.Server.Infrastructure.Concurrency {
         private readonly AutoResetEvent _readFree = new AutoResetEvent(true);
         private readonly AutoResetEvent _writeFree = new AutoResetEvent(true);
 
-        public void ObtainExclusiveWrite() {
+        public void obtainExclusiveWrite() {
             // Wait for exclusive read and write
             _writeFree.WaitOne();
             _readFree.WaitOne();
         }
 
-        public async Task ObtainExclusiveWriteAsync() {
-            await Task.Run(() => ObtainExclusiveWrite());
+        public async Task obtainExclusiveWriteAsync() {
+            await Task.Run(() => obtainExclusiveWrite());
         }
 
-        public void ReleaseExclusiveWrite() {
+        public void releaseExclusiveWrite() {
             // Release exclusive read and write
             _writeFree.Set();
             _readFree.Set();
         }
 
-        public void ObtainExclusiveRead() {
+        public void obtainExclusiveRead() {
             _readFree.WaitOne();
         }
 
-        public async Task ObtainExclusiveReadAsync() {
-            await Task.Run(() => ObtainExclusiveRead());
+        public async Task obtainExclusiveReadAsync() {
+            await Task.Run(() => obtainExclusiveRead());
         }
 
-        public void ReleaseExclusiveRead() {
+        public void releaseExclusiveRead() {
             _readFree.Set();
         }
 
-        public void ObtainConcurrentRead() {
+        public void obtainConcurrentRead() {
             // Lock writing, and allow multiple concurrent reads
             _writeFree.WaitOne();
         }
 
-        public async Task ObtainConcurrentReadAsync() {
-            await Task.Run(() => ObtainConcurrentRead());
+        public async Task obtainConcurrentReadAsync() {
+            await Task.Run(() => obtainConcurrentRead());
         }
 
-        public void ReleaseConcurrentRead() {
+        public void releaseConcurrentRead() {
             // Allow writing again
             _writeFree.Set();
         }
 
-        public async Task WithExclusiveWriteAsync(Task action) {
-            await ObtainExclusiveWriteAsync();
+        public async Task withExclusiveWriteAsync(Task action) {
+            await obtainExclusiveWriteAsync();
             await action;
-            ReleaseExclusiveWrite();
+            releaseExclusiveWrite();
         }
 
-        public async Task WithExclusiveWriteAsync(Func<Task> action) {
-            await ObtainExclusiveWriteAsync();
+        public async Task withExclusiveWriteAsync(Func<Task> action) {
+            await obtainExclusiveWriteAsync();
             await action();
-            ReleaseExclusiveWrite();
+            releaseExclusiveWrite();
         }
 
-        public async Task WithExclusiveReadAsync(Task action) {
-            await ObtainExclusiveReadAsync();
+        public async Task withExclusiveReadAsync(Task action) {
+            await obtainExclusiveReadAsync();
             await action;
-            ReleaseExclusiveRead();
+            releaseExclusiveRead();
         }
 
-        public async Task WithExclusiveReadAsync(Func<Task> action) {
-            await ObtainExclusiveReadAsync();
+        public async Task withExclusiveReadAsync(Func<Task> action) {
+            await obtainExclusiveReadAsync();
             await action();
-            ReleaseExclusiveRead();
+            releaseExclusiveRead();
         }
 
-        public async Task WithConcurrentReadAsync(Task action) {
-            await ObtainConcurrentReadAsync();
+        public async Task withConcurrentReadAsync(Task action) {
+            await obtainConcurrentReadAsync();
             await action;
-            ReleaseConcurrentRead();
+            releaseConcurrentRead();
         }
 
-        public async Task WithConcurrentReadAsync(Func<Task> action) {
-            await ObtainConcurrentReadAsync();
+        public async Task withConcurrentReadAsync(Func<Task> action) {
+            await obtainConcurrentReadAsync();
             await action();
-            ReleaseConcurrentRead();
+            releaseConcurrentRead();
         }
     }
 }

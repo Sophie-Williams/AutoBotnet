@@ -1,9 +1,9 @@
 namespace Speercs.Server.Models.Requests {
     public class UserPasswordChangeRequest {
-        public string Username { get; set; }
+        public string username { get; set; }
 
-        public string OldPassword { get; set; }
+        public string oldPassword { get; set; }
 
-        public string NewPassword { get; set; }
+        public string newPassword { get; set; }
     }
 }

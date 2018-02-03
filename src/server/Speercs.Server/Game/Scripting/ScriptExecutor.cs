@@ -7,11 +7,11 @@ using Speercs.Server.Models.Game.Entities;
 namespace Speercs.Server.Game.Scripting {
     public class ScriptExecutor : DependencyObject {
         public ScriptExecutor(JSEngine engine, string userIdentifier, ISContext context) : base(context) {
-            Engine = engine;
-            UserIdentifier = userIdentifier;
+            this.engine = engine;
+            this.userIdentifier = userIdentifier;
         }
 
-        public JSEngine Engine { get; }
-        public string UserIdentifier { get; }
+        public JSEngine engine { get; }
+        public string userIdentifier { get; }
     }
 }

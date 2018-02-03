@@ -5,10 +5,10 @@ using System;
 namespace Speercs.Server.Utilities {
     public class RoomImage {
         public Image<Rgba32> drawRoom(Room room) {
-            Image<Rgba32> image = new Image<Rgba32>(Room.MapEdgeSize, Room.MapEdgeSize);
-            for (var y = 0; y < Room.MapEdgeSize; y++) {
-                for (var x = 0; x < Room.MapEdgeSize; x++) {
-                    image[x, y] = room.Tiles[x, y].GetColor();
+            Image<Rgba32> image = new Image<Rgba32>(Room.MAP_EDGE_SIZE, Room.MAP_EDGE_SIZE);
+            for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
+                for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
+                    image[x, y] = room.tiles[x, y].getColor();
                 }
             }
 
@@ -20,25 +20,25 @@ namespace Speercs.Server.Utilities {
             int worldMaxY = Int32.MinValue;
             int worldMinX = Int32.MaxValue;
             int worldMinY = Int32.MaxValue;
-            foreach (var room in map.RoomDict.Values) {
-                if (room.X > worldMaxX) worldMaxX = room.X;
-                if (room.X < worldMinX) worldMinX = room.X;
+            foreach (var room in map.roomDict.Values) {
+                if (room.x > worldMaxX) worldMaxX = room.x;
+                if (room.x < worldMinX) worldMinX = room.x;
 
-                if (room.Y > worldMaxY) worldMaxY = room.Y;
-                if (room.Y < worldMinY) worldMinY = room.Y;
+                if (room.y > worldMaxY) worldMaxY = room.y;
+                if (room.y < worldMinY) worldMinY = room.y;
             }
 
-            Image<Rgba32> image = new Image<Rgba32>((Math.Abs((worldMaxX - worldMinX) + 1) * Room.MapEdgeSize),
-                (Math.Abs((worldMaxY - worldMinY) + 1) * Room.MapEdgeSize));
+            Image<Rgba32> image = new Image<Rgba32>((Math.Abs((worldMaxX - worldMinX) + 1) * Room.MAP_EDGE_SIZE),
+                (Math.Abs((worldMaxY - worldMinY) + 1) * Room.MAP_EDGE_SIZE));
 
             image.BackgroundColor(Rgba32.Black);
 
-            foreach (var room in map.RoomDict.Values) {
-                var roomX = Room.MapEdgeSize * (room.X - worldMinX);
-                var roomY = Room.MapEdgeSize * (room.Y - worldMinY);
-                for (var y = 0; y < Room.MapEdgeSize; y++) {
-                    for (var x = 0; x < Room.MapEdgeSize; x++) {
-                        image[roomX + x, roomY + y] = map[room.X, room.Y].Tiles[x, y].GetColor();
+            foreach (var room in map.roomDict.Values) {
+                var roomX = Room.MAP_EDGE_SIZE * (room.x - worldMinX);
+                var roomY = Room.MAP_EDGE_SIZE * (room.y - worldMinY);
+                for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
+                    for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
+                        image[roomX + x, roomY + y] = map[room.x, room.y].tiles[x, y].getColor();
                     }
                 }
             }

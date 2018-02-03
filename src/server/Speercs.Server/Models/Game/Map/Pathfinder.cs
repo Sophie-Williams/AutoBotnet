@@ -9,56 +9,56 @@ namespace Speercs.Server.Models.Game.Map {
         private class Node : IComparable<Node> {
             public bool open = true;
             public Node parent;
-            public int X, Y;
-            public int G, H;
+            public int x, y;
+            public int g, h;
 
-            public int F {
-                get { return G + H; }
+            public int f {
+                get { return g + h; }
             }
 
             public IPriorityQueueHandle<Node> pqHandle;
 
             public Node(int x, int y, int g, int h, Node parent) {
-                X = x;
-                Y = y;
-                G = g;
-                H = h;
+                this.x = x;
+                this.y = y;
+                this.g = g;
+                this.h = h;
                 this.parent = parent;
             }
 
             public int CompareTo(Node other) {
-                return this.F - other.F;
+                return this.f - other.f;
             }
         }
 
         public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal)
-            : this(context, start, goal, tile => tile.IsWalkable()) { }
+            : this(context, start, goal, tile => tile.isWalkable()) { }
 
         public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal, Predicate<ITile> passable)
             : base(context) {
-            this.start = start;
-            this.goal = goal;
-            this.passable = passable;
+            this._start = start;
+            this._goal = goal;
+            this._passable = passable;
         }
 
-        public List<RoomPosition> FindPath() {
-            if (start == goal) return new List<RoomPosition>();
-            if (start.RoomX != goal.RoomX || start.RoomY != goal.RoomY)
+        public List<RoomPosition> findPath() {
+            if (_start == _goal) return new List<RoomPosition>();
+            if (_start.roomX != _goal.roomX || _start.roomY != _goal.roomY)
                 throw new NotImplementedException("Inter-room pathfinding not implemented yet");
 
             // add the start node to the open list
-            openList.Add(nodeGrid[start.X, start.Y] = new Node(start.X, start.Y, 0, goal.Distance(start), null));
+            _openList.Add(_nodeGrid[_start.x, _start.y] = new Node(_start.x, _start.y, 0, _goal.distance(_start), null));
 
-            while (!openList.IsEmpty) {
-                Node curNode = openList.DeleteMin(); // pop the next node off the open list
+            while (!_openList.IsEmpty) {
+                Node curNode = _openList.DeleteMin(); // pop the next node off the open list
                 curNode.open = false;
 
                 // check if we've reached the goal
-                if (curNode.X == goal.X && curNode.Y == goal.Y) {
+                if (curNode.x == _goal.x && curNode.y == _goal.y) {
                     // return the found path
                     var path = new List<RoomPosition>();
                     while (curNode.parent != null) {
-                        path.Add(new RoomPosition(start, curNode.X, curNode.Y));
+                        path.Add(new RoomPosition(_start, curNode.x, curNode.y));
                         curNode = curNode.parent;
                     }
 
@@ -67,13 +67,13 @@ namespace Speercs.Server.Models.Game.Map {
                 }
 
                 // add valid neighbors to the open list
-                var x = curNode.X;
-                var y = curNode.Y;
-                var g = curNode.G + 1;
+                var x = curNode.x;
+                var y = curNode.y;
+                var g = curNode.g + 1;
                 if (x > 0) tryOpenNode(x - 1, y, g, curNode);
-                if (x < Room.MapEdgeSize - 1) tryOpenNode(x + 1, y, g, curNode);
+                if (x < Room.MAP_EDGE_SIZE - 1) tryOpenNode(x + 1, y, g, curNode);
                 if (y > 0) tryOpenNode(x, y - 1, g, curNode);
-                if (y < Room.MapEdgeSize - 1) tryOpenNode(x, y + 1, g, curNode);
+                if (y < Room.MAP_EDGE_SIZE - 1) tryOpenNode(x, y + 1, g, curNode);
             }
 
             // there isn't a path to the goal
@@ -81,27 +81,27 @@ namespace Speercs.Server.Models.Game.Map {
         }
 
         private void tryOpenNode(int x, int y, int g, Node parent) {
-            var node = nodeGrid[x, y];
+            var node = _nodeGrid[x, y];
             if (node == null) {
-                if (passable(new RoomPosition(start, x, y).GetTile(ServerContext))) {
+                if (_passable(new RoomPosition(_start, x, y).getTile(serverContext))) {
                     // unvisited node; add to open list
-                    node = nodeGrid[x, y] = new Node(x, y, g, goal.Distance(new RoomPosition(goal, x, y)), parent);
-                    openList.Add(ref node.pqHandle, node);
+                    node = _nodeGrid[x, y] = new Node(x, y, g, _goal.distance(new RoomPosition(_goal, x, y)), parent);
+                    _openList.Add(ref node.pqHandle, node);
                 }
             } else if (node.open) {
-                if (g < node.G) {
+                if (g < node.g) {
                     // this route is better
-                    node.G = g;
+                    node.g = g;
                     node.parent = parent;
-                    openList.Replace(node.pqHandle, node); // update in the priority queue
+                    _openList.Replace(node.pqHandle, node); // update in the priority queue
                 }
             }
         }
 
-        private Predicate<ITile> passable;
-        private RoomPosition start, goal;
+        private Predicate<ITile> _passable;
+        private RoomPosition _start, _goal;
 
-        private Node[,] nodeGrid = new Node[Room.MapEdgeSize, Room.MapEdgeSize];
-        private IntervalHeap<Node> openList = new IntervalHeap<Node>();
+        private Node[,] _nodeGrid = new Node[Room.MAP_EDGE_SIZE, Room.MAP_EDGE_SIZE];
+        private IntervalHeap<Node> _openList = new IntervalHeap<Node>();
     }
 }

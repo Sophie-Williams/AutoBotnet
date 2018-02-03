@@ -5,20 +5,20 @@ using System.Collections.Generic;
 
 namespace Speercs.Server.Extensibility.MapGen {
     public interface IMapGenerator {
-        Random Random { get; }
+        Random random { get; }
 
-        Room GenerateRoom(int roomX, int roomY);
+        Room generateRoom(int roomX, int roomY);
 
-        ISet<Point> Walls { get; set; }
+        ISet<Point> walls { get; set; }
 
-        ISet<Point> ExposedWalls { get; set; }
+        ISet<Point> exposedWalls { get; set; }
 
-        ISet<Point> UnexposedWalls { get; set; }
+        ISet<Point> unexposedWalls { get; set; }
 
-        Point RandomWall();
+        Point randomWall();
 
-        Point RandomExposedWall();
+        Point randomExposedWall();
 
-        Point RandomUnexposedWall();
+        Point randomUnexposedWall();
     }
 }
