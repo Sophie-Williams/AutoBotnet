@@ -6,10 +6,8 @@ using Speercs.Server.Game.Scripting;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
 
-namespace Speercs.Server.Configuration
-{
-    public interface ISContext
-    {
+namespace Speercs.Server.Configuration {
+    public interface ISContext {
         LiteDatabase Database { get; }
 
         SConfiguration Configuration { get; }

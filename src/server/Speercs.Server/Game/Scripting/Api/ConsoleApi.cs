@@ -8,14 +8,12 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
-namespace Speercs.Server.Game.Scripting.Api
-{
-    public class ConsoleApi : ObjectInstance
-    {
+namespace Speercs.Server.Game.Scripting.Api {
+    public class ConsoleApi : ObjectInstance {
         private ISContext ServerContext { get; set; }
         private string UserId { get; set; }
-        public ConsoleApi(JSEngine engine, ISContext serverContext, string userId) : base(engine)
-        {
+
+        public ConsoleApi(JSEngine engine, ISContext serverContext, string userId) : base(engine) {
             ServerContext = serverContext;
             UserId = userId;
             FastAddProperty("log", new ClrFunctionInstance(Engine, Log, 0), false, true, false);
@@ -23,16 +21,13 @@ namespace Speercs.Server.Game.Scripting.Api
             GameApi.SetDefaultToString(this);
         }
 
-        public override string Class
-        {
+        public override string Class {
             get { return "Console"; }
         }
 
-        private JsValue Log(JsValue thisObj, JsValue[] args)
-        {
+        private JsValue Log(JsValue thisObj, JsValue[] args) {
             string str = "";
-            for (int i = 0; i < args.Length; i++)
-            {
+            for (int i = 0; i < args.Length; i++) {
                 if (i > 0) str += " ";
                 str += args[i].ToString();
             }
@@ -43,11 +38,9 @@ namespace Speercs.Server.Game.Scripting.Api
             return JsValue.Undefined;
         }
 
-        private JsValue Notify(JsValue thisObj, JsValue[] args)
-        {
+        private JsValue Notify(JsValue thisObj, JsValue[] args) {
             string str = "";
-            for (int i = 0; i < args.Length; i++)
-            {
+            for (int i = 0; i < args.Length; i++) {
                 if (i > 0) str += " ";
                 str += args[i].ToString();
             }

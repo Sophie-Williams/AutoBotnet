@@ -1,16 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Speercs.Server.Controllers
-{
-    public class HomeController : Controller
-    {
-        public IActionResult Index()
-        {
+namespace Speercs.Server.Controllers {
+    public class HomeController : Controller {
+        public IActionResult Index() {
             return View();
         }
 
-        public IActionResult Error()
-        {
+        public IActionResult Error() {
             return View();
         }
     }

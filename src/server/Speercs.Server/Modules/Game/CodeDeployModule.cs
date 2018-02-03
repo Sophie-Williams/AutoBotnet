@@ -6,41 +6,33 @@ using Speercs.Server.Models.Requests;
 using Speercs.Server.Modules.User;
 using Speercs.Server.Utilities;
 
-namespace Speercs.Server.Modules.Game
-{
-    public class CodeDeployModule : UserApiModule
-    {
-        public CodeDeployModule(ISContext serverContext) : base("/game/code", serverContext)
-        {
-            Get("/get", _ =>
-            {
+namespace Speercs.Server.Modules.Game {
+    public class CodeDeployModule : UserApiModule {
+        public CodeDeployModule(ISContext serverContext) : base("/game/code", serverContext) {
+            Get("/get", _ => {
                 var program = PlayerDataService[CurrentUser.Identifier].Program;
                 return Response.AsJsonNet(program);
             });
 
-            Patch("/reload", _ =>
-            {
+            Patch("/reload", _ => {
                 // reload cached engine for that user
                 ServerContext.Executors.ReloadExecutor(CurrentUser.Identifier);
 
                 return HttpStatusCode.OK;
             });
 
-            Post("/deploy", _ =>
-            {
+            Post("/deploy", _ => {
                 var req = this.Bind<CodeDeployRequest>();
 
                 // Validate code size (for security reasons)
-                if (req.Source.Length > ServerContext.Configuration.CodeSizeLimit)
-                {
+                if (req.Source.Length > ServerContext.Configuration.CodeSizeLimit) {
                     return HttpStatusCode.UnprocessableEntity;
                 }
 
-                if (CurrentUser.AnalyticsEnabled)
-                {
+                if (CurrentUser.AnalyticsEnabled) {
                     var analyticsObject = ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier];
-                    analyticsObject.CodeDeploys ++;
-                    var numLines = (ulong)req.Source.Split('\n').Length;
+                    analyticsObject.CodeDeploys++;
+                    var numLines = (ulong) req.Source.Split('\n').Length;
                     analyticsObject.LineCount = numLines;
                     analyticsObject.TotalLineCount += numLines;
                 }

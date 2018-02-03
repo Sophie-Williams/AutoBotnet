@@ -1,27 +1,22 @@
-namespace Speercs.Server.Models.Math
-{
-    public struct Point
-    {
+namespace Speercs.Server.Models.Math {
+    public struct Point {
         public int X { get; }
 
         public int Y { get; }
 
-        public Point(int x, int y)
-        {
+        public Point(int x, int y) {
             X = x;
             Y = y;
         }
 
-        public override bool Equals(object obj)
-        {
+        public override bool Equals(object obj) {
             if (obj == null || GetType() != obj.GetType())
                 return false;
 
-            return EqualTo((Point)obj);
+            return EqualTo((Point) obj);
         }
 
-        public override int GetHashCode()
-        {
+        public override int GetHashCode() {
             unchecked // Overflow is fine, just wrap
             {
                 int hash = 17;

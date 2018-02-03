@@ -1,12 +1,10 @@
 using Newtonsoft.Json;
 
-namespace Speercs.Server.Models.User
-{
+namespace Speercs.Server.Models.User {
     /// <summary>
     /// Public user data model
     /// </summary>
-    public class SelfUser : DatabaseObject
-    {
+    public class SelfUser : DatabaseObject {
         [JsonProperty("username")]
         public string Username { get; set; }
 
@@ -19,8 +17,7 @@ namespace Speercs.Server.Models.User
         [JsonProperty("id")]
         public string Identifier { get; set; }
 
-        public SelfUser(RegisteredUser user)
-        {
+        public SelfUser(RegisteredUser user) {
             Username = user.Username;
             Email = user.Email;
             AnalyticsEnabled = user.AnalyticsEnabled;
@@ -28,4 +25,3 @@ namespace Speercs.Server.Models.User
         }
     }
 }
-

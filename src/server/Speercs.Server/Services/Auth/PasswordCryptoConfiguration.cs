@@ -1,17 +1,13 @@
-namespace Speercs.Server.Services.Auth
-{
-    public class PasswordCryptoConfiguration
-    {
+namespace Speercs.Server.Services.Auth {
+    public class PasswordCryptoConfiguration {
         public int Iterations { get; set; }
 
         public int Length { get; set; }
 
         public int SaltLength { get; set; }
 
-        public static PasswordCryptoConfiguration CreateDefault()
-        {
-            return new PasswordCryptoConfiguration
-            {
+        public static PasswordCryptoConfiguration CreateDefault() {
+            return new PasswordCryptoConfiguration {
                 Iterations = 10000,
                 Length = DefaultLength,
                 SaltLength = DefaultSaltLength

@@ -3,10 +3,8 @@ using Speercs.Server.Models.Math;
 using System;
 using System.Collections.Generic;
 
-namespace Speercs.Server.Extensibility.MapGen
-{
-    public interface IMapGenerator
-    {
+namespace Speercs.Server.Extensibility.MapGen {
+    public interface IMapGenerator {
         Random Random { get; }
 
         Room GenerateRoom(int roomX, int roomY);

@@ -14,10 +14,8 @@ using System;
 using System.IO;
 using System.Runtime.Loader;
 
-namespace Speercs.Server
-{
-    public class Startup
-    {
+namespace Speercs.Server {
+    public class Startup {
         private const string ConfigFileName = "speercs.json";
         private const string StateStorageDatabaseFileName = "speercs_state.lidb";
         private readonly IConfigurationRoot fileConfig;
@@ -26,35 +24,30 @@ namespace Speercs.Server
 
         public SGameBootstrapper GameBootstrapper { get; private set; }
 
-        public Startup(IHostingEnvironment env)
-        {
-            if (!File.Exists(ConfigFileName))
-            {
-                try
-                {
+        public Startup(IHostingEnvironment env) {
+            if (!File.Exists(ConfigFileName)) {
+                try {
                     // Create config file
                     Console.WriteLine($"Configuration file {ConfigFileName} does not exist, creating default.");
                     var confFileContent = JsonConvert.SerializeObject(new SConfiguration(), Formatting.Indented);
                     File.WriteAllText(ConfigFileName, confFileContent);
-                }
-                catch
-                {
+                } catch {
                     Console.WriteLine($"Could not write to {ConfigFileName}");
                 }
             }
+
             var builder = new ConfigurationBuilder()
-                              .AddJsonFile(ConfigFileName,
-                                optional: true,
-                                reloadOnChange: true)
-                              .SetBasePath(env.ContentRootPath);
+                .AddJsonFile(ConfigFileName,
+                    optional: true,
+                    reloadOnChange: true)
+                .SetBasePath(env.ContentRootPath);
 
             fileConfig = builder.Build();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
+        public void ConfigureServices(IServiceCollection services) {
             // Adds services required for using options.
             services.AddOptions();
 
@@ -66,8 +59,8 @@ namespace Speercs.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
+        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime,
+            IHostingEnvironment env, ILoggerFactory loggerFactory) {
             loggerFactory.AddConsole();
 
             // create default configuration
@@ -98,20 +91,16 @@ namespace Speercs.Server
 
             ClientAppPath = Path.Combine(Directory.GetCurrentDirectory(), ClientAppPath);
 
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 if (context.Configuration.EnableDevelopmentWebInterface) {
-                    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                    {
+                    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
                         HotModuleReplacement = true,
                         ProjectPath = ClientAppPath,
                         ConfigFile = $"{ClientAppPath}webpack.config.js"
                     });
                 }
-            }
-            else
-            {
+            } else {
                 app.UseExceptionHandler("/Home/Error");
             }
 
@@ -119,8 +108,7 @@ namespace Speercs.Server
             app.UseStaticFiles();
 
             // set up Nancy OWIN hosting
-            app.UseOwin(x => x.UseNancy(options =>
-            {
+            app.UseOwin(x => x.UseNancy(options => {
                 options.PassThroughWhenStatusCodesAre(
                     HttpStatusCode.NotFound,
                     HttpStatusCode.InternalServerError
@@ -129,15 +117,14 @@ namespace Speercs.Server
             }));
 
             // set up MVC fallback
-            app.UseMvc(routes =>
-            {
+            app.UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                    defaults: new {controller = "Home", action = "Index"});
             });
 
             // start game services
@@ -145,8 +132,7 @@ namespace Speercs.Server
             GameBootstrapper.OnStartup();
         }
 
-        private void OnUnload(ISContext sctx)
-        {
+        private void OnUnload(ISContext sctx) {
             Console.WriteLine("Server unloading, force-persisting state data.");
             // persist on unload
             sctx.AppState.Persist(true);

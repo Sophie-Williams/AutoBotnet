@@ -1,7 +1,5 @@
-namespace Speercs.Server.Infrastructure.Concurrency
-{
-    public class UserServices
-    {
+namespace Speercs.Server.Infrastructure.Concurrency {
+    public class UserServices {
         public string Username { get; }
 
         /// <summary>
@@ -9,8 +7,7 @@ namespace Speercs.Server.Infrastructure.Concurrency
         /// </summary>
         public UserLock UserLock { get; }
 
-        public UserServices(string username)
-        {
+        public UserServices(string username) {
             Username = username;
             UserLock = new UserLock();
         }

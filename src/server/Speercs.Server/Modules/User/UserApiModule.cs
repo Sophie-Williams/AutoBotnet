@@ -5,13 +5,11 @@ using Speercs.Server.Services.Auth.Security;
 using Speercs.Server.Services.Game;
 using System.Linq;
 
-namespace Speercs.Server.Modules.User
-{
+namespace Speercs.Server.Modules.User {
     /// <summary>
     /// Defines a module that is part of the **authenticated** user API.
     /// </summary>
-    public abstract class UserApiModule : SBaseModule
-    {
+    public abstract class UserApiModule : SBaseModule {
         public UserManagerService UserManager { get; private set; }
 
         public PlayerPersistentDataService PlayerDataService { get; private set; }
@@ -20,17 +18,16 @@ namespace Speercs.Server.Modules.User
 
         public ISContext ServerContext { get; private set; }
 
-        internal UserApiModule(string path, ISContext serverContext) : base(path)
-        {
+        internal UserApiModule(string path, ISContext serverContext) : base(path) {
             ServerContext = serverContext;
 
             // require claims from stateless auther, defined in bootstrapper
             this.RequiresUserAuthentication();
 
             // add a pre-request hook to load the user manager
-            Before += ctx =>
-            {
-                var userIdentifier = Context.CurrentUser.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey).Value;
+            Before += ctx => {
+                var userIdentifier = Context.CurrentUser.Claims
+                    .FirstOrDefault(x => x.Type == ApiAuthenticator.UserIdentifierClaimKey).Value;
 
                 UserManager = new UserManagerService(ServerContext);
                 PlayerDataService = new PlayerPersistentDataService(ServerContext);

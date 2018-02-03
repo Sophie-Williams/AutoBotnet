@@ -1,9 +1,7 @@
 using Speercs.Server.Models.Game.Map;
 
-namespace Speercs.Server.Game.MapGen
-{
-    public static class MapGenConstants
-    {
+namespace Speercs.Server.Game.MapGen {
+    public static class MapGenConstants {
         /// Wall Density ///
         public const double MinRoomDensity = 0.40;
 

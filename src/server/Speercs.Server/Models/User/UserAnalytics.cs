@@ -1,16 +1,14 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Speercs.Server.Models.User
-{
-    public class UserAnalytics
-    {
+namespace Speercs.Server.Models.User {
+    public class UserAnalytics {
         [JsonProperty("playtime")]
         public ulong Playtime { get; set; }
 
         [JsonProperty("codeDeploys")]
         public ulong CodeDeploys { get; set; }
-    
+
         [JsonProperty("lineCount")]
         public ulong LineCount { get; set; }
 

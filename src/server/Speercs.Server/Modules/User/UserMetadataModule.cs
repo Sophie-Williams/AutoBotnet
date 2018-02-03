@@ -6,16 +6,12 @@ using Speercs.Server.Models.Requests;
 using Speercs.Server.Utilities;
 using Speercs.Server.Services.Auth;
 
-namespace Speercs.Server.Modules.User
-{
-    public class UserMetadataModule : UserApiModule
-    {
-        public UserMetadataModule(ISContext serverContext) : base("/user/meta", serverContext)
-        {
+namespace Speercs.Server.Modules.User {
+    public class UserMetadataModule : UserApiModule {
+        public UserMetadataModule(ISContext serverContext) : base("/user/meta", serverContext) {
             Get("/", _ => Response.AsJsonNet(new SelfUser(CurrentUser)));
 
-            Put("/", async _ =>
-            {
+            Put("/", async _ => {
                 var userManager = new UserManagerService(ServerContext);
                 var req = this.Bind<UserModificationRequest>();
                 var newUser = CurrentUser;
@@ -25,17 +21,16 @@ namespace Speercs.Server.Modules.User
                 return Response.AsJsonNet(new SelfUser(newUser));
             });
 
-            Get("/analytics", _ => Response.AsJsonNet(ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier]));
+            Get("/analytics",
+                _ => Response.AsJsonNet(ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier]));
 
-            Delete("/analytics", _ =>
-            {
+            Delete("/analytics", _ => {
                 ServerContext.AppState.UserAnalyticsData[CurrentUser.Identifier] = new UserAnalytics();
                 return HttpStatusCode.OK;
             });
 
-            Get("/player/{id}", async args =>
-            {
-                var user = await UserManager.FindUserByIdentifierAsync((string)args.id);
+            Get("/player/{id}", async args => {
+                var user = await UserManager.FindUserByIdentifierAsync((string) args.id);
                 if (user == null) return HttpStatusCode.NotFound;
                 var publicProfile = new PublicUser(user);
                 return Response.AsJsonNet(publicProfile);

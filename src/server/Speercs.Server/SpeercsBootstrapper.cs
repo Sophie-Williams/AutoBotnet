@@ -5,46 +5,40 @@ using Nancy.TinyIoc;
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Auth;
 
-namespace Speercs.Server
-{
-    public class SpeercsBootstrapper : DefaultNancyBootstrapper
-    {
+namespace Speercs.Server {
+    public class SpeercsBootstrapper : DefaultNancyBootstrapper {
         public SContext ServerContext { get; }
 
-        public SpeercsBootstrapper(SContext context)
-        {
+        public SpeercsBootstrapper(SContext context) {
             ServerContext = context;
         }
 
-        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
-        {
+        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines) {
             base.ApplicationStartup(container, pipelines);
 
             // Enable stateless authentication
-            StatelessAuthentication.Enable(pipelines, new StatelessAuthenticationConfiguration(ctx =>
-            {
+            StatelessAuthentication.Enable(pipelines, new StatelessAuthenticationConfiguration(ctx => {
                 // Take API key from query string
-                var apikey = (string)ctx.Request.Query.apikey.Value;
+                var apikey = (string) ctx.Request.Query.apikey.Value;
                 if (apikey == null) // key wasn't in query, check alternate sources
                 {
                     var authHeader = ctx.Request.Headers.Authorization;
-                    if (!string.IsNullOrWhiteSpace(authHeader))
-                    {
+                    if (!string.IsNullOrWhiteSpace(authHeader)) {
                         apikey = authHeader;
                     }
                 }
+
                 // Call authenticator
                 var auther = new ApiAuthenticator(ServerContext);
                 return auther.ResolveIdentity(apikey);
             }));
 
             // Enable CORS
-            pipelines.AfterRequest.AddItemToEndOfPipeline((ctx) =>
-            {
-                foreach (var origin in ServerContext.Configuration.CorsOrigins)
-                {
+            pipelines.AfterRequest.AddItemToEndOfPipeline((ctx) => {
+                foreach (var origin in ServerContext.Configuration.CorsOrigins) {
                     ctx.Response.WithHeader("Access-Control-Allow-Origin", origin);
                 }
+
                 ctx.Response
                     .WithHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
                     .WithHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, Authorization");
@@ -53,8 +47,7 @@ namespace Speercs.Server
             // TODO: Set configuration
         }
 
-        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {
+        protected override void ConfigureApplicationContainer(TinyIoCContainer container) {
             base.ConfigureApplicationContainer(container);
 
             // Register IoC components
