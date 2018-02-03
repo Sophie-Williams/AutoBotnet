@@ -1,49 +1,42 @@
-using IridiumJS;
+using System;
+using System.Collections.Concurrent;
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Game;
-using System.Collections.Concurrent;
 
-namespace Speercs.Server.Game.Scripting
-{
-    public class PlayerExecutors : DependencyObject
-    {
+namespace Speercs.Server.Game.Scripting {
+    public class PlayerExecutors : DependencyObject {
         // cache of player executors
-        ConcurrentDictionary<string, ScriptExecutor> Executors { get; } = new ConcurrentDictionary<string, ScriptExecutor>();
+        ConcurrentDictionary<string, ScriptExecutor> Executors { get; } =
+            new ConcurrentDictionary<string, ScriptExecutor>();
 
         public PlayerPersistentDataService PlayerPersistentData { get; }
 
-        public PlayerExecutors(ISContext context) : base(context)
-        {
+        public PlayerExecutors(ISContext context) : base(context) {
             PlayerPersistentData = new PlayerPersistentDataService(context);
         }
 
-        public ScriptExecutor ReloadExecutor(string userIdentifier)
-        {
-            if (Executors.TryRemove(userIdentifier, out ScriptExecutor removed))
-            {
+        public ScriptExecutor ReloadExecutor(string userIdentifier) {
+            if (Executors.TryRemove(userIdentifier, out ScriptExecutor removed)) {
                 return RetrieveExecutor(userIdentifier);
             }
+
             return null;
         }
 
-        public ScriptExecutor RetrieveExecutor(string userIdentifier)
-        {
+        public ScriptExecutor RetrieveExecutor(string userIdentifier) {
             return Executors.GetOrAdd(userIdentifier, key => {
                 var engine = new SScriptingHost(ServerContext).CreateSandboxedEngine(userIdentifier);
 
                 // Load player code into engine
-                try
-                {
+                try {
                     var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
-                    engine.Execute(playerSource);
-                }
-                catch
-                {
+                    var result = engine.Execute(playerSource).GetCompletionValue();
+                } catch (Exception ex) {
                     // Invalid code (syntax or other error on load)
                     // TODO: let the user know
                 }
 
-                return new ScriptExecutor(engine, ServerContext);
+                return new ScriptExecutor(engine, userIdentifier, ServerContext);
             });
         }
     }
