@@ -1,6 +1,9 @@
 using Speercs.Server.Configuration;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
+using IridiumJS.Native;
+using Speercs.Server.Game.Scripting;
 
 namespace Speercs.Server.Game.Subsystems {
     public class GameTickHandler : DependencyObject {
@@ -8,20 +11,28 @@ namespace Speercs.Server.Game.Subsystems {
 
         public async Task OnTickAsync() {
             ServerContext.AppState.TickCount++;
-
-            foreach (var entry in ServerContext.AppState.PlayerData) {
+            var executors =
+                ServerContext.AppState.PlayerData.Select(x => ServerContext.Executors.RetrieveExecutor(x.Key))
+                    .OrderBy(a => Guid.NewGuid()).ToList();
+            foreach (var executor in executors) {
                 await Task.Run(() => {
-                    var engine = ServerContext.Executors.RetrieveExecutor(entry.Value.UserIdentifier).Engine;
+                    var engine = executor.Engine;
                     try {
                         var loopFunc = engine.GetValue("loop");
-                        var res = loopFunc.Invoke(5);
-                    } catch (TimeoutException) {
-                        //var res = "Code took too long";
-                    } catch {
-                        //var res = "Could not find loop function";
+                        if (loopFunc != JsValue.Undefined) {
+                            var res = loopFunc.Invoke();
+                        }
+                    } catch (TimeoutException ex) {
+                        throw new TimeoutException("Code took too long", ex);
+                    } catch (Exception ex) {
+                        throw new CodeExecutionException("Error executing player program", ex);
                     }
                 });
             }
+
+            // TODO: Tick all entities
+
+            // Game update logic (state: won)
         }
     }
 }
