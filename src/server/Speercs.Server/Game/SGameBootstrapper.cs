@@ -3,18 +3,15 @@ using Speercs.Server.Game.Subsystems;
 using System.Threading;
 using Speercs.Server.Game.Scripting;
 
-namespace Speercs.Server.Game
-{
-    public class SGameBootstrapper : DependencyObject
-    {
+namespace Speercs.Server.Game {
+    public class SGameBootstrapper : DependencyObject {
         public TickSystem TickSystem { get; }
 
         public CancellationToken TickSystemCancelToken { get; }
-        
+
         public GameTickHandler TickHandler { get; }
 
-        public SGameBootstrapper(ISContext context) : base(context)
-        {
+        public SGameBootstrapper(ISContext context) : base(context) {
             // Create tick handler
             TickHandler = new GameTickHandler(context);
             // Create tick system
@@ -24,8 +21,7 @@ namespace Speercs.Server.Game
             TickSystemCancelToken = new CancellationTokenSource().Token;
         }
 
-        public void OnStartup()
-        {
+        public void OnStartup() {
             // start tick system
             var tickLoopTask = TickSystem.StartAsync(TickSystemCancelToken);
         }

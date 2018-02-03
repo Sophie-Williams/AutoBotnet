@@ -2,34 +2,27 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Speercs.Server.Infrastructure.Concurrency
-{
-    public class ResourceThrottle
-    {
+namespace Speercs.Server.Infrastructure.Concurrency {
+    public class ResourceThrottle {
         private readonly Semaphore _throttle;
 
-        public ResourceThrottle(int maxConcurrent)
-        {
+        public ResourceThrottle(int maxConcurrent) {
             _throttle = new Semaphore(maxConcurrent, maxConcurrent);
         }
 
-        public void Acquire()
-        {
+        public void Acquire() {
             _throttle.WaitOne();
         }
 
-        public async Task AcquireAsync()
-        {
+        public async Task AcquireAsync() {
             await Task.Run(() => Acquire());
         }
 
-        public void Release()
-        {
+        public void Release() {
             _throttle.Release();
         }
 
-        public async Task WithResourceAsync(Func<Task> action)
-        {
+        public async Task WithResourceAsync(Func<Task> action) {
             await AcquireAsync();
             await action();
             Release();

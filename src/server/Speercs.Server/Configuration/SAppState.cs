@@ -6,13 +6,11 @@ using Speercs.Server.Models.Game.Map;
 using System;
 using System.Collections.Generic;
 
-namespace Speercs.Server.Configuration
-{
+namespace Speercs.Server.Configuration {
     /// <summary>
     /// Persisted state for the server
     /// </summary>
-    public class SAppState : DatabaseObject
-    {
+    public class SAppState : DatabaseObject {
         [BsonIgnore]
         public LiteCollection<SAppState> PersistenceMedium { get; set; }
 
@@ -22,7 +20,7 @@ namespace Speercs.Server.Configuration
         /// <returns></returns>
         [BsonIgnore]
         public Action<bool> Persist { get; set; }
-        
+
 
         [BsonIgnore]
         public bool PersistNeeded { get; set; }
@@ -33,8 +31,7 @@ namespace Speercs.Server.Configuration
         /// <summary>
         /// Call this to queue a persist.
         /// </summary>
-        public void QueuePersist()
-        {
+        public void QueuePersist() {
             PersistNeeded = true;
         }
 

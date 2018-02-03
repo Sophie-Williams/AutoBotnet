@@ -1,36 +1,29 @@
 using Nancy;
 using System.Security.Claims;
 
-namespace Speercs.Server.Services.Auth.Security
-{
-    public static class ApiAccessModuleSecurityExtensions
-    {
+namespace Speercs.Server.Services.Auth.Security {
+    public static class ApiAccessModuleSecurityExtensions {
         private static Claim AdminClaim = new Claim(ApiAuthenticator.AuthTypeClaimKey, ApiAccessScope.Admin.ToString());
         private static Claim UserClaim = new Claim(ApiAuthenticator.AuthTypeClaimKey, ApiAccessScope.User.ToString());
 
-        public static void RequiresUserAuthentication(this NancyModule module)
-        {
+        public static void RequiresUserAuthentication(this NancyModule module) {
             InjectAuthenticationHook(module, UserClaim);
         }
 
-        public static void RequiresAdminAuthentication(this NancyModule module)
-        {
+        public static void RequiresAdminAuthentication(this NancyModule module) {
             InjectAuthenticationHook(module, AdminClaim);
         }
 
-        public static void InjectAuthenticationHook(NancyModule module, Claim requiredClaim)
-        {
-            module.Before.AddItemToEndOfPipeline((ctx) =>
-            {
-                if (ctx.CurrentUser == null)
-                {
+        public static void InjectAuthenticationHook(NancyModule module, Claim requiredClaim) {
+            module.Before.AddItemToEndOfPipeline((ctx) => {
+                if (ctx.CurrentUser == null) {
                     return HttpStatusCode.Unauthorized;
                 }
 
-                if (ctx.CurrentUser.EnsureClaim(requiredClaim))
-                {
+                if (ctx.CurrentUser.EnsureClaim(requiredClaim)) {
                     return null;
                 }
+
                 return HttpStatusCode.Unauthorized;
             });
         }
@@ -41,8 +34,7 @@ namespace Speercs.Server.Services.Auth.Security
         /// <param name="principal"></param>
         /// <param name="claim"></param>
         /// <returns></returns>
-        public static bool EnsureClaim(this ClaimsPrincipal principal, Claim claim)
-        {
+        public static bool EnsureClaim(this ClaimsPrincipal principal, Claim claim) {
             return principal.HasClaim(claim.Type, claim.Value);
         }
     }

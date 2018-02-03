@@ -1,9 +1,7 @@
 using Speercs.Server.Services.Auth;
 
-namespace Speercs.Server.Models.User
-{
-    public class ItemCrypto
-    {
+namespace Speercs.Server.Models.User {
+    public class ItemCrypto {
         public PasswordCryptoConfiguration Conf { get; set; }
 
         public byte[] Salt { get; set; }

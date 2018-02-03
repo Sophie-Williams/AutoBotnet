@@ -1,7 +1,5 @@
-namespace Speercs.Server.Models.Requests
-{
-    public class UserRegistrationRequest
-    {
+namespace Speercs.Server.Models.Requests {
+    public class UserRegistrationRequest {
         public string Username { get; set; }
 
         public string Email { get; set; } = "";

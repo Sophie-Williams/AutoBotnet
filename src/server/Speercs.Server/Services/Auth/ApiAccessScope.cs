@@ -1,7 +1,5 @@
-namespace Speercs.Server.Services.Auth
-{
-    public enum ApiAccessScope
-    {
+namespace Speercs.Server.Services.Auth {
+    public enum ApiAccessScope {
         Anonymous,
         User,
         Admin

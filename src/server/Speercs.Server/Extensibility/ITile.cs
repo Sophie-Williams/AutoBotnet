@@ -1,9 +1,7 @@
 using ImageSharp;
 
-namespace Speercs.Server.Extensibility
-{
-    public interface ITile
-    {
+namespace Speercs.Server.Extensibility {
+    public interface ITile {
         bool IsWalkable();
 
         bool IsMinable();

@@ -1,9 +1,7 @@
 using Newtonsoft.Json;
 
-namespace Speercs.Server.Models.User
-{
-    public class RegisteredUser : DatabaseObject
-    {
+namespace Speercs.Server.Models.User {
+    public class RegisteredUser : DatabaseObject {
         [JsonProperty("username")]
         public string Username { get; set; }
 

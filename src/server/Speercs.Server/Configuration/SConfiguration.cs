@@ -1,9 +1,7 @@
 using Newtonsoft.Json;
 
-namespace Speercs.Server.Configuration
-{
-    public class SConfiguration
-    {
+namespace Speercs.Server.Configuration {
+    public class SConfiguration {
         [JsonProperty("databaseConfig")]
         public SDatabaseConfiguration DatabaseConfiguration { get; set; } = new SDatabaseConfiguration();
 
@@ -48,7 +46,8 @@ namespace Speercs.Server.Configuration
         /// A MOTD (message of the day) to display to all users.
         /// </summary>
         [JsonProperty("globalMessage")]
-        public string GlobalMessage { get; set; } = "AutoBotnet server v{ver}\nThis message is configurable by the server admins.";
+        public string GlobalMessage { get; set; } =
+            "AutoBotnet server v{ver}\nThis message is configurable by the server admins.";
 
         /// <summary>
         /// List of origins to allow CORS requests from. Can possibly be used to enable API access from another domain hosting a custom client.

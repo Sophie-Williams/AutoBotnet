@@ -30,8 +30,13 @@ namespace Speercs.Server.Game.Scripting {
                 // Load player code into engine
                 try {
                     var playerSource = PlayerPersistentData[userIdentifier].Program.Source;
+<<<<<<< HEAD
                     var result = engine.Execute(playerSource).GetCompletionValue();
                 } catch (Exception ex) {
+=======
+                    engine.Execute(playerSource);
+                } catch {
+>>>>>>> staging
                     // Invalid code (syntax or other error on load)
                     // TODO: let the user know
                 }

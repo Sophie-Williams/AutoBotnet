@@ -6,10 +6,8 @@ using Speercs.Server.Game.Scripting;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
 
-namespace Speercs.Server.Configuration
-{
-    public class SContext : ISContext
-    {
+namespace Speercs.Server.Configuration {
+    public class SContext : ISContext {
         // Configuration parameters
         public SConfiguration Configuration { get; }
 
@@ -34,8 +32,7 @@ namespace Speercs.Server.Configuration
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
 
-        public SContext(SConfiguration config)
-        {
+        public SContext(SConfiguration config) {
             Configuration = config;
             NotificationPipeline = new NotificationPipeline(this);
             ServiceTable = new UserServiceTable(this);
@@ -43,16 +40,14 @@ namespace Speercs.Server.Configuration
             PluginLoader = new PluginLoader<ISpeercsPlugin>();
         }
 
-        public void ConnectDatabase()
-        {
+        public void ConnectDatabase() {
             // Create database
             Database = new LiteDatabase(Configuration.DatabaseConfiguration.FileName);
             // load dependent services
             LoadDatabaseDependentServices();
         }
 
-        protected void LoadDatabaseDependentServices()
-        {
+        protected void LoadDatabaseDependentServices() {
             Executors = new PlayerExecutors(this);
         }
     }

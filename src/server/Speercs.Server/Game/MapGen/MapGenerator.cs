@@ -9,24 +9,19 @@ using System.Collections.Generic;
 using System.Linq;
 using static Speercs.Server.Game.MapGen.MapGenConstants;
 
-namespace Speercs.Server.Game.MapGen
-{
-    public class MapGenerator : DependencyObject, IMapGenerator
-    {
-        public MapGenerator(ISContext context) : base(context)
-        {
+namespace Speercs.Server.Game.MapGen {
+    public class MapGenerator : DependencyObject, IMapGenerator {
+        public MapGenerator(ISContext context) : base(context) {
             Random = new Random();
         }
 
-        public Room GenerateRoom(int roomX, int roomY)
-        {
+        public Room GenerateRoom(int roomX, int roomY) {
             // set the density
             var density = RandomDouble(MinRoomDensity, MaxRoomDensity);
             return GenerateRoom(roomX, roomY, density);
         }
 
-        public Room GenerateRoom(int roomX, int roomY, double density)
-        {
+        public Room GenerateRoom(int roomX, int roomY, double density) {
             var room = new Room(roomX, roomY);
 
             // set exits
@@ -46,19 +41,15 @@ namespace Speercs.Server.Game.MapGen
             ApplyCellularAutomaton(CellularAutomatonIterations);
 
             // fill in bedrock and create tile lists for IMapGenFeatures
-            for (var x = 0; x < Room.MapEdgeSize; x++)
-            {
-                for (var y = 0; y < Room.MapEdgeSize; y++)
-                {
+            for (var x = 0; x < Room.MapEdgeSize; x++) {
+                for (var y = 0; y < Room.MapEdgeSize; y++) {
                     if (ShouldBeBedrock(x, y)) room.Tiles[x, y] = new TileBedrock();
-                    if (GetTileAt(x, y) is TileWall)
-                    {
+                    if (GetTileAt(x, y) is TileWall) {
                         Walls.Add(new Point(x, y));
                         if (IsExposed()) ExposedWalls.Add(new Point(x, y));
                         else UnexposedWalls.Add(new Point(x, y));
 
-                        bool IsExposed()
-                        {
+                        bool IsExposed() {
                             if (GetTileAt(x - 1, y) is TileFloor) return true;
                             if (GetTileAt(x + 1, y) is TileFloor) return true;
                             if (GetTileAt(x, y - 1) is TileFloor) return true;
@@ -70,8 +61,7 @@ namespace Speercs.Server.Game.MapGen
             }
 
             // generate map features
-            foreach (var feature in ServerContext.ExtensibilityContainer.ResolveAll<IMapGenFeature>())
-            {
+            foreach (var feature in ServerContext.ExtensibilityContainer.ResolveAll<IMapGenFeature>()) {
                 feature.Generate(room, this);
             }
 
@@ -83,8 +73,7 @@ namespace Speercs.Server.Game.MapGen
 
             /* helper functions */
 
-            ITile GetTileAt(int x, int y)
-            {
+            ITile GetTileAt(int x, int y) {
                 if (x < 0) x = 0;
                 if (y < 0) y = 0;
                 if (x >= Room.MapEdgeSize) x = Room.MapEdgeSize - 1;
@@ -92,21 +81,17 @@ namespace Speercs.Server.Game.MapGen
                 return room.Tiles[x, y];
             }
 
-            Room.Exit RandomExit()
-            {
+            Room.Exit RandomExit() {
                 int size = Random.Next(MinExitSize, MaxExitSize);
                 int pos = Random.Next(1, Room.MapEdgeSize - size - 1); // random position, not at a corner
                 return new Room.Exit(pos, pos + size - 1);
             }
 
-            void InitRandomness()
-            {
+            void InitRandomness() {
                 // create base density map
                 var densityMap = new double[Room.MapEdgeSize, Room.MapEdgeSize];
-                for (var x = 0; x < Room.MapEdgeSize; x++)
-                {
-                    for (var y = 0; y < Room.MapEdgeSize; y++)
-                    {
+                for (var x = 0; x < Room.MapEdgeSize; x++) {
+                    for (var y = 0; y < Room.MapEdgeSize; y++) {
                         const double halfSize = (Room.MapEdgeSize - 1) / 2.0;
                         var dx = Math.Abs(x - halfSize);
                         var dy = Math.Abs(y - halfSize);
@@ -117,35 +102,31 @@ namespace Speercs.Server.Game.MapGen
                 }
 
                 // augment for exits
-                for (var a = 0; a < ExitCarveDepth; a++)
-                {
+                for (var a = 0; a < ExitCarveDepth; a++) {
                     // north exit
-                    for (var b = room.NorthExit.Low; b <= room.NorthExit.High; b++)
-                    {
+                    for (var b = room.NorthExit.Low; b <= room.NorthExit.High; b++) {
                         densityMap[b, a] = 0;
                     }
+
                     // south exit
-                    for (var b = room.SouthExit.Low; b <= room.SouthExit.High; b++)
-                    {
+                    for (var b = room.SouthExit.Low; b <= room.SouthExit.High; b++) {
                         densityMap[b, Room.MapEdgeSize - a - 1] = 0;
                     }
+
                     // west exit
-                    for (var b = room.WestExit.Low; b <= room.WestExit.High; b++)
-                    {
+                    for (var b = room.WestExit.Low; b <= room.WestExit.High; b++) {
                         densityMap[a, b] = 0;
                     }
+
                     // east exit
-                    for (var b = room.EastExit.Low; b <= room.EastExit.High; b++)
-                    {
+                    for (var b = room.EastExit.Low; b <= room.EastExit.High; b++) {
                         densityMap[Room.MapEdgeSize - a - 1, b] = 0;
                     }
                 }
 
                 // fill map
-                for (var x = 0; x < Room.MapEdgeSize; x++)
-                {
-                    for (var y = 0; y < Room.MapEdgeSize; y++)
-                    {
+                for (var x = 0; x < Room.MapEdgeSize; x++) {
+                    for (var y = 0; y < Room.MapEdgeSize; y++) {
                         var d = densityMap[x, y];
                         if (Random.NextDouble() < d) room.Tiles[x, y] = new TileWall();
                         else room.Tiles[x, y] = new TileFloor();
@@ -153,16 +134,12 @@ namespace Speercs.Server.Game.MapGen
                 }
             }
 
-            void ApplyCellularAutomaton(int numGenerations)
-            {
+            void ApplyCellularAutomaton(int numGenerations) {
                 var counts = new int[Room.MapEdgeSize, Room.MapEdgeSize];
-                for (var generation = 0; generation < numGenerations; generation++)
-                {
+                for (var generation = 0; generation < numGenerations; generation++) {
                     // count each cell's neighbors
-                    for (var x = 0; x < Room.MapEdgeSize; x++)
-                    {
-                        for (var y = 0; y < Room.MapEdgeSize; y++)
-                        {
+                    for (var x = 0; x < Room.MapEdgeSize; x++) {
+                        for (var y = 0; y < Room.MapEdgeSize; y++) {
                             counts[x, y] = 0;
                             if (GetTileAt(x - 1, y) is TileWall) counts[x, y]++;
                             if (GetTileAt(x + 1, y) is TileWall) counts[x, y]++;
@@ -176,16 +153,11 @@ namespace Speercs.Server.Game.MapGen
                     }
 
                     // update the grid
-                    for (var x = 0; x < Room.MapEdgeSize; x++)
-                    {
-                        for (var y = 0; y < Room.MapEdgeSize; y++)
-                        {
-                            if (GetTileAt(x, y) is TileWall)
-                            {
+                    for (var x = 0; x < Room.MapEdgeSize; x++) {
+                        for (var y = 0; y < Room.MapEdgeSize; y++) {
+                            if (GetTileAt(x, y) is TileWall) {
                                 if (counts[x, y] < 4) room.Tiles[x, y] = new TileFloor();
-                            }
-                            else
-                            {
+                            } else {
                                 if (counts[x, y] >= 5) room.Tiles[x, y] = new TileWall();
                             }
                         }
@@ -193,8 +165,7 @@ namespace Speercs.Server.Game.MapGen
                 }
             }
 
-            bool ShouldBeBedrock(int x, int y)
-            {
+            bool ShouldBeBedrock(int x, int y) {
                 // only Wall becomes Bedrock
                 if (GetTileAt(x, y) is TileFloor) return false;
                 // edges are bedrock
@@ -202,20 +173,18 @@ namespace Speercs.Server.Game.MapGen
                     (x == 0 || x == Room.MapEdgeSize - 1 || y == 0 || y == Room.MapEdgeSize - 1))
                     return true;
                 // walls 2 tiles deep become bedrock
-                for (var x2 = x - BedrockDepth; x2 <= x + BedrockDepth; x2++)
-                {
-                    for (var y2 = y - BedrockDepth; y2 <= y + BedrockDepth; y2++)
-                    {
+                for (var x2 = x - BedrockDepth; x2 <= x + BedrockDepth; x2++) {
+                    for (var y2 = y - BedrockDepth; y2 <= y + BedrockDepth; y2++) {
                         if (GetTileAt(x2, y2) is TileFloor)
                             return false;
                     }
                 }
+
                 return true;
             }
         }
 
-        protected double RandomDouble(double min, double max)
-        {
+        protected double RandomDouble(double min, double max) {
             return Random.NextDouble() * (max - min) + min;
         }
 
@@ -227,18 +196,15 @@ namespace Speercs.Server.Game.MapGen
 
         public ISet<Point> UnexposedWalls { get; set; } = new HashSet<Point>();
 
-        public Point RandomWall()
-        {
+        public Point RandomWall() {
             return Walls.ElementAt(Random.Next(Walls.Count));
         }
 
-        public Point RandomExposedWall()
-        {
+        public Point RandomExposedWall() {
             return ExposedWalls.ElementAt(Random.Next(ExposedWalls.Count));
         }
 
-        public Point RandomUnexposedWall()
-        {
+        public Point RandomUnexposedWall() {
             return UnexposedWalls.ElementAt(Random.Next(UnexposedWalls.Count));
         }
     }

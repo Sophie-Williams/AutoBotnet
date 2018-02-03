@@ -1,10 +1,8 @@
 using ImageSharp;
 using Speercs.Server.Extensibility;
 
-namespace Speercs.Server.Game.MapGen.Tiles
-{
-    public class TileBedrock : ITile
-    {
+namespace Speercs.Server.Game.MapGen.Tiles {
+    public class TileBedrock : ITile {
         public bool IsWalkable() => false;
 
         public bool IsMinable() => false;
