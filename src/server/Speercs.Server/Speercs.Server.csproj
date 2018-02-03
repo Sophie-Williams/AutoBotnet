@@ -15,7 +15,6 @@
     <None Remove="ClientApp\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Game\Scripting\Api\Modules" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>

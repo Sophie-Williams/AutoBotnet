@@ -2,6 +2,7 @@ using System;
 using IridiumJS;
 using IridiumJS.Native;
 using Speercs.Server.Configuration;
+using Speercs.Server.Game.Scripting.Api.Modules;
 using Speercs.Server.Models.Game.Entities;
 
 namespace Speercs.Server.Game.Scripting {
@@ -18,7 +19,7 @@ namespace Speercs.Server.Game.Scripting {
             );
 
             //--Add modules
-//            AddGlobal(engine, "Game", new GameApiModule(engine, ServerContext, userId));
+            AddGlobal(engine, "Game", new GameApiModule(engine, ServerContext, userId));
 //            AddGlobal(engine, "Units", new UnitManagementModule(engine, ServerContext, userId));
 //            AddGlobal(engine, "Utils", new UtilsModule(engine, ServerContext, userId));
 
