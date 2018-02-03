@@ -88,7 +88,7 @@ namespace Speercs.Server.Models.Game.Map {
 
         public override int GetHashCode() {
             unchecked {
-                int hash = 17;
+                var hash = 17;
                 hash = hash * 31 + x;
                 hash = hash * 31 + y;
                 hash = hash * 31 + roomX;

@@ -16,7 +16,7 @@ namespace Speercs.Server.Game.Scripting {
         }
 
         public ScriptExecutor reloadExecutor(string userIdentifier) {
-            if (executors.TryRemove(userIdentifier, out ScriptExecutor removed)) {
+            if (executors.TryRemove(userIdentifier, out var removed)) {
                 return retrieveExecutor(userIdentifier);
             }
 

@@ -27,7 +27,7 @@ namespace Speercs.Server.Modules {
 
             // Register account
             Post("/register", async args => {
-                Regex charsetRegex = new Regex(@"^[a-zA-Z0-9._-]{3,24}$");
+                var charsetRegex = new Regex(@"^[a-zA-Z0-9._-]{3,24}$");
 
                 var req = this.Bind<UserRegistrationRequest>();
 

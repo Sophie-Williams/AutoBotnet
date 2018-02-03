@@ -50,7 +50,7 @@ namespace Speercs.Server.Models.Game.Map {
             _openList.Add(_nodeGrid[_start.x, _start.y] = new Node(_start.x, _start.y, 0, _goal.distance(_start), null));
 
             while (!_openList.IsEmpty) {
-                Node curNode = _openList.DeleteMin(); // pop the next node off the open list
+                var curNode = _openList.DeleteMin(); // pop the next node off the open list
                 curNode.open = false;
 
                 // check if we've reached the goal

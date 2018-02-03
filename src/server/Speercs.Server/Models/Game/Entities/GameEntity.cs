@@ -36,8 +36,8 @@ namespace Speercs.Server.Models.Game.Entities {
         public virtual bool moveRelative(Direction direction) {
             var roomX = position.roomX;
             var roomY = position.roomY;
-            int newX = position.x;
-            int newY = position.y;
+            var newX = position.x;
+            var newY = position.y;
 
             switch (direction) {
                 case Direction.North:

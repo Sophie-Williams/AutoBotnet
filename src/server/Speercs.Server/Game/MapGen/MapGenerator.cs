@@ -82,8 +82,8 @@ namespace Speercs.Server.Game.MapGen {
             }
 
             Room.Exit randomExit() {
-                int size = random.Next(MIN_EXIT_SIZE, MAX_EXIT_SIZE);
-                int pos = random.Next(1, Room.MAP_EDGE_SIZE - size - 1); // random position, not at a corner
+                var size = random.Next(MIN_EXIT_SIZE, MAX_EXIT_SIZE);
+                var pos = random.Next(1, Room.MAP_EDGE_SIZE - size - 1); // random position, not at a corner
                 return new Room.Exit(pos, pos + size - 1);
             }
 

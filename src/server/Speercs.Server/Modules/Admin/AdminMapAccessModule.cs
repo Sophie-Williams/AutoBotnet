@@ -8,7 +8,7 @@ namespace Speercs.Server.Modules.Admin {
     public class AdminMapAccessModule : AdminApiModule {
         public AdminMapAccessModule(ISContext serverContext) : base("/map", serverContext) {
             Post("/genroom", _ => {
-                MapGenerator mapGen = new MapGenerator(base.serverContext);
+                var mapGen = new MapGenerator(base.serverContext);
                 var req = this.Bind<RoomGenerationRequest>();
                 if (base.serverContext.appState.worldMap[req.x, req.y] != null) return HttpStatusCode.BadRequest;
                 var newRoom = req.density == 0

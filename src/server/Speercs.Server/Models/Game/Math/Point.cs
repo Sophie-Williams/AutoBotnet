@@ -19,7 +19,7 @@ namespace Speercs.Server.Models.Math {
         public override int GetHashCode() {
             unchecked // Overflow is fine, just wrap
             {
-                int hash = 17;
+                var hash = 17;
                 hash = hash * 23 + x.GetHashCode();
                 hash = hash * 23 + y.GetHashCode();
                 return hash;
