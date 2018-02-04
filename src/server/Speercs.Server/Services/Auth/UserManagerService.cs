@@ -42,7 +42,6 @@ namespace Speercs.Server.Services.Auth {
                         key = encryptedPassword
                     },
                     enabled = true,
-                    analyticsEnabled = false,
                 };
 
                 // Add the user to the database
@@ -63,7 +62,7 @@ namespace Speercs.Server.Services.Auth {
                 var persistentDataService = new PlayerPersistentDataService(serverContext);
                 await persistentDataService.createPersistentDataAsync(user.identifier);
 
-                serverContext.appState.userAnalyticsData[user.identifier] = new UserAnalytics();
+                serverContext.appState.userMetrics[user.identifier] = new UserMetrics();
 
                 return user;
             });
@@ -134,7 +133,7 @@ namespace Speercs.Server.Services.Auth {
                 var persistentDataService = new PlayerPersistentDataService(serverContext);
                 await persistentDataService.removePersistentDataAsync(userId);
 
-                serverContext.appState.userAnalyticsData.Remove(userId);
+                serverContext.appState.userMetrics.Remove(userId);
 
                 // TODO: Purge all entities
             });

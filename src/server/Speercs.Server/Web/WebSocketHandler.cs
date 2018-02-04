@@ -84,10 +84,11 @@ namespace Speercs.Server.Web {
                     .retrieveUserPipeline(currentUser.identifier)
                     .addItemToEnd(pipelineHandler);
                 pipelineRegistered = true;
-                if (currentUser.analyticsEnabled) {
-                    serverContext.appState.userAnalyticsData[currentUser.identifier].lastConnection =
-                        (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                }
+                
+                // save last connection metric
+                var metricsObject = serverContext.appState.userMetrics[currentUser.identifier];
+                metricsObject.lastConnection =
+                    (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
                 // pipeline is registered, send any queued, previously undelivered data
                 var userNotificationQueue =
@@ -128,11 +129,11 @@ namespace Speercs.Server.Web {
                     serverContext.notificationPipeline
                         .retrieveUserPipeline(currentUser.identifier)
                         .UnregisterHandler(pipelineHandler);
-                    if (currentUser.analyticsEnabled) {
-                        var analyticsObject = serverContext.appState.userAnalyticsData[currentUser.identifier];
-                        analyticsObject.playtime += ((ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) -
-                                                    analyticsObject.lastConnection;
-                    }
+                    
+                    // update playtime (using disconnect time)
+                    var metricsObject = serverContext.appState.userMetrics[currentUser.identifier];
+                    metricsObject.playtime += ((ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) -
+                                              metricsObject.lastConnection;
                 }
             }
         }

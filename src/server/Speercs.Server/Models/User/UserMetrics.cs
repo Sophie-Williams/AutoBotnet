@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using System;
 
 namespace Speercs.Server.Models.User {
-    public class UserAnalytics {
+    public class UserMetrics {
         [JsonProperty("playtime")]
         public ulong playtime { get; set; }
 

@@ -28,11 +28,10 @@ namespace Speercs.Server.Services.Auth {
             var userManager = new UserManagerService(serverContext);
             var user = userManager.findUserByApiKeyAsync(apikey).Result;
             if (user == null) return null;
-            if (user.analyticsEnabled) {
-                var analyticsObject = serverContext.appState.userAnalyticsData[user.identifier];
-                analyticsObject.apiRequests++;
-                analyticsObject.lastRequest = (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            }
+            
+            var metricsObject = serverContext.appState.userMetrics[user.identifier];
+            metricsObject.apiRequests++;
+            metricsObject.lastRequest = (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
             var userAuthClaims = new List<Claim>() {
                 new Claim(AUTH_TYPE_CLAIM_KEY, ApiAccessScope.User.ToString()),

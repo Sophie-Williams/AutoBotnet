@@ -11,9 +11,6 @@ namespace Speercs.Server.Models.User {
         [JsonProperty("apikey")]
         public string apiKey { get; set; }
 
-        [JsonProperty("analyticsEnabled")]
-        public bool analyticsEnabled { get; set; }
-
         [JsonIgnore]
         public ItemCrypto crypto { get; set; }
 

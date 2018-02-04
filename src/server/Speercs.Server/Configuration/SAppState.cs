@@ -34,15 +34,15 @@ namespace Speercs.Server.Configuration {
             persistNeeded = true;
         }
 
-        public Dictionary<string, UserTeam> playerData { get; set; } = new Dictionary<string, UserTeam>();
+        public Dictionary<string, UserTeam> playerData { get; } = new Dictionary<string, UserTeam>();
 
-        public List<string> inviteKeys { get; set; } = new List<string>();
+        public List<string> inviteKeys { get; } = new List<string>();
 
-        public WorldMap worldMap { get; set; } = new WorldMap();
+        public WorldMap worldMap { get; } = new WorldMap();
 
-        public EntityBag entities { get; set; } = new EntityBag();
+        public EntityBag entities { get; } = new EntityBag();
 
-        public Dictionary<string, UserAnalytics> userAnalyticsData = new Dictionary<string, UserAnalytics>();
+        public Dictionary<string, UserMetrics> userMetrics { get; } = new Dictionary<string, UserMetrics>();
 
         public ulong tickCount { get; set; }
     }

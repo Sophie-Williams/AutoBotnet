@@ -29,13 +29,11 @@ namespace Speercs.Server.Modules.Game {
                     return HttpStatusCode.UnprocessableEntity;
                 }
 
-                if (currentUser.analyticsEnabled) {
-                    var analyticsObject = base.serverContext.appState.userAnalyticsData[currentUser.identifier];
-                    analyticsObject.codeDeploys++;
-                    var numLines = (ulong) req.source.Split('\n').Length;
-                    analyticsObject.lineCount = numLines;
-                    analyticsObject.totalLineCount += numLines;
-                }
+                var metricsObject = userMetrics.get();
+                metricsObject.codeDeploys++;
+                var numLines = (ulong) req.source.Split('\n').Length;
+                metricsObject.lineCount = numLines;
+                metricsObject.totalLineCount += numLines;
 
                 playerDataService.deployProgram(currentUser.identifier, new UserProgram(req.source));
                 return HttpStatusCode.OK;

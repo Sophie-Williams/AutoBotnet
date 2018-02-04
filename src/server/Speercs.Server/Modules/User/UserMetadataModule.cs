@@ -16,17 +16,8 @@ namespace Speercs.Server.Modules.User {
                 var req = this.Bind<UserModificationRequest>();
                 var newUser = currentUser;
                 newUser.email = req.email;
-                newUser.analyticsEnabled = req.analyticsEnabled;
                 await userManager.updateUserInDatabaseAsync(newUser);
                 return Response.asJsonNet(new SelfUser(newUser));
-            });
-
-            Get("/analytics",
-                _ => Response.asJsonNet(base.serverContext.appState.userAnalyticsData[currentUser.identifier]));
-
-            Delete("/analytics", _ => {
-                base.serverContext.appState.userAnalyticsData[currentUser.identifier] = new UserAnalytics();
-                return HttpStatusCode.OK;
             });
 
             Get("/player/{id}", async args => {

@@ -4,6 +4,7 @@ using Speercs.Server.Services.Auth;
 using Speercs.Server.Services.Auth.Security;
 using Speercs.Server.Services.Game;
 using System.Linq;
+using Speercs.Server.Services.Metrics;
 
 namespace Speercs.Server.Modules.User {
     /// <summary>
@@ -13,6 +14,8 @@ namespace Speercs.Server.Modules.User {
         public UserManagerService userManager { get; private set; }
 
         public PlayerPersistentDataService playerDataService { get; private set; }
+        
+        public UserMetricsService userMetrics { get; private set; }
 
         public RegisteredUser currentUser { get; private set; }
 
@@ -27,10 +30,12 @@ namespace Speercs.Server.Modules.User {
             // add a pre-request hook to load the user manager
             Before += ctx => {
                 var userIdentifier = Context.CurrentUser.Claims
-                    .FirstOrDefault(x => x.Type == ApiAuthenticator.USER_IDENTIFIER_CLAIM_KEY).Value;
+                    .FirstOrDefault(x => x.Type == ApiAuthenticator.USER_IDENTIFIER_CLAIM_KEY)
+                    ?.Value;
 
                 userManager = new UserManagerService(this.serverContext);
                 playerDataService = new PlayerPersistentDataService(this.serverContext);
+                userMetrics = new UserMetricsService(this.serverContext, userIdentifier);
                 currentUser = userManager.findUserByIdentifierAsync(userIdentifier).Result;
                 return null;
             };
