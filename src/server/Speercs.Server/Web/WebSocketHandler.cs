@@ -77,7 +77,7 @@ namespace Speercs.Server.Web {
                 // Attempt to authenticate
                 if (!_rtContext.authenticateWith(authApiKey)) {
                     await writeLineAsync("false"); // authentication failure
-                    await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "Invalid Authentication Key",
+                    await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "Invalid authentication key",
                         CancellationToken.None);
                     throw new SecurityException();
                 }
