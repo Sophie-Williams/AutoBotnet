@@ -21,16 +21,15 @@ namespace Speercs.Server.Modules.Admin {
 
             // require claims from stateless auther, defined in bootstrapper
             this.requiresAdminAuthentication();
-           
-            // retrieve the key used for admin auth for logging purposes
-            var adminKey = Context.CurrentUser.Claims
-                    .FirstOrDefault(x => x.Type == ApiAuthenticator.API_KEY_CLAIM_KEY)
-                    ?.Value;
-
-            serverContext.log.writeLine($"Admin authenticated using key {adminKey}", SpeercsLogger.LogLevel.Information);
 
             // add a pre-request hook to load the user manager
             Before += ctx => {
+                // retrieve the key used for admin auth for logging purposes
+                var adminKey = Context.CurrentUser.Claims
+                        .FirstOrDefault(x => x.Type == ApiAuthenticator.API_KEY_CLAIM_KEY)
+                        ?.Value;
+                serverContext.log.writeLine($"Admin authenticated using key {adminKey}", SpeercsLogger.LogLevel.Information);
+                
                 userManager = new UserManagerService(this.serverContext);
                 playerDataService = new PlayerPersistentDataService(this.serverContext);
                 return null;
