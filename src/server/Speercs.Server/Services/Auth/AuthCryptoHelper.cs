@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Speercs.Server.Services.Auth {
     public class AuthCryptoHelper {
-        public PasswordCryptoConfiguration configuration { get; }
+        private PasswordCryptoConfiguration configuration { get; }
 
         public AuthCryptoHelper(PasswordCryptoConfiguration conf) {
             configuration = conf;

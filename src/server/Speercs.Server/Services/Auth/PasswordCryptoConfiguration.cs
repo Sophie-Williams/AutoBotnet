@@ -8,7 +8,7 @@ namespace Speercs.Server.Services.Auth {
 
         public static PasswordCryptoConfiguration createDefault() {
             return new PasswordCryptoConfiguration {
-                iterations = 10000,
+                iterations = DEFAULT_ITERATION_COUNT,
                 length = DEFAULT_LENGTH,
                 saltLength = DEFAULT_SALT_LENGTH
             };

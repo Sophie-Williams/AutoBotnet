@@ -115,6 +115,9 @@ namespace Speercs.Server.Services.Auth {
                     conf = cryptoConf,
                     key = encryptedPassword
                 };
+                // regenerate key to invalidate old sessions
+                await generateNewApiKeyAsync(user);
+
                 // Save changes
                 await updateUserInDatabaseAsync(user);
             }));
