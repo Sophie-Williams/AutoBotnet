@@ -6,7 +6,7 @@ REST API route descriptions:
   - Register
   - Login
   - Delete
-  - Change Password
+  - Change password
 - Server Info
   - Info
   - Meta
@@ -23,10 +23,10 @@ REQUEST:
 
 ```json
 {
-    "Username": "<USERNAME>",
-    "Email": "<EMAIL [OPTIONAL]>",
-    "Password": "<PASSWORD>",
-    "InviteKey": "<INVITE KEY> [ONLY REQIRED IF `inviteRequired` IS TRUE]>"
+    "username": "<username>",
+    "email": "<email [optional]>",
+    "password": "<password>",
+    "invitekey": "<invite key> [only required if `requireInvite` is true]>"
 }
 ```
 
@@ -34,10 +34,9 @@ RESPONSE:
 
 ```json
 {
-    "username": "joonatoona",
-    "email": "",
-    "apikey": "jfgshiuoreb7c6w8s76ctbrsiu5su464",
-    "analyticsEnabled": false
+    "username": "<username>",
+    "email": "<email>",
+    "apikey": "<api key [alphanumeric string]>"
 }
 ```
 
@@ -51,8 +50,8 @@ REQUEST:
 
 ```json
 {
-    "Username": "<USERNAME>",
-    "Password": "<PASSWORD>"
+    "username": "<username>",
+    "password": "<password>"
 }
 ```
 
@@ -60,10 +59,9 @@ RESPONSE:
 
 ```json
 {
-    "username": "joonatoona",
-    "email": "",
-    "apikey": "jfgshiuoreb7c6w8s76ctbrsiu5su464",
-    "analyticsEnabled": false
+    "username": "<username>",
+    "email": "<email>",
+    "apikey": "<api key [alphanumeric string]>"
 }
 ```
 
@@ -77,16 +75,16 @@ REQUEST:
 
 ```json
 {
-    "Username": "<USERNAME>",
-    "Password": "<PASSWORD>"
+    "username": "<username>",
+    "password": "<password>"
 }
 ```
 
 RESPONSE:
 
-`200`
+Status code `200`.
 
-### Change Password
+### Change password
 
 > Change a password for a user
 
@@ -96,15 +94,15 @@ REQUEST:
 
 ```json
 {
-    "Username": "<USERNAME>",
-    "OldPassword": "<OLD_PASSWORD>",
-    "NewPassword": "<NEW_PASSWORD>"
+    "username": "<username>",
+    "oldpassword": "<old_password>",
+    "oewpassword": "<new_password>"
 }
 ```
 
 RESPONSE:
 
-`200`
+Status code `200`.
 
 ## Server Info
 
@@ -121,7 +119,7 @@ RESPONSE:
 {
     "userCount": 1337, // Haha I wish
     "tickrate": 1000,
-    "mapSize": 80085
+    "mapSize": 80085 // lol ikr
 }
 ```
 
@@ -139,8 +137,8 @@ RESPONSE:
 ```json
 {
     "name": "CookieEaters Official",
-    "motd": "AutoBotnet server v1.0.0.0\nThis message is configurable by the server admins.",
-    "version": "1.0.0.0",
+    "motd": "Welcome to AutoBotnet server v0.1",
+    "version": "0.1",
     "inviteRequired": false
 }
 ```
@@ -166,7 +164,7 @@ This will be similar to JSON-RPC:
 
 Request schema:
 
-```
+```json
 {
   "request": <string>, // request command
   "data": <object/value>, // request data
@@ -176,7 +174,7 @@ Request schema:
 
 Response schema:
 
-```
+```json
 {
   "id": <int>, // request
   "data": <object/value> // response data
@@ -187,8 +185,8 @@ Request example:
 
 ```json
 {
-  "request": "console_command",
-  "data": "speercs.creeps['bob'].memory['a']",
+  "request": "command",
+  "data": "speercs.units['bob'].memory['a']",
   "id": 123948709
 }
 ```
@@ -200,6 +198,6 @@ Response example:
 ```json
 {
   "id": 123948709,
-  "data": 42
+  "value": 42
 }
 ```
