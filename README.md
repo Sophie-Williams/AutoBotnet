@@ -7,7 +7,7 @@
 
 ## Documentation
 
-Documentation can be found in [doc](doc/)
+- Server REST API documentation can be found in [doc](doc/).
 
 ## Design
 
