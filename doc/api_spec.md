@@ -119,7 +119,8 @@ RESPONSE:
 {
     "userCount": 1337, // Haha I wish
     "tickrate": 1000,
-    "mapSize": 80085 // lol ikr
+    "mapSize": 80085, // lol ikr
+    "inviteRequired": false
 }
 ```
 
@@ -138,8 +139,7 @@ RESPONSE:
 {
     "name": "CookieEaters Official",
     "motd": "Welcome to AutoBotnet server v0.1",
-    "version": "0.1",
-    "inviteRequired": false
+    "version": "0.1"
 }
 ```
 

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Auth;
 
-namespace Speercs.Server.Models {
+namespace Speercs.Server.Models.Meta {
     public class PublicInfo : ProtectedDependencyObject {
         [JsonProperty("userCount")]
         public int userCount { get; set; }
@@ -12,7 +12,7 @@ namespace Speercs.Server.Models {
 
         [JsonProperty("mapSize")]
         public int mapSize { get; set; }
-        
+
         [JsonProperty("inviteRequired")]
         public bool inviteRequired { get; set; }
 

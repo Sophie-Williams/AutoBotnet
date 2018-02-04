@@ -31,7 +31,7 @@ namespace Speercs.Server.Configuration {
         public string gameName { get; } = "AutoBotnet";
 
         /// <summary>
-        /// The name of the server.
+        /// The name of the server instance.
         /// </summary>
         [JsonProperty("globalName")]
         public string globalName { get; set; } = "AutoBotnet";
