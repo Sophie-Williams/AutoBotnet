@@ -38,7 +38,7 @@ namespace Speercs.Server.Services.Auth {
 
             var userAuthClaims = new List<Claim> {
                 new Claim(AUTH_TYPE_CLAIM_KEY, ApiAccessScope.User.ToString()),
-                new Claim(USER_IDENTIFIER_CLAIM_KEY, user.identifier)
+                new Claim(USER_IDENTIFIER_CLAIM_KEY, user.identifier),
                 new Claim(API_KEY_CLAIM_KEY, apikey)
             };
             var userAuthIdentity = new ClaimsIdentity(userAuthClaims);
