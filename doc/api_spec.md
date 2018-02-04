@@ -1,6 +1,11 @@
-# API Spec for **Speercs**
 
-REST API route descriptions:
+# API Spec for **Speercs** AutoBotnet Server
+
+## Request Index
+
+Key
+
+- `[u]` - the request (and all children) are user requests, append the `Authorization: <apikey>` header to all user requests.
 
 - [Server Info](#server-info)
   - [Info](#info)
@@ -12,7 +17,7 @@ REST API route descriptions:
   - [Change password](#change-password)
   - [Reauth](#reauth)
   - [Regenerate API Key](#regenerate-api-key)
-- [Game](#game)
+- [Game](#game) [u]
   - [Deploy Code](#deploy-code)
 
 
