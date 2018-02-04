@@ -22,12 +22,13 @@ namespace Speercs.Server.Game.Subsystems {
                         try {
                             var loopFunc = engine.GetValue("loop");
                             engine.ResetTimeoutTicks();
+                            JsValue res = null;
                             if (loopFunc != JsValue.Undefined) {
-                                var res = loopFunc.Invoke();
+                                res = loopFunc.Invoke();
                             }
 
                             serverContext.log.writeLine(
-                                $"Player {executor.userIdentifier} program executed successfully",
+                                $"Player {executor.userIdentifier} program executed successfully with result {res}",
                                 SpeercsLogger.LogLevel.Trace);
                         } catch (TimeoutException ex) {
                             throw new TimeoutException($"Player {executor.userIdentifier} code took too long", ex);
