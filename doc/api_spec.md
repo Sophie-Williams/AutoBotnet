@@ -211,7 +211,10 @@ Status code `2xx`.
 RESPONSE:
 
 ```json
-// TODO
+{
+	"deployTime": "<deploy time> [unix timestamp]",
+	"source": "let a = 1; function loop() { a++; }"
+}
 ```
 
 #### Reload
