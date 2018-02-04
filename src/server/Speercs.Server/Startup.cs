@@ -71,24 +71,28 @@ namespace Speercs.Server {
             // build context
             var context = SConfigurator.createContext(serverConfig);
 
+            context.log.writeLine("Server context created", SpeercsLogger.LogLevel.Information);
+
             // load plugins
             // load builtin; TODO: Make some builtin plugins external, load external plugins
             new BuiltinPluginBootstrapper(context).loadAll();
 
             // load persistent state
             SConfigurator.loadState(context, state_storage_database_file_name);
+            context.log.writeLine($"Persistent state loaded from {state_storage_database_file_name}", SpeercsLogger.LogLevel.Information);
 
             // load database
             context.connectDatabase();
+            context.log.writeLine($"Database connected", SpeercsLogger.LogLevel.Information);
 
             // register application stop handler
             // AssemblyLoadContext.Default.Unloading += (c) => OnUnload(context);
             applicationLifetime.ApplicationStopping.Register(() => onUnload(context));
+            context.log.writeLine($"Application interrupt handler registered", SpeercsLogger.LogLevel.Information);
 
             // map websockets
             app.UseWebSockets();
             app.Map("/ws", ab => WebSocketHandler.map(ab, context));
-
 
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
@@ -105,6 +109,8 @@ namespace Speercs.Server {
                 );
                 options.Bootstrapper = new SpeercsBootstrapper(context);
             }));
+
+            context.log.writeLine($"Web services mapped successfully", SpeercsLogger.LogLevel.Information);
 
             // start game services
             gameBootstrapper = new SGameBootstrapper(context);

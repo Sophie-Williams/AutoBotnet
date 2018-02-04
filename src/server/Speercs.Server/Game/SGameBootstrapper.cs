@@ -1,6 +1,7 @@
 using System.Threading;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Subsystems;
+using Speercs.Server.Services.Application;
 
 namespace Speercs.Server.Game {
     public class SGameBootstrapper : DependencyObject {
@@ -21,6 +22,7 @@ namespace Speercs.Server.Game {
         }
 
         public void onStartup() {
+            serverContext.log.writeLine($"Running game bootstrapper startup", SpeercsLogger.LogLevel.Information);
             // start tick system
             var tickLoopTask = tickSystem.startAsync(tickSystemCancelToken);
         }
