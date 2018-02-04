@@ -102,9 +102,9 @@ namespace Speercs.Server.Modules.Auth {
                 } catch (NullReferenceException) {
                     // A parameter was not provided
                     return HttpStatusCode.BadRequest;
-                } catch (SecurityException secEx) {
+                } catch (SecurityException ex) {
                     // Registration blocked for security reasons
-                    return Response.AsText(secEx.Message)
+                    return Response.AsText(ex.Message)
                         .WithStatusCode(HttpStatusCode.Unauthorized);
                 }
             });
@@ -158,12 +158,12 @@ namespace Speercs.Server.Modules.Auth {
                 } catch (NullReferenceException) {
                     // A parameter was not provided
                     return new Response().WithStatusCode(HttpStatusCode.BadRequest);
-                } catch (SecurityException secEx) {
+                } catch (SecurityException ex) {
                     // Registration blocked for security reasons
-                    return Response.AsText(secEx.Message)
+                    return Response.AsText(ex.Message)
                         .WithStatusCode(HttpStatusCode.Unauthorized);
-                } catch (InvalidParameterException sx) {
-                    return Response.AsText(sx.Message)
+                } catch (InvalidParameterException ex) {
+                    return Response.AsText(ex.Message)
                         .WithStatusCode(HttpStatusCode.UnprocessableEntity);
                 }
             });
@@ -186,9 +186,9 @@ namespace Speercs.Server.Modules.Auth {
                 } catch (NullReferenceException) {
                     // A parameter was not provided
                     return HttpStatusCode.BadRequest;
-                } catch (SecurityException secEx) {
+                } catch (SecurityException ex) {
                     // Blocked for security reasons
-                    return Response.AsText(secEx.Message)
+                    return Response.AsText(ex.Message)
                         .WithStatusCode(HttpStatusCode.Unauthorized);
                 }
             });
@@ -212,9 +212,9 @@ namespace Speercs.Server.Modules.Auth {
                 } catch (NullReferenceException) {
                     // A parameter was not provided
                     return HttpStatusCode.BadRequest;
-                } catch (SecurityException secEx) {
+                } catch (SecurityException ex) {
                     // Blocked for security reasons
-                    return Response.AsText(secEx.Message)
+                    return Response.AsText(ex.Message)
                         .WithStatusCode(HttpStatusCode.Unauthorized);
                 }
             });
