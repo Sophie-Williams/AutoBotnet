@@ -7,13 +7,6 @@ namespace Speercs.Server.Configuration {
         public SDatabaseConfiguration databaseConfiguration { get; set; } = new SDatabaseConfiguration();
 
         /// <summary>
-        /// Controls whether the Webpack Dev Middleware is enabled for serving the
-        /// web interface in development mode.
-        /// </summary>
-        [JsonProperty("enableWebpackDevelopmentInterface")]
-        public bool enableDevelopmentWebInterface { get; set; } = true;
-
-        /// <summary>
         /// If an invite key is required for registration
         /// </summary>
         [JsonProperty("requireInvite")]
