@@ -2,11 +2,38 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": ".NET Core - Speercs Server",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceRoot}/Speercs.Server/bin/Debug/netcoreapp2.0/Speercs.Server.dll",
+            "args": [],
+            "cwd": "${workspaceRoot}/Speercs.Server",
+            "stopAtEntry": false,
+            "launchBrowser": {
+                "enabled": false,
+                "args": "${auto-detect-url}",
+                "windows": {
+                    "command": "cmd.exe",
+                    "args": "/C start ${auto-detect-url}"
+                },
+                "osx": {
+                    "command": "open"
+                },
+                "linux": {
+                    "command": "xdg-open"
+                }
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        {
             "name": ".NET Core - DevTests",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/Speercs.DevTests/bin/Debug/netcoreapp1.1/Speercs.DevTests.dll",
+            "program": "${workspaceRoot}/Speercs.DevTests/bin/Debug/netcoreapp2.0/Speercs.DevTests.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "enableStepFiltering": false,
@@ -27,39 +54,6 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceRoot}/Views"
-            }
-        },
-        {
-            "name": ".NET Core + Node.js - Speercs Server",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceRoot}/Speercs.Server/bin/Debug/netcoreapp1.1/Speercs.Server.dll",
-            "args": [],
-            "cwd": "${workspaceRoot}/Speercs.Server",
-            "stopAtEntry": false,
-            "launchBrowser": {
-                "enabled": false,
-                "args": "${auto-detect-url}",
-                "windows": {
-                    "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}"
-                },
-                "osx": {
-                    "command": "open"
-                },
-                "linux": {
-                    "command": "xdg-open"
-                }
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceRoot}/Views"
             }
         }
     ]
