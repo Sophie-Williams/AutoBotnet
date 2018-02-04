@@ -34,18 +34,9 @@ namespace Speercs.Server.Modules.Auth {
                         throw new SecurityException("Maximum number of users for this server reached");
                     }
 
-                    // Valdiate username length
-                    if (req.username.Length < 2) {
-                        throw new InvalidParameterException("Username must be at least 2 characters.");
-                    }
-
-                    if (req.username.Length > 24) {
-                        throw new InvalidParameterException("Username may not exceed 24 characters.");
-                    }
-
                     // Validate username charset
                     if (charsetRegex.Matches(req.username).Count <= 0) {
-                        throw new InvalidParameterException("Invalid character in username.");
+                        throw new InvalidParameterException("Invalid username.");
                     }
 
                     // Validate password
