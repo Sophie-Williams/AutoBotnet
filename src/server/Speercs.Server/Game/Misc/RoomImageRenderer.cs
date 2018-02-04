@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using SixLabors.ImageSharp;
 using Speercs.Server.Models.Game.Map;
 
-namespace Speercs.Server.Utilities {
-    public class RoomImage {
+namespace Speercs.Server.Game.Misc {
+    public class RoomImageRenderer {
         public Image<Rgba32> drawRoom(Room room) {
             var image = new Image<Rgba32>(Room.MAP_EDGE_SIZE, Room.MAP_EDGE_SIZE);
             for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
@@ -16,10 +16,10 @@ namespace Speercs.Server.Utilities {
         }
 
         public Image<Rgba32> drawMap(WorldMap map) {
-            var worldMaxX = Int32.MinValue;
-            var worldMaxY = Int32.MinValue;
-            var worldMinX = Int32.MaxValue;
-            var worldMinY = Int32.MaxValue;
+            var worldMaxX = int.MinValue;
+            var worldMaxY = int.MinValue;
+            var worldMinX = int.MaxValue;
+            var worldMinY = int.MaxValue;
             foreach (var room in map.roomDict.Values) {
                 if (room.x > worldMaxX) worldMaxX = room.x;
                 if (room.x < worldMinX) worldMinX = room.x;
