@@ -65,6 +65,7 @@ RESPONSE:
 }
 ```
 
+
 ### Delete
 
 > Delete a user account
@@ -82,11 +83,11 @@ REQUEST:
 
 RESPONSE:
 
-Status code `200`.
+Status code `2xx`.
 
 ### Change password
 
-> Change a password for a user
+> Change the password for a user. Resets the API key
 
 `PATCH /a/auth/changepassword`
 
@@ -102,13 +103,57 @@ REQUEST:
 
 RESPONSE:
 
-Status code `200`.
+Status code `2xx`.
+
+### Reauth
+
+> Validate an API key by using it to log in as a user
+
+`PATCH /a/auth/reauth`
+
+REQUEST:
+
+```json
+{
+    "username": "<username>",
+    "apikey": "<apikey>"
+}
+```
+
+RESPONSE:
+
+```json
+{
+    "username": "<username>",
+    "email": "<email>",
+    "apikey": "<api key [alphanumeric string]>"
+}
+```
+
+### Regenerate API Key
+
+> Generate a new API key. Requires a password-backed login to obtain the new key
+
+`PATCH /a/auth/newkey`
+
+REQUEST:
+
+```json
+{
+    "username": "<username>",
+    "apikey": "<apikey>"
+}
+```
+
+RESPONSE:
+
+Status code `2xx`.
 
 ## Server Info
 
-# Info
+### Info
 
-> Get dynamic server information
+> Get information about the server
 
 `GET /a/info`
 
@@ -126,9 +171,9 @@ RESPONSE:
 
 ## Server Meta
 
-# Meta
+### Meta
 
-> Get static server information
+> Get metadata about the server
 
 `GET /a/meta`
 
@@ -143,7 +188,7 @@ RESPONSE:
 }
 ```
 
-# Websockets
+## Websockets
 
 Websocket API route descriptions:
 

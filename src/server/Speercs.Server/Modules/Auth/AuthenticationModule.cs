@@ -117,7 +117,7 @@ namespace Speercs.Server.Modules.Auth {
                         // queue persist
                         this.serverContext.appState.queuePersist();
 
-                        return HttpStatusCode.OK;
+                        return HttpStatusCode.NoContent;
                     }
 
                     return HttpStatusCode.Unauthorized;
@@ -142,7 +142,7 @@ namespace Speercs.Server.Modules.Auth {
                     if (user.enabled && await _userManager.checkPasswordAsync(req.oldPassword, user)) {
                         // Update password
                         await _userManager.changeUserPasswordAsync(user, req.newPassword);
-                        return HttpStatusCode.OK;
+                        return HttpStatusCode.NoContent;
                     }
 
                     return HttpStatusCode.Unauthorized;
