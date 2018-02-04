@@ -2,14 +2,58 @@
 
 REST API route descriptions:
 
-- Auth
-  - Register
-  - Login
-  - Delete
-  - Change password
-- Server Info
-  - Info
-  - Meta
+- [Server Info](#server-info)
+  - [Info](#info)
+  - [Meta](#meta)
+- [Auth](#auth)
+  - [Register](#register)
+  - [Login](#login)
+  - [Delete](#delete)
+  - [Change password](#change-password)
+  - [Reauth](#reauth)
+  - [Regenerate API Key](#regenerate-api-key)
+- [Game](#game)
+  - [Deploy Code](#deploy-code)
+
+
+## Server Info
+
+### Info
+
+> Get information about the server
+
+`GET /a/info`
+
+RESPONSE:
+
+
+```json
+{
+    "userCount": 1337, // Haha I wish
+    "tickrate": 1000,
+    "mapSize": 80085, // lol ikr
+    "inviteRequired": false
+}
+```
+
+## Server Meta
+
+### Meta
+
+> Get metadata about the server
+
+`GET /a/meta`
+
+RESPONSE:
+
+
+```json
+{
+    "name": "CookieEaters Official",
+    "motd": "Welcome to AutoBotnet server v0.1",
+    "version": "0.1"
+}
+```
 
 ## Auth
 
@@ -149,100 +193,46 @@ RESPONSE:
 
 Status code `2xx`.
 
-## Server Info
+## Game
 
-### Info
+### Deploy Code
 
-> Get information about the server
+#### Get
 
-`GET /a/info`
+> Retrieve currently deployed code
 
-RESPONSE:
-
-
-```json
-{
-    "userCount": 1337, // Haha I wish
-    "tickrate": 1000,
-    "mapSize": 80085, // lol ikr
-    "inviteRequired": false
-}
-```
-
-## Server Meta
-
-### Meta
-
-> Get metadata about the server
-
-`GET /a/meta`
+`GET /a/game/code/get`
 
 RESPONSE:
 
+```json
+// TODO
+```
+
+#### Reload
+
+> Request a reinitialization of the engine hosting the user's program
+
+`PATCH /a/game/code/reload`
+
+RESPONSE:
+
+Status code `2xx`.
+
+#### Deploy
+
+> Deploy a new program for the user
+
+`POST /a/game/code/deploy`
+
+REQUEST:
 
 ```json
 {
-    "name": "CookieEaters Official",
-    "motd": "Welcome to AutoBotnet server v0.1",
-    "version": "0.1"
+    "source": "<js program source>"
 }
 ```
 
-## Websockets
+RESPONSE:
 
-Websocket API route descriptions:
-
-"<--": incoming  
-"-->": outgoing
-
-- Map
-  - Fetch map <--
-  - Build building -->
-- Player status
-  - Creep locations <--
-  - Attack/Mine/Resources/etc. <--
-
-
-How we'll use 2-way websocket requests/events:
-
-This will be similar to JSON-RPC:
-
-Request schema:
-
-```json
-{
-  "request": <string>, // request command
-  "data": <object/value>, // request data
-  "id": <int> // request id
-}
-```
-
-Response schema:
-
-```json
-{
-  "id": <int>, // request
-  "data": <object/value> // response data
-}
-```
-
-Request example:
-
-```json
-{
-  "request": "command",
-  "data": "speercs.units['bob'].memory['a']",
-  "id": 123948709
-}
-```
-
-(If `id` is passed, then a reply is expected. Otherwise, it is a "notification")
-
-Response example:
-
-```json
-{
-  "id": 123948709,
-  "value": 42
-}
-```
+Status code `2xx`.

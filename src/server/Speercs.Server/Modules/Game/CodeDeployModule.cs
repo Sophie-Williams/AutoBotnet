@@ -18,7 +18,7 @@ namespace Speercs.Server.Modules.Game {
                 // reload cached engine for that user
                 this.serverContext.executors.reloadExecutor(currentUser.identifier);
 
-                return HttpStatusCode.OK;
+                return HttpStatusCode.NoContent;
             });
 
             Post("/deploy", _ => {
@@ -36,7 +36,7 @@ namespace Speercs.Server.Modules.Game {
                 metricsObject.totalLineCount += numLines;
 
                 playerDataService.deployProgram(currentUser.identifier, new UserProgram(req.source));
-                return HttpStatusCode.OK;
+                return HttpStatusCode.NoContent;
             });
         }
     }
