@@ -57,7 +57,12 @@ namespace Speercs.Server.Web {
                 var id = ((JValue) requestBundle["id"]).ToObject<long>();
                 // Get handler
                 var handler = _realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.path == rcommand);
-                return (await handler?.handleRequestAsync(id, data, _rtContext), rcommand, id);
+                var result = (JToken) JValue.CreateNull();
+                if (handler != null) {
+                    result = await handler.handleRequestAsync(id, data, _rtContext);
+                }
+
+                return (result, rcommand, id);
             }
 
             var pipelineRegistered = false;
@@ -84,7 +89,7 @@ namespace Speercs.Server.Web {
                     .retrieveUserPipeline(currentUser.identifier)
                     .addItemToEnd(pipelineHandler);
                 pipelineRegistered = true;
-                
+
                 // save last connection metric
                 var metricsObject = serverContext.appState.userMetrics[currentUser.identifier];
                 metricsObject.lastConnection =
@@ -127,7 +132,7 @@ namespace Speercs.Server.Web {
                     serverContext.notificationPipeline
                         .retrieveUserPipeline(currentUser.identifier)
                         .UnregisterHandler(pipelineHandler);
-                    
+
                     // update playtime (using disconnect time)
                     var metricsObject = serverContext.appState.userMetrics[currentUser.identifier];
                     metricsObject.playtime += ((ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) -

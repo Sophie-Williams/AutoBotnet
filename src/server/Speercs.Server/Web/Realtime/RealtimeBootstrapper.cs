@@ -1,7 +1,6 @@
 using CookieIoC;
 using Speercs.Server.Configuration;
 using Speercs.Server.Web.Realtime.Handlers;
-using Speercs.Server.Web.Realtime.Handlers.Game;
 
 namespace Speercs.Server.Web.Realtime {
     public class RealtimeBootstrapper {

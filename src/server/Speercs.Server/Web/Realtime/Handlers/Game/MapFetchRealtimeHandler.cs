@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
 
-namespace Speercs.Server.Web.Realtime.Handlers.Game {
+namespace Speercs.Server.Web.Realtime.Handlers {
     public class MapFetchRealtimeHandler : RealtimeHandler {
         public MapFetchRealtimeHandler(ISContext context) : base(context, "fetchmap") { }
 

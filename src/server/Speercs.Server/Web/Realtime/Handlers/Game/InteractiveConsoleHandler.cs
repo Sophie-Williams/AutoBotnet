@@ -11,9 +11,9 @@ namespace Speercs.Server.Web.Realtime.Handlers {
             bool error;
             try {
                 var engine = serverContext.executors.retrieveExecutor(rtContext.userIdentifier).engine;
-                var command = data["command"].ToString();
+                var expression = data["expr"].ToString();
                 var result = engine
-                    .Execute(command)
+                    .Execute(expression)
                     .GetCompletionValue()
                     .ToObject();
                 if (result != null) {
