@@ -1,9 +1,9 @@
-using ImageSharp.Formats;
+using System.IO;
 using Nancy;
+using SixLabors.ImageSharp.Formats.Png;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game.Map;
 using Speercs.Server.Utilities;
-using System.IO;
 
 namespace Speercs.Server.Modules.Game {
     public class MapImageModule : SBaseModule {

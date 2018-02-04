@@ -1,4 +1,4 @@
-using ImageSharp;
+using SixLabors.ImageSharp;
 using Speercs.Server.Models.Game.Map;
 using System;
 
@@ -30,8 +30,6 @@ namespace Speercs.Server.Utilities {
 
             var image = new Image<Rgba32>((Math.Abs((worldMaxX - worldMinX) + 1) * Room.MAP_EDGE_SIZE),
                 (Math.Abs((worldMaxY - worldMinY) + 1) * Room.MAP_EDGE_SIZE));
-
-            image.BackgroundColor(Rgba32.Black);
 
             foreach (var room in map.roomDict.Values) {
                 var roomX = Room.MAP_EDGE_SIZE * (room.x - worldMinX);

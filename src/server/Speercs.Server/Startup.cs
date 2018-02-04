@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,17 +11,12 @@ using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game;
 using Speercs.Server.Web;
-using System;
-using System.IO;
-using System.Runtime.Loader;
 
 namespace Speercs.Server {
     public class Startup {
         private const string config_file_name = "speercs.json";
         private const string state_storage_database_file_name = "speercs_state.lidb";
         private readonly IConfigurationRoot _fileConfig;
-
-        private string _clientAppPath = "ClientApp/";
 
         public SGameBootstrapper gameBootstrapper { get; private set; }
 
@@ -53,9 +49,6 @@ namespace Speercs.Server {
 
             // Register IConfiguration
             services.Configure<SConfiguration>(_fileConfig);
-
-            // Add AspNetCore MVC
-            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,21 +82,6 @@ namespace Speercs.Server {
             app.UseWebSockets();
             app.Map("/ws", (ab) => WebSocketHandler.map(ab, context));
 
-            _clientAppPath = Path.Combine(Directory.GetCurrentDirectory(), _clientAppPath);
-
-            if (env.IsDevelopment()) {
-                app.UseDeveloperExceptionPage();
-                if (context.configuration.enableDevelopmentWebInterface) {
-                    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
-                        HotModuleReplacement = true,
-                        ProjectPath = _clientAppPath,
-                        ConfigFile = $"{_clientAppPath}webpack.config.js"
-                    });
-                }
-            } else {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
             // add wwwroot/
             app.UseStaticFiles();
 
@@ -115,17 +93,6 @@ namespace Speercs.Server {
                 );
                 options.Bootstrapper = new SpeercsBootstrapper(context);
             }));
-
-            // set up MVC fallback
-            app.UseMvc(routes => {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new {controller = "Home", action = "Index"});
-            });
 
             // start game services
             gameBootstrapper = new SGameBootstrapper(context);

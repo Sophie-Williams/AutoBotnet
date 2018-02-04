@@ -10,8 +10,8 @@ using Speercs.Server.Models.Game.Program;
 using IridiumJS;
 
 namespace Speercs.DevTests {
-    internal class Program {
-        public static void main(string[] args) {
+    internal static class Program {
+        public static void Main(string[] args) {
             var task = mainAsync(args);
             task.Wait();
             Console.WriteLine("PROGRAM DONE");

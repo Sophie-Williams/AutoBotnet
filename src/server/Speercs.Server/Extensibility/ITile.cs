@@ -1,4 +1,4 @@
-using ImageSharp;
+using SixLabors.ImageSharp;
 
 namespace Speercs.Server.Extensibility {
     public interface ITile {

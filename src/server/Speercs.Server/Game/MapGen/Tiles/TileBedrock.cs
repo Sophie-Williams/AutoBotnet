@@ -1,4 +1,4 @@
-using ImageSharp;
+using SixLabors.ImageSharp;
 using Speercs.Server.Extensibility;
 
 namespace Speercs.Server.Game.MapGen.Tiles {
