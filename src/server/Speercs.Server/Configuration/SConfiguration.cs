@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Speercs.Server.Services.Application;
 
 namespace Speercs.Server.Configuration {
     public class SConfiguration {
@@ -80,6 +81,12 @@ namespace Speercs.Server.Configuration {
         /// </summary>
         [JsonProperty("codeSizeLimit")]
         public int codeSizeLimit { get; set; } = 24000;
+        
+        /// <summary>
+        /// The verbosity of the application logger.
+        /// </summary>
+        [JsonProperty("logLevel")]
+        public SpeercsLogger.LogLevel logLevel { get; set; } = SpeercsLogger.LogLevel.Warning;
 
         /// <summary>
         /// Maximum number of registered users. Set to -1 for unlimited.

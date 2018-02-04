@@ -5,6 +5,7 @@ using Speercs.Server.Extensibility;
 using Speercs.Server.Game.Scripting;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
+using Speercs.Server.Services.Application;
 
 namespace Speercs.Server.Configuration {
     public class SContext : ISContext {
@@ -29,6 +30,8 @@ namespace Speercs.Server.Configuration {
 
         public PlayerExecutors executors { get; private set; }
 
+        public SpeercsLogger log { get; }
+
         public static string version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
 
@@ -38,6 +41,7 @@ namespace Speercs.Server.Configuration {
             serviceTable = new UserServiceTable(this);
             extensibilityContainer = new CookieJar();
             pluginLoader = new PluginLoader<ISpeercsPlugin>();
+            log = new SpeercsLogger(config.logLevel);
         }
 
         public void connectDatabase() {

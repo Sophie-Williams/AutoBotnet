@@ -21,7 +21,6 @@ namespace Speercs.Server.Configuration {
         [BsonIgnore]
         public Action<bool> persist { get; set; }
 
-
         [BsonIgnore]
         public bool persistNeeded { get; set; }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using Speercs.Server.Configuration;
+using Speercs.Server.Services.Application;
 using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Game.Scripting {
@@ -33,6 +34,8 @@ namespace Speercs.Server.Game.Scripting {
                     var result = engine.Execute(playerSource).GetCompletionValue();
                 } catch (Exception ex) {
                     // Invalid code (syntax or other error on load)
+                    serverContext.log.writeLine($"Error loading player {userIdentifier}'s code: {ex.Message}",
+                        SpeercsLogger.LogLevel.Warning);
                     // TODO: let the user know
                 }
 
