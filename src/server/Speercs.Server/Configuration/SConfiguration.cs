@@ -25,10 +25,10 @@ namespace Speercs.Server.Configuration {
         public string baseDirectory { get; set; }
 
         /// <summary>
-        /// The name of the game as displayed to end-users. Currently immutable.
+        /// The name of the game as displayed to end-users.
         /// </summary>
         [JsonIgnore]
-        public string gameName { get; } = "AutoBotnet";
+        public string gameName { get; set; } = "AutoBotnet";
 
         /// <summary>
         /// The name of the server instance.
