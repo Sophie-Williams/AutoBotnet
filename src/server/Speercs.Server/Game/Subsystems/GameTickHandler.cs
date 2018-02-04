@@ -21,13 +21,19 @@ namespace Speercs.Server.Game.Subsystems {
                         var engine = executor.engine;
                         try {
                             var loopFunc = engine.GetValue("loop");
+                            engine.ResetTimeoutTicks();
                             if (loopFunc != JsValue.Undefined) {
                                 var res = loopFunc.Invoke();
                             }
+
+                            serverContext.log.writeLine(
+                                $"Player {executor.userIdentifier} program executed successfully",
+                                SpeercsLogger.LogLevel.Trace);
                         } catch (TimeoutException ex) {
                             throw new TimeoutException($"Player {executor.userIdentifier} code took too long", ex);
                         } catch (Exception ex) {
-                            throw new CodeExecutionException($"Error executing player {executor.userIdentifier} program", ex);
+                            throw new CodeExecutionException(
+                                $"Error executing player {executor.userIdentifier} program", ex);
                         }
                     });
                 }
