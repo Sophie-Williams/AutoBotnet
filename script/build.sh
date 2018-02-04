@@ -6,22 +6,21 @@ if [ -d $artifactsFolder ]; then
   rm -R $artifactsFolder
 fi
 
-# Dotnet info
+# dotnet info
+echo "Building using .NET Core SDK $(dotnet --version)"
 
-dotnet --version
-
-echo "Restoring packages..."
+echo "Running dotnet restore"
 # Restore packages
 dotnet restore src/server/Speercs.Server.sln
 
-echo "Building project..."
+echo "Running dotnet build [Release]"
 
 # Build
 dotnet build -c Release src/server/Speercs.Server
 
-echo "Running tests..."
+echo "Running tests"
 
-echo "Publishing project..."
+echo "Running dotnet publish [Release]"
 
 # Publish
 dotnet publish -c Release src/server/Speercs.Server
