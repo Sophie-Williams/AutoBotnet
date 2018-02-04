@@ -8,7 +8,7 @@ namespace Speercs.Server.Services.Application {
         
         public void writeLine(string log, LogLevel level) {
             if (level >= verbosity) {
-                Console.WriteLine($"[{level.ToString()}] {log}");
+                Console.WriteLine($"[{DateTime.Now}] [{level.ToString()}] {log}");
             }
         }
 

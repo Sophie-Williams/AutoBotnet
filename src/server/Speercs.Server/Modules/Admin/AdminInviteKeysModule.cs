@@ -3,6 +3,7 @@ using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests.Game;
+using Speercs.Server.Services.Application;
 using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Admin {
@@ -16,6 +17,7 @@ namespace Speercs.Server.Modules.Admin {
                     newCodes.Add(StringUtils.secureRandomString(16));
                 }
 
+                serverContext.log.writeLine($"Admin generated {req.amount} invite keys", SpeercsLogger.LogLevel.Information);
                 this.serverContext.appState.inviteKeys.AddRange(newCodes);
                 return Response.asJsonNet(newCodes);
             });

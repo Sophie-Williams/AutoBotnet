@@ -6,6 +6,7 @@ using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests.User;
 using Speercs.Server.Modules.Exceptions;
+using Speercs.Server.Services.Application;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Utilities;
 
@@ -58,6 +59,8 @@ namespace Speercs.Server.Modules.Auth {
 
                     // Attempt to register user
                     var newUser = await _userManager.registerUserAsync(req);
+
+                    serverContext.log.writeLine($"Registered user {newUser.username} [{newUser.identifier}]", SpeercsLogger.LogLevel.Information);
 
                     // queue persist
                     this.serverContext.appState.queuePersist();
