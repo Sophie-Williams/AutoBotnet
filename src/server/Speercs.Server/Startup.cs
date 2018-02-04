@@ -18,7 +18,7 @@ namespace Speercs.Server {
         private const string state_storage_database_file_name = "speercs_state.lidb";
         private readonly IConfigurationRoot _fileConfig;
 
-        public SGameBootstrapper gameBootstrapper { get; private set; }
+        private SGameBootstrapper gameBootstrapper { get; set; }
 
         public Startup(IHostingEnvironment env) {
             if (!File.Exists(config_file_name)) {
@@ -43,7 +43,8 @@ namespace Speercs.Server {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void configureServices(IServiceCollection services) {
+        // ReSharper disable once InconsistentNaming
+        public void ConfigureServices(IServiceCollection services) {
             // Adds services required for using options.
             services.AddOptions();
 
@@ -52,7 +53,8 @@ namespace Speercs.Server {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime,
+        // ReSharper disable once InconsistentNaming
+        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime,
             IHostingEnvironment env, ILoggerFactory loggerFactory) {
             loggerFactory.AddConsole();
 
