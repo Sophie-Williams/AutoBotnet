@@ -85,7 +85,7 @@ namespace Speercs.Server.Configuration {
         /// The verbosity of the application logger.
         /// </summary>
         [JsonProperty("logLevel")]
-        public SpeercsLogger.LogLevel logLevel { get; set; } = SpeercsLogger.LogLevel.Warning;
+        public SpeercsLogger.LogLevel logLevel { get; set; } = SpeercsLogger.LogLevel.Information;
 
         /// <summary>
         /// Maximum number of registered users. Set to -1 for unlimited.
