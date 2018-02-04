@@ -9,7 +9,7 @@ using Speercs.Server.Modules.Exceptions;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Utilities;
 
-namespace Speercs.Server.Modules {
+namespace Speercs.Server.Modules.Auth {
     public class AuthenticationModule : SBaseModule {
         private UserManagerService _userManager;
 
