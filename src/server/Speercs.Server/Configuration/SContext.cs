@@ -32,7 +32,7 @@ namespace Speercs.Server.Configuration {
 
         public SpeercsLogger log { get; }
 
-        public static string version = Microsoft.Extensions.PlatformAbstractions
+        public static readonly string version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
 
         public SContext(SConfiguration config) {
@@ -51,7 +51,7 @@ namespace Speercs.Server.Configuration {
             loadDatabaseDependentServices();
         }
 
-        protected void loadDatabaseDependentServices() {
+        private void loadDatabaseDependentServices() {
             executors = new PlayerExecutors(this);
         }
     }

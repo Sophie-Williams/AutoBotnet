@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Speercs.Server.Configuration {
-    public class SConfigurator {
+    public static class SConfigurator {
         internal static SContext createContext(SConfiguration config) {
             // load the parameters
             config.baseDirectory = Directory.GetCurrentDirectory();
@@ -14,9 +14,9 @@ namespace Speercs.Server.Configuration {
             return context;
         }
 
-        public const string STATE_STORAGE_KEY = "state";
+        private const string state_storage_key = "state";
 
-        public static bool serializationMappersRegistered { get; private set; }
+        private static bool serializationMappersRegistered { get; set; }
 
         public static void loadState(SContext serverContext, string stateStorageFile) {
             if (!serializationMappersRegistered) {
@@ -32,7 +32,7 @@ namespace Speercs.Server.Configuration {
 
             // Load the Server State into the context. This object also includes the OsmiumMine Core state
             var database = new LiteDatabase(stateStorageFile);
-            var stateStorage = database.GetCollection<SAppState>(STATE_STORAGE_KEY);
+            var stateStorage = database.GetCollection<SAppState>(state_storage_key);
             var savedState = stateStorage.FindAll().FirstOrDefault();
             if (savedState == null) {
                 // Create and save new state
