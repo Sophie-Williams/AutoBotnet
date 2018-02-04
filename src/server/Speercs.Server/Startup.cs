@@ -10,6 +10,7 @@ using Nancy.Owin;
 using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game;
+using Speercs.Server.Services.Application;
 using Speercs.Server.Web;
 
 namespace Speercs.Server {
@@ -111,7 +112,7 @@ namespace Speercs.Server {
         }
 
         private void onUnload(ISContext sctx) {
-            Console.WriteLine("Server unloading, force-persisting state data.");
+            sctx.log.writeLine("Server unloading, force-persisting state data.", SpeercsLogger.LogLevel.Information);
             // persist on unload
             sctx.appState.persist(true);
         }
