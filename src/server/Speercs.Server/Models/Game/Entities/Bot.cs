@@ -14,10 +14,12 @@ namespace Speercs.Server.Models.Game.Entities {
             if (base.moveRelative(direction)) {
                 lastMoveTime = serverContext.appState.tickCount;
                 return true;
-            } else return false;
+            }
+
+            return false;
         }
 
-        protected ulong lastMoveTime = 0;
+        protected ulong lastMoveTime;
 
         public UserTeam team { get; }
     }

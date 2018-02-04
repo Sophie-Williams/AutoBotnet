@@ -1,16 +1,14 @@
-using LiteDB;
-using Speercs.Server.Configuration;
-using Speercs.Server.Models.Requests;
-using Speercs.Server.Models.User;
-using Speercs.Server.Utilities;
 using System;
 using System.Collections;
 using System.Security;
 using System.Threading.Tasks;
-using Speercs.Server.Services.Game;
+using LiteDB;
+using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game;
-using Speercs.Server.Models.Game.Program;
 using Speercs.Server.Models.Requests.User;
+using Speercs.Server.Models.User;
+using Speercs.Server.Services.Game;
+using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Services.Auth {
     public class UserManagerService : DependencyObject {
@@ -42,7 +40,7 @@ namespace Speercs.Server.Services.Auth {
                         conf = cryptoConf,
                         key = encryptedPassword
                     },
-                    enabled = true,
+                    enabled = true
                 };
 
                 // Add the user to the database

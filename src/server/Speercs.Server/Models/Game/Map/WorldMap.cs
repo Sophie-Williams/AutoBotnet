@@ -1,5 +1,5 @@
-using Speercs.Server.Models.Math;
 using System.Collections.Generic;
+using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Game.Map {
     public class WorldMap {

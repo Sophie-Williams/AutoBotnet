@@ -1,7 +1,6 @@
 using System;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game.Map;
-using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Game.Entities {
     public enum Direction {
@@ -19,8 +18,8 @@ namespace Speercs.Server.Models.Game.Entities {
         public GameEntity(ISContext serverContext, RoomPosition pos) : base(serverContext) {
             position = pos;
 
-            id = System.Guid.NewGuid().ToString("N");
-            base.serverContext.appState.entities.insert(this);
+            id = Guid.NewGuid().ToString("N");
+            this.serverContext.appState.entities.insert(this);
         }
 
         public RoomPosition move(int x, int y) {

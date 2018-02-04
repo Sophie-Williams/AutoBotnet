@@ -1,11 +1,10 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using LiteDB;
+using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Game.Program;
-using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
 
 namespace Speercs.Server.Services.Game {
     public class PlayerPersistentDataService : DependencyObject {

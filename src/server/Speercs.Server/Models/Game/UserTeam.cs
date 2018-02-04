@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Speercs.Server.Models.User;
 
 namespace Speercs.Server.Models.Game {
     /// <summary>

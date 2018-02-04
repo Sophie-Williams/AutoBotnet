@@ -1,10 +1,3 @@
-using CookieIoC;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Speercs.Server.Configuration;
-using Speercs.Server.Web.Realtime;
 using System;
 using System.Linq;
 using System.Net.WebSockets;
@@ -12,8 +5,15 @@ using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CookieIoC;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Speercs.Server.Configuration;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Game;
+using Speercs.Server.Web.Realtime;
 
 namespace Speercs.Server.Web {
     public class WebSocketHandler : DependencyObject {
@@ -62,7 +62,7 @@ namespace Speercs.Server.Web {
 
             var pipelineRegistered = false;
             var currentUser = default(RegisteredUser);
-            var pipelineHandler = new Func<JObject, Task<bool>>(async (bundle) => {
+            var pipelineHandler = new Func<JObject, Task<bool>>(async bundle => {
                 await writeLineAsync(bundle.ToString(Formatting.None));
                 return false;
             });
@@ -119,9 +119,7 @@ namespace Speercs.Server.Web {
                                 await writeLineAsync(resultBundle.ToString(Formatting.None));
                             });
                     } catch (NullReferenceException) // Missing parameter
-                    {
-                        continue;
-                    }
+                    { }
                 }
             } finally {
                 if (pipelineRegistered) {
@@ -151,7 +149,7 @@ namespace Speercs.Server.Web {
             // DI for websocket handlers
             _realtimeCookieJar = new RealtimeBootstrapper()
                 .ConfigureRealtimeHandlerContainer(context);
-            app.Use(async (hc, n) => await WebSocketHandler.acceptWebSocketClientsAsync(hc, n, context));
+            app.Use(async (hc, n) => await acceptWebSocketClientsAsync(hc, n, context));
         }
     }
 }

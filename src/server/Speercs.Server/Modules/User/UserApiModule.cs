@@ -1,9 +1,9 @@
+using System.Linq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Services.Auth.Security;
 using Speercs.Server.Services.Game;
-using System.Linq;
 using Speercs.Server.Services.Metrics;
 
 namespace Speercs.Server.Modules.User {

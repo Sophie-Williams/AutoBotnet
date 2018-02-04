@@ -14,7 +14,7 @@ namespace Speercs.Server.Modules.Game {
                 stream.Position = 0;
                 return Response.FromStream(stream, "image/png");
             });
-            Get("/room/{x:int}/{y:int}.png", (parameters) => {
+            Get("/room/{x:int}/{y:int}.png", parameters => {
                 Room room = serverContext.appState.worldMap[parameters.x, parameters.y];
                 if (room == null) return HttpStatusCode.NotFound;
                 var stream = new MemoryStream();

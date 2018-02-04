@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using Speercs.Server.Configuration;
-using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server.Models {
     public class PublicMetadata : ProtectedDependencyObject {

@@ -1,5 +1,5 @@
-using Nancy;
 using System.Security.Claims;
+using Nancy;
 
 namespace Speercs.Server.Services.Auth.Security {
     public static class ApiAccessModuleSecurityExtensions {
@@ -15,7 +15,7 @@ namespace Speercs.Server.Services.Auth.Security {
         }
 
         public static void injectAuthenticationHook(NancyModule module, Claim requiredClaim) {
-            module.Before.AddItemToEndOfPipeline((ctx) => {
+            module.Before.AddItemToEndOfPipeline(ctx => {
                 if (ctx.CurrentUser == null) {
                     return HttpStatusCode.Unauthorized;
                 }

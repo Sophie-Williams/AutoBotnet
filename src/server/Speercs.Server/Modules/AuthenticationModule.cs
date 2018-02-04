@@ -1,17 +1,13 @@
-using Nancy;
-using Nancy.ModelBinding;
-using Speercs.Server.Configuration;
-using Speercs.Server.Models.Game;
-using Speercs.Server.Models.Requests;
-using Speercs.Server.Modules.Exceptions;
-using Speercs.Server.Services.Auth;
-using Speercs.Server.Models.User;
-using Speercs.Server.Services.Game;
-using Speercs.Server.Utilities;
 using System;
 using System.Security;
 using System.Text.RegularExpressions;
+using Nancy;
+using Nancy.ModelBinding;
+using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests.User;
+using Speercs.Server.Modules.Exceptions;
+using Speercs.Server.Services.Auth;
+using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules {
     public class AuthenticationModule : SBaseModule {

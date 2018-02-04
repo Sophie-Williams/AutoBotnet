@@ -1,9 +1,9 @@
-using LiteDB;
-using Speercs.Server.Models.Game.Map;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using LiteDB;
+using Speercs.Server.Models.Game.Map;
 
 namespace Speercs.Server.Configuration {
     public static class SConfigurator {
@@ -20,7 +20,7 @@ namespace Speercs.Server.Configuration {
 
         public static void loadState(SContext serverContext, string stateStorageFile) {
             if (!serializationMappersRegistered) {
-                BsonMapper.Global.RegisterType<WorldMap>(
+                BsonMapper.Global.RegisterType(
                     serialize: map => BsonMapper.Global.ToDocument(map.roomDict),
                     deserialize: bson => new WorldMap {
                         roomDict = (Dictionary<string, Room>) BsonMapper.Global
@@ -42,7 +42,7 @@ namespace Speercs.Server.Configuration {
 
             // Update context
             savedState.persistenceMedium = stateStorage;
-            savedState.persist = (forcePersist) => {
+            savedState.persist = forcePersist => {
                 // If needed...
                 if (forcePersist || savedState.persistNeeded) {
                     savedState.persistAvailable = false;

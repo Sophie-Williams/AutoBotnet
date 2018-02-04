@@ -1,7 +1,6 @@
+using System.Threading;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Subsystems;
-using System.Threading;
-using Speercs.Server.Game.Scripting;
 
 namespace Speercs.Server.Game {
     public class SGameBootstrapper : DependencyObject {

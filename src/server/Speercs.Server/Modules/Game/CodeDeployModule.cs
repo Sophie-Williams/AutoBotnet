@@ -2,7 +2,6 @@ using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Game.Program;
-using Speercs.Server.Models.Requests;
 using Speercs.Server.Models.Requests.Game;
 using Speercs.Server.Modules.User;
 using Speercs.Server.Utilities;
@@ -17,7 +16,7 @@ namespace Speercs.Server.Modules.Game {
 
             Patch("/reload", _ => {
                 // reload cached engine for that user
-                base.serverContext.executors.reloadExecutor(currentUser.identifier);
+                this.serverContext.executors.reloadExecutor(currentUser.identifier);
 
                 return HttpStatusCode.OK;
             });
@@ -26,7 +25,7 @@ namespace Speercs.Server.Modules.Game {
                 var req = this.Bind<CodeDeployRequest>();
 
                 // Validate code size (for security reasons)
-                if (req.source.Length > base.serverContext.configuration.codeSizeLimit) {
+                if (req.source.Length > this.serverContext.configuration.codeSizeLimit) {
                     return HttpStatusCode.UnprocessableEntity;
                 }
 

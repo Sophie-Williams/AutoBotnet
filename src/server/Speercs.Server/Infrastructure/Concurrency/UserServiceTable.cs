@@ -1,5 +1,5 @@
-using Speercs.Server.Configuration;
 using System.Collections.Concurrent;
+using Speercs.Server.Configuration;
 
 namespace Speercs.Server.Infrastructure.Concurrency {
     public class UserServiceTable : DependencyObject {

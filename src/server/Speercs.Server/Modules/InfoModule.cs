@@ -1,4 +1,3 @@
-using Nancy;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models;
 using Speercs.Server.Utilities;

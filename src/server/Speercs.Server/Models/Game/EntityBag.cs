@@ -1,16 +1,13 @@
-using Speercs.Server.Models.Game.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Speercs.Server.Models.Game.Entities;
 
 namespace Speercs.Server.Models.Game {
     public class EntityBag {
-        public EntityBag() { }
-
         public Dictionary<string, GameEntity> entityData { get; set; } = new Dictionary<string, GameEntity>();
 
         public void insert(GameEntity entity) {
-            this.entityData.Add(entity.id, entity);
+            entityData.Add(entity.id, entity);
         }
 
         public T get<T>(string id) where T : GameEntity {

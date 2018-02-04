@@ -1,8 +1,8 @@
-using Speercs.Server.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System;
+using Speercs.Server.Configuration;
 
 namespace Speercs.Server.Services.Auth {
     public class ApiAuthenticator : DependencyObject {
@@ -16,8 +16,8 @@ namespace Speercs.Server.Services.Auth {
             // check admin keys
             var adminKey = serverContext.configuration.adminKeys.FirstOrDefault(x => x == apikey);
             if (adminKey != null) {
-                var adminAuthClaims = new List<Claim>() {
-                    new Claim(AUTH_TYPE_CLAIM_KEY, ApiAccessScope.Admin.ToString()),
+                var adminAuthClaims = new List<Claim> {
+                    new Claim(AUTH_TYPE_CLAIM_KEY, ApiAccessScope.Admin.ToString())
                 };
                 var adminAuthIdentity = new ClaimsIdentity(adminAuthClaims);
                 var adminIdentity = new ClaimsPrincipal(adminAuthIdentity);
@@ -33,7 +33,7 @@ namespace Speercs.Server.Services.Auth {
             metricsObject.apiRequests++;
             metricsObject.lastRequest = (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-            var userAuthClaims = new List<Claim>() {
+            var userAuthClaims = new List<Claim> {
                 new Claim(AUTH_TYPE_CLAIM_KEY, ApiAccessScope.User.ToString()),
                 new Claim(USER_IDENTIFIER_CLAIM_KEY, user.identifier)
             };

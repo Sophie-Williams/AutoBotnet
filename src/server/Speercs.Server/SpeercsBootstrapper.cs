@@ -34,7 +34,7 @@ namespace Speercs.Server {
             }));
 
             // Enable CORS
-            pipelines.AfterRequest.AddItemToEndOfPipeline((ctx) => {
+            pipelines.AfterRequest.AddItemToEndOfPipeline(ctx => {
                 foreach (var origin in serverContext.configuration.corsOrigins) {
                     ctx.Response.WithHeader("Access-Control-Allow-Origin", origin);
                 }

@@ -17,7 +17,7 @@ namespace Speercs.Server.Configuration {
         /// If an invite key is required for registration
         /// </summary>
         [JsonProperty("requireInvite")]
-        public bool inviteRequired { get; set; } = false;
+        public bool inviteRequired { get; set; }
 
         /// <summary>
         /// Special API keys that grant privileged admin access (keep these secret!)
@@ -68,7 +68,7 @@ namespace Speercs.Server.Configuration {
         /// (Not currently implemented)
         /// </summary>
         [JsonProperty("useDynamicTickrate")]
-        public bool useDynamicTickrate { get; set; } = false;
+        public bool useDynamicTickrate { get; set; }
 
         /// <summary>
         /// The maximum amount of time (in milliseconds) to wait for loading user code into the engine.

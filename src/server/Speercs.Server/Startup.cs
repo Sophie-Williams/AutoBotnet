@@ -82,7 +82,7 @@ namespace Speercs.Server {
 
             // map websockets
             app.UseWebSockets();
-            app.Map("/ws", (ab) => WebSocketHandler.map(ab, context));
+            app.Map("/ws", ab => WebSocketHandler.map(ab, context));
 
             // add wwwroot/
             app.UseStaticFiles();

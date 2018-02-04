@@ -1,5 +1,5 @@
-using Newtonsoft.Json;
 using System;
+using Newtonsoft.Json;
 
 namespace Speercs.Server.Models.Notifications {
     public class PushNotification {

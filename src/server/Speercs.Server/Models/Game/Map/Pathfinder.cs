@@ -27,7 +27,7 @@ namespace Speercs.Server.Models.Game.Map {
             }
 
             public int CompareTo(Node other) {
-                return this.f - other.f;
+                return f - other.f;
             }
         }
 
@@ -36,9 +36,9 @@ namespace Speercs.Server.Models.Game.Map {
 
         public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal, Predicate<ITile> passable)
             : base(context) {
-            this._start = start;
-            this._goal = goal;
-            this._passable = passable;
+            _start = start;
+            _goal = goal;
+            _passable = passable;
         }
 
         public List<RoomPosition> findPath() {

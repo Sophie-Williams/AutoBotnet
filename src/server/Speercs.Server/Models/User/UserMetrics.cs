@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using System;
 
 namespace Speercs.Server.Models.User {
     public class UserMetrics {

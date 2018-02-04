@@ -6,7 +6,7 @@ namespace Speercs.Server.Services.Metrics {
         private readonly string _userIdentifier;
 
         public UserMetricsService(ISContext context, string userIdentifier) : base(context) {
-            this._userIdentifier = userIdentifier;
+            _userIdentifier = userIdentifier;
         }
 
         public UserMetrics get() {

@@ -1,8 +1,5 @@
-using System.Collections.Concurrent;
 using IridiumJS;
 using Speercs.Server.Configuration;
-using Speercs.Server.Game.Scripting.Api;
-using Speercs.Server.Models.Game.Entities;
 
 namespace Speercs.Server.Game.Scripting {
     public class ScriptExecutor : DependencyObject {

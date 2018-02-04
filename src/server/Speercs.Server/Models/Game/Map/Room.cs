@@ -1,7 +1,7 @@
-using Newtonsoft.Json;
-using Speercs.Server.Extensibility;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Speercs.Server.Extensibility;
 using Speercs.Server.Models.Game.Entities;
 
 namespace Speercs.Server.Models.Game.Map {

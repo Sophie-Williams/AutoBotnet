@@ -1,10 +1,9 @@
+using System.Collections.Generic;
 using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Requests;
-using Speercs.Server.Utilities;
-using System.Collections.Generic;
 using Speercs.Server.Models.Requests.Game;
+using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Admin {
     public class AdminInviteKeysModule : AdminApiModule {
@@ -17,15 +16,13 @@ namespace Speercs.Server.Modules.Admin {
                     newCodes.Add(StringUtils.secureRandomString(16));
                 }
 
-                base.serverContext.appState.inviteKeys.AddRange(newCodes);
+                this.serverContext.appState.inviteKeys.AddRange(newCodes);
                 return Response.asJsonNet(newCodes);
             });
 
-            Get("/active", _ => Response.asJsonNet(base.serverContext.appState.inviteKeys));
+            Get("/active", _ => Response.asJsonNet(this.serverContext.appState.inviteKeys));
 
-            Delete("/delete/{key}", (args) => {
-                return base.serverContext.appState.inviteKeys.Remove((string) args.key);
-            });
+            Delete("/delete/{key}", args => this.serverContext.appState.inviteKeys.Remove((string) args.key));
         }
     }
 }

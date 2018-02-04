@@ -1,9 +1,9 @@
-using Speercs.Server.Configuration;
-using Speercs.Server.Services.Auth;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Linq;
+using Speercs.Server.Configuration;
 using Speercs.Server.Models.User;
+using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server.Web.Realtime {
     public class RealtimeContext : DependencyObject {
