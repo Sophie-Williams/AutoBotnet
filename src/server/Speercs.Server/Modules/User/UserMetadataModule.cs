@@ -1,23 +1,20 @@
 using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
+using Speercs.Server.Models.Requests.User;
 using Speercs.Server.Models.User;
-using Speercs.Server.Models.Requests;
 using Speercs.Server.Utilities;
-using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server.Modules.User {
     public class UserMetadataModule : UserApiModule {
         public UserMetadataModule(ISContext serverContext) : base("/user/meta", serverContext) {
-            Get("/", _ => Response.asJsonNet(new SelfUser(currentUser)));
+            Get("/", _ => Response.asJsonNet(currentUser));
 
             Put("/", async _ => {
-                var userManager = new UserManagerService(base.serverContext);
                 var req = this.Bind<UserModificationRequest>();
-                var newUser = currentUser;
-                newUser.email = req.email;
-                await userManager.updateUserInDatabaseAsync(newUser);
-                return Response.asJsonNet(new SelfUser(newUser));
+                req.apply(currentUser);
+                await userManager.updateUserInDatabaseAsync(currentUser);
+                return Response.asJsonNet(currentUser);
             });
 
             Get("/player/{id}", async args => {

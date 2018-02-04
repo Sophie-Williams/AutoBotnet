@@ -48,7 +48,7 @@ namespace Speercs.Server.Configuration {
         /// </summary>
         [JsonProperty("globalMessage")]
         public string globalMessage { get; set; } =
-            "AutoBotnet server v{ver}\nThis message is configurable by the server admins.";
+            "Welcome to AutoBotnet server v{ver}.";
 
         /// <summary>
         /// List of origins to allow CORS requests from. Can possibly be used to enable API access from another domain hosting a custom client.

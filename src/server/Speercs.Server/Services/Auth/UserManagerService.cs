@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Speercs.Server.Services.Game;
 using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Game.Program;
+using Speercs.Server.Models.Requests.User;
 
 namespace Speercs.Server.Services.Auth {
     public class UserManagerService : DependencyObject {

@@ -2,6 +2,7 @@ using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests;
+using Speercs.Server.Models.Requests.User;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Utilities;
 using Speercs.Server.Models.User;

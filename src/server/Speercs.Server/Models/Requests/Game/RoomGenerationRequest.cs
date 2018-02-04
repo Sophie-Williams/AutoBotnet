@@ -1,4 +1,4 @@
-namespace Speercs.Server.Models.Requests {
+namespace Speercs.Server.Models.Requests.Game {
     public class RoomGenerationRequest {
         public int x { get; set; }
 

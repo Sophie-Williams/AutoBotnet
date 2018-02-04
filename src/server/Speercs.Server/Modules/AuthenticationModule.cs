@@ -11,6 +11,7 @@ using Speercs.Server.Utilities;
 using System;
 using System.Security;
 using System.Text.RegularExpressions;
+using Speercs.Server.Models.Requests.User;
 
 namespace Speercs.Server.Modules {
     public class AuthenticationModule : SBaseModule {

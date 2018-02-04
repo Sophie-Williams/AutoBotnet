@@ -9,6 +9,7 @@ namespace Speercs.Server.Models.Game {
         }
 
         // BSON Constructor
+        // ReSharper disable once UnusedMember.Global
         public UserPersistentData() { }
 
         public string ownerId { get; set; }

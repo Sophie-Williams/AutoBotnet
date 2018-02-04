@@ -4,6 +4,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests;
 using Speercs.Server.Utilities;
 using System.Collections.Generic;
+using Speercs.Server.Models.Requests.Game;
 
 namespace Speercs.Server.Modules.Admin {
     public class AdminInviteKeysModule : AdminApiModule {

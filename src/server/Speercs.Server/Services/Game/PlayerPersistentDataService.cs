@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 namespace Speercs.Server.Services.Game {
     public class PlayerPersistentDataService : DependencyObject {
         public const string PLAYER_DATA_KEY = "player_persistent_data";
-        private LiteCollection<UserPersistentData> _persistentPlayerDataCollection;
+        private readonly LiteCollection<UserPersistentData> _persistentPlayerDataCollection;
 
         public PlayerPersistentDataService(ISContext serverContext) : base(serverContext) {
             _persistentPlayerDataCollection = serverContext.database.GetCollection<UserPersistentData>(PLAYER_DATA_KEY);

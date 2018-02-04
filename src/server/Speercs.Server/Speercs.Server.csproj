@@ -12,6 +12,7 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Models\Requests\Ga,e" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
