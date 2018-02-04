@@ -7,6 +7,12 @@ namespace Speercs.Server.Configuration {
         public SDatabaseConfiguration databaseConfiguration { get; set; } = new SDatabaseConfiguration();
 
         /// <summary>
+        /// Whether to enable ASP.NET Core verbose logging
+        /// </summary>
+        [JsonProperty("aspnetVerboseLogging")]
+        public bool aspnetVerboseLogging { get; set; } = true;
+
+        /// <summary>
         /// If an invite key is required for registration
         /// </summary>
         [JsonProperty("requireInvite")]

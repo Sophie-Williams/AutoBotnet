@@ -57,12 +57,6 @@ namespace Speercs.Server {
         // ReSharper disable once InconsistentNaming
         public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime,
             IHostingEnvironment env, ILoggerFactory loggerFactory) {
-            if (env.IsDevelopment()) {
-                loggerFactory.AddConsole(LogLevel.Information);
-            } else {
-                loggerFactory.AddConsole(LogLevel.Warning);
-            }
-
             // create default configuration
             var serverConfig = new SConfiguration();
             // bind configuration
@@ -90,13 +84,21 @@ namespace Speercs.Server {
             applicationLifetime.ApplicationStopping.Register(() => onUnload(context));
             context.log.writeLine($"Application interrupt handler registered", SpeercsLogger.LogLevel.Information);
 
-            // map websockets
-            app.UseWebSockets();
-            app.Map("/ws", ab => WebSocketHandler.map(ab, context));
-
+            // add aspnet developer exception page
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+            
+            // add aspnet logger
+            if (env.IsDevelopment() && serverConfig.aspnetVerboseLogging) {
+                loggerFactory.AddConsole(LogLevel.Information);
+            } else {
+                loggerFactory.AddConsole(LogLevel.Warning);
+            }
+
+            // map websockets
+            app.UseWebSockets();
+            app.Map("/ws", ab => WebSocketHandler.map(ab, context));
 
             // add wwwroot/
             app.UseStaticFiles();
