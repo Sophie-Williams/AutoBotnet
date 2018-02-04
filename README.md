@@ -5,6 +5,10 @@
 
 **AutoBotnet - The Game**
 
+## Documentation
+
+Documentation can be found in [doc](doc/)
+
 ## Design
 
 Design information can be found in [AutoBotnetDesign](https://github.com/CookieEaters/AutoBotnetDesign).
