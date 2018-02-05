@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Speercs.Server.Configuration;
+using Speercs.Server.Services.Metrics;
 
 namespace Speercs.Server.Services.Auth {
     public class ApiAuthenticator : DependencyObject {
@@ -32,7 +33,8 @@ namespace Speercs.Server.Services.Auth {
             var user = userManager.findUserByApiKeyAsync(apikey).Result;
             if (user == null) return null;
 
-            var metricsObject = serverContext.appState.userMetrics[user.identifier];
+            var metricsService = new UserMetricsService(serverContext, user.identifier);
+            var metricsObject = metricsService.get();
             metricsObject.apiRequests++;
             metricsObject.lastRequest = (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 

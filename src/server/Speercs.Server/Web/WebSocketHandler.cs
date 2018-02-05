@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Game;
+using Speercs.Server.Services.Metrics;
 using Speercs.Server.Web.Realtime;
 
 namespace Speercs.Server.Web {
@@ -66,7 +67,7 @@ namespace Speercs.Server.Web {
             }
 
             var pipelineRegistered = false;
-            var currentUser = default(RegisteredUser);
+            var user = default(RegisteredUser);
             var pipelineHandler = new Func<JObject, Task<bool>>(async bundle => {
                 await writeLineAsync(bundle.ToString(Formatting.None));
                 return false;
@@ -83,27 +84,28 @@ namespace Speercs.Server.Web {
                 }
 
                 await writeLineAsync("true"); // websocket channel was authenticated successfully
-                currentUser = await _rtContext.getCurrentUserAsync();
+                user = await _rtContext.getCurrentUserAsync();
                 // Attempt to add handler
                 serverContext.notificationPipeline
-                    .retrieveUserPipeline(currentUser.identifier)
+                    .retrieveUserPipeline(user.identifier)
                     .addItemToEnd(pipelineHandler);
                 pipelineRegistered = true;
 
                 // save last connection metric
-                var metricsObject = serverContext.appState.userMetrics[currentUser.identifier];
+                var metricsService = new UserMetricsService(serverContext, user.identifier);
+                var metricsObject = metricsService.get();
                 metricsObject.lastConnection =
                     (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
                 // pipeline is registered, send any queued, previously undelivered data
                 var userNotificationQueue =
-                    new PlayerPersistentDataService(serverContext).retrieveNotificationQueue(currentUser.identifier);
+                    new PlayerPersistentDataService(serverContext).retrieveNotificationQueue(user.identifier);
                 while (userNotificationQueue.Count > 0) {
                     // send data back through pipelines
                     // now that a pipeline is registered, the data will be sent through the channel
                     // in the case of an exception or other delivery failure, the message will be queued again.
                     await serverContext.notificationPipeline.pushMessageAsync(userNotificationQueue.Dequeue(),
-                        currentUser.identifier);
+                        user.identifier);
                 }
 
                 while (_ws.State == WebSocketState.Open) {
@@ -130,11 +132,12 @@ namespace Speercs.Server.Web {
                 if (pipelineRegistered) {
                     // Unregister pipeline
                     serverContext.notificationPipeline
-                        .retrieveUserPipeline(currentUser.identifier)
+                        .retrieveUserPipeline(user.identifier)
                         .UnregisterHandler(pipelineHandler);
 
                     // update playtime (using disconnect time)
-                    var metricsObject = serverContext.appState.userMetrics[currentUser.identifier];
+                    var metricsService = new UserMetricsService(serverContext, user.identifier);
+                    var metricsObject = metricsService.get();
                     metricsObject.playtime += ((ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) -
                                               metricsObject.lastConnection;
                 }
