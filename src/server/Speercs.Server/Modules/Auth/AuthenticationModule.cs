@@ -16,7 +16,7 @@ namespace Speercs.Server.Modules.Auth {
 
         public ISContext serverContext { get; private set; }
 
-        public AuthenticationModule(ISContext serverContext) : base("/auth") {
+        public AuthenticationModule(ISContext serverContext) : base("/auth", serverContext) {
             this.serverContext = serverContext;
             Before += ctx => {
                 _userManager = new UserManagerService(this.serverContext);
@@ -60,7 +60,8 @@ namespace Speercs.Server.Modules.Auth {
                     // Attempt to register user
                     var newUser = await _userManager.registerUserAsync(req);
 
-                    serverContext.log.writeLine($"Registered user {newUser.username} [{newUser.identifier}]", SpeercsLogger.LogLevel.Information);
+                    serverContext.log.writeLine($"Registered user {newUser.username} [{newUser.identifier}]",
+                        SpeercsLogger.LogLevel.Information);
 
                     // queue persist
                     this.serverContext.appState.queuePersist();

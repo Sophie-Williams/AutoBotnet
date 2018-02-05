@@ -19,11 +19,7 @@ namespace Speercs.Server.Modules.User {
 
         public RegisteredUser currentUser { get; private set; }
 
-        public ISContext serverContext { get; private set; }
-
-        internal UserApiModule(string path, ISContext serverContext) : base(path) {
-            this.serverContext = serverContext;
-
+        internal UserApiModule(string path, ISContext serverContext) : base(path, serverContext) {
             // require claims from stateless auther, defined in bootstrapper
             this.requiresUserAuthentication();
 

@@ -14,11 +14,7 @@ namespace Speercs.Server.Modules.Admin {
 
         public PlayerPersistentDataService playerDataService { get; private set; }
 
-        public ISContext serverContext { get; private set; }
-
-        internal AdminApiModule(string path, ISContext serverContext) : base($"/admin{path}") {
-            this.serverContext = serverContext;
-
+        internal AdminApiModule(string path, ISContext serverContext) : base($"/admin{path}", serverContext) {
             // require claims from stateless auther, defined in bootstrapper
             this.requiresAdminAuthentication();
 
@@ -26,10 +22,11 @@ namespace Speercs.Server.Modules.Admin {
             Before += ctx => {
                 // retrieve the key used for admin auth for logging purposes
                 var adminKey = Context.CurrentUser.Claims
-                        .FirstOrDefault(x => x.Type == ApiAuthenticator.API_KEY_CLAIM_KEY)
-                        ?.Value;
-                serverContext.log.writeLine($"Admin authenticated using key {adminKey}", SpeercsLogger.LogLevel.Information);
-                
+                    .FirstOrDefault(x => x.Type == ApiAuthenticator.API_KEY_CLAIM_KEY)
+                    ?.Value;
+                serverContext.log.writeLine($"Admin authenticated using key {adminKey}",
+                    SpeercsLogger.LogLevel.Information);
+
                 userManager = new UserManagerService(this.serverContext);
                 playerDataService = new PlayerPersistentDataService(this.serverContext);
                 return null;

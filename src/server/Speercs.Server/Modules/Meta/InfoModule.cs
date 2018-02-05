@@ -5,7 +5,7 @@ using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Meta {
     public class InfoModule : SBaseModule {
-        public InfoModule(ISContext serverContext) : base("/info") {
+        public InfoModule(ISContext serverContext) : base("/info", serverContext) {
             Get("/", _ => Response.asJsonNet(new PublicInfo(serverContext)));
         }
     }

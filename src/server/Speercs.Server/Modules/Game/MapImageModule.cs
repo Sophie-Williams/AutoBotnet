@@ -8,7 +8,7 @@ using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Game {
     public class MapImageModule : SBaseModule {
-        public MapImageModule(ISContext serverContext) : base("/map") {
+        public MapImageModule(ISContext serverContext) : base("/map", serverContext) {
             Get("/map.png", _ => {
                 var stream = new MemoryStream();
                 new RoomImageRenderer().drawMap(serverContext.appState.worldMap).Save(stream, new PngEncoder());
