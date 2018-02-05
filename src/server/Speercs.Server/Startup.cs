@@ -73,7 +73,8 @@ namespace Speercs.Server {
 
             // load persistent state
             SConfigurator.loadState(context, state_storage_database_file_name);
-            context.log.writeLine($"Persistent state loaded from {state_storage_database_file_name}", SpeercsLogger.LogLevel.Information);
+            context.log.writeLine($"Persistent state loaded from {state_storage_database_file_name}",
+                SpeercsLogger.LogLevel.Information);
 
             // load database
             context.connectDatabase();
@@ -88,7 +89,7 @@ namespace Speercs.Server {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             // add aspnet logger
             if (env.IsDevelopment() && serverConfig.aspnetVerboseLogging) {
                 loggerFactory.AddConsole(LogLevel.Information);

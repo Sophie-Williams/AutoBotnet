@@ -14,10 +14,7 @@ namespace Speercs.Server.Modules.Auth {
     public class AuthenticationModule : SBaseModule {
         private UserManagerService _userManager;
 
-        public ISContext serverContext { get; private set; }
-
         public AuthenticationModule(ISContext serverContext) : base("/auth", serverContext) {
-            this.serverContext = serverContext;
             Before += ctx => {
                 _userManager = new UserManagerService(this.serverContext);
                 return null;

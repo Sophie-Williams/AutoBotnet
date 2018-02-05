@@ -16,7 +16,8 @@ namespace Speercs.Server.Modules.Game {
             });
 
             Patch("/reload", _ => {
-                serverContext.log.writeLine($"User {currentUser.identifier} requested executor reload", SpeercsLogger.LogLevel.Information);
+                serverContext.log.writeLine($"User {currentUser.identifier} requested executor reload",
+                    SpeercsLogger.LogLevel.Information);
                 // reload cached engine for that user
                 this.serverContext.executors.reloadExecutor(currentUser.identifier);
 
@@ -38,7 +39,8 @@ namespace Speercs.Server.Modules.Game {
                 metricsObject.totalLineCount += numLines;
 
                 playerDataService.deployProgram(currentUser.identifier, new UserProgram(req.source));
-                serverContext.log.writeLine($"User {currentUser.identifier} deployed program", SpeercsLogger.LogLevel.Information);
+                serverContext.log.writeLine($"User {currentUser.identifier} deployed program",
+                    SpeercsLogger.LogLevel.Information);
                 return HttpStatusCode.NoContent;
             });
         }

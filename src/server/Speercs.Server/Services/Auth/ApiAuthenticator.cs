@@ -31,7 +31,7 @@ namespace Speercs.Server.Services.Auth {
             var userManager = new UserManagerService(serverContext);
             var user = userManager.findUserByApiKeyAsync(apikey).Result;
             if (user == null) return null;
-            
+
             var metricsObject = serverContext.appState.userMetrics[user.identifier];
             metricsObject.apiRequests++;
             metricsObject.lastRequest = (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();

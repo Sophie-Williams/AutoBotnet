@@ -17,7 +17,8 @@ namespace Speercs.Server.Modules.Admin {
                     newCodes.Add(StringUtils.secureRandomString(16));
                 }
 
-                serverContext.log.writeLine($"Admin generated {req.amount} invite keys", SpeercsLogger.LogLevel.Information);
+                serverContext.log.writeLine($"Admin generated {req.amount} invite keys",
+                    SpeercsLogger.LogLevel.Information);
                 this.serverContext.appState.inviteKeys.AddRange(newCodes);
                 return Response.asJsonNet(newCodes);
             });

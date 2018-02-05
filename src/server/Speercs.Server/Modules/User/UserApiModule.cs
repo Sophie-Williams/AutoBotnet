@@ -14,7 +14,7 @@ namespace Speercs.Server.Modules.User {
         public UserManagerService userManager { get; private set; }
 
         public PlayerPersistentDataService playerDataService { get; private set; }
-        
+
         public UserMetricsService userMetrics { get; private set; }
 
         public RegisteredUser currentUser { get; private set; }

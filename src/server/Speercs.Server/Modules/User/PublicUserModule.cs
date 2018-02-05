@@ -7,7 +7,7 @@ using Speercs.Server.Services.Auth;
 using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.User {
-    public class PublicUserModule : UserApiModule {
+    public class PublicUserModule : SBaseModule {
         private UserManagerService _userManager;
 
         public PublicUserModule(ISContext serverContext) : base("/user", serverContext) {
@@ -16,8 +16,15 @@ namespace Speercs.Server.Modules.User {
                 return null;
             };
 
+            Get("/u/{username}", async args => {
+                var user = await _userManager.findUserByUsernameAsync((string) args.username);
+                if (user == null) return HttpStatusCode.NotFound;
+                var publicProfile = new PublicUser(user);
+                return Response.asJsonNet(publicProfile);
+            });
+
             Get("/{id}", async args => {
-                var user = await userManager.findUserByIdentifierAsync((string) args.id);
+                var user = await _userManager.findUserByIdentifierAsync((string) args.id);
                 if (user == null) return HttpStatusCode.NotFound;
                 var publicProfile = new PublicUser(user);
                 return Response.asJsonNet(publicProfile);

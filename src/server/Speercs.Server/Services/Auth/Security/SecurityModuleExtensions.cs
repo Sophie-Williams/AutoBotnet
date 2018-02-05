@@ -3,8 +3,11 @@ using Nancy;
 
 namespace Speercs.Server.Services.Auth.Security {
     public static class ApiAccessModuleSecurityExtensions {
-        private static Claim _adminClaim = new Claim(ApiAuthenticator.AUTH_TYPE_CLAIM_KEY, ApiAccessScope.Admin.ToString());
-        private static Claim _userClaim = new Claim(ApiAuthenticator.AUTH_TYPE_CLAIM_KEY, ApiAccessScope.User.ToString());
+        private static Claim _adminClaim =
+            new Claim(ApiAuthenticator.AUTH_TYPE_CLAIM_KEY, ApiAccessScope.Admin.ToString());
+
+        private static Claim _userClaim =
+            new Claim(ApiAuthenticator.AUTH_TYPE_CLAIM_KEY, ApiAccessScope.User.ToString());
 
         public static void requiresUserAuthentication(this NancyModule module) {
             injectAuthenticationHook(module, _userClaim);

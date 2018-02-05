@@ -5,7 +5,7 @@ namespace Speercs.Server.Services.Application {
         public SpeercsLogger(LogLevel verbosity) {
             this.verbosity = verbosity;
         }
-        
+
         public void writeLine(string log, LogLevel level) {
             if (level >= verbosity) {
                 Console.WriteLine($"[{DateTime.Now}] [{level.ToString()}] {log}");

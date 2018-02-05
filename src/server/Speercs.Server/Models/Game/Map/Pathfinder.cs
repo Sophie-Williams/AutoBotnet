@@ -47,7 +47,8 @@ namespace Speercs.Server.Models.Game.Map {
                 throw new NotImplementedException("Inter-room pathfinding not implemented yet");
 
             // add the start node to the open list
-            _openList.Add(_nodeGrid[_start.x, _start.y] = new Node(_start.x, _start.y, 0, _goal.distance(_start), null));
+            _openList.Add(_nodeGrid[_start.x, _start.y] =
+                new Node(_start.x, _start.y, 0, _goal.distance(_start), null));
 
             while (!_openList.IsEmpty) {
                 var curNode = _openList.DeleteMin(); // pop the next node off the open list

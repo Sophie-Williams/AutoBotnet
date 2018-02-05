@@ -80,7 +80,7 @@ namespace Speercs.Server.Configuration {
         /// </summary>
         [JsonProperty("codeSizeLimit")]
         public int codeSizeLimit { get; set; } = 24000;
-        
+
         /// <summary>
         /// The verbosity of the application logger.
         /// </summary>

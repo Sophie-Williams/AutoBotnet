@@ -4,7 +4,8 @@ using System.Text.RegularExpressions;
 
 namespace Speercs.Server.Utilities {
     public class StringUtils {
-        public static string secureRandomString(int maxSize, string charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890") {
+        public static string secureRandomString(int maxSize,
+            string charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890") {
             var chars = charset.ToCharArray();
             var data = new byte[1];
             using (var prng = RandomNumberGenerator.Create()) {
