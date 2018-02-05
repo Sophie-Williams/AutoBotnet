@@ -17,7 +17,7 @@ namespace Speercs.Server.Modules.User {
                 return Response.asJsonNet(currentUser);
             });
 
-            Get("/player/{id}", async args => {
+            Get("/u/{id}", async args => {
                 var user = await userManager.findUserByIdentifierAsync((string) args.id);
                 if (user == null) return HttpStatusCode.NotFound;
                 var publicProfile = new PublicUser(user);
