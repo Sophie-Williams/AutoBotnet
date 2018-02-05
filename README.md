@@ -24,6 +24,9 @@ Design information can be found in [AutoBotnetDesign](https://github.com/CookieE
 - For script build, use `./script/build.sh` with development dependencies
 already installed. This is used in our CI pipeline.
 
+## Useful Commands
+- Run server in development mode: `dotnet run --no-restore ENVIRONMENT=Development`
+
 # License
 
 Copyright © 2017 The CookieEaters. All Rights Reserved.
