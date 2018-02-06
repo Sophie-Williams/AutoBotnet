@@ -32,7 +32,7 @@ namespace Speercs.Server.Configuration {
 
         public SpeercsLogger log { get; }
 
-        public static readonly string version = "0.0.2-dev";
+        public const string version = "0.0.3-dev";
 
         public SContext(SConfiguration config) {
             configuration = config;
