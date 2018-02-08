@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
+using IridiumJS.Runtime;
+using System;
 
 namespace Speercs.Server.Web.Realtime.Handlers {
     public class InteractiveConsoleHandler : RealtimeHandler {
@@ -8,7 +10,7 @@ namespace Speercs.Server.Web.Realtime.Handlers {
 
         public override Task<JToken> handleRequestAsync(long id, JToken data, RealtimeContext rtContext) {
             JToken jsonResult = JValue.CreateNull();
-            bool error;
+            string error;
             try {
                 var engine = serverContext.executors.retrieveExecutor(rtContext.userIdentifier).engine;
                 var expression = data["expr"].ToString();
@@ -20,10 +22,13 @@ namespace Speercs.Server.Web.Realtime.Handlers {
                     jsonResult = JToken.FromObject(result);
                 }
 
-                error = false;
-            } catch {
+                error = null;
+            } catch (JavaScriptException ex) {
                 // there was an error
-                error = true;
+                error = ex.Message;
+            } catch (Exception) {
+                // for now no need to give debug info to clients
+                error = null;
             }
 
             return Task.FromResult<JToken>(
