@@ -43,7 +43,7 @@ namespace Speercs.Server.Web {
 
         private async Task writeLineAsync(string data) {
             await _ws.SendAsync(
-                new ArraySegment<byte>(Encoding.UTF8.GetBytes(data)),
+                new ArraySegment<byte>(Encoding.UTF8.GetBytes(data + "\n")),
                 WebSocketMessageType.Text,
                 true,
                 CancellationToken.None
