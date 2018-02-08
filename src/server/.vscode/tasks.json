@@ -8,7 +8,9 @@
     "tasks": [
         {
             "taskName": "build",
-            "args": [ ],
+            "args": [
+                "--no-restore"
+            ],
             "isBuildCommand": true,
             "showOutput": "silent",
             "problemMatcher": "$msCompile"
