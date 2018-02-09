@@ -10,7 +10,7 @@ namespace Speercs.Server.Game.Scripting {
         public SandboxedScriptingHost(ISContext context) : base(context) { }
 
         public JSEngine createSandboxedEngine(string userId) {
-            //-- create the engine
+            // create the engine
             var engine = new JSEngine(
                 cfg => {
                     cfg.LimitRecursion(10);
@@ -18,10 +18,9 @@ namespace Speercs.Server.Game.Scripting {
                 }
             );
 
-            //--Add modules
+            // Add userapi module globals
             addGlobal(engine, "Game", new GameApiModule(engine, serverContext, userId));
-//            AddGlobal(engine, "Units", new UnitManagementModule(engine, ServerContext, userId));
-//            AddGlobal(engine, "Utils", new UtilsModule(engine, ServerContext, userId));
+            addGlobal(engine, "Utils", new UtilsModule(engine, serverContext, userId));
 
 
             // these enum values become numbers (0-3)
@@ -30,7 +29,6 @@ namespace Speercs.Server.Game.Scripting {
             addGlobal(engine, "SOUTH", Direction.South);
             addGlobal(engine, "WEST", Direction.West);
 
-            //-- return it
             return engine;
         }
 
