@@ -17,5 +17,7 @@ namespace Speercs.Server.Models.Game {
         public UserProgram program { get; set; }
 
         public Queue<JToken> queuedNotifications { get; set; } = new Queue<JToken>();
+
+        public UserTeam team { get; set; } = new UserTeam();
     }
 }

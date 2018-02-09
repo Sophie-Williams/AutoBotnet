@@ -5,6 +5,7 @@ using IridiumJS.Native;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting;
 using Speercs.Server.Services.Application;
+using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Game.Subsystems {
     public class GameTickHandler : DependencyObject {
@@ -14,7 +15,7 @@ namespace Speercs.Server.Game.Subsystems {
             try {
                 serverContext.appState.tickCount++;
                 var executors =
-                    serverContext.appState.playerData.Select(x => serverContext.executors.retrieveExecutor(x.Key))
+                    serverContext.appState.userMetrics.Select(x => serverContext.executors.retrieveExecutor(x.Key))
                         .OrderBy(a => Guid.NewGuid()).ToList();
                 foreach (var executor in executors) {
                     await Task.Run(() => {

@@ -16,8 +16,8 @@ namespace Speercs.Server.Models.Game {
             return entity as T;
         }
 
-        public List<GameEntity> getAllByUser(UserTeam user) {
-            return user.ownedEntities.Select(entityId => entityData[entityId]).ToList();
+        public IEnumerable<GameEntity> getByUser(UserTeam user) {
+            return user.ownedEntities.Select(entityId => entityData[entityId]);
         }
     }
 }

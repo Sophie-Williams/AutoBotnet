@@ -1,5 +1,6 @@
 using System.Linq;
 using Speercs.Server.Configuration;
+using Speercs.Server.Models.Game;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Services.Auth.Security;
@@ -14,6 +15,8 @@ namespace Speercs.Server.Modules.User {
         public UserManagerService userManager { get; private set; }
 
         public PlayerPersistentDataService playerDataService { get; private set; }
+
+        public UserPersistentData persistentData { get; private set; }
 
         public UserMetricsService userMetrics { get; private set; }
 
@@ -31,6 +34,7 @@ namespace Speercs.Server.Modules.User {
 
                 userManager = new UserManagerService(this.serverContext);
                 playerDataService = new PlayerPersistentDataService(this.serverContext);
+                persistentData = playerDataService.get(userIdentifier);
                 userMetrics = new UserMetricsService(this.serverContext, userIdentifier);
                 currentUser = userManager.findUserByIdentifierAsync(userIdentifier).Result;
                 return null;

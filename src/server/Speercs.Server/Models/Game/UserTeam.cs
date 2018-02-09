@@ -6,7 +6,7 @@ namespace Speercs.Server.Models.Game {
     /// </summary>
     public class UserTeam {
         public int nrg { get; set; }
-        public string userIdentifier { get; set; }
+        public string identifier { get; set; }
         public List<string> ownedEntities { get; set; } = new List<string>();
     }
 }

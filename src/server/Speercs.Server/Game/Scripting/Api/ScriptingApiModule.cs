@@ -6,6 +6,7 @@ using IridiumJS.Native.Object;
 using IridiumJS.Runtime.Descriptors;
 using IridiumJS.Runtime.Interop;
 using Speercs.Server.Configuration;
+using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Game.Scripting.Api {
     public class ScriptingApiModule : ObjectInstance {
@@ -16,7 +17,8 @@ namespace Speercs.Server.Game.Scripting.Api {
         public ScriptingApiModule(JSEngine engine, ISContext context, string userId) : base(engine) {
             this.context = context;
             this.userId = userId;
-            myEntities = context.appState.playerData[userId].ownedEntities;
+            var persistentData = new PlayerPersistentDataService(context).get(userId);
+            myEntities = persistentData.team.ownedEntities;
             setDefaultToString();
         }
 

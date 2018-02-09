@@ -36,8 +36,6 @@ namespace Speercs.Server.Configuration {
             persistNeeded = true;
         }
 
-        public Dictionary<string, UserTeam> playerData { get; set; } = new Dictionary<string, UserTeam>();
-
         public List<string> inviteKeys { get; set; } = new List<string>();
 
         public WorldMap worldMap { get; set; } = new WorldMap();

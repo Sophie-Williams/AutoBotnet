@@ -15,7 +15,7 @@ namespace Speercs.Server.Services.Game {
             _persistentPlayerDataCollection = serverContext.database.GetCollection<UserPersistentData>(PLAYER_DATA_KEY);
         }
 
-        public UserPersistentData this[string ownerId] => findPersistentData(ownerId);
+        public UserPersistentData get(string ownerId) => findPersistentData(ownerId);
 
         private UserPersistentData findPersistentData(string ownerId) {
             return _persistentPlayerDataCollection.FindOne(x => x.ownerId == ownerId);
@@ -24,7 +24,7 @@ namespace Speercs.Server.Services.Game {
         public async Task createPersistentDataAsync(string ownerId) {
             await Task.Run(() => {
                 var persistentData = new UserPersistentData(ownerId) {
-                    program = new UserProgram(string.Empty)
+                    program = new UserProgram("\nfunction loop () {\n  // your code\n}\n")
                 };
                 _persistentPlayerDataCollection.Upsert(persistentData);
                 _persistentPlayerDataCollection.EnsureIndex(x => x.ownerId);
@@ -48,6 +48,6 @@ namespace Speercs.Server.Services.Game {
         }
 
         public Queue<JToken> retrieveNotificationQueue(string userIdentifier) =>
-            this[userIdentifier].queuedNotifications;
+            get(userIdentifier).queuedNotifications;
     }
 }

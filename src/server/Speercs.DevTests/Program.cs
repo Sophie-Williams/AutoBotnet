@@ -8,6 +8,7 @@ using Speercs.Server.Models.Game;
 using System.Threading.Tasks;
 using Speercs.Server.Models.Game.Program;
 using IridiumJS;
+using Speercs.Server.Services.Game;
 
 namespace Speercs.DevTests {
     internal static class Program {
@@ -25,18 +26,17 @@ namespace Speercs.DevTests {
             console.log('code load');
         ";
 
-        private const string user_id = "foooooo";
+        private const string userId = "foooooo";
 
         private static async Task setupStuffAsync() {
             serverContext.connectDatabase();
 
-            Console.WriteLine("userID: " + user_id);
-            serverContext.appState.playerData[user_id] = new UserTeam {
-                userIdentifier = user_id
-            };
+            Console.WriteLine("userID: " + userId);
 
-            await serverContext.executors.playerPersistentData.createPersistentDataAsync(user_id);
-            serverContext.executors.playerPersistentData.deployProgram(user_id, new UserProgram(js_source));
+            var persistentDataService = new PlayerPersistentDataService(serverContext);
+
+            await serverContext.executors.playerPersistentData.createPersistentDataAsync(userId);
+            serverContext.executors.playerPersistentData.deployProgram(userId, new UserProgram(js_source));
         }
 
         private static async Task mainAsync(string[] args) {
@@ -52,7 +52,7 @@ namespace Speercs.DevTests {
 
 
             // JS engine testing
-            var engine = serverContext.executors.retrieveExecutor(user_id).engine; // can be any JSEngine
+            var engine = serverContext.executors.retrieveExecutor(userId).engine; // can be any JSEngine
 
             // Console.WriteLine("INVOKING loop");
 

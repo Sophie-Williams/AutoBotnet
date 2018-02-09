@@ -11,7 +11,7 @@ namespace Speercs.Server.Modules.Game {
     public class CodeDeployModule : UserApiModule {
         public CodeDeployModule(ISContext serverContext) : base("/game/code", serverContext) {
             Get("/get", _ => {
-                var program = playerDataService[currentUser.identifier].program;
+                var program = playerDataService.get(currentUser.identifier).program;
                 return Response.asJsonNet(program);
             });
 

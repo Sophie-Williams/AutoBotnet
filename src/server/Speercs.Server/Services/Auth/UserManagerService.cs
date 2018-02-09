@@ -51,12 +51,6 @@ namespace Speercs.Server.Services.Auth {
                 _userCollection.EnsureIndex(x => x.apiKey);
                 _userCollection.EnsureIndex(x => x.username);
 
-                // Create additional data containers
-                // create team data
-                serverContext.appState.playerData[user.identifier] = new UserTeam {
-                    userIdentifier = user.identifier
-                };
-
                 // create persistent data
                 var persistentDataService = new PlayerPersistentDataService(serverContext);
                 await persistentDataService.createPersistentDataAsync(user.identifier);
@@ -126,10 +120,6 @@ namespace Speercs.Server.Services.Auth {
         public async Task deleteUserAsync(string userId) {
             await Task.Run(async () => {
                 _userCollection.Delete(x => x.identifier == userId);
-
-                // purge additional data
-                // remove team data
-                serverContext.appState.playerData.Remove(userId);
 
                 // remove persistent data
                 var persistentDataService = new PlayerPersistentDataService(serverContext);
