@@ -27,5 +27,9 @@ namespace Speercs.Server.Models.Math {
         }
 
         public bool equalTo(Point p) => (x == p.x) && (y == p.y);
+
+        public static double distance(Point p1, Point p2) {
+            return System.Math.Sqrt(System.Math.Pow(p1.x - p2.x, 2) + System.Math.Pow(p1.y - p2.y, 2));
+        }
     }
 }
