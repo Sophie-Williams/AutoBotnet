@@ -6,8 +6,8 @@ using Speercs.Server.Game.Scripting.Api.Modules;
 using Speercs.Server.Models.Game.Entities;
 
 namespace Speercs.Server.Game.Scripting {
-    public class SScriptingHost : DependencyObject {
-        public SScriptingHost(ISContext context) : base(context) { }
+    public class SandboxedScriptingHost : DependencyObject {
+        public SandboxedScriptingHost(ISContext context) : base(context) { }
 
         public JSEngine createSandboxedEngine(string userId) {
             //-- create the engine

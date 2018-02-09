@@ -18,6 +18,7 @@ namespace Speercs.Server.Game.Subsystems {
                     serverContext.appState.userMetrics.Select(x => serverContext.executors.retrieveExecutor(x.Key))
                         .OrderBy(a => Guid.NewGuid()).ToList();
                 foreach (var executor in executors) {
+                    if (executor == null) continue;
                     await Task.Run(() => {
                         var engine = executor.engine;
                         try {
