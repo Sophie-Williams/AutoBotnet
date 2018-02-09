@@ -24,6 +24,7 @@ namespace Speercs.Server.Game.Subsystems {
                         var completionWait = new ManualResetEventSlim();
                         var executionHost = new ScriptExecutionHost(executor.engine, executor.userIdentifier, completionWait);
                         var executionThread = new Thread(executionHost.execute);
+                        executionThread.Start();
                         completionWait.Wait();
                         switch (executionHost.exception) {
                             case null:
