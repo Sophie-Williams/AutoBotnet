@@ -38,48 +38,26 @@ namespace Speercs.Server.Models.Game.Entities {
             var newX = position.x;
             var newY = position.y;
 
+            // TODO: Movement between rooms
+
             switch (direction) {
                 case Direction.North:
                     newY--;
-                    if (newY < 0) {
-                        if (serverContext.appState.worldMap[roomX, roomY - 1] != null) {
-                            roomY--;
-                            newY = Room.MAP_EDGE_SIZE - 1;
-                        } else return false;
-                    }
 
                     break;
 
                 case Direction.East:
                     newX++;
-                    if (newX >= Room.MAP_EDGE_SIZE) {
-                        if (serverContext.appState.worldMap[roomX + 1, roomY] != null) {
-                            roomX++;
-                            newX = 0;
-                        } else return false;
-                    }
 
                     break;
 
                 case Direction.South:
                     newY++;
-                    if (newY >= Room.MAP_EDGE_SIZE) {
-                        if (serverContext.appState.worldMap[roomX, roomY + 1] != null) {
-                            roomY++;
-                            newY = 0;
-                        } else return false;
-                    }
 
                     break;
 
                 case Direction.West:
                     newX--;
-                    if (newX < 0) {
-                        if (serverContext.appState.worldMap[roomX - 1, roomY] != null) {
-                            roomX--;
-                            newX = Room.MAP_EDGE_SIZE - 1;
-                        } else return false;
-                    }
 
                     break;
                 default:
@@ -95,20 +73,11 @@ namespace Speercs.Server.Models.Game.Entities {
             return true;
         }
 
-        public RoomPosition moveRelative(int x, int y) {
-            return move(position.x + x, position.y + y);
-        }
-
-        public bool attemptMoveRoom((int, int) newRoom) {
+        private bool moveRoom(int roomX, int roomY) {
             // only allow moving to an adjacent room that exists
-            (int nRoomX, int nRoomY) = newRoom;
-            var roomX = position.roomX;
-            var roomY = position.roomY;
-            if (serverContext.appState.worldMap[nRoomX, nRoomY] != null) {
-                if (roomX + 1 == nRoomX || roomX - 1 == nRoomX ||
-                    roomY + 1 == nRoomY || roomY - 1 == nRoomY) {
-                    position = new RoomPosition(nRoomX, nRoomY, position.x, position.y);
-                    return true;
+            if (System.Math.Abs(position.roomX - roomX) == 1 || System.Math.Abs(position.roomY - roomY) == 1) {
+                if (serverContext.appState.worldMap[roomX, roomY] != null) {
+                    position = new RoomPosition(roomX, roomY, position.x, position.y);
                 }
             }
 
