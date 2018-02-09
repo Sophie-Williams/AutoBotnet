@@ -21,6 +21,7 @@ namespace Speercs.Server.Game.Scripting {
             // Add userapi module globals
             addGlobal(engine, "Game", new GameApiModule(engine, serverContext, userId));
             addGlobal(engine, "Utils", new UtilsModule(engine, serverContext, userId));
+            addGlobal(engine, "Army", new ArmyModule(engine, serverContext, userId));
 
 
             // these enum values become numbers (0-3)
