@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using IridiumJS.Native;
 using Speercs.Server.Configuration;
@@ -20,23 +21,23 @@ namespace Speercs.Server.Game.Subsystems {
                 foreach (var executor in executors) {
                     if (executor == null) continue;
                     await Task.Run(() => {
-                        var engine = executor.engine;
-                        try {
-                            var loopFunc = engine.GetValue("loop");
-                            engine.ResetTimeoutTicks();
-                            JsValue res = null;
-                            if (loopFunc != JsValue.Undefined) {
-                                res = loopFunc.Invoke();
-                            }
-
+                        var completionWait = new ManualResetEventSlim();
+                        var executionHost = new ScriptExecutionHost(executor.engine, executor.userIdentifier, completionWait);
+                        var executionThread = new Thread(executionHost.execute);
+                        completionWait.Wait();
+                        switch (executionHost.exception) {
+                            case null:
                             serverContext.log.writeLine(
-                                $"Player {executor.userIdentifier} program executed successfully with result {res}",
+                                $"Player {executor.userIdentifier} program executed successfully with result {executionHost.result}",
                                 SpeercsLogger.LogLevel.Trace);
-                        } catch (TimeoutException ex) {
-                            throw new TimeoutException($"Player {executor.userIdentifier} code took too long", ex);
-                        } catch (Exception ex) {
-                            throw new CodeExecutionException(
-                                $"Error executing player {executor.userIdentifier} program", ex);
+                                break;
+                            case TimeoutException ex: {
+                                throw new TimeoutException($"Player {executor.userIdentifier} code took too long", ex);
+                            }
+                            case Exception ex: {
+                                throw new CodeExecutionException(
+                                    $"Error executing player {executor.userIdentifier} program", ex);
+                            }
                         }
                     });
                 }
