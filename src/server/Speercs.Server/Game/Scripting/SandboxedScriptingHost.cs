@@ -24,11 +24,8 @@ namespace Speercs.Server.Game.Scripting {
             addGlobal(engine, "Army", new ArmyModule(engine, serverContext, userId));
 
 
-            // these enum values become numbers (0-3)
-            addGlobal(engine, "NORTH", Direction.North);
-            addGlobal(engine, "EAST", Direction.East);
-            addGlobal(engine, "SOUTH", Direction.South);
-            addGlobal(engine, "WEST", Direction.West);
+            // define enum values
+            addGlobal(engine, "C", new ConstantsModule(engine, serverContext, userId));
 
             return engine;
         }
