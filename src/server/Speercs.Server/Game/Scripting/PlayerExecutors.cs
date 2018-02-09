@@ -10,10 +10,10 @@ namespace Speercs.Server.Game.Scripting {
         ConcurrentDictionary<string, ScriptExecutor> executors { get; } =
             new ConcurrentDictionary<string, ScriptExecutor>();
 
-        public PlayerPersistentDataService playerPersistentData { get; }
+        public PersistentDataService playerPersistentData { get; }
 
         public PlayerExecutors(ISContext context) : base(context) {
-            playerPersistentData = new PlayerPersistentDataService(context);
+            playerPersistentData = new PersistentDataService(context);
         }
 
         public ScriptExecutor reloadExecutor(string userIdentifier) {

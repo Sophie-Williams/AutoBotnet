@@ -14,7 +14,7 @@ namespace Speercs.Server.Modules.User {
     public abstract class UserApiModule : SBaseModule {
         public UserManagerService userManager { get; private set; }
 
-        public PlayerPersistentDataService playerDataService { get; private set; }
+        public PersistentDataService playerDataService { get; private set; }
 
         public UserPersistentData persistentData { get; private set; }
 
@@ -33,7 +33,7 @@ namespace Speercs.Server.Modules.User {
                     ?.Value;
 
                 userManager = new UserManagerService(this.serverContext);
-                playerDataService = new PlayerPersistentDataService(this.serverContext);
+                playerDataService = new PersistentDataService(this.serverContext);
                 persistentData = playerDataService.get(userIdentifier);
                 userMetrics = new UserMetricsService(this.serverContext, userIdentifier);
                 currentUser = userManager.findUserByIdentifierAsync(userIdentifier).Result;

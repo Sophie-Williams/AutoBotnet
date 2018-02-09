@@ -52,7 +52,7 @@ namespace Speercs.Server.Services.Auth {
                 _userCollection.EnsureIndex(x => x.username);
 
                 // create persistent data
-                var persistentDataService = new PlayerPersistentDataService(serverContext);
+                var persistentDataService = new PersistentDataService(serverContext);
                 await persistentDataService.createPersistentDataAsync(user.identifier);
 
                 serverContext.appState.userMetrics[user.identifier] = new UserMetrics();
@@ -122,7 +122,7 @@ namespace Speercs.Server.Services.Auth {
                 _userCollection.Delete(x => x.identifier == userId);
 
                 // remove persistent data
-                var persistentDataService = new PlayerPersistentDataService(serverContext);
+                var persistentDataService = new PersistentDataService(serverContext);
                 await persistentDataService.removePersistentDataAsync(userId);
 
                 serverContext.appState.userMetrics.Remove(userId);

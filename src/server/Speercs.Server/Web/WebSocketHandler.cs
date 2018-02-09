@@ -99,7 +99,7 @@ namespace Speercs.Server.Web {
 
                 // pipeline is registered, send any queued, previously undelivered data
                 var userNotificationQueue =
-                    new PlayerPersistentDataService(serverContext).retrieveNotificationQueue(user.identifier);
+                    new PersistentDataService(serverContext).retrieveNotificationQueue(user.identifier);
                 while (userNotificationQueue.Count > 0) {
                     // send data back through pipelines
                     // now that a pipeline is registered, the data will be sent through the channel

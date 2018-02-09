@@ -27,7 +27,7 @@ namespace Speercs.Server.Infrastructure.Push {
                 // No handlers are currently available. Message should be added to persistent queue of undelivered messages.
                 // get player data service, and retrieve queued notifications container
                 var userNotificationQueue =
-                    new PlayerPersistentDataService(serverContext).retrieveNotificationQueue(userIdentifier);
+                    new PersistentDataService(serverContext).retrieveNotificationQueue(userIdentifier);
                 // Enqueue the data.
                 userNotificationQueue.Enqueue(data);
             }

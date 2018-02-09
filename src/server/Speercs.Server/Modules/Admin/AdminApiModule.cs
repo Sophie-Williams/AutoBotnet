@@ -12,7 +12,7 @@ namespace Speercs.Server.Modules.Admin {
     public abstract class AdminApiModule : SBaseModule {
         public UserManagerService userManager { get; private set; }
 
-        public PlayerPersistentDataService playerDataService { get; private set; }
+        public PersistentDataService playerDataService { get; private set; }
 
         internal AdminApiModule(string path, ISContext serverContext) : base($"/admin{path}", serverContext) {
             // require claims from stateless auther, defined in bootstrapper
@@ -28,7 +28,7 @@ namespace Speercs.Server.Modules.Admin {
                     SpeercsLogger.LogLevel.Information);
 
                 userManager = new UserManagerService(this.serverContext);
-                playerDataService = new PlayerPersistentDataService(this.serverContext);
+                playerDataService = new PersistentDataService(this.serverContext);
                 return null;
             };
         }

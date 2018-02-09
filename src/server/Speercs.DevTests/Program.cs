@@ -33,7 +33,7 @@ namespace Speercs.DevTests {
 
             Console.WriteLine("userID: " + userId);
 
-            var persistentDataService = new PlayerPersistentDataService(serverContext);
+            var persistentDataService = new PersistentDataService(serverContext);
 
             await serverContext.executors.playerPersistentData.createPersistentDataAsync(userId);
             serverContext.executors.playerPersistentData.deployProgram(userId, new UserProgram(js_source));

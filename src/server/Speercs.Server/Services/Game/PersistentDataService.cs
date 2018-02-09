@@ -7,11 +7,11 @@ using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Game.Program;
 
 namespace Speercs.Server.Services.Game {
-    public class PlayerPersistentDataService : DependencyObject {
+    public class PersistentDataService : DependencyObject {
         public const string PLAYER_DATA_KEY = "player_persistent_data";
         private readonly LiteCollection<UserPersistentData> _persistentPlayerDataCollection;
 
-        public PlayerPersistentDataService(ISContext serverContext) : base(serverContext) {
+        public PersistentDataService(ISContext serverContext) : base(serverContext) {
             _persistentPlayerDataCollection = serverContext.database.GetCollection<UserPersistentData>(PLAYER_DATA_KEY);
         }
 

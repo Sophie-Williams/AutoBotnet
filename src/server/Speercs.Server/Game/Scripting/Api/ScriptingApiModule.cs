@@ -17,7 +17,7 @@ namespace Speercs.Server.Game.Scripting.Api {
         public ScriptingApiModule(JSEngine engine, ISContext context, string userId) : base(engine) {
             this.context = context;
             this.userId = userId;
-            var persistentData = new PlayerPersistentDataService(context).get(userId);
+            var persistentData = new PersistentDataService(context).get(userId);
             myEntities = persistentData.team.ownedEntities;
             setDefaultToString();
         }
