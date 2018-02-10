@@ -6,15 +6,16 @@ using Speercs.Server.Game.Scripting.Api.Modules;
 using Speercs.Server.Models.Game.Entities;
 
 namespace Speercs.Server.Game.Scripting {
-    public class SandboxedScriptingHost : DependencyObject {
-        public SandboxedScriptingHost(ISContext context) : base(context) { }
+    public class EngineSandboxer : DependencyObject {
+        public EngineSandboxer(ISContext context) : base(context) { }
 
         public JSEngine createSandboxedEngine(string userId) {
             // create the engine
             var engine = new JSEngine(
                 cfg => {
-                    cfg.LimitRecursion(10);
+                    cfg.LimitRecursion(serverContext.configuration.codeRecursionLimit);
                     cfg.TimeoutInterval(TimeSpan.FromMilliseconds(serverContext.configuration.codeLoadTimeLimit));
+                    cfg.LimitMemory(serverContext.configuration.codeMemoryLimit);
                 }
             );
 

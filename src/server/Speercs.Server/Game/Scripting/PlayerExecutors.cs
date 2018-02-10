@@ -28,7 +28,7 @@ namespace Speercs.Server.Game.Scripting {
             return executors.GetOrAdd(userIdentifier, key => {
                 if (playerPersistentData.get(userIdentifier).program == null) return null;
                 
-                var engine = new SandboxedScriptingHost(serverContext).createSandboxedEngine(userIdentifier);
+                var engine = new EngineSandboxer(serverContext).createSandboxedEngine(userIdentifier);
 
                 // Load player code into engine
                 try {

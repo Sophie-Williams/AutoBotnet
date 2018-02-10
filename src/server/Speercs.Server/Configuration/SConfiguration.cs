@@ -76,10 +76,22 @@ namespace Speercs.Server.Configuration {
         public int codeLoadTimeLimit { get; set; } = 200;
 
         /// <summary>
+        /// The limit of the depth of recursion allowed in user scripts
+        /// </summary>
+        [JsonProperty("codeRecursionLimit")]
+        public int codeRecursionLimit { get; set; } = 12;
+
+        /// <summary>
         /// The limit (in chars) of the raw user source code length.
         /// </summary>
         [JsonProperty("codeSizeLimit")]
         public int codeSizeLimit { get; set; } = 24000;
+
+        /// <summary>
+        /// The limit (in bytes) of script executor memory usage
+        /// </summary>
+        [JsonProperty("codeMemoryLimit")]
+        public long codeMemoryLimit { get; set; } = 16 * 1024 * 1024;
 
         /// <summary>
         /// The verbosity of the application logger.
