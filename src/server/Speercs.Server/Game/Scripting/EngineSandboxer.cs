@@ -13,8 +13,9 @@ namespace Speercs.Server.Game.Scripting {
             // create the engine
             var engine = new JSEngine(
                 cfg => {
-                    cfg.LimitRecursion(10);
+                    cfg.LimitRecursion(serverContext.configuration.codeRecursionLimit);
                     cfg.TimeoutInterval(TimeSpan.FromMilliseconds(serverContext.configuration.codeLoadTimeLimit));
+                    cfg.LimitMemory(serverContext.configuration.codeMemoryLimit);
                 }
             );
 
