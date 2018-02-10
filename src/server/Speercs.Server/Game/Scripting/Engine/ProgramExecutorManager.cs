@@ -4,15 +4,15 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Services.Application;
 using Speercs.Server.Services.Game;
 
-namespace Speercs.Server.Game.Scripting {
-    public class PlayerExecutors : DependencyObject {
+namespace Speercs.Server.Game.Scripting.Engine {
+    public class ProgramExecutorManager : DependencyObject {
         // cache of player executors
         ConcurrentDictionary<string, ScriptExecutor> executors { get; } =
             new ConcurrentDictionary<string, ScriptExecutor>();
 
         public PersistentDataService playerPersistentData { get; }
 
-        public PlayerExecutors(ISContext context) : base(context) {
+        public ProgramExecutorManager(ISContext context) : base(context) {
             playerPersistentData = new PersistentDataService(context);
         }
 

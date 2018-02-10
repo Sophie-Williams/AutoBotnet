@@ -1,7 +1,7 @@
 using IridiumJS;
 using Speercs.Server.Configuration;
 
-namespace Speercs.Server.Game.Scripting {
+namespace Speercs.Server.Game.Scripting.Engine {
     public class ScriptExecutor : DependencyObject {
         public ScriptExecutor(JSEngine engine, string userIdentifier, ISContext context) : base(context) {
             this.engine = engine;

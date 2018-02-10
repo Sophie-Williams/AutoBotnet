@@ -2,7 +2,7 @@ using CookieIoC;
 using LiteDB;
 using Osmium.PluginEngine;
 using Speercs.Server.Extensibility;
-using Speercs.Server.Game.Scripting;
+using Speercs.Server.Game.Scripting.Engine;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
 using Speercs.Server.Services.Application;
@@ -28,7 +28,7 @@ namespace Speercs.Server.Configuration {
 
         public NotificationPipeline notificationPipeline { get; }
 
-        public PlayerExecutors executors { get; private set; }
+        public ProgramExecutorManager executors { get; private set; }
 
         public SpeercsLogger log { get; }
 
@@ -51,7 +51,7 @@ namespace Speercs.Server.Configuration {
         }
 
         private void loadDatabaseDependentServices() {
-            executors = new PlayerExecutors(this);
+            executors = new ProgramExecutorManager(this);
         }
     }
 }

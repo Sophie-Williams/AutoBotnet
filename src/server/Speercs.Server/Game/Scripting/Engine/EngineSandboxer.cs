@@ -5,7 +5,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting.Api.Modules;
 using Speercs.Server.Models.Game.Entities;
 
-namespace Speercs.Server.Game.Scripting {
+namespace Speercs.Server.Game.Scripting.Engine {
     public class EngineSandboxer : DependencyObject {
         public EngineSandboxer(ISContext context) : base(context) { }
 

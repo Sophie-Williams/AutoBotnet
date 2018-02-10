@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using IridiumJS.Native;
 using Speercs.Server.Configuration;
-using Speercs.Server.Game.Scripting;
+using Speercs.Server.Game.Scripting.Engine;
 using Speercs.Server.Services.Application;
 using Speercs.Server.Services.Game;
 
@@ -13,7 +13,7 @@ namespace Speercs.Server.Game.Scripting {
 
         public BatchProgramExecutor(ISContext context) : base(context) { }
 
-        public async Task executePlayerPrograms() {
+        public async Task executePlayerProgramsAsync() {
             try {
                 serverContext.appState.tickCount++;
                 var executors =

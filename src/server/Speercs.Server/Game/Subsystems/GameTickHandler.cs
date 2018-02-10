@@ -9,7 +9,7 @@ namespace Speercs.Server.Game.Subsystems
 
         public async Task onTickAsync() {
             var batchExecutor = new BatchProgramExecutor(serverContext);
-            await batchExecutor.executePlayerPrograms();
+            await batchExecutor.executePlayerProgramsAsync();
         }
     }
 }
