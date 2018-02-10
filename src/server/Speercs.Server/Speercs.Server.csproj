@@ -17,7 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="C5" Version="2.5.3" />
-    <PackageReference Include="CookieIoC" Version="2.1.0" />
+    <PackageReference Include="CookieIoC" Version="2.2.0" />
     <PackageReference Include="IridiumJS" Version="2.12.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
