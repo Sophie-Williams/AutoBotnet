@@ -27,30 +27,36 @@ namespace Speercs.Server.Game.Scripting {
                         var executionThread = new Thread(executionHost.execute);
                         executionThread.Start();
                         completionWait.Wait();
-                        switch (executionHost.exception) {
-                            case null:
-                            serverContext.log.writeLine(
-                                $"Player {executor.userIdentifier} program executed successfully with result {executionHost.result}",
-                                SpeercsLogger.LogLevel.Trace);
-                                break;
-                            case TimeoutException ex: {
-                                throw new TimeoutException($"Player {executor.userIdentifier} code took too long", ex);
+                        try {
+                            switch (executionHost.exception) {
+                                case null:
+                                serverContext.log.writeLine(
+                                    $"Player {executor.userIdentifier} program executed successfully with result {executionHost.result}",
+                                    SpeercsLogger.LogLevel.Trace);
+                                    break;
+                                case TimeoutException ex: {
+                                    throw new CodeExecutionException($"Player {executor.userIdentifier} code took too long", ex);
+                                }
+                                case OutOfMemoryException ex: {
+                                    throw new CodeExecutionException($"Player {executor.userIdentifier} program killed for exceeding memory limit", ex);
+                                }
+                                case Exception ex: {
+                                    throw new CodeExecutionException(
+                                        $"Error executing player {executor.userIdentifier} program", ex);
+                                }
                             }
-                            case OutOfMemoryException ex: {
-                                throw new CodeExecutionException($"Player {executor.userIdentifier} program killed for exceeding memory limit", ex);
-                            }
-                            case Exception ex: {
-                                throw new CodeExecutionException(
-                                    $"Error executing player {executor.userIdentifier} program", ex);
-                            }
+                        } catch (Exception ex) { // generic error
+                            serverContext.log.writeLine(ex.Message, SpeercsLogger.LogLevel.Warning);
+                            serverContext.log.writeLine(ex.ToString(), SpeercsLogger.LogLevel.Trace);
                         }
                     });
                 }
 
                 // TODO: Tick all entities
 
-                // Game update logic (state: won)
-            } catch (Exception ex) {
+                // TODO: Game update logic (state: died, etc.)
+
+            } catch (Exception ex) { // generic error
                 serverContext.log.writeLine(ex.ToString(), SpeercsLogger.LogLevel.Warning);
             }
         }
