@@ -1,6 +1,13 @@
 
 # Speercs (AutoBotnet) Changelog
 
+## `0.0.3-dev` [TBD] (Unreleased)
+
+- internal engine optimizations
+    - store as much data as possible in persistentdata instead of using additional containers
+- improved script sandboxing
+    - configurable sandbox limits (recursion, code size, timeout time, memory usage)
+
 ## `0.0.2-dev` "Illeg" (February 5, 2018)
 
 - Upgrade to ASP.NET Core 2.0
