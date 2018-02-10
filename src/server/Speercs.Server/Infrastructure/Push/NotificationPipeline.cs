@@ -12,7 +12,7 @@ namespace Speercs.Server.Infrastructure.Push {
 
         public NotificationPipeline(ISContext context) : base(context) { }
 
-        public async Task pushMessageAsync(JToken data, string userIdentifier) {
+        public async Task pushMessageAsync(JToken data, string userIdentifier, bool queue = false) {
             var dataBundle = new JObject(
                 new JProperty("data", data),
                 new JProperty("type", "push")
@@ -23,7 +23,7 @@ namespace Speercs.Server.Infrastructure.Push {
                 foreach (var handler in userPipeline.GetHandlers()) {
                     if (await handler.Invoke(dataBundle)) break;
                 }
-            } else {
+            } else if (queue) {
                 // No handlers are currently available. Message should be added to persistent queue of undelivered messages.
                 // get player data service, and retrieve queued notifications container
                 var userNotificationQueue =
