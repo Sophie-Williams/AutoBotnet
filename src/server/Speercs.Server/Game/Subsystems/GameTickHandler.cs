@@ -35,6 +35,9 @@ namespace Speercs.Server.Game.Subsystems {
                             case TimeoutException ex: {
                                 throw new TimeoutException($"Player {executor.userIdentifier} code took too long", ex);
                             }
+                            case OutOfMemoryException ex: {
+                                throw new CodeExecutionException($"Player {executor.userIdentifier} program killed for exceeding memory limit", ex);
+                            }
                             case Exception ex: {
                                 throw new CodeExecutionException(
                                     $"Error executing player {executor.userIdentifier} program", ex);
