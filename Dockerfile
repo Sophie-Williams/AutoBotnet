@@ -7,6 +7,10 @@ COPY . ./
 # Run CI build script
 RUN ./script/build.sh
 
+# Tag with Git commit hash
+ARG GIT_COMMIT=unspecified
+LABEL git_commit=$GIT_COMMIT
+
 # Build runtime image
 FROM microsoft/aspnetcore:2.0
 WORKDIR /app

@@ -30,6 +30,10 @@ already installed. This is used in our CI pipeline.
 
 Here is an example, running `speercs` in Docker using the development configuration file:
 
+#### Building the Docker image
+- Use `./script/build_docker.sh`, it will build the image and auto-tag it with the commit hash.
+
+#### Running
 - `docker run --name AutoBotnetLocalDev -p 5000:80 -v $(pwd)/src/server/Speercs.Server/speercs.json:/app/speercs.json speercs`
     - This will forward speercs's port 80 to the local system's port 5000, and link the config file to `/app/speercs.json`.
     - Use `docker create` to create the container without starting it immediately.
