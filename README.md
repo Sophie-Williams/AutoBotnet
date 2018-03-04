@@ -30,8 +30,9 @@ already installed. This is used in our CI pipeline.
 
 Here is an example, running `speercs` in Docker using the development configuration file:
 
-- `docker run -p 5000:80 -v $(pwd)/src/server/Speercs.Server/speercs.json:/app/speercs.json speercs`
+- `docker run --name AutoBotnetLocalDev -p 5000:80 -v $(pwd)/src/server/Speercs.Server/speercs.json:/app/speercs.json speercs`
     - This will forward speercs's port 80 to the local system's port 5000, and link the config file to `/app/speercs.json`.
+- `docker start AutoBotnetLocalDev` and `docker stop AutoBotnetLocalDev` to start/stop the container.
 
 ## Useful Commands
 - Run server in development mode: `dotnet run --no-restore ENVIRONMENT=Development`
