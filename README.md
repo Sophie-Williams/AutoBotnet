@@ -32,6 +32,7 @@ Here is an example, running `speercs` in Docker using the development configurat
 
 - `docker run --name AutoBotnetLocalDev -p 5000:80 -v $(pwd)/src/server/Speercs.Server/speercs.json:/app/speercs.json speercs`
     - This will forward speercs's port 80 to the local system's port 5000, and link the config file to `/app/speercs.json`.
+    - Use `docker create` to create the container without starting it immediately.
 - `docker start AutoBotnetLocalDev` and `docker stop AutoBotnetLocalDev` to start/stop the container.
 
 ## Useful Commands
