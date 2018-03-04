@@ -24,6 +24,15 @@ Design information can be found in [AutoBotnetDesign](https://github.com/CookieE
 - For script build, use `./script/build.sh` with development dependencies
 already installed. This is used in our CI pipeline.
 
+### Docker
+
+`Speercs.Server` has full support for running in Docker. You will have to link in config files using Docker volumes.
+
+Here is an example, running `speercs` in Docker using the development configuration file:
+
+- `docker run -p 5000:80 -v $(pwd)/src/server/Speercs.Server/speercs.json:/app/speercs.json speercs`
+    - This will forward speercs's port 80 to the local system's port 5000, and link the config file to `/app/speercs.json`.
+
 ## Useful Commands
 - Run server in development mode: `dotnet run --no-restore ENVIRONMENT=Development`
 
