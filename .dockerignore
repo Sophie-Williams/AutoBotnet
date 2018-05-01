@@ -1,0 +1,7 @@
+.git/
+bin/
+obj/
+speercs.json
+hosting.json
+*.lidb
+.vscode
