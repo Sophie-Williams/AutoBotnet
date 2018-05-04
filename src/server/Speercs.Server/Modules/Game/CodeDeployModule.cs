@@ -1,7 +1,7 @@
 using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Game.Program;
+using Speercs.Server.Models.Program;
 using Speercs.Server.Models.Requests.Game;
 using Speercs.Server.Modules.User;
 using Speercs.Server.Services.Application;

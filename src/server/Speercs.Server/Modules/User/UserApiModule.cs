@@ -1,6 +1,6 @@
 using System.Linq;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Game;
+using Speercs.Server.Models;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Auth;
 using Speercs.Server.Services.Auth.Security;

@@ -1,7 +1,7 @@
 using System;
 using IridiumJS;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Game.Materials;
+using Speercs.Server.Models.Construction;
 using Speercs.Server.Models.Math;
 using Speercs.Server.Services.Game;
 

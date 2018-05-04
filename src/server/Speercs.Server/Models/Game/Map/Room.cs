@@ -3,7 +3,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Map;
-using Speercs.Server.Models.Game.Entities;
+using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Map {

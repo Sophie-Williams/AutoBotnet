@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using Speercs.Server.Models.Game.Program;
+using Speercs.Server.Models.Program;
 
-namespace Speercs.Server.Models.Game {
+namespace Speercs.Server.Models {
     public class UserPersistentData : DatabaseObject {
         public UserPersistentData(string ownerId) {
             this.ownerId = ownerId;

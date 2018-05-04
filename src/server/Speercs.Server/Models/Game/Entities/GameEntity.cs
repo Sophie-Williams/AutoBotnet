@@ -2,7 +2,7 @@ using System;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Map;
 
-namespace Speercs.Server.Models.Game.Entities {
+namespace Speercs.Server.Models.Entities {
     public enum Direction {
         North = 0,
         East = 1,

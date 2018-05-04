@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using LiteDB;
 using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Game;
-using Speercs.Server.Models.Game.Program;
+using Speercs.Server.Models;
+using Speercs.Server.Models.Program;
 
 namespace Speercs.Server.Services.Game {
     public class PersistentDataService : DependencyObject {

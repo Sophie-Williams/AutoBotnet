@@ -4,7 +4,6 @@ using System.Security;
 using System.Threading.Tasks;
 using LiteDB;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Game;
 using Speercs.Server.Models.Requests.User;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Game;

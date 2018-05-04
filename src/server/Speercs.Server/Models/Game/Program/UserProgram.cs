@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace Speercs.Server.Models.Game.Program {
+namespace Speercs.Server.Models.Program {
     public class UserProgram {
         [JsonProperty("deployTime")]
         public long deployTime { get; set; }

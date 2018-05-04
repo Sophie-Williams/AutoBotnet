@@ -1,7 +1,7 @@
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Map;
 
-namespace Speercs.Server.Models.Game.Entities {
+namespace Speercs.Server.Models.Entities {
     public class Bot : GameEntity {
         public Bot(ISContext serverContext, RoomPosition pos, UserTeam team) : base(serverContext, pos) {
             this.team = team;

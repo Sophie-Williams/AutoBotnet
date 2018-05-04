@@ -1,8 +1,8 @@
 using System;
 using IridiumJS;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Game.Entities;
-using Speercs.Server.Models.Game.Materials;
+using Speercs.Server.Models.Construction;
+using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Game.Scripting.Api.Modules {

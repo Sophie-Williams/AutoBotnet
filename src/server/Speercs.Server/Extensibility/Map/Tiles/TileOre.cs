@@ -1,5 +1,5 @@
 using SixLabors.ImageSharp;
-using Speercs.Server.Models.Game.Materials;
+using Speercs.Server.Models.Materials;
 
 namespace Speercs.Server.Extensibility.Map.Tiles {
     public class TileOre : ITile {

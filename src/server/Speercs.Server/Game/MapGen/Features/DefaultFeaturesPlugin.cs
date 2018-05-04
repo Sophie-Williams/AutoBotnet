@@ -3,7 +3,7 @@ using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Map;
 using Speercs.Server.Extensibility.Map.Features;
 using Speercs.Server.Extensibility.Map.Tiles;
-using Speercs.Server.Models.Game.Materials;
+using Speercs.Server.Models.Materials;
 
 namespace Speercs.Server.Game.MapGen.Features {
     public class DefaultFeaturesPlugin : ISpeercsPlugin {

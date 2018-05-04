@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Speercs.Server.Models.Game.Materials;
+using Speercs.Server.Models.Materials;
 
-namespace Speercs.Server.Models.Game {
+namespace Speercs.Server.Models {
     /// <summary>
     /// Data model for storing all information about a user and his/her stuff
     /// </summary>

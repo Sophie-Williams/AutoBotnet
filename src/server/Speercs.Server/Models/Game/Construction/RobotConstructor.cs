@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using Speercs.Server.Models.Game.Entities;
+using Speercs.Server.Models.Entities;
+using Speercs.Server.Models.Materials;
 
-namespace Speercs.Server.Models.Game.Materials {
+namespace Speercs.Server.Models.Construction {
     public enum BotTemplates {
         Scout = 0
     }

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Speercs.Server.Models.Game.Entities;
+using Speercs.Server.Models.Entities;
 
-namespace Speercs.Server.Models.Game {
+namespace Speercs.Server.Models {
     public class EntityBag {
         public Dictionary<string, GameEntity> entityData { get; set; } = new Dictionary<string, GameEntity>();
 
