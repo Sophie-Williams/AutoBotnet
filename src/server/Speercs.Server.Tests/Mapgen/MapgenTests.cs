@@ -1,7 +1,7 @@
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Speercs.Server.Tests {
+namespace Speercs.Server.Tests.Mapgen {
     public class MapgenTests {
         private readonly ITestOutputHelper _output;
 
