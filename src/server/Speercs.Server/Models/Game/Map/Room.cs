@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Newtonsoft.Json;
 using Speercs.Server.Extensibility;
 using Speercs.Server.Models.Game.Entities;
@@ -22,14 +23,17 @@ namespace Speercs.Server.Models.Game.Map {
             entities.Remove(entity.id);
         }
 
-        public void print() {
+        public string print() {
+            var sb = new StringBuilder();
             for (var y = 0; y < MAP_EDGE_SIZE; y++) {
                 for (var x = 0; x < MAP_EDGE_SIZE; x++) {
-                    Console.Write(tiles[x, y].getTileChar());
+                    sb.Append(tiles[x, y].getTileChar());
                 }
 
-                Console.WriteLine();
+                sb.AppendLine();
             }
+
+            return sb.ToString();
         }
 
         public int x { get; }
