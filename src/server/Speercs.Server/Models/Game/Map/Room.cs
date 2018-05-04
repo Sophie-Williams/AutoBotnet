@@ -23,7 +23,7 @@ namespace Speercs.Server.Models.Map {
             entities.Remove(entity.id);
         }
 
-        public string print() {
+        public string dump() {
             var sb = new StringBuilder();
             for (var y = 0; y < MAP_EDGE_SIZE; y++) {
                 for (var x = 0; x < MAP_EDGE_SIZE; x++) {
