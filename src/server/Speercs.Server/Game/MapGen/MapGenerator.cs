@@ -25,6 +25,9 @@ namespace Speercs.Server.Game.MapGen {
 
         public Room generateRoom(int roomX, int roomY, double density) {
             var room = new Room(roomX, roomY);
+            
+            // key points
+            var center = new Point(Room.MAP_EDGE_SIZE / 2, Room.MAP_EDGE_SIZE / 2);
 
             // set exits
             var adjRoom = serverContext.appState.worldMap[roomX, roomY - 1];
@@ -66,6 +69,20 @@ namespace Speercs.Server.Game.MapGen {
             foreach (var feature in serverContext.extensibilityContainer.ResolveAll<IMapGenFeature>()) {
                 feature.generate(room, this);
             }
+            
+            // select a spawn point near the center
+            // pick an empty tile
+            var candidates = new List<Point>();
+            for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
+                for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
+                    if (tileAt(x, y) is TileFloor) {
+                        candidates.Add(new Point(x, y));
+                    }
+                }
+            }
+            // pick a spawn point
+            candidates = candidates.OrderByDescending(x => Point.distance(x, center)).Take(prm.spawnPointCandidates).ToList();
+            room.spawn = candidates[random.Next(candidates.Count)];
 
             // clean up and return
             walls.Clear();

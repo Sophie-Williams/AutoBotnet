@@ -23,6 +23,9 @@ namespace Speercs.Server.Game.MapGen {
 
         public int exitCarveDepth = Room.MAP_EDGE_SIZE / 20;
 
+        /// Spawn Points ///
+        public int spawnPointCandidates = 8;
+
         /// Tile Type Stuff ///
         public int bedrockDepth = 2;
     }
