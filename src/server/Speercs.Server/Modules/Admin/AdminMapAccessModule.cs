@@ -9,7 +9,7 @@ namespace Speercs.Server.Modules.Admin {
     public class AdminMapAccessModule : AdminApiModule {
         public AdminMapAccessModule(ISContext serverContext) : base("/map", serverContext) {
             Post("/genroom", _ => {
-                var mapGen = new MapGenerator(this.serverContext);
+                var mapGen = new MapGenerator(this.serverContext, new MapGenParameters());
                 var req = this.Bind<RoomGenerationRequest>();
                 serverContext.log.writeLine($"Admin generated new room at ({req.x}, {req.y})",
                     SpeercsLogger.LogLevel.Information);

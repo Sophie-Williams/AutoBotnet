@@ -72,17 +72,19 @@ namespace Speercs.Server.Game.MapGen {
             
             // select a spawn point near the center
             // pick an empty tile
-            var candidates = new List<Point>();
+            var spawnCandidates = new List<Point>();
             for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
                 for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
                     if (tileAt(x, y) is TileFloor) {
-                        candidates.Add(new Point(x, y));
+                        spawnCandidates.Add(new Point(x, y));
                     }
                 }
             }
             // pick a spawn point
-            candidates = candidates.OrderByDescending(x => Point.distance(x, center)).Take(prm.spawnPointCandidates).ToList();
-            room.spawn = candidates[random.Next(candidates.Count)];
+            spawnCandidates = spawnCandidates.OrderByDescending(x => Point.distance(x, center)).Take(prm.spawnPointCandidates).ToList();
+            room.spawn = spawnCandidates[random.Next(spawnCandidates.Count)];
+            room.tiles[room.spawn.x, room.spawn.y] = new TileCrashSite();
+            
 
             // clean up and return
             walls.Clear();
