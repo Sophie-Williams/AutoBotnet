@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using LiteDB;
 using Speercs.Server.Models;
 using Speercs.Server.Models.Game;
-using Speercs.Server.Models.Game.Map;
+using Speercs.Server.Models.Map;
 using Speercs.Server.Models.User;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global

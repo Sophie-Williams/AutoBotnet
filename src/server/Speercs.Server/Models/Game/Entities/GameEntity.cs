@@ -1,6 +1,6 @@
 using System;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Game.Map;
+using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Models.Game.Entities {
     public enum Direction {

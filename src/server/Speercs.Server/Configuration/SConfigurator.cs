@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LiteDB;
-using Speercs.Server.Models.Game.Map;
+using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Configuration {
     public static class SConfigurator {

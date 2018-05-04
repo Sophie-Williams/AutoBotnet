@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Speercs.Server.Models.Math;
 
-namespace Speercs.Server.Models.Game.Map {
+namespace Speercs.Server.Models.Map {
     public class WorldMap {
         public Dictionary<string, Room> roomDict { get; set; } = new Dictionary<string, Room>();
 

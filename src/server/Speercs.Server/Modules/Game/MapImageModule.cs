@@ -3,7 +3,7 @@ using Nancy;
 using SixLabors.ImageSharp.Formats.Png;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Misc;
-using Speercs.Server.Models.Game.Map;
+using Speercs.Server.Models.Map;
 using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Game {

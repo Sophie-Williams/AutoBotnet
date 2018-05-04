@@ -1,6 +1,6 @@
 ﻿using System;
 using SixLabors.ImageSharp;
-using Speercs.Server.Models.Game.Map;
+using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Game.Misc {
     public class RoomImageRenderer {

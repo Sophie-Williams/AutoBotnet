@@ -1,11 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 using Speercs.Server.Extensibility;
 using Speercs.Server.Models.Game.Entities;
+using Speercs.Server.Models.Math;
 
-namespace Speercs.Server.Models.Game.Map {
+namespace Speercs.Server.Models.Map {
     public class Room {
         [JsonIgnore] public const int MAP_EDGE_SIZE = 64;
 
@@ -39,6 +39,8 @@ namespace Speercs.Server.Models.Game.Map {
         public int x { get; }
 
         public int y { get; }
+
+        public Point spawn;
 
         [JsonProperty("tiles")]
         public ITile[,] tiles { get; }

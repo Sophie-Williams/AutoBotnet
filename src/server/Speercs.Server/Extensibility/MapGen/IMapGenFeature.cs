@@ -1,4 +1,4 @@
-using Speercs.Server.Models.Game.Map;
+using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Extensibility.MapGen {
     public interface IMapGenFeature {

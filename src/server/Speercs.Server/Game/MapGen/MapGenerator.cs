@@ -5,7 +5,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.MapGen;
 using Speercs.Server.Game.MapGen.Tiles;
-using Speercs.Server.Models.Game.Map;
+using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Game.MapGen {
