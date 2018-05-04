@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using C5;
 using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility;
+using Speercs.Server.Extensibility.Map;
 
 namespace Speercs.Server.Models.Map {
     public class Pathfinder : DependencyObject {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 using Speercs.Server.Extensibility;
+using Speercs.Server.Extensibility.Map;
 using Speercs.Server.Models.Game.Entities;
 using Speercs.Server.Models.Math;
 

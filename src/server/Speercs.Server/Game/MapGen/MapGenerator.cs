@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility;
-using Speercs.Server.Extensibility.MapGen;
+using Speercs.Server.Extensibility.Map;
 using Speercs.Server.Game.MapGen.Tiles;
 using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;

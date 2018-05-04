@@ -1,5 +1,6 @@
 using SixLabors.ImageSharp;
 using Speercs.Server.Extensibility;
+using Speercs.Server.Extensibility.Map;
 
 namespace Speercs.Server.Game.MapGen.Tiles {
     public class TileWall : ITile {
