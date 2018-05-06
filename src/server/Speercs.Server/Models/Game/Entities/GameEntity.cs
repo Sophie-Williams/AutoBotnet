@@ -1,6 +1,7 @@
 using System;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Map;
+using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Entities {
     public enum Direction {
@@ -25,7 +26,7 @@ namespace Speercs.Server.Models.Entities {
         public RoomPosition move(int x, int y) {
             if (x < 0 || y < 0 || x >= Room.MAP_EDGE_SIZE || y >= Room.MAP_EDGE_SIZE)
                 throw new ArgumentException("Cannot move outside of the Room's boundaries");
-            return move(new RoomPosition(position, x, y));
+            return move(new RoomPosition(position.roomPos, new Point(x, y)));
         }
 
         public RoomPosition move(RoomPosition pos) {
@@ -33,10 +34,10 @@ namespace Speercs.Server.Models.Entities {
         }
 
         public virtual bool moveRelative(Direction direction) {
-            var roomX = position.roomX;
-            var roomY = position.roomY;
-            var newX = position.x;
-            var newY = position.y;
+            var roomX = position.roomPos.x;
+            var roomY = position.roomPos.y;
+            var newX = position.pos.x;
+            var newY = position.pos.y;
 
             // TODO: Movement between rooms
 
@@ -65,7 +66,7 @@ namespace Speercs.Server.Models.Entities {
                     throw new ArgumentException("direction must be one of the four cardinal directions", "direction");
             }
 
-            var newPos = new RoomPosition(roomX, roomY, newX, newY);
+            var newPos = new RoomPosition(new Point(roomX, roomY), new Point(newX, newY));
             if (!newPos.getTile(serverContext).isWalkable())
                 return false; // not Walkable; don't move
 
@@ -75,9 +76,9 @@ namespace Speercs.Server.Models.Entities {
 
         private bool moveRoom(int roomX, int roomY) {
             // only allow moving to an adjacent room that exists
-            if (System.Math.Abs(position.roomX - roomX) == 1 || System.Math.Abs(position.roomY - roomY) == 1) {
+            if (System.Math.Abs(position.roomPos.x - roomX) == 1 || System.Math.Abs(position.roomPos.y - roomY) == 1) {
                 if (serverContext.appState.worldMap[roomX, roomY] != null) {
-                    position = new RoomPosition(roomX, roomY, position.x, position.y);
+                    position = new RoomPosition(new Point(roomX, roomY), position.pos);
                 }
             }
 

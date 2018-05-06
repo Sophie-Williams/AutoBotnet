@@ -3,48 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
 using Speercs.Server.Configuration;
-using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Map;
 using Speercs.Server.Models.Entities;
+using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Map {
     public struct RoomPosition {
-        public int x { get; set; }
-        public int y { get; set; }
-        public int roomX { get; set; }
-        public int roomY { get; set; }
+        public readonly Point pos;
+        public readonly Point roomPos;
 
         // Constructors
 
-        public RoomPosition(int roomX, int roomY, int x, int y) {
-            this.roomX = roomX;
-            this.roomY = roomY;
-            this.x = x;
-            this.y = y;
+        public RoomPosition(Point roomPos, Point pos) {
+            this.roomPos = roomPos;
+            this.pos = pos;
         }
 
-        public RoomPosition(Room room, int x, int y) {
-            roomX = room.x;
-            roomY = room.y;
-            this.x = x;
-            this.y = y;
-        }
-
-        public RoomPosition(RoomPosition room, int x, int y) {
-            roomX = room.roomX;
-            roomY = room.roomY;
-            this.x = x;
-            this.y = y;
-        }
+        public RoomPosition(Room room, Point pos) : this(new Point(room.x, room.y), pos) { }
 
         // Methods
 
-        public int distance(RoomPosition other) {
-            return Room.MAP_EDGE_SIZE * (System.Math.Abs(roomX - other.roomX) + System.Math.Abs(roomY - other.roomY)) +
-                   System.Math.Abs(x - other.x) + System.Math.Abs(y - other.y);
+        /// <summary>
+        /// Distance (possibly spanning multiple rooms)
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public double distance(RoomPosition other) {
+            return (Point.distance(roomPos, other.roomPos) * Room.MAP_EDGE_SIZE) + Point.distance(pos, other.pos);
+        }
+        
+        public int pathDistance(RoomPosition other) {
+            return Room.MAP_EDGE_SIZE * (System.Math.Abs(roomPos.x - other.roomPos.x) + System.Math.Abs(roomPos.y - other.roomPos.y)) +
+                   System.Math.Abs(pos.x - other.pos.x) + System.Math.Abs(pos.y - other.pos.y);
         }
 
-        public int distance(GameEntity entity) {
+        public double distance(GameEntity entity) {
             return distance(entity.position);
         }
 
@@ -74,35 +67,35 @@ namespace Speercs.Server.Models.Map {
         }
 
         public Room getRoom(ISContext context) {
-            return context.appState.worldMap[roomX, roomY];
+            return context.appState.worldMap[roomPos.x, roomPos.y];
         }
 
         public ITile getTile(ISContext context) {
-            return getRoom(context).tiles[x, y];
+            return getRoom(context).tiles[pos.x, pos.y];
         }
 
 
         public override bool Equals(object obj) {
-            return obj is RoomPosition && this == (RoomPosition) obj;
+            return obj is RoomPosition position && this == position;
         }
 
         public override int GetHashCode() {
             unchecked {
                 var hash = 17;
-                hash = hash * 31 + x;
-                hash = hash * 31 + y;
-                hash = hash * 31 + roomX;
-                hash = hash * 31 + roomY;
+                hash = hash * 31 + pos.x;
+                hash = hash * 31 + pos.y;
+                hash = hash * 31 + roomPos.x;
+                hash = hash * 31 + roomPos.y;
                 return hash;
             }
         }
 
         public static bool operator ==(RoomPosition a, RoomPosition b) {
-            return a.x == b.x && a.y == b.y && a.roomX == b.roomX && a.roomY == b.roomY;
+            return a.pos.x == b.pos.x && a.pos.y == b.pos.y && a.roomPos.x == b.roomPos.x && a.roomPos.y == b.roomPos.y;
         }
 
         public static bool operator !=(RoomPosition a, RoomPosition b) {
-            return a.x != b.x || a.y != b.y || a.roomX != b.roomX || a.roomY != b.roomY;
+            return a.pos.x != b.pos.x || a.pos.y != b.pos.y || a.roomPos.x != b.roomPos.x || a.roomPos.y != b.roomPos.y;
         }
     }
 }

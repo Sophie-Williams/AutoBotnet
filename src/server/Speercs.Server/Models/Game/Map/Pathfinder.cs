@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using C5;
 using Speercs.Server.Configuration;
-using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Map;
+using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Map {
     public class Pathfinder : DependencyObject {
@@ -44,23 +44,23 @@ namespace Speercs.Server.Models.Map {
 
         public List<RoomPosition> findPath() {
             if (_start == _goal) return new List<RoomPosition>();
-            if (_start.roomX != _goal.roomX || _start.roomY != _goal.roomY)
+            if (_start.roomPos.x != _goal.roomPos.x || _start.roomPos.y != _goal.roomPos.y)
                 throw new NotImplementedException("Inter-room pathfinding not implemented yet");
 
             // add the start node to the open list
-            _openList.Add(_nodeGrid[_start.x, _start.y] =
-                new Node(_start.x, _start.y, 0, _goal.distance(_start), null));
+            _openList.Add(_nodeGrid[_start.pos.x, _start.pos.y] =
+                new Node(_start.pos.x, _start.pos.y, 0, _goal.pathDistance(_start), null));
 
             while (!_openList.IsEmpty) {
                 var curNode = _openList.DeleteMin(); // pop the next node off the open list
                 curNode.open = false;
 
                 // check if we've reached the goal
-                if (curNode.x == _goal.x && curNode.y == _goal.y) {
+                if (curNode.x == _goal.pos.x && curNode.y == _goal.pos.y) {
                     // return the found path
                     var path = new List<RoomPosition>();
                     while (curNode.parent != null) {
-                        path.Add(new RoomPosition(_start, curNode.x, curNode.y));
+                        path.Add(new RoomPosition(_start.roomPos, new Point(curNode.x, curNode.y)));
                         curNode = curNode.parent;
                     }
 
@@ -85,9 +85,10 @@ namespace Speercs.Server.Models.Map {
         private void tryOpenNode(int x, int y, int g, Node parent) {
             var node = _nodeGrid[x, y];
             if (node == null) {
-                if (_passable(new RoomPosition(_start, x, y).getTile(serverContext))) {
+                if (_passable(new RoomPosition(_start.roomPos, new Point(x, y)).getTile(serverContext))) {
                     // unvisited node; add to open list
-                    node = _nodeGrid[x, y] = new Node(x, y, g, _goal.distance(new RoomPosition(_goal, x, y)), parent);
+                    node = _nodeGrid[x, y] = new Node(x, y, g,
+                        _goal.pathDistance(new RoomPosition(_start.roomPos, new Point(x, y))), parent);
                     _openList.Add(ref node.pqHandle, node);
                 }
             } else if (node.open) {
