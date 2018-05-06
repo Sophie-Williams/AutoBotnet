@@ -3,6 +3,7 @@ using System.Linq;
 using IridiumJS;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Construction;
+using Speercs.Server.Models.Entities.Towers;
 using Speercs.Server.Models.Math;
 using Speercs.Server.Models.Mechanics;
 using Speercs.Server.Services.Game;
@@ -25,14 +26,19 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return true;
             }
 
-            bool spawnUnit(int template) {
-                var bot = RobotConstructor.construct((BotTemplates) template, userData.team);
+            FactoryTower getFactory(int seq) {
+                return (FactoryTower) userData.team.entities.Where(x => x is FactoryTower).ElementAt(seq);
+            }
+
+            bool constructBot(int template, FactoryTower factory) {
+                var bot = RobotConstructor.construct(context, factory, (BotTemplates) template, userData.team);
                 userData.team.addEntity(bot);
                 return true;
             }
 
             defineFunction("boot", new Func<bool>(boot));
-            defineFunction("spawnUnit", new Func<int, bool>(spawnUnit));
+            defineFunction("getFactory", new Func<int, FactoryTower>(getFactory));
+            defineFunction("constructBot", new Func<int, FactoryTower, bool>(constructBot));
         }
     }
 }
