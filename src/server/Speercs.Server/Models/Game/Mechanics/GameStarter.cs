@@ -21,7 +21,6 @@ namespace Speercs.Server.Models.Mechanics {
             var homeRoom = mapExpander.createConnectedRoom();
             var factory = new FactoryTower(serverContext,
                 new RoomPosition(new Point(homeRoom.x, homeRoom.y), homeRoom.spawn), team);
-            serverContext.appState.entities.insert(factory);
             team.addEntity(factory);
         }
 

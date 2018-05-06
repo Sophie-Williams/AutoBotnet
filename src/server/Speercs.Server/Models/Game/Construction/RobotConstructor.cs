@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Materials;
 
@@ -25,7 +26,8 @@ namespace Speercs.Server.Models.Construction {
 
         private static bool spendResources(UserTeam team, IEnumerable<(ResourceId, ulong)> costs) {
             // ensure that the user can afford
-            foreach (var cost in costs) {
+            var costList = costs.ToList();
+            foreach (var cost in costList) {
                 (ResourceId resource, ulong amount) = cost;
                 if (team.resources[resource] < amount) {
                     return false;
@@ -33,7 +35,7 @@ namespace Speercs.Server.Models.Construction {
             }
 
             // spend the resources
-            foreach (var cost in costs) {
+            foreach (var cost in costList) {
                 (ResourceId resource, ulong amount) = cost;
                 team.resources[resource] -= amount;
             }

@@ -27,8 +27,6 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
 
             bool spawnUnit(int template) {
                 var bot = RobotConstructor.construct((BotTemplates) template, userData.team);
-                // TODO: Add the bot to the entity system
-                context.appState.entities.insert(bot);
                 userData.team.addEntity(bot);
                 return true;
             }

@@ -34,7 +34,11 @@ namespace Speercs.Server.Models.Entities {
 
         private void propagatePosition(RoomPosition pos) {
             // TODO: Propagate position to spatial hash, etc.
-            serverContext.appState.entities.spatialHash[pos.roomPos].Remove(this);
+            if (serverContext.appState.entities.spatialHash.ContainsKey(pos.roomPos) &&
+                serverContext.appState.entities.spatialHash[pos.roomPos].Contains(this)) {
+                serverContext.appState.entities.spatialHash[pos.roomPos].Remove(this);
+            }
+
             serverContext.appState.entities.insertSpatialHash(this);
             _position = pos;
         }
