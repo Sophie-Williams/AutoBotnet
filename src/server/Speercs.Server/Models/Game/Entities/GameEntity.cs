@@ -23,13 +23,8 @@ namespace Speercs.Server.Models.Entities {
             this.serverContext.appState.entities.insert(this);
         }
 
-        public RoomPosition move(int x, int y) {
-            if (x < 0 || y < 0 || x >= Room.MAP_EDGE_SIZE || y >= Room.MAP_EDGE_SIZE)
-                throw new ArgumentException("Cannot move outside of the Room's boundaries");
-            return move(new RoomPosition(position.roomPos, new Point(x, y)));
-        }
-
         public RoomPosition move(RoomPosition pos) {
+            // TODO: propagate position change
             return position = pos;
         }
 
@@ -38,8 +33,6 @@ namespace Speercs.Server.Models.Entities {
             var roomY = position.roomPos.y;
             var newX = position.pos.x;
             var newY = position.pos.y;
-
-            // TODO: Movement between rooms
 
             switch (direction) {
                 case Direction.North:
@@ -64,6 +57,30 @@ namespace Speercs.Server.Models.Entities {
                 default:
                     // this can happen if an int is casted to Direction
                     throw new ArgumentException("direction must be one of the four cardinal directions", "direction");
+            }
+
+            if (newX < 0 && moveRoom(roomX - 1, roomY)) {
+                roomX--;
+            } else {
+                return false;
+            }
+
+            if (newX > Room.MAP_EDGE_SIZE && moveRoom(roomX + 1, roomY)) {
+                roomX++;
+            } else {
+                return false;
+            }
+
+            if (newY < 0 && moveRoom(roomX, roomY - 1)) {
+                roomY--;
+            } else {
+                return false;
+            }
+
+            if (newY > Room.MAP_EDGE_SIZE && moveRoom(roomX, roomY + 1)) {
+                roomY++;
+            } else {
+                return false;
             }
 
             var newPos = new RoomPosition(new Point(roomX, roomY), new Point(newX, newY));
