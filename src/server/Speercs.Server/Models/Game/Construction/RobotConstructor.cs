@@ -22,16 +22,15 @@ namespace Speercs.Server.Models.Construction {
             if (!spendResources(team, costs)) return null;
 
             // build the bot
+            // TODO: Bot templates loaded from plugins
             var bot = default(Bot);
             switch (template) {
                 case BotTemplates.Scout:
-//                    bot = new Bot(context, );
+                    bot = new Bot(context, factory.position, team, 4);
                     break;
             }
 
-            // TODO: create the bot
-            // TODO: bot components/module system
-            throw new System.NotImplementedException();
+            return bot;
         }
 
         private static bool spendResources(UserTeam team, IEnumerable<(ResourceId, ulong)> costs) {
