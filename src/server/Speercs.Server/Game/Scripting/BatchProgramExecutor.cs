@@ -61,7 +61,7 @@ namespace Speercs.Server.Game.Scripting {
                 // TODO: Game update logic (state: died, etc.)
             } catch (Exception ex) {
                 // generic error
-                serverContext.log.writeLine(ex.ToString(), SpeercsLogger.LogLevel.Warning);
+                serverContext.log.writeLine(ex.ToString(), SpeercsLogger.LogLevel.Error);
             }
         }
     }
