@@ -15,6 +15,11 @@ namespace Speercs.Server.Tests.Mapgen {
         }
 
         [Fact]
+        public void roomHasSpawn() {
+            Assert.True(_fixture.testRoom.spawn.x > 0 && _fixture.testRoom.spawn.y > 0);
+        }
+
+        [Fact]
         public void roomHasExits() {
             var room = _fixture.testRoom;
             var hasNorthExit = room.northExit.high - room.northExit.low;
