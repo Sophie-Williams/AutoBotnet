@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Speercs.Server.Models.Entities;
+using Speercs.Server.Models.Entities.Towers;
 using Speercs.Server.Models.Materials;
 
 namespace Speercs.Server.Models {
@@ -17,6 +18,11 @@ namespace Speercs.Server.Models {
             }
 
             return 0;
+        }
+
+        public GameEntity addEntity(GameEntity entity) {
+            entities.Add(entity);
+            return entity;
         }
     }
 }

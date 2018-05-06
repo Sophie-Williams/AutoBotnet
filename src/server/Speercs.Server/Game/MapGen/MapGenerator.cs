@@ -18,13 +18,11 @@ namespace Speercs.Server.Game.MapGen {
         }
 
         public Room generateRoom(int roomX, int roomY) {
-            // set the density
-            var density = doubleRange(prm.minRoomDensity, prm.maxRoomDensity);
-            return generateRoom(roomX, roomY, density);
-        }
-
-        public Room generateRoom(int roomX, int roomY, double density) {
             var room = new Room(roomX, roomY);
+            room.creationTime = serverContext.appState.tickCount;
+            
+            // variables
+            var density = doubleRange(prm.minRoomDensity, prm.maxRoomDensity);
 
             // key points
             var center = new Point(Room.MAP_EDGE_SIZE / 2, Room.MAP_EDGE_SIZE / 2);

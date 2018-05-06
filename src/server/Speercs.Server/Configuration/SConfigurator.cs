@@ -21,9 +21,9 @@ namespace Speercs.Server.Configuration {
         public static void loadState(SContext serverContext, string stateStorageFile) {
             if (!serializationMappersRegistered) {
                 BsonMapper.Global.RegisterType(
-                    serialize: map => BsonMapper.Global.ToDocument(map.roomDict),
+                    serialize: map => BsonMapper.Global.ToDocument(map.rooms),
                     deserialize: bson => new WorldMap {
-                        roomDict = (Dictionary<string, Room>) BsonMapper.Global
+                        rooms = (Dictionary<string, Room>) BsonMapper.Global
                             .ToObject(typeof(Dictionary<string, Room>), bson.AsDocument)
                     }
                 );

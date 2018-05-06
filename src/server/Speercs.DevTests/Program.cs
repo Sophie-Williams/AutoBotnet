@@ -29,7 +29,7 @@ namespace Speercs.DevTests {
 
         private static void testRoomGenerator() {
             var mapGenerator = new MapGenerator(serverContext, new MapGenParameters());
-            var room = mapGenerator.generateRoom(0, 0, 0.5);
+            var room = mapGenerator.generateRoom(0, 0);
             Console.WriteLine(room.dump());
         }
 

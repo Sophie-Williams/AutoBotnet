@@ -13,7 +13,7 @@ namespace Speercs.Server.Models.Map {
         public Room(int x, int y) {
             this.x = x;
             this.y = y;
-            tiles = new ITile[MAP_EDGE_SIZE, MAP_EDGE_SIZE];
+            tiles = new ITile[MAP_EDGE_SIZE, MAP_EDGE_SIZE]; 
         }
 
         public void addEntity(GameEntity entity) {
@@ -42,6 +42,8 @@ namespace Speercs.Server.Models.Map {
         public int y { get; }
 
         public Point spawn;
+
+        public ulong creationTime;
 
         [JsonProperty("tiles")]
         public ITile[,] tiles { get; }

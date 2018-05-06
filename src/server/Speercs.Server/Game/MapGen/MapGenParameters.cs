@@ -3,7 +3,7 @@ using Speercs.Server.Models.Map;
 namespace Speercs.Server.Game.MapGen {
     public class MapGenParameters {
         /// Wall Density ///
-        public double minRoomDensity = 0.40;
+        public double minRoomDensity = 0.35;
 
         public double maxRoomDensity = 0.50;
 

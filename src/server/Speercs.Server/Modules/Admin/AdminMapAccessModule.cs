@@ -14,9 +14,7 @@ namespace Speercs.Server.Modules.Admin {
                 serverContext.log.writeLine($"Admin generated new room at ({req.x}, {req.y})",
                     SpeercsLogger.LogLevel.Information);
                 if (this.serverContext.appState.worldMap[req.x, req.y] != null) return HttpStatusCode.BadRequest;
-                var newRoom = req.density == 0
-                    ? mapGen.generateRoom(req.x, req.y)
-                    : mapGen.generateRoom(req.x, req.y, req.density);
+                var newRoom = mapGen.generateRoom(req.x, req.y);
                 this.serverContext.appState.worldMap[req.x, req.y] = newRoom;
                 return Response.AsJson(newRoom);
             });
