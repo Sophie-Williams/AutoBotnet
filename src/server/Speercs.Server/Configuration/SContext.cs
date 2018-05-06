@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using CookieIoC;
 using LiteDB;
 using Osmium.PluginEngine;
@@ -45,13 +47,22 @@ namespace Speercs.Server.Configuration {
 
         public void connectDatabase() {
             // Create database
-            database = new LiteDatabase(configuration.databaseConfiguration.fileName);
+            if (configuration.databaseConfiguration.fileName == null) {
+                database = new LiteDatabase(configuration.databaseConfiguration.fileName);
+            } else {
+                log.writeLine("Database target file not provided, using transient in-memory storage backend", SpeercsLogger.LogLevel.Warning);
+                database = new LiteDatabase(new MemoryStream());
+            }
             // load dependent services
             loadDatabaseDependentServices();
         }
 
         private void loadDatabaseDependentServices() {
             executors = new ProgramExecutorManager(this);
+        }
+
+        public void Dispose() {
+            database?.Dispose();
         }
     }
 }

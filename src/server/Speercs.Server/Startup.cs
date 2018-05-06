@@ -120,10 +120,11 @@ namespace Speercs.Server {
             gameBootstrapper.onStartup();
         }
 
-        private void onUnload(ISContext sctx) {
-            sctx.log.writeLine("Server unloading, force-persisting state data.", SpeercsLogger.LogLevel.Information);
+        private void onUnload(ISContext scx) {
+            scx.log.writeLine("Server unloading, force-persisting state data.", SpeercsLogger.LogLevel.Information);
             // persist on unload
-            sctx.appState.persist(true);
+            scx.appState.persist(true);
+            scx.Dispose();
         }
     }
 }

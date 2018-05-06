@@ -1,3 +1,4 @@
+using System;
 using CookieIoC;
 using LiteDB;
 using Osmium.PluginEngine;
@@ -8,7 +9,7 @@ using Speercs.Server.Infrastructure.Push;
 using Speercs.Server.Services.Application;
 
 namespace Speercs.Server.Configuration {
-    public interface ISContext {
+    public interface ISContext : IDisposable {
         LiteDatabase database { get; }
 
         SConfiguration configuration { get; }
