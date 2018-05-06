@@ -14,7 +14,12 @@ namespace Speercs.Server.Models.Entities {
     public abstract class GameEntity : DependencyObject {
         public string id { get; }
 
-        public RoomPosition position { get; set; }
+        private RoomPosition _position;
+
+        public RoomPosition position {
+            get => _position;
+            set { propagatePosition(value); }
+        }
 
         public GameEntity(ISContext serverContext, RoomPosition pos) : base(serverContext) {
             position = pos;
@@ -23,8 +28,12 @@ namespace Speercs.Server.Models.Entities {
             this.serverContext.appState.entities.insert(this);
         }
 
+        private void propagatePosition(RoomPosition pos) {
+            // TODO: Propagate position to spatial hash, etc.
+            _position = pos;
+        }
+
         public RoomPosition move(RoomPosition pos) {
-            // TODO: propagate position change
             return position = pos;
         }
 
