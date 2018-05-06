@@ -26,7 +26,7 @@ namespace Speercs.Server.Services.Game {
                 var persistentData = new UserPersistentData(ownerId) {
                     program = new UserProgram("\nfunction loop () {\n  // your code\n}\n")
                 };
-                _persistentPlayerDataCollection.Upsert(persistentData);
+                _persistentPlayerDataCollection.Insert(persistentData);
                 _persistentPlayerDataCollection.EnsureIndex(x => x.ownerId);
             });
         }
