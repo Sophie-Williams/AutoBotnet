@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Speercs.Server.Services.Application;
 
@@ -5,6 +6,12 @@ namespace Speercs.Server.Configuration {
     public class SConfiguration {
         [JsonProperty("databaseConfig")]
         public SDatabaseConfiguration databaseConfiguration { get; set; } = new SDatabaseConfiguration();
+
+        /// <summary>
+        /// Plugin assemblies for dynamically loading extensibility plugins
+        /// </summary>
+        [JsonProperty("plugins")]
+        public List<string> pluginAssemblies { get; set; } = new List<string>();
 
         /// <summary>
         /// Whether to enable ASP.NET Core verbose logging
