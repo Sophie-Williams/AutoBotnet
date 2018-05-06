@@ -1,9 +1,8 @@
 using System;
 using IridiumJS;
 using Speercs.Server.Configuration;
-using Speercs.Server.Models.Construction;
+using Speercs.Server.Extensibility.Entities;
 using Speercs.Server.Models.Entities;
-using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Game.Scripting.Api.Modules {
     public class ConstantsModule : ScriptingApiModule {
