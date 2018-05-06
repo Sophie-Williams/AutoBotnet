@@ -2,12 +2,12 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Models.Entities {
-    public class Bot : GameEntity {
+    public class Bot : MobileEntity {
         public Bot(ISContext serverContext, RoomPosition pos, UserTeam team) : base(serverContext, pos) {
             this.team = team;
         }
 
-        public override bool moveRelative(Direction direction) {
+        protected override bool moveRelative(Direction direction) {
             if (serverContext.appState.tickCount <= lastMoveTime)
                 return false; // already moved this tick
 
