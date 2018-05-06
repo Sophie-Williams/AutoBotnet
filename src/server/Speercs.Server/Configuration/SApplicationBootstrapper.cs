@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LiteDB;
+using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Configuration {
@@ -27,6 +28,9 @@ namespace Speercs.Server.Configuration {
                             .ToObject(typeof(Dictionary<string, Room>), bson.AsDocument)
                     }
                 );
+                BsonMapper.Global.RegisterType(
+                    serialize: room => BsonMapper.Global.ToDocument(room),
+                    deserialize: bson => new Room(bson.AsDocument["x"].AsInt32, bson.AsDocument["y"].AsInt32));
                 serializationMappersRegistered = true;
             }
 

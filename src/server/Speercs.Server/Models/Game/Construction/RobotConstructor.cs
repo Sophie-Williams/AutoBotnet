@@ -25,7 +25,7 @@ namespace Speercs.Server.Models.Construction {
             var costList = costs.ToList();
             foreach (var cost in costList) {
                 var (resource, amount) = cost;
-                if (team.resources[resource] < amount) {
+                if (team.getResource(resource) < amount) {
                     return false;
                 }
             }
