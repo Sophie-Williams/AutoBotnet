@@ -48,11 +48,11 @@ namespace Speercs.Server.Configuration {
         public void connectDatabase() {
             // Create database
             if (configuration.databaseConfiguration.fileName == null) {
-                database = new LiteDatabase(configuration.databaseConfiguration.fileName);
-            } else {
                 log.writeLine("Database target file not provided, using transient in-memory storage backend",
                     SpeercsLogger.LogLevel.Warning);
                 database = new LiteDatabase(new MemoryStream());
+            } else {
+                database = new LiteDatabase(configuration.databaseConfiguration.fileName);
             }
 
             // load dependent services

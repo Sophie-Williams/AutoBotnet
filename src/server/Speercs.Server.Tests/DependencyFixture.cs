@@ -11,6 +11,8 @@ namespace Speercs.Server.Tests {
 
         private SContext createTransientServerContext(SConfiguration configuration) {
             var scx = new SContext(configuration);
+            configuration.databaseConfiguration.fileName = null; // use transisent database mode
+            scx.connectDatabase();
             scx.appState = new SAppState();
             return scx;
         }
