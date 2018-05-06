@@ -14,8 +14,8 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
 
             bool boot() {
                 // "boot up", or create the player's force
-                if (userData.team.entities.Any()) {
-                    // can't "boot" an existing team
+                if (userData.team.booted) {
+                    // can't "boot" an already-booted team
                     return false;
                 }
 

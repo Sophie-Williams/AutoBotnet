@@ -11,6 +11,7 @@ namespace Speercs.Server.Models {
         public string identifier { get; set; }
         public List<GameEntity> entities { get; set; } = new List<GameEntity>();
         public Dictionary<ResourceId, ulong> resources { get; set; } = new Dictionary<ResourceId, ulong>();
+        public bool booted = false;
 
         public ulong getResource(ResourceId resourceId) {
             if (resources.ContainsKey(resourceId)) {

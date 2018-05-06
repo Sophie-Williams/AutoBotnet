@@ -1,5 +1,4 @@
-﻿using System;
-using Speercs.Server.Configuration;
+﻿using Speercs.Server.Configuration;
 using Speercs.Server.Game.MapGen;
 using Speercs.Server.Models.Entities.Towers;
 using Speercs.Server.Models.Map;
@@ -22,6 +21,7 @@ namespace Speercs.Server.Models.Mechanics {
             var factory = new FactoryTower(serverContext,
                 new RoomPosition(new Point(homeRoom.x, homeRoom.y), homeRoom.spawn), team);
             team.addEntity(factory);
+            team.booted = true;
         }
 
         public void destroyTeam(UserTeam team) {
