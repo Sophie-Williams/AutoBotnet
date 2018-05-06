@@ -26,7 +26,8 @@ namespace Speercs.Server.Game.Scripting.Api {
             return new PropertyDescriptor(new DelegateWrapper(engine, func), false, false, false);
         }
 
-        protected PropertyDescriptor makeProperty(object value, bool writable, bool enumerable, bool configurable = false) {
+        protected PropertyDescriptor makeProperty(object value, bool writable, bool enumerable,
+            bool configurable = false) {
             return new PropertyDescriptor(JsValue.FromObject(Engine, value), writable, enumerable, configurable);
         }
 

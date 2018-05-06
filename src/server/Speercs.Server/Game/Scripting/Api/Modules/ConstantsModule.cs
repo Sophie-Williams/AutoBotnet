@@ -16,7 +16,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             var names = Enum.GetNames(typeof(T));
             foreach (var name in names) {
                 var propertyName = prefix ? $"{typeof(T).Name.ToUpper()}_{name.ToUpper()}" : name.ToUpper();
-                addReadOnlyProperty(propertyName, (int)Enum.Parse(typeof(T), name));
+                addReadOnlyProperty(propertyName, (int) Enum.Parse(typeof(T), name));
             }
         }
     }

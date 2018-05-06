@@ -1,5 +1,6 @@
 ﻿using System;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Game.Misc {

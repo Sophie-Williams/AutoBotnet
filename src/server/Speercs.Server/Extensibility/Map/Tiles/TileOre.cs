@@ -1,4 +1,5 @@
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using Speercs.Server.Models.Materials;
 
 namespace Speercs.Server.Extensibility.Map.Tiles {

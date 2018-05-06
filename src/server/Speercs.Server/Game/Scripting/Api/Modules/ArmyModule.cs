@@ -9,12 +9,13 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
     public class ArmyModule : ScriptingApiModule {
         public ArmyModule(JSEngine engine, ISContext context, string userId) : base(engine, context, userId) {
             var userData = new PersistentDataService(context).get(userId);
-            
+
             bool spawnUnit(int template) {
-                var bot = RobotConstructor.construct((BotTemplates)template, userData.team);
+                var bot = RobotConstructor.construct((BotTemplates) template, userData.team);
                 // TODO: Add the bot to the entity system
                 throw new System.NotImplementedException();
             }
+
             defineFunction("spawnUnit", new Func<int, bool>(spawnUnit));
         }
     }

@@ -23,6 +23,7 @@ namespace Speercs.Server.Game.Scripting {
             } catch (Exception ex) {
                 exception = ex;
             }
+
             completionWait.Set();
         }
 

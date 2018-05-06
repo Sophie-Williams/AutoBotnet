@@ -50,9 +50,11 @@ namespace Speercs.Server.Configuration {
             if (configuration.databaseConfiguration.fileName == null) {
                 database = new LiteDatabase(configuration.databaseConfiguration.fileName);
             } else {
-                log.writeLine("Database target file not provided, using transient in-memory storage backend", SpeercsLogger.LogLevel.Warning);
+                log.writeLine("Database target file not provided, using transient in-memory storage backend",
+                    SpeercsLogger.LogLevel.Warning);
                 database = new LiteDatabase(new MemoryStream());
             }
+
             // load dependent services
             loadDatabaseDependentServices();
         }

@@ -9,6 +9,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             double pointDistance(Point p1, Point p2) {
                 return Point.distance(p1, p2);
             }
+
             defineFunction("pointDistance", new Func<Point, Point, double>(pointDistance));
         }
     }

@@ -10,7 +10,6 @@ using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Game.Scripting {
     public class BatchProgramExecutor : DependencyObject {
-
         public BatchProgramExecutor(ISContext context) : base(context) { }
 
         public async Task executePlayerProgramsAsync() {
@@ -23,29 +22,34 @@ namespace Speercs.Server.Game.Scripting {
                     if (executor == null) continue;
                     await Task.Run(() => {
                         var completionWait = new ManualResetEventSlim();
-                        var executionHost = new ScriptExecutionHost(executor.engine, executor.userIdentifier, completionWait);
+                        var executionHost =
+                            new ScriptExecutionHost(executor.engine, executor.userIdentifier, completionWait);
                         var executionThread = new Thread(executionHost.execute);
                         executionThread.Start();
                         completionWait.Wait();
                         try {
                             switch (executionHost.exception) {
                                 case null:
-                                serverContext.log.writeLine(
-                                    $"Player {executor.userIdentifier} program executed successfully with result {executionHost.result}",
-                                    SpeercsLogger.LogLevel.Trace);
+                                    serverContext.log.writeLine(
+                                        $"Player {executor.userIdentifier} program executed successfully with result {executionHost.result}",
+                                        SpeercsLogger.LogLevel.Trace);
                                     break;
                                 case TimeoutException ex: {
-                                    throw new CodeExecutionException($"Player {executor.userIdentifier} code took too long", ex);
+                                    throw new CodeExecutionException(
+                                        $"Player {executor.userIdentifier} code took too long", ex);
                                 }
                                 case OutOfMemoryException ex: {
-                                    throw new CodeExecutionException($"Player {executor.userIdentifier} program killed for exceeding memory limit", ex);
+                                    throw new CodeExecutionException(
+                                        $"Player {executor.userIdentifier} program killed for exceeding memory limit",
+                                        ex);
                                 }
                                 case Exception ex: {
                                     throw new CodeExecutionException(
                                         $"Error executing player {executor.userIdentifier} program", ex);
                                 }
                             }
-                        } catch (Exception ex) { // generic error
+                        } catch (Exception ex) {
+                            // generic error
                             serverContext.log.writeLine(ex.Message, SpeercsLogger.LogLevel.Warning);
                             serverContext.log.writeLine(ex.ToString(), SpeercsLogger.LogLevel.Trace);
                         }
@@ -55,8 +59,8 @@ namespace Speercs.Server.Game.Scripting {
                 // TODO: Tick all entities
 
                 // TODO: Game update logic (state: died, etc.)
-
-            } catch (Exception ex) { // generic error
+            } catch (Exception ex) {
+                // generic error
                 serverContext.log.writeLine(ex.ToString(), SpeercsLogger.LogLevel.Warning);
             }
         }

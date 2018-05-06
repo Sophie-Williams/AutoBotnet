@@ -1,4 +1,5 @@
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Map;
 

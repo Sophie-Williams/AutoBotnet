@@ -6,8 +6,8 @@ namespace Speercs.Server.Models.Construction {
     public enum BotTemplates {
         Scout = 0
     }
-    public static class RobotConstructor {
 
+    public static class RobotConstructor {
         public static Bot construct(BotTemplates templates, UserTeam team) {
             var costs = new List<(ResourceId, ulong)>();
             switch (templates) {
@@ -15,6 +15,7 @@ namespace Speercs.Server.Models.Construction {
                     costs.Add((ResourceId.NRG, 40UL));
                     break;
             }
+
             if (!spendResources(team, costs)) return null;
 
             // TODO: create the bot
@@ -29,11 +30,13 @@ namespace Speercs.Server.Models.Construction {
                     return false;
                 }
             }
+
             // spend the resources
             foreach (var cost in costs) {
                 (ResourceId resource, ulong amount) = cost;
                 team.resources[resource] -= amount;
             }
+
             return true;
         }
     }
