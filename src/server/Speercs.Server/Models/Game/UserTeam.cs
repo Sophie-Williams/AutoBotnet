@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Materials;
 
 namespace Speercs.Server.Models {
@@ -7,7 +8,7 @@ namespace Speercs.Server.Models {
     /// </summary>
     public class UserTeam {
         public string identifier { get; set; }
-        public List<string> ownedEntities { get; set; } = new List<string>();
+        public List<GameEntity> ownedEntities { get; set; } = new List<GameEntity>();
         public Dictionary<ResourceId, ulong> resources { get; set; } = new Dictionary<ResourceId, ulong>();
     }
 }

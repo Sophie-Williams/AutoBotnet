@@ -15,12 +15,20 @@ namespace Speercs.Server.Models {
             insertSpatialHash(entity);
         }
 
-        private void insertSpatialHash(GameEntity entity) {
+        /// <summary>
+        /// Insert an entity into the spatial hash automatically. You probably want to use insert() unless you want to only modify the spatial hash.
+        /// </summary>
+        /// <param name="entity"></param>
+        public void insertSpatialHash(GameEntity entity) {
             if (!spatialHash.ContainsKey(entity.position.roomPos)) {
                 spatialHash[entity.position.roomPos] = new List<GameEntity>();
             }
 
             spatialHash[entity.position.roomPos].Add(entity);
+        }
+
+        public void remove(GameEntity entity) {
+            entityData.Remove(entity.id);
         }
 
         public T get<T>(string id) where T : GameEntity {
@@ -30,7 +38,7 @@ namespace Speercs.Server.Models {
         }
 
         public IEnumerable<GameEntity> getByUser(UserTeam user) {
-            return user.ownedEntities.Select(entityId => entityData[entityId]);
+            return user.ownedEntities;
         }
     }
 }

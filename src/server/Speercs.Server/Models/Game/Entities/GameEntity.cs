@@ -5,13 +5,14 @@ using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Entities {
     public enum Direction {
-        North = 0,
-        East = 1,
-        South = 2,
-        West = 3
+        None = 0,
+        North = 1,
+        East = 2,
+        South = 3,
+        West = 4
     }
 
-    public abstract class GameEntity : DependencyObject {
+    public abstract class GameEntity : ProtectedDependencyObject {
         public string id { get; }
 
         private RoomPosition _position;
@@ -30,6 +31,8 @@ namespace Speercs.Server.Models.Entities {
 
         private void propagatePosition(RoomPosition pos) {
             // TODO: Propagate position to spatial hash, etc.
+            serverContext.appState.entities.spatialHash[pos.roomPos].Remove(this);
+            serverContext.appState.entities.insertSpatialHash(this);
             _position = pos;
         }
 
@@ -46,22 +49,18 @@ namespace Speercs.Server.Models.Entities {
             switch (direction) {
                 case Direction.North:
                     newY--;
-
                     break;
 
                 case Direction.East:
                     newX++;
-
                     break;
 
                 case Direction.South:
                     newY++;
-
                     break;
 
                 case Direction.West:
                     newX--;
-
                     break;
                 default:
                     // this can happen if an int is casted to Direction
