@@ -32,8 +32,7 @@ namespace Speercs.Server.Models {
         }
 
         public T get<T>(string id) where T : GameEntity {
-            GameEntity entity = null;
-            entityData.TryGetValue(id, out entity);
+            entityData.TryGetValue(id, out var entity);
             return entity as T;
         }
 
