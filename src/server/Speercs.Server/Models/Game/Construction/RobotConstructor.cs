@@ -19,6 +19,7 @@ namespace Speercs.Server.Models.Construction {
             if (!spendResources(team, costs)) return null;
 
             // TODO: create the bot
+            // TODO: bot components/module system
             throw new System.NotImplementedException();
         }
 
