@@ -1,4 +1,5 @@
 using Speercs.Server.Configuration;
+using Speercs.Server.Models;
 using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.User {
@@ -6,7 +7,7 @@ namespace Speercs.Server.Modules.User {
         public UserUnitsModule(ISContext serverContext) : base("/user/units", serverContext) {
             Get("/",
                 _ => Response.asJsonNet(
-                    this.serverContext.appState.entities.getByUser(
+                    EntityBag.getByUser(
                         persistentData.team)));
         }
     }

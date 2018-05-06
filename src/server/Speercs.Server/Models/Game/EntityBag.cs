@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Math;
 
@@ -36,7 +35,7 @@ namespace Speercs.Server.Models {
             return entity as T;
         }
 
-        public IEnumerable<GameEntity> getByUser(UserTeam user) {
+        public static IEnumerable<GameEntity> getByUser(UserTeam user) {
             return user.ownedEntities;
         }
     }
