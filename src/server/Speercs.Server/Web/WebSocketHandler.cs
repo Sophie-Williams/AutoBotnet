@@ -114,7 +114,7 @@ namespace Speercs.Server.Web {
                     try {
                         await handleRequestAsync(requestBundle)
                             .ContinueWith(async t => {
-                                (var response, var request, var id) = t.Result;
+                                var (response, request, id) = t.Result;
                                 // Send result
                                 var resultBundle = new JObject(
                                     new JProperty("id", id),

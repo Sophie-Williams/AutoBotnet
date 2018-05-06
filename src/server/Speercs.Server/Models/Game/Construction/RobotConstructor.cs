@@ -24,7 +24,7 @@ namespace Speercs.Server.Models.Construction {
             // ensure that the user can afford
             var costList = costs.ToList();
             foreach (var cost in costList) {
-                (ResourceId resource, ulong amount) = cost;
+                (var resource, var amount) = cost;
                 if (team.resources[resource] < amount) {
                     return false;
                 }
@@ -32,7 +32,7 @@ namespace Speercs.Server.Models.Construction {
 
             // spend the resources
             foreach (var cost in costList) {
-                (ResourceId resource, ulong amount) = cost;
+                (var resource, var amount) = cost;
                 team.resources[resource] -= amount;
             }
 
