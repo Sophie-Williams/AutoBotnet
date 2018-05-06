@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
@@ -22,6 +23,7 @@ namespace Speercs.Server.Models.Entities {
             set { propagatePosition(value); }
         }
 
+        [JsonIgnore]
         public UserTeam team;
 
         public GameEntity(ISContext serverContext, RoomPosition pos, UserTeam team) : base(serverContext) {

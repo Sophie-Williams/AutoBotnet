@@ -27,11 +27,14 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             FactoryTower getFactory(int seq) {
-                return (FactoryTower) userData.team.entities.Where(x => x is FactoryTower).ElementAt(seq);
+                var factories = userData.team.entities.Where(x => x is FactoryTower).ToList();
+                if (!factories.Any()) return null;
+                return (FactoryTower) factories[seq];
             }
 
             bool constructBot(string templateName, FactoryTower factory) {
                 var bot = RobotConstructor.construct(context, factory, templateName, userData.team);
+                if (bot == null) return false;
                 userData.team.addEntity(bot);
                 return true;
             }
