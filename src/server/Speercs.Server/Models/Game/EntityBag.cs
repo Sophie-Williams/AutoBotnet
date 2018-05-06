@@ -36,7 +36,7 @@ namespace Speercs.Server.Models {
         }
 
         public static IEnumerable<GameEntity> getByUser(UserTeam user) {
-            return user.ownedEntities;
+            return user.entities;
         }
     }
 }

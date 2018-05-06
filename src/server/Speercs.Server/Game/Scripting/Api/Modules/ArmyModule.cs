@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using IridiumJS;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Construction;
 using Speercs.Server.Models.Math;
+using Speercs.Server.Models.Mechanics;
 using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Game.Scripting.Api.Modules {
@@ -12,8 +14,15 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
 
             bool boot() {
                 // "boot up", or create the player's force
-                // TODO: !!!
-                return false;
+                if (userData.team.entities.Any()) {
+                    // can't "boot" an existing team
+                    return false;
+                }
+
+                var starter = new GameStarter(context);
+                starter.bootTeam(userData.team);
+
+                return true;
             }
 
             bool spawnUnit(int template) {

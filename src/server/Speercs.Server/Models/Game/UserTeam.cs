@@ -8,7 +8,15 @@ namespace Speercs.Server.Models {
     /// </summary>
     public class UserTeam {
         public string identifier { get; set; }
-        public List<GameEntity> ownedEntities { get; set; } = new List<GameEntity>();
+        public List<GameEntity> entities { get; set; } = new List<GameEntity>();
         public Dictionary<ResourceId, ulong> resources { get; set; } = new Dictionary<ResourceId, ulong>();
+
+        public ulong getResource(ResourceId resourceId) {
+            if (resources.ContainsKey(resourceId)) {
+                return resources[resourceId];
+            }
+
+            return 0;
+        }
     }
 }

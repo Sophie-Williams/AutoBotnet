@@ -5,7 +5,7 @@ using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Entities {
     public abstract class MobileEntity : GameEntity {
-        protected MobileEntity(ISContext serverContext, RoomPosition pos) : base(serverContext, pos) { }
+        protected MobileEntity(ISContext serverContext, RoomPosition pos, UserTeam team) : base(serverContext, pos, team) { }
 
         public RoomPosition move(RoomPosition pos) {
             return position = pos;

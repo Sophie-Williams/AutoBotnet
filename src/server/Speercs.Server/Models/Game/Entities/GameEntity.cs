@@ -22,8 +22,11 @@ namespace Speercs.Server.Models.Entities {
             set { propagatePosition(value); }
         }
 
-        public GameEntity(ISContext serverContext, RoomPosition pos) : base(serverContext) {
+        public UserTeam team;
+
+        public GameEntity(ISContext serverContext, RoomPosition pos, UserTeam team) : base(serverContext) {
             position = pos;
+            this.team = team;
 
             id = Guid.NewGuid().ToString("N");
             this.serverContext.appState.entities.insert(this);

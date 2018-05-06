@@ -3,7 +3,7 @@ using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Models.Entities {
     public class Bot : MobileEntity {
-        public Bot(ISContext serverContext, RoomPosition pos, UserTeam team) : base(serverContext, pos) {
+        public Bot(ISContext serverContext, RoomPosition pos, UserTeam team) : base(serverContext, pos, team) {
             this.team = team;
         }
 
