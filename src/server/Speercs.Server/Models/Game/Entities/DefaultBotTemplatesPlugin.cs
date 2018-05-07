@@ -8,6 +8,8 @@ namespace Speercs.Server.Models.Entities {
         public void beforeActivation(CookieJar container) {
             // register bot templates
             container.register<IBotTemplate>(new ScoutBotTemplate());
+            // register core templates
+            container.register<IBotCoreTemplate>(new CoreStorage1Template());
         }
     }
 }

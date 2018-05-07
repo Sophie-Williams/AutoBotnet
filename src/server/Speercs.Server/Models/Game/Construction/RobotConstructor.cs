@@ -7,7 +7,7 @@ using Speercs.Server.Models.Entities.Towers;
 
 namespace Speercs.Server.Models.Construction {
     public static class RobotConstructor {
-        public static Bot construct(ISContext context, FactoryTower factory, string templateName, UserTeam team) {
+        public static Bot constructBot(ISContext context, FactoryTower factory, string templateName, UserTeam team) {
             var templates = context.extensibilityContainer.resolveAll<IBotTemplate>();
             var template = templates.FirstOrDefault(x => x.name == templateName);
             if (template == null) return null;
@@ -18,6 +18,22 @@ namespace Speercs.Server.Models.Construction {
             context.appState.entities.insertNew(bot);
 
             return bot;
+        }
+
+        public static BotCore constructCore(ISContext context, Bot bot, string templateName, UserTeam team) {
+            var templates = context.extensibilityContainer.resolveAll<IBotCoreTemplate>();
+            var template = templates.FirstOrDefault(x => x.name == templateName);
+            if (template == null) return null;
+            // ensure bot has space to fit core
+            var core = template.construct();
+            if (bot.usedCoreSpace + core.size > bot.coreCapacity) {
+                return null;
+            }
+
+            if (!spendResources(team, template.costs)) return null;
+            // now install the core
+            bot.cores.Add(core);
+            return core;
         }
 
         private static bool spendResources(UserTeam team, IEnumerable<(string, ulong)> costs) {

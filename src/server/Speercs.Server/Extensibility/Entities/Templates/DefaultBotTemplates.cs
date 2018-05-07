@@ -4,7 +4,7 @@ using Speercs.Server.Models.Entities.Towers;
 
 namespace Speercs.Server.Extensibility.Entities.Templates {
     public class ScoutBotTemplate : IBotTemplate {
-        public (string, ulong)[] costs { get; } = new[] {("nrg", 40UL)};
+        public (string, ulong)[] costs { get; } = {("nrg", 40UL)};
         public string name { get; } = "scout";
 
         public Bot construct(FactoryTower factory, UserTeam team) {

@@ -13,6 +13,7 @@ namespace Speercs.Server.Models.Mechanics {
             destroyTeam(team);
             // give resources
             team.resources["nrg"] = 80;
+            team.resources["iron"] = 20;
             // create a starter factory in a new room
             // TODO: generate a nearby unoccupied room and spawn the factory
             var mapExpander =

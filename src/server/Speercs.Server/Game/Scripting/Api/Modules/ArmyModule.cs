@@ -43,10 +43,16 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             bool constructBot(string templateName, GameEntityRef factoryRef) {
                 var factory = factoryRef.target as FactoryTower;
                 if (factory == null) return false;
-                var bot = RobotConstructor.construct(context, factory, templateName, userData.team);
+                var bot = RobotConstructor.constructBot(context, factory, templateName, userData.team);
                 if (bot == null) return false;
                 userData.team.addEntity(bot);
                 return true;
+            }
+
+            BotCoreRef installCore(string templateName, BotEntityRef botRef) {
+                var core = RobotConstructor.constructCore(context, (Bot) botRef.target, templateName, userData.team);
+                if (core == null) return null;
+                return new BotCoreRef(core);
             }
 
             GameEntityRef[] getUnits() {
@@ -61,6 +67,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             defineFunction(nameof(getFactory), new Func<int, GameEntityRef>(getFactory));
             defineFunction(nameof(getBot), new Func<string, GameEntityRef>(getBot));
             defineFunction(nameof(constructBot), new Func<string, GameEntityRef, bool>(constructBot));
+            defineFunction(nameof(installCore), new Func<string, BotEntityRef, BotCoreRef>(installCore));
             defineFunction(nameof(getUnits), new Func<GameEntityRef[]>(getUnits));
             defineFunction(nameof(getResource), new Func<string, ulong>(getResource));
         }

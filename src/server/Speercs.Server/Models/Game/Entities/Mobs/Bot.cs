@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LiteDB;
@@ -22,6 +23,10 @@ namespace Speercs.Server.Models.Entities {
         [JsonIgnore]
         [BsonField("cores")]
         public List<BotCore> cores { get; set; } = new List<BotCore>();
+        
+        public int usedCoreSpace => cores.Sum(x => x.size);
+        
+        public int coreDrain => cores.Sum(x => x.drain);
 
         protected override bool moveRelative(Direction direction) {
             if (_context.appState.tickCount <= lastMoveTime)
@@ -38,5 +43,16 @@ namespace Speercs.Server.Models.Entities {
         protected ulong lastMoveTime;
     }
 
-    public class BotCore { }
+    [Flags]
+    public enum BotCoreFlags {
+        None = 0,
+        Switchable = 1 << 0,
+    }
+
+    public abstract class BotCore {
+        public Dictionary<string, int> qualities { get; } = new Dictionary<string, int>();
+        public abstract int drain { get; }
+        public abstract BotCoreFlags flags { get; }
+        public abstract int size { get; }
+    }
 }
