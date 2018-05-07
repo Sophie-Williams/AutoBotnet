@@ -17,6 +17,7 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
             return null;
         }
 
+        public string type => _core.type;
         public Dictionary<string, long> qualities => _core.qualities;
         public int drain => _core.drain;
         public BotCoreFlags flags => _core.flags;

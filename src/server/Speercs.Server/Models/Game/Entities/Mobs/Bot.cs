@@ -51,6 +51,8 @@ namespace Speercs.Server.Models.Entities {
     }
 
     public abstract class BotCore {
+        [BsonIgnore]
+        public string type => this.GetType().Name;
         public abstract Dictionary<string, long> qualities { get; }
         public abstract int drain { get; }
         public abstract BotCoreFlags flags { get; }
