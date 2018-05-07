@@ -13,20 +13,15 @@ namespace Speercs.Server.Models.Entities {
         public Bot() { }
 
         public Bot(RoomPosition pos, UserTeam team, int coreCapacity) : base(pos, team) {
-            _coreCapacity = coreCapacity;
+            this.coreCapacity = coreCapacity;
         }
 
-        [BsonField("coreCapacity")] private int _coreCapacity { get; set; }
-
-        public int coreCapacity => _coreCapacity;
+        [BsonField("coreCapacity")]
+        public int coreCapacity { get; set; }
 
         [JsonIgnore]
         [BsonField("cores")]
-        private List<BotCore> _cores { get; set; } = new List<BotCore>();
-
-        public BotCore[] getCores() {
-            return _cores.ToArray();
-        }
+        public List<BotCore> cores { get; set; } = new List<BotCore>();
 
         protected override bool moveRelative(Direction direction) {
             if (_context.appState.tickCount <= lastMoveTime)

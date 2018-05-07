@@ -15,29 +15,22 @@ namespace Speercs.Server.Models.Entities {
     }
 
     public abstract class GameEntity : DatabaseObject {
-        [BsonField("e_id")]
-        private string _id { get; set; }
+        [BsonField("eid")]
+        public string id { get; set; }
 
-        [BsonIgnore]
-        public string id => _id;
-
-        [BsonField("position")]
         private RoomPosition _position { get; set; }
 
         [BsonIgnore] protected ISContext _context;
 
-        [BsonIgnore]
+        [BsonField("position")]
         public RoomPosition position {
             get => _position;
             set { propagatePosition(value); }
         }
 
-        [BsonField("teamId")]
-        private string _teamId { get; set; }
-
-        [BsonIgnore]
         [JsonIgnore]
-        public string teamId => _teamId;
+        [BsonField("teamId")]
+        public string teamId { get; set; }
 
         [BsonIgnore]
         public string type => this.GetType().Name;
@@ -49,8 +42,8 @@ namespace Speercs.Server.Models.Entities {
 
         public GameEntity(RoomPosition pos, UserTeam team) {
             position = pos;
-            _teamId = team.identifier;
-            _id = Guid.NewGuid().ToString("N");
+            teamId = team.identifier;
+            id = Guid.NewGuid().ToString("N");
         }
 
         internal void loadContext(ISContext context) {

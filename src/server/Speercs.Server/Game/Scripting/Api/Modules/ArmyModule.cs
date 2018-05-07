@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IridiumJS;
 using Speercs.Server.Configuration;
+using Speercs.Server.Game.Scripting.Api.Refs;
 using Speercs.Server.Models.Construction;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Entities.Towers;
@@ -27,21 +28,29 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return true;
             }
 
-            FactoryTower getFactory(int seq) {
+            GameEntityRef getFactory(int seq) {
                 var factories = userData.team.entities.Where(x => x is FactoryTower).ToList();
                 if (!factories.Any()) return null;
-                return (FactoryTower) factories[seq];
+                return new GameEntityRef((FactoryTower) factories[seq]);
             }
 
-            bool constructBot(string templateName, FactoryTower factory) {
+            BotEntityRef getBot(string id) {
+                var bot = userData.team.entities.FirstOrDefault(x => x.id == id) as Bot;
+                if (bot == null) return null;
+                return new BotEntityRef(bot);
+            }
+
+            bool constructBot(string templateName, GameEntityRef factoryRef) {
+                var factory = factoryRef.target as FactoryTower;
+                if (factory == null) return false;
                 var bot = RobotConstructor.construct(context, factory, templateName, userData.team);
                 if (bot == null) return false;
                 userData.team.addEntity(bot);
                 return true;
             }
 
-            GameEntity[] getUnits() {
-                return userData.team.entities.ToArray();
+            GameEntityRef[] getUnits() {
+                return userData.team.entities.Select(x => new GameEntityRef(x)).ToArray();
             }
 
             ulong getResource(string resource) {
@@ -49,9 +58,9 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             defineFunction(nameof(boot), new Func<bool>(boot));
-            defineFunction(nameof(getFactory), new Func<int, FactoryTower>(getFactory));
-            defineFunction(nameof(constructBot), new Func<string, FactoryTower, bool>(constructBot));
-            defineFunction(nameof(getUnits), new Func<GameEntity[]>(getUnits));
+            defineFunction(nameof(getFactory), new Func<int, GameEntityRef>(getFactory));
+            defineFunction(nameof(constructBot), new Func<string, GameEntityRef, bool>(constructBot));
+            defineFunction(nameof(getUnits), new Func<GameEntityRef[]>(getUnits));
             defineFunction(nameof(getResource), new Func<string, ulong>(getResource));
         }
     }
