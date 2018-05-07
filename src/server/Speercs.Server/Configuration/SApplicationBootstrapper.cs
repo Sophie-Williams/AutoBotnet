@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,6 +32,14 @@ namespace Speercs.Server.Configuration {
                 BsonMapper.Global.RegisterType(
                     serialize: room => BsonMapper.Global.ToDocument(room),
                     deserialize: bson => new Room(bson.AsDocument["x"].AsInt32, bson.AsDocument["y"].AsInt32));
+                BsonMapper.Global.RegisterType(
+                    serialize: point => new BsonDocument(new Dictionary<string, BsonValue> {
+                        ["x"] = new BsonValue(point.x),
+                        ["y"] = new BsonValue(point.y)
+                    }),
+                    deserialize: bson =>
+                        new Models.Math.Point(bson.AsDocument["x"].AsInt32, bson.AsDocument["y"].AsInt32)
+                );
                 serializationMappersRegistered = true;
             }
 
