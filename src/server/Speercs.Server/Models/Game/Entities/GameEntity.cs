@@ -14,9 +14,11 @@ namespace Speercs.Server.Models.Entities {
         West = 4
     }
 
-    public abstract class GameEntity {
-        [BsonId]
-        public string id { get; protected set; }
+    public abstract class GameEntity : DatabaseObject {
+        [BsonField("e_id")]
+        private string _id { get; set; }
+
+        public string id => _id;
 
         [BsonField("position")]
         private RoomPosition _position { get; set; }
@@ -30,7 +32,9 @@ namespace Speercs.Server.Models.Entities {
 
         [JsonIgnore]
         [BsonField("teamId")]
-        public string teamId { get; set; }
+        private string _teamId { get; set; }
+
+        public string teamId => _teamId;
 
         [BsonIgnore]
         public string type => this.GetType().Name;
@@ -42,9 +46,8 @@ namespace Speercs.Server.Models.Entities {
 
         public GameEntity(RoomPosition pos, UserTeam team) {
             position = pos;
-            this.teamId = team.identifier;
-
-            id = Guid.NewGuid().ToString("N");
+            _teamId = team.identifier;
+            _id = Guid.NewGuid().ToString("N");
         }
 
         internal void loadContext(ISContext context) {
