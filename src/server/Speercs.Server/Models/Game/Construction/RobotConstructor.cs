@@ -15,7 +15,7 @@ namespace Speercs.Server.Models.Construction {
             if (!spendResources(team, template.costs)) return null;
 
             // build the bot
-            var bot = template.construct(context, factory, team);
+            var bot = template.construct(factory, team);
             context.appState.entities.insertNew(bot);
 
             return bot;
