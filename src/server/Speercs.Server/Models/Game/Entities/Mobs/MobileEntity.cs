@@ -40,7 +40,7 @@ namespace Speercs.Server.Models.Entities {
                     break;
                 default:
                     // this can happen if an int is casted to Direction
-                    throw new ArgumentException("direction must be one of the four cardinal directions", "direction");
+                    throw new ArgumentException("direction must be one of the four cardinal directions", nameof(direction));
             }
 
             if (newX < 0) {
