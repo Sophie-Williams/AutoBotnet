@@ -10,6 +10,7 @@ namespace Speercs.Server.Modules.Admin {
     public class AdminServerModule : AdminApiModule {
         public AdminServerModule(ISContext serverContext) : base("/server", serverContext) {
             Post("/persist", _ => {
+                serverContext.log.writeLine("running admin API triggered force persist", SpeercsLogger.LogLevel.Information);
                 serverContext.appState.persist(true);
                 return HttpStatusCode.NoContent;
             });
