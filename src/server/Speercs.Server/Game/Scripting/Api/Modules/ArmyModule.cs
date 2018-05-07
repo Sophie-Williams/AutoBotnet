@@ -37,13 +37,15 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             BotEntityRef getBot(string id) {
+                if (id == null) return null;
                 var bot = userData.team.entities.FirstOrDefault(x => x.id == id) as Bot;
                 if (bot == null) return null;
                 return new BotEntityRef(bot);
             }
 
             BotEntityRef constructBot(string templateName, GameEntityRef factoryRef) {
-                var factory = factoryRef.target as FactoryTower;
+                if (templateName == null) return null;
+                var factory = factoryRef?.target as FactoryTower;
                 if (factory == null) return null;
                 var bot = botConstructor.constructBot(factory, templateName);
                 if (bot == null) return null;
@@ -52,7 +54,8 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             bool deconstructBot(BotEntityRef botRef, GameEntityRef factoryRef) {
-                var factory = factoryRef.target as FactoryTower;
+                if (botRef == null) return false;
+                var factory = factoryRef?.target as FactoryTower;
                 if (factory == null) return false;
                 var result = botConstructor.deconstructBot((Bot) botRef.target, factory);
                 if (!result) return false;
@@ -62,6 +65,8 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             BotCoreRef installCore(string templateName, BotEntityRef botRef) {
+                if (templateName == null) return null;
+                if (botRef == null) return null;
                 var (core, err) = botConstructor.constructCore((Bot) botRef.target, templateName);
                 if (core == null) return null;
                 return new BotCoreRef(core);

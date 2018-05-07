@@ -111,7 +111,6 @@ namespace Speercs.Server.Configuration {
                         new Room.Exit(bson.AsDocument[nameof(Room.Exit.low)].AsInt32,
                             bson.AsDocument[nameof(Room.Exit.high)].AsInt32)
                 );
-                BsonMapper.Global.IncludeNonPublic = true;
                 serializationMappersRegistered = true;
             }
 
