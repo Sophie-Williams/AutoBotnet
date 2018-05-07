@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 15.0.26124.0
@@ -9,8 +9,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speercs.DevTests", "Speercs.DevTests\Speercs.DevTests.csproj", "{C0757F6C-395A-4BF4-9556-DF92ECA07E2A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{453B66F7-5D89-4FE2-8319-BF8376D661B6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Osmium.PluginEngine", "Dependencies\Osmium.PluginEngine\src\Osmium.PluginEngine\Osmium.PluginEngine.csproj", "{74EDA40C-36F8-484B-B027-01B2F3597813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,23 +56,10 @@ Global
 		{C0757F6C-395A-4BF4-9556-DF92ECA07E2A}.Release|x64.Build.0 = Release|Any CPU
 		{C0757F6C-395A-4BF4-9556-DF92ECA07E2A}.Release|x86.ActiveCfg = Release|Any CPU
 		{C0757F6C-395A-4BF4-9556-DF92ECA07E2A}.Release|x86.Build.0 = Release|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Debug|x64.Build.0 = Debug|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Debug|x86.Build.0 = Debug|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Release|Any CPU.Build.0 = Release|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Release|x64.ActiveCfg = Release|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Release|x64.Build.0 = Release|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Release|x86.ActiveCfg = Release|Any CPU
-		{74EDA40C-36F8-484B-B027-01B2F3597813}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{74EDA40C-36F8-484B-B027-01B2F3597813} = {453B66F7-5D89-4FE2-8319-BF8376D661B6}
 	EndGlobalSection
 EndGlobal
