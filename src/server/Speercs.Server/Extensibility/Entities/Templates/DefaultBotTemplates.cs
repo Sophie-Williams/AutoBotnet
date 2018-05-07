@@ -10,8 +10,8 @@ namespace Speercs.Server.Extensibility.Entities.Templates {
         public (ResourceId, ulong)[] costs { get; } = new[] {(ResourceId.NRG, 40UL)};
         public string name { get; } = "scout";
 
-        public Bot construct(ISContext context, FactoryTower factory, UserTeam team) {
-            return new Bot(context, factory.position, team, 4);
+        public Bot construct(FactoryTower factory, UserTeam team) {
+            return new Bot(factory.position, team, 4);
         }
     }
 }

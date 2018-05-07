@@ -16,6 +16,7 @@ namespace Speercs.Server.Models.Construction {
 
             // build the bot
             var bot = template.construct(context, factory, team);
+            context.appState.entities.insertNew(bot);
 
             return bot;
         }

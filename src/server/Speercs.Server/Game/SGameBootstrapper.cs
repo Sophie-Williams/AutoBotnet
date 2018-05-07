@@ -23,6 +23,16 @@ namespace Speercs.Server.Game {
 
         public void onStartup() {
             serverContext.log.writeLine($"Running game bootstrapper startup", SpeercsLogger.LogLevel.Information);
+            
+            // Wake entities
+            serverContext.appState.entities.serverContext = serverContext;
+            var entityCount = 0;
+            foreach (var entity in serverContext.appState.entities.enumerate()) {
+                serverContext.appState.entities.wake(entity);
+                entityCount++;
+            }
+            serverContext.log.writeLine($"woke {entityCount} entities", SpeercsLogger.LogLevel.Information);
+            
             // start tick system
             var tickLoopTask = tickSystem.startAsync(tickSystemCancelToken);
         }

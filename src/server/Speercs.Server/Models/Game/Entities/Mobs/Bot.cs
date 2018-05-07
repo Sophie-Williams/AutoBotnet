@@ -4,7 +4,7 @@ using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Models.Entities {
     public class Bot : MobileEntity {
-        public Bot(ISContext serverContext, RoomPosition pos, UserTeam team, int coreCapacity) : base(serverContext, pos, team) {
+        public Bot(RoomPosition pos, UserTeam team, int coreCapacity) : base(pos, team) {
             this.team = team;
             this.coreCapacity = coreCapacity;
         }
@@ -18,11 +18,11 @@ namespace Speercs.Server.Models.Entities {
         }
 
         protected override bool moveRelative(Direction direction) {
-            if (serverContext.appState.tickCount <= lastMoveTime)
+            if (_context.appState.tickCount <= lastMoveTime)
                 return false; // already moved this tick
 
             if (base.moveRelative(direction)) {
-                lastMoveTime = serverContext.appState.tickCount;
+                lastMoveTime = _context.appState.tickCount;
                 return true;
             }
 

@@ -1,4 +1,5 @@
 using System;
+using LiteDB;
 using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Map;
@@ -13,36 +14,51 @@ namespace Speercs.Server.Models.Entities {
         West = 4
     }
 
-    public abstract class GameEntity : ProtectedDependencyObject {
+    public abstract class GameEntity {
+        [BsonId]
         public string id { get; }
 
         private RoomPosition _position;
 
+        protected ISContext _context;
+
+        [BsonField("position")]
         public RoomPosition position {
             get => _position;
             set { propagatePosition(value); }
         }
 
-        [JsonIgnore]
-        public UserTeam team;
+        [JsonIgnore] [BsonField("team")] public UserTeam team;
 
-        public GameEntity(ISContext serverContext, RoomPosition pos, UserTeam team) : base(serverContext) {
+        /// <summary>
+        /// Bson constructor
+        /// </summary>
+        public GameEntity() { }
+
+        public GameEntity(RoomPosition pos, UserTeam team) {
             position = pos;
             this.team = team;
 
             id = Guid.NewGuid().ToString("N");
-            this.serverContext.appState.entities.insert(this);
         }
 
-        private void propagatePosition(RoomPosition pos) {
-            // TODO: Propagate position to spatial hash, etc.
-            if (serverContext.appState.entities.spatialHash.ContainsKey(pos.roomPos) &&
-                serverContext.appState.entities.spatialHash[pos.roomPos].Contains(this)) {
-                serverContext.appState.entities.spatialHash[pos.roomPos].Remove(this);
+        internal void loadContext(ISContext context) {
+            _context = context;
+        }
+
+        public virtual void wake() { }
+
+        private bool propagatePosition(RoomPosition pos) {
+            _position = pos;
+            if (_context == null) return false;
+            // Propagate position to spatial hash, etc.
+            if (_context.appState.entities.spatialHash.ContainsKey(pos.roomPos) &&
+                _context.appState.entities.spatialHash[pos.roomPos].Contains(this)) {
+                _context.appState.entities.spatialHash[pos.roomPos].Remove(this);
             }
 
-            serverContext.appState.entities.insertSpatialHash(this);
-            _position = pos;
+            _context.appState.entities.insertSpatialHash(this);
+            return true;
         }
     }
 }

@@ -1,15 +1,28 @@
 using System.Collections.Generic;
+using Speercs.Server.Configuration;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models {
     public class EntityBag {
+        public ISContext serverContext;
+        
         public Dictionary<string, GameEntity> entityData { get; set; } = new Dictionary<string, GameEntity>();
 
         public Dictionary<Point, List<GameEntity>> spatialHash { get; set; } =
             new Dictionary<Point, List<GameEntity>>();
 
-        public void insert(GameEntity entity) {
+        public void wake(GameEntity entity) {
+            entity.loadContext(serverContext);
+            entity.wake();
+        }
+
+        public void insertNew(GameEntity entity) {
+            insertAA(entity);
+            wake(entity);
+        }
+
+        public void insertAA(GameEntity entity) {
             entityData.Add(entity.id, entity);
             insertSpatialHash(entity);
         }
@@ -38,5 +51,7 @@ namespace Speercs.Server.Models {
         public static IEnumerable<GameEntity> getByUser(UserTeam user) {
             return user.entities;
         }
+
+        public IEnumerable<GameEntity> enumerate() => entityData.Values;
     }
 }

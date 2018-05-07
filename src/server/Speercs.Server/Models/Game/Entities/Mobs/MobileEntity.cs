@@ -5,7 +5,7 @@ using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Entities {
     public abstract class MobileEntity : GameEntity {
-        protected MobileEntity(ISContext serverContext, RoomPosition pos, UserTeam team) : base(serverContext, pos, team) { }
+        protected MobileEntity(RoomPosition pos, UserTeam team) : base(pos, team) { }
 
         public RoomPosition move(RoomPosition pos) {
             return position = pos;
@@ -63,7 +63,7 @@ namespace Speercs.Server.Models.Entities {
             }
 
             var newPos = new RoomPosition(new Point(roomX, roomY), new Point(newX, newY));
-            if (!newPos.getTile(serverContext).isWalkable())
+            if (!newPos.getTile(_context).isWalkable())
                 return false; // not Walkable; don't move
 
             position = newPos;
@@ -73,7 +73,7 @@ namespace Speercs.Server.Models.Entities {
         private bool moveRoom(int roomX, int roomY) {
             // only allow moving to an adjacent room that exists
             if (System.Math.Abs(position.roomPos.x - roomX) == 1 || System.Math.Abs(position.roomPos.y - roomY) == 1) {
-                if (serverContext.appState.worldMap[roomX, roomY] != null) {
+                if (_context.appState.worldMap[roomX, roomY] != null) {
                     position = new RoomPosition(new Point(roomX, roomY), position.pos);
                 }
             }

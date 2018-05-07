@@ -8,6 +8,6 @@ namespace Speercs.Server.Extensibility.Entities {
     public interface IBotTemplate {
         (ResourceId, ulong)[] costs { get; }
         string name { get; }
-        Bot construct(ISContext context, FactoryTower factory, UserTeam team);
+        Bot construct(FactoryTower factory, UserTeam team);
     }
 }

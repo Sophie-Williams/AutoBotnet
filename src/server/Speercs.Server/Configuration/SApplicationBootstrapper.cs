@@ -31,6 +31,9 @@ namespace Speercs.Server.Configuration {
                 BsonMapper.Global.RegisterType(
                     serialize: room => BsonMapper.Global.ToDocument(room),
                     deserialize: bson => new Room(bson.AsDocument["x"].AsInt32, bson.AsDocument["y"].AsInt32));
+                BsonMapper.Global.RegisterType(
+                    serialize: entity => BsonMapper.Global.ToDocument(entity),
+                    deserialize: bson => BsonMapper.Global.ToObject<GameEntity>(bson.AsDocument));
                 serializationMappersRegistered = true;
             }
 

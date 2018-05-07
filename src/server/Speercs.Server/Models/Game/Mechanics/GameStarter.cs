@@ -16,10 +16,11 @@ namespace Speercs.Server.Models.Mechanics {
             team.resources[ResourceId.NRG] = 80;
             // create a starter factory in a new room
             // TODO: generate a nearby unoccupied room and spawn the factory
-            var mapExpander = new WorldMapExpander(serverContext, new MapGenerator(serverContext, new MapGenParameters()));
+            var mapExpander =
+                new WorldMapExpander(serverContext, new MapGenerator(serverContext, new MapGenParameters()));
             var homeRoom = mapExpander.createConnectedRoom();
-            var factory = new FactoryTower(serverContext,
-                new RoomPosition(new Point(homeRoom.x, homeRoom.y), homeRoom.spawn), team);
+            var factory = new FactoryTower(new RoomPosition(new Point(homeRoom.x, homeRoom.y), homeRoom.spawn), team);
+            serverContext.appState.entities.insertNew(factory);
             team.addEntity(factory);
             team.booted = true;
         }
