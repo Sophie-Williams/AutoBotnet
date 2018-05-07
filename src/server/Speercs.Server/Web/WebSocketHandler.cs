@@ -57,7 +57,7 @@ namespace Speercs.Server.Web {
                 var data = (JObject) requestBundle["data"];
                 var id = ((JValue) requestBundle["id"]).ToObject<long>();
                 // Get handler
-                var handler = _realtimeCookieJar.ResolveAll<IRealtimeHandler>().FirstOrDefault(x => x.path == rcommand);
+                var handler = _realtimeCookieJar.resolveAll<IRealtimeHandler>().FirstOrDefault(x => x.path == rcommand);
                 var result = (JToken) JValue.CreateNull();
                 if (handler != null) {
                     result = await handler.handleRequestAsync(id, data, _rtContext);

@@ -9,8 +9,8 @@ namespace Speercs.Server.Models {
 
         public Dictionary<string, GameEntity> entityData { get; set; } = new Dictionary<string, GameEntity>();
 
-        public Dictionary<Point, List<GameEntity>> spatialHash { get; set; } =
-            new Dictionary<Point, List<GameEntity>>();
+        public Dictionary<string, List<GameEntity>> spatialHash { get; set; } =
+            new Dictionary<string, List<GameEntity>>();
 
         public void wake(GameEntity entity) {
             entity.loadContext(serverContext);
@@ -32,15 +32,15 @@ namespace Speercs.Server.Models {
         /// </summary>
         /// <param name="entity"></param>
         public void insertSpatialHash(GameEntity entity) {
-            if (!spatialHash.ContainsKey(entity.position.roomPos)) {
-                spatialHash[entity.position.roomPos] = new List<GameEntity>();
+            if (!spatialHash.ContainsKey(entity.position.roomPos.ToString())) {
+                spatialHash[entity.position.roomPos.ToString()] = new List<GameEntity>();
             }
 
-            spatialHash[entity.position.roomPos].Add(entity);
+            spatialHash[entity.position.roomPos.ToString()].Add(entity);
         }
 
         public List<GameEntity> getByRoom(Point roomPos) {
-            return spatialHash[roomPos] ?? new List<GameEntity>();
+            return spatialHash[roomPos.ToString()] ?? new List<GameEntity>();
         }
 
         public void remove(GameEntity entity) {

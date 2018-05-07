@@ -9,7 +9,7 @@ using Speercs.Server.Models.Materials;
 namespace Speercs.Server.Models.Construction {
     public static class RobotConstructor {
         public static Bot construct(ISContext context, FactoryTower factory, string templateName, UserTeam team) {
-            var templates = context.extensibilityContainer.ResolveAll<IBotTemplate>();
+            var templates = context.extensibilityContainer.resolveAll<IBotTemplate>();
             var template = templates.FirstOrDefault(x => x.name == templateName);
             if (template == null) return null;
             if (!spendResources(team, template.costs)) return null;

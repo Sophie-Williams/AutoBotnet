@@ -7,7 +7,7 @@ namespace Speercs.Server.Models.Entities {
     public class DefaultBotTemplatesPlugin : ISpeercsPlugin {
         public void beforeActivation(CookieJar container) {
             // register bot templates
-            container.Register<IBotTemplate>(new ScoutBotTemplate());
+            container.register<IBotTemplate>(new ScoutBotTemplate());
         }
     }
 }

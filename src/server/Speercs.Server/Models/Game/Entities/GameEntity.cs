@@ -52,9 +52,9 @@ namespace Speercs.Server.Models.Entities {
             _position = pos;
             if (_context == null) return false;
             // Propagate position to spatial hash, etc.
-            if (_context.appState.entities.spatialHash.ContainsKey(pos.roomPos) &&
-                _context.appState.entities.spatialHash[pos.roomPos].Contains(this)) {
-                _context.appState.entities.spatialHash[pos.roomPos].Remove(this);
+            if (_context.appState.entities.spatialHash.ContainsKey(pos.roomPos.ToString()) &&
+                _context.appState.entities.spatialHash[pos.roomPos.ToString()].Contains(this)) {
+                _context.appState.entities.spatialHash[pos.roomPos.ToString()].Remove(this);
             }
 
             _context.appState.entities.insertSpatialHash(this);

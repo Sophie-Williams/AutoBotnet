@@ -64,7 +64,7 @@ namespace Speercs.Server.Game.MapGen {
             }
 
             // generate map features
-            foreach (var feature in serverContext.extensibilityContainer.ResolveAll<IMapGenFeature>()) {
+            foreach (var feature in serverContext.extensibilityContainer.resolveAll<IMapGenFeature>()) {
                 feature.generate(room, this);
             }
 
