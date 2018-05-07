@@ -1,3 +1,0 @@
-[submodule "src/server/Dependencies/Osmium.PluginEngine"]
-	path = src/server/Dependencies/Osmium.PluginEngine
-	url = https://github.com/0xFireball/Osmium.PluginEngine.git
