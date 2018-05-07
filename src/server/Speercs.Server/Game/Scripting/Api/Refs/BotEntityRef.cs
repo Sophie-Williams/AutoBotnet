@@ -1,4 +1,5 @@
-﻿using IridiumJS;
+﻿using System.Linq;
+using IridiumJS;
 using Speercs.Server.Models.Entities;
 
 namespace Speercs.Server.Game.Scripting.Api.Refs {
@@ -9,9 +10,10 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
             _bot = bot;
         }
 
-        public BotCore[] cores => _bot.cores.ToArray();
-
+        public BotCoreRef[] cores => _bot.cores.Select(x => new BotCoreRef(x)).ToArray();
         public int coreCapacity => _bot.coreCapacity;
+        public int usedCoreSpace => _bot.usedCoreSpace;
+        public int coreDrain => _bot.coreDrain;
 
         public bool move(Direction direction) {
             return _bot.move(direction);
