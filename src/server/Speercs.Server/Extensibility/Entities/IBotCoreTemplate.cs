@@ -1,9 +1,8 @@
 ﻿using Speercs.Server.Models.Entities;
 
 namespace Speercs.Server.Extensibility.Entities {
-    public interface IBotCoreTemplate {
+    public interface IBotCoreTemplate : IBotMetaTemplate {
         (string, long)[] costs { get; }
-        string name { get; }
         BotCore construct();
     }
 }

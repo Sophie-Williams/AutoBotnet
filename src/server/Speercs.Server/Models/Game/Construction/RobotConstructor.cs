@@ -14,12 +14,16 @@ namespace Speercs.Server.Models.Construction {
             this.team = team;
         }
 
+        public TTemplate resolveTemplate<TTemplate>(string name) where TTemplate : IBotMetaTemplate {
+            var templates = serverContext.extensibilityContainer.resolveAll<TTemplate>();
+            var template = templates.FirstOrDefault(x => x.name == name);
+            return template;
+        }
+
         public Bot constructBot(FactoryTower factory, string templateName) {
-            var templates = serverContext.extensibilityContainer.resolveAll<IBotTemplate>();
-            var template = templates.FirstOrDefault(x => x.name == templateName);
+            var template = resolveTemplate<IBotTemplate>(templateName);
             if (template == null) return null;
             if (!spendResources(template.costs)) return null;
-
             // build the bot
             var bot = template.construct(factory, team);
             serverContext.appState.entities.insertNew(bot);
@@ -31,8 +35,7 @@ namespace Speercs.Server.Models.Construction {
             // ensure that the bot is at the factory
             if (bot.position != factory.position) return false;
             // refund resources and destroy the bot
-            var templates = serverContext.extensibilityContainer.resolveAll<IBotTemplate>();
-            var template = templates.FirstOrDefault(x => x.name == bot.model);
+            var template = resolveTemplate<IBotTemplate>(bot.model);
             if (template == null) return false;
             var refundCosts = new List<(string, long)>();
             foreach (var (resource, cost) in template.costs) {
@@ -53,8 +56,7 @@ namespace Speercs.Server.Models.Construction {
         }
 
         public (BotCore, BotCoreInstallStatus) constructCore(Bot bot, string templateName) {
-            var templates = serverContext.extensibilityContainer.resolveAll<IBotCoreTemplate>();
-            var template = templates.FirstOrDefault(x => x.name == templateName);
+            var template = resolveTemplate<IBotCoreTemplate>(templateName);
             if (template == null) return (null, BotCoreInstallStatus.TemplateNotFound);
             // ensure bot has space to fit core
             var core = template.construct();
