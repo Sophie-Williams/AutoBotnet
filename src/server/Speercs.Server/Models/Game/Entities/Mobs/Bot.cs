@@ -1,16 +1,28 @@
 using System.Collections.Generic;
+using System.Linq;
+using LiteDB;
+using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Models.Entities {
     public class Bot : MobileEntity {
-        public Bot(RoomPosition pos, UserTeam team, int coreCapacity) : base(pos, team) {
-            this.coreCapacity = coreCapacity;
-        }
-        
-        public int coreCapacity { get; } 
+        /// <summary>
+        /// BsonConstructor
+        /// </summary>
+        public Bot() { }
 
-        private List<BotCore> _cores = new List<BotCore>();
+        public Bot(RoomPosition pos, UserTeam team, int coreCapacity) : base(pos, team) {
+            _coreCapacity = coreCapacity;
+        }
+
+        [BsonField("coreCapacity")] private readonly int _coreCapacity;
+
+        public int coreCapacity => _coreCapacity;
+
+        [JsonIgnore]
+        [BsonField("cores")]
+        private List<BotCore> _cores { get; set; } = new List<BotCore>();
 
         public BotCore[] getCores() {
             return _cores.ToArray();
@@ -31,7 +43,5 @@ namespace Speercs.Server.Models.Entities {
         protected ulong lastMoveTime;
     }
 
-    public class BotCore {
-        
-    }
+    public class BotCore { }
 }

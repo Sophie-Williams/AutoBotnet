@@ -5,6 +5,10 @@ using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Entities {
     public abstract class MobileEntity : GameEntity {
+        /// <summary>
+        /// BsonConstructor
+        /// </summary>
+        public MobileEntity() {}
         protected MobileEntity(RoomPosition pos, UserTeam team) : base(pos, team) { }
 
         public RoomPosition move(RoomPosition pos) {

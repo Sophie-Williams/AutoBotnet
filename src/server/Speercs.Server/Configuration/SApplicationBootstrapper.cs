@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LiteDB;
 using Speercs.Server.Extensibility.Map;
+using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
 
@@ -110,6 +111,7 @@ namespace Speercs.Server.Configuration {
                         new Room.Exit(bson.AsDocument[nameof(Room.Exit.low)].AsInt32,
                             bson.AsDocument[nameof(Room.Exit.high)].AsInt32)
                 );
+                BsonMapper.Global.IncludeNonPublic = true;
                 serializationMappersRegistered = true;
             }
 

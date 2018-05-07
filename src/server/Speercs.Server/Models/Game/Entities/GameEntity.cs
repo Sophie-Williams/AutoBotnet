@@ -18,9 +18,9 @@ namespace Speercs.Server.Models.Entities {
         [BsonId]
         public string id { get; set; }
 
-        private RoomPosition _position;
+        [BsonIgnore] private RoomPosition _position;
 
-        protected ISContext _context;
+        [BsonIgnore] protected ISContext _context;
 
         [BsonField("position")]
         public RoomPosition position {

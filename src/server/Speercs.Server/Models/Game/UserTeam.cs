@@ -9,7 +9,6 @@ namespace Speercs.Server.Models {
     public class UserTeam : DatabaseObject {
         [BsonIgnore]
         public List<GameEntity> entities { get; set; } = new List<GameEntity>();
-
         public string identifier { get; set; }
         public Dictionary<string, ulong> resources { get; set; } = new Dictionary<string, ulong>();
         public bool booted { get; set; } = false;
