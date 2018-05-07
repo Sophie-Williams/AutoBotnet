@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LiteDB;
-using Speercs.Server.Models.Entities;
+using Speercs.Server.Extensibility.Map;
 using Speercs.Server.Models.Map;
+using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Configuration {
     public static class SConfigurator {
@@ -30,15 +30,48 @@ namespace Speercs.Server.Configuration {
                     }
                 );
                 BsonMapper.Global.RegisterType(
-                    serialize: room => BsonMapper.Global.ToDocument(room),
-                    deserialize: bson => new Room(bson.AsDocument["x"].AsInt32, bson.AsDocument["y"].AsInt32));
+                    serialize: room => new BsonDocument(new Dictionary<string, BsonValue> {
+                        [nameof(Room.x)] = new BsonValue(room.x),
+                        [nameof(Room.y)] = new BsonValue(room.y),
+                        [nameof(Room.spawn)] = new BsonValue(room.spawn),
+                        [nameof(Room.creationTime)] = new BsonValue(room.creationTime.ToString()),
+                        [nameof(Room.tiles)] = new BsonValue(room.tiles),
+                        [nameof(Room.northExit)] = new BsonValue(room.northExit),
+                        [nameof(Room.eastExit)] = new BsonValue(room.eastExit),
+                        [nameof(Room.southExit)] = new BsonValue(room.southExit),
+                        [nameof(Room.westExit)] = new BsonValue(room.westExit)
+                    }),
+                    deserialize: bson =>
+                        new Room(bson.AsDocument[nameof(Room.x)].AsInt32, bson.AsDocument[nameof(Room.y)].AsInt32) {
+                            spawn = BsonMapper.Global.ToObject<Point>(bson.AsDocument[nameof(Room.spawn)].AsDocument),
+                            creationTime = ulong.Parse(bson.AsDocument[nameof(Room.creationTime)].AsString),
+                            tiles =
+                                BsonMapper.Global.ToObject<ITile[,]>(bson.AsDocument[nameof(Room.tiles)].AsDocument),
+                            northExit = BsonMapper.Global.ToObject<Room.Exit>(bson.AsDocument[nameof(Room.northExit)]
+                                .AsDocument),
+                            eastExit = BsonMapper.Global.ToObject<Room.Exit>(bson.AsDocument[nameof(Room.eastExit)]
+                                .AsDocument),
+                            southExit = BsonMapper.Global.ToObject<Room.Exit>(bson.AsDocument[nameof(Room.southExit)]
+                                .AsDocument),
+                            westExit = BsonMapper.Global.ToObject<Room.Exit>(bson.AsDocument[nameof(Room.westExit)]
+                                .AsDocument)
+                        });
                 BsonMapper.Global.RegisterType(
                     serialize: point => new BsonDocument(new Dictionary<string, BsonValue> {
                         ["x"] = new BsonValue(point.x),
                         ["y"] = new BsonValue(point.y)
                     }),
                     deserialize: bson =>
-                        new Models.Math.Point(bson.AsDocument["x"].AsInt32, bson.AsDocument["y"].AsInt32)
+                        new Point(bson.AsDocument["x"].AsInt32, bson.AsDocument["y"].AsInt32)
+                );
+                BsonMapper.Global.RegisterType(
+                    serialize: exit => new BsonDocument(new Dictionary<string, BsonValue> {
+                        [nameof(Room.Exit.low)] = new BsonValue(exit.low),
+                        [nameof(Room.Exit.high)] = new BsonValue(exit.high)
+                    }),
+                    deserialize: bson =>
+                        new Room.Exit(bson.AsDocument[nameof(Room.Exit.low)].AsInt32,
+                            bson.AsDocument[nameof(Room.Exit.high)].AsInt32)
                 );
                 serializationMappersRegistered = true;
             }

@@ -6,7 +6,7 @@ using Speercs.Server.Models.Math;
 namespace Speercs.Server.Models {
     public class EntityBag {
         public ISContext serverContext;
-        
+
         public Dictionary<string, GameEntity> entityData { get; set; } = new Dictionary<string, GameEntity>();
 
         public Dictionary<Point, List<GameEntity>> spatialHash { get; set; } =
@@ -18,17 +18,17 @@ namespace Speercs.Server.Models {
         }
 
         public void insertNew(GameEntity entity) {
-            insertAA(entity);
+            register(entity);
             wake(entity);
         }
 
-        public void insertAA(GameEntity entity) {
+        public void register(GameEntity entity) {
             entityData.Add(entity.id, entity);
             insertSpatialHash(entity);
         }
 
         /// <summary>
-        /// Insert an entity into the spatial hash automatically. You probably want to use insert() unless you want to only modify the spatial hash.
+        /// Insert an entity into the spatial hash automatically. You probably want to use register() unless you want to only modify the spatial hash.
         /// </summary>
         /// <param name="entity"></param>
         public void insertSpatialHash(GameEntity entity) {
@@ -37,6 +37,10 @@ namespace Speercs.Server.Models {
             }
 
             spatialHash[entity.position.roomPos].Add(entity);
+        }
+
+        public List<GameEntity> getByRoom(Point roomPos) {
+            return spatialHash[roomPos] ?? new List<GameEntity>();
         }
 
         public void remove(GameEntity entity) {

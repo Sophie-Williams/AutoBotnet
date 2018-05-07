@@ -31,9 +31,10 @@ namespace Speercs.Server.Models.Map {
         public double distance(RoomPosition other) {
             return (Point.distance(roomPos, other.roomPos) * Room.MAP_EDGE_SIZE) + Point.distance(pos, other.pos);
         }
-        
+
         public int pathDistance(RoomPosition other) {
-            return Room.MAP_EDGE_SIZE * (System.Math.Abs(roomPos.x - other.roomPos.x) + System.Math.Abs(roomPos.y - other.roomPos.y)) +
+            return Room.MAP_EDGE_SIZE * (System.Math.Abs(roomPos.x - other.roomPos.x) +
+                                         System.Math.Abs(roomPos.y - other.roomPos.y)) +
                    System.Math.Abs(pos.x - other.pos.x) + System.Math.Abs(pos.y - other.pos.y);
         }
 
@@ -43,16 +44,14 @@ namespace Speercs.Server.Models.Map {
 
         public T getClosestEntity<T>(ISContext context) where T : GameEntity {
             var _this = this;
-            return getRoom(context).entities
-                .Select(entry => entry.Value)
+            return context.appState.entities.getByRoom(roomPos)
                 .OfType<T>()
                 .MinBy(entity => _this.distance(entity));
         }
 
         public T getClosestEntity<T>(ISContext context, Func<T, bool> predicate) where T : GameEntity {
             var _this = this;
-            return getRoom(context).entities
-                .Select(entry => entry.Value)
+            return context.appState.entities.getByRoom(roomPos)
                 .OfType<T>()
                 .Where(predicate)
                 .MinBy(entity => _this.distance(entity));

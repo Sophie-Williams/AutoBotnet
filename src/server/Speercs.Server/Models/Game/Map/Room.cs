@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using LiteDB;
 using Newtonsoft.Json;
 using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Map;
@@ -16,14 +17,6 @@ namespace Speercs.Server.Models.Map {
             tiles = new ITile[MAP_EDGE_SIZE, MAP_EDGE_SIZE]; 
         }
 
-        public void addEntity(GameEntity entity) {
-            entities.Add(entity.id, entity);
-        }
-
-        public void removeEntity(GameEntity entity) {
-            entities.Remove(entity.id);
-        }
-
         public string dump() {
             var sb = new StringBuilder();
             for (var y = 0; y < MAP_EDGE_SIZE; y++) {
@@ -37,18 +30,23 @@ namespace Speercs.Server.Models.Map {
             return sb.ToString();
         }
 
-        public int x { get; }
+        [BsonField("x")]
+        public int x { get; set; }
 
-        public int y { get; }
+        [BsonField("y")]
+        public int y { get; set; }
 
-        public Point spawn;
+        public Point pos() => new Point(x, y);
 
-        public ulong creationTime;
+        [BsonField("spawn")]
+        public Point spawn { get; set; }
+
+        [BsonField("creationTime")]
+        public ulong creationTime { get; set; }
 
         [JsonProperty("tiles")]
-        public ITile[,] tiles { get; }
-
-        public Dictionary<string, GameEntity> entities { get; } = new Dictionary<string, GameEntity>();
+        [BsonField("tiles")]
+        public ITile[,] tiles { get; set; }
 
         public Exit northExit, southExit, eastExit, westExit;
 

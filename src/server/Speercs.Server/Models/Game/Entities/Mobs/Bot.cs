@@ -30,8 +30,6 @@ namespace Speercs.Server.Models.Entities {
         }
 
         protected ulong lastMoveTime;
-
-        public UserTeam team { get; }
     }
 
     public class BotCore {
