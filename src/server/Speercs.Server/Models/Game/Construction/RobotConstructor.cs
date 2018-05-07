@@ -7,34 +7,40 @@ using Speercs.Server.Models.Entities.Towers;
 using Speercs.Server.Models.Mechanics;
 
 namespace Speercs.Server.Models.Construction {
-    public static class RobotConstructor {
-        public static Bot constructBot(ISContext context, FactoryTower factory, string templateName, UserTeam team) {
-            var templates = context.extensibilityContainer.resolveAll<IBotTemplate>();
+    public class RobotConstructor : DependencyObject {
+        private UserTeam team;
+
+        public RobotConstructor(ISContext context, UserTeam team) : base(context) {
+            this.team = team;
+        }
+
+        public Bot constructBot(FactoryTower factory, string templateName) {
+            var templates = serverContext.extensibilityContainer.resolveAll<IBotTemplate>();
             var template = templates.FirstOrDefault(x => x.name == templateName);
             if (template == null) return null;
-            if (!spendResources(team, template.costs)) return null;
+            if (!spendResources(template.costs)) return null;
 
             // build the bot
             var bot = template.construct(factory, team);
-            context.appState.entities.insertNew(bot);
+            serverContext.appState.entities.insertNew(bot);
 
             return bot;
         }
 
-        public static bool deconstructBot(ISContext context, Bot bot, FactoryTower factory, UserTeam team) {
+        public bool deconstructBot(Bot bot, FactoryTower factory) {
             // ensure that the bot is at the factory
             if (bot.position != factory.position) return false;
             // refund resources and destroy the bot
-            var templates = context.extensibilityContainer.resolveAll<IBotTemplate>();
+            var templates = serverContext.extensibilityContainer.resolveAll<IBotTemplate>();
             var template = templates.FirstOrDefault(x => x.name == bot.model);
             if (template == null) return false;
             var refundCosts = new List<(string, long)>();
             foreach (var (resource, cost) in template.costs) {
                 refundCosts.Add((resource, (long)(-cost * MechanicsConstants.REFUND_FACTOR)));
             }
-            if (!spendResources(team, refundCosts)) return false; // wat?
+            if (!spendResources(refundCosts)) return false; // wat?
             // unregister the entity
-            context.appState.entities.remove(bot);
+            serverContext.appState.entities.remove(bot);
             return true;
         }
 
@@ -46,8 +52,8 @@ namespace Speercs.Server.Models.Construction {
             InsufficientResources,
         }
 
-        public static (BotCore, BotCoreInstallStatus) constructCore(ISContext context, Bot bot, string templateName, UserTeam team) {
-            var templates = context.extensibilityContainer.resolveAll<IBotCoreTemplate>();
+        public (BotCore, BotCoreInstallStatus) constructCore(Bot bot, string templateName) {
+            var templates = serverContext.extensibilityContainer.resolveAll<IBotCoreTemplate>();
             var template = templates.FirstOrDefault(x => x.name == templateName);
             if (template == null) return (null, BotCoreInstallStatus.TemplateNotFound);
             // ensure bot has space to fit core
@@ -59,13 +65,13 @@ namespace Speercs.Server.Models.Construction {
             if (bot.coreDrain + core.drain > bot.reactorPower) {
                 return (null, BotCoreInstallStatus.InsufficientPower);
             }
-            if (!spendResources(team, template.costs)) return (null, BotCoreInstallStatus.InsufficientResources);
+            if (!spendResources(template.costs)) return (null, BotCoreInstallStatus.InsufficientResources);
             // now install the core
             bot.cores.Add(core);
             return (core, BotCoreInstallStatus.Success);
         }
 
-        private static bool spendResources(UserTeam team, IEnumerable<(string, long)> costs) {
+        private bool spendResources(IEnumerable<(string, long)> costs) {
             // ensure that the user can afford
             var costList = costs.ToList();
             foreach (var cost in costList) {

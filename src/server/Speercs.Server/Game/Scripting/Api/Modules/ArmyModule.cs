@@ -16,6 +16,8 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             var dataService = new PersistentDataService(context);
             var userData = dataService.get(userId);
 
+            var botConstructor = new RobotConstructor(context, userData.team);
+
             bool boot() {
                 // "boot up", or create the player's force
                 if (userData.team.booted) {
@@ -43,7 +45,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             BotEntityRef constructBot(string templateName, GameEntityRef factoryRef) {
                 var factory = factoryRef.target as FactoryTower;
                 if (factory == null) return null;
-                var bot = RobotConstructor.constructBot(context, factory, templateName, userData.team);
+                var bot = botConstructor.constructBot(factory, templateName);
                 if (bot == null) return null;
                 userData.team.addEntity(bot);
                 return new BotEntityRef(bot);
@@ -52,7 +54,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             bool deconstructBot(BotEntityRef botRef, GameEntityRef factoryRef) {
                 var factory = factoryRef.target as FactoryTower;
                 if (factory == null) return false;
-                var result = RobotConstructor.deconstructBot(context, (Bot) botRef.target, factory, userData.team);
+                var result = botConstructor.deconstructBot((Bot) botRef.target, factory);
                 if (!result) return false;
                 userData.team.removeEntity(botRef.target);
                 botRef.destroy();
@@ -60,7 +62,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             BotCoreRef installCore(string templateName, BotEntityRef botRef) {
-                var (core, err) = RobotConstructor.constructCore(context, (Bot) botRef.target, templateName, userData.team);
+                var (core, err) = botConstructor.constructCore((Bot) botRef.target, templateName);
                 if (core == null) return null;
                 return new BotCoreRef(core);
             }
