@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
 using IridiumJS.Runtime;
 using System;
+using IridiumJS.Parser;
 
 namespace Speercs.Server.Web.Realtime.Handlers {
     public class InteractiveConsoleHandler : RealtimeHandler {
@@ -23,12 +24,14 @@ namespace Speercs.Server.Web.Realtime.Handlers {
                 }
 
                 error = null;
+            } catch (ParserException ex) {
+                error = "parse";
             } catch (JavaScriptException ex) {
                 // there was an error
                 error = ex.Message;
-            } catch (Exception) {
+            } catch (Exception ex) {
                 // for now no need to give debug info to clients
-                error = null;
+                error = "true";
             }
 
             return Task.FromResult<JToken>(

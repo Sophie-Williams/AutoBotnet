@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LiteDB;
 using MoreLinq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility.Map;
@@ -9,8 +10,10 @@ using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Map {
     public struct RoomPosition {
-        public readonly Point pos;
-        public readonly Point roomPos;
+        [BsonField("pos")]
+        public Point pos { get; set; }
+        [BsonField("roomPos")]
+        public Point roomPos { get; set; }
 
         // Constructors
 

@@ -16,13 +16,13 @@ namespace Speercs.Server.Models.Entities {
 
     public abstract class GameEntity {
         [BsonId]
-        public string id { get; set; }
+        public string id { get; protected set; }
 
-        [BsonIgnore] private RoomPosition _position;
+        [BsonField("position")]
+        private RoomPosition _position { get; set; }
 
         [BsonIgnore] protected ISContext _context;
 
-        [BsonField("position")]
         public RoomPosition position {
             get => _position;
             set { propagatePosition(value); }
@@ -49,6 +49,7 @@ namespace Speercs.Server.Models.Entities {
 
         internal void loadContext(ISContext context) {
             _context = context;
+            propagatePosition(_position);
         }
 
         public virtual void wake() { }

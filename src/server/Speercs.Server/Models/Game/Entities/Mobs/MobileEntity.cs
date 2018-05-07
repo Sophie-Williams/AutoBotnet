@@ -11,10 +11,10 @@ namespace Speercs.Server.Models.Entities {
         public MobileEntity() {}
         protected MobileEntity(RoomPosition pos, UserTeam team) : base(pos, team) { }
 
-        public RoomPosition move(RoomPosition pos) {
-            return position = pos;
+        public bool move(Direction direction) {
+            return moveRelative(direction);
         }
-
+        
         protected virtual bool moveRelative(Direction direction) {
             var roomX = position.roomPos.x;
             var roomY = position.roomPos.y;

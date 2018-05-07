@@ -16,7 +16,7 @@ namespace Speercs.Server.Models.Entities {
             _coreCapacity = coreCapacity;
         }
 
-        [BsonField("coreCapacity")] private readonly int _coreCapacity;
+        [BsonField("coreCapacity")] private int _coreCapacity { get; set; }
 
         public int coreCapacity => _coreCapacity;
 
