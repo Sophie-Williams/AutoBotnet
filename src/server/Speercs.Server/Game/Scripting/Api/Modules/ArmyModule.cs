@@ -40,8 +40,8 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return true;
             }
 
-            IEnumerable<GameEntity> getUnits() {
-                return userData.team.entities;
+            GameEntity[] getUnits() {
+                return userData.team.entities.ToArray();
             }
 
             ulong getResource(string resource) {
@@ -51,7 +51,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             defineFunction(nameof(boot), new Func<bool>(boot));
             defineFunction(nameof(getFactory), new Func<int, FactoryTower>(getFactory));
             defineFunction(nameof(constructBot), new Func<string, FactoryTower, bool>(constructBot));
-            defineFunction(nameof(getUnits), new Func<IEnumerable<GameEntity>>(getUnits));
+            defineFunction(nameof(getUnits), new Func<GameEntity[]>(getUnits));
             defineFunction(nameof(getResource), new Func<string, ulong>(getResource));
         }
     }
