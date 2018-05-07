@@ -31,13 +31,6 @@ namespace Speercs.Server.Configuration {
                             .ToObject(typeof(Dictionary<string, Room>), bson.AsDocument)
                     }
                 );
-                // TODO: custom serializers for tile data
-//                BsonMapper.Global.RegisterType<ITile>(
-//                    serialize: tile => tile.GetType().Name,
-//                    deserialize: bson =>
-//                        (ITile) Activator.CreateInstance(serverContext.extensibilityContainer.resolveTypes<ITile>()
-//                            .First(x => x.Name == bson.AsString))
-//                );
                 BsonMapper.Global.RegisterType<ITile[,]>(
                     serialize: tileArray => {
                         var doc = new BsonDocument();

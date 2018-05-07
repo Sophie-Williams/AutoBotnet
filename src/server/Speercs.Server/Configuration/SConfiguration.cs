@@ -80,7 +80,7 @@ namespace Speercs.Server.Configuration {
         /// The maximum amount of time (in milliseconds) to wait for loading user code into the engine.
         /// </summary>
         [JsonProperty("codeLoadTimeLimit")]
-        public int codeLoadTimeLimit { get; set; } = 200;
+        public int codeLoadTimeLimit { get; set; } = 1000;
 
         /// <summary>
         /// The limit of the depth of recursion allowed in user scripts
