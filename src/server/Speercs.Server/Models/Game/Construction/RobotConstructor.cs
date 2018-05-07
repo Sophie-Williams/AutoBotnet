@@ -4,7 +4,6 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility.Entities;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Entities.Towers;
-using Speercs.Server.Models.Materials;
 
 namespace Speercs.Server.Models.Construction {
     public static class RobotConstructor {
@@ -21,7 +20,7 @@ namespace Speercs.Server.Models.Construction {
             return bot;
         }
 
-        private static bool spendResources(UserTeam team, IEnumerable<(ResourceId, ulong)> costs) {
+        private static bool spendResources(UserTeam team, IEnumerable<(string, ulong)> costs) {
             // ensure that the user can afford
             var costList = costs.ToList();
             foreach (var cost in costList) {

@@ -4,7 +4,6 @@ using Speercs.Server.Extensibility.Map;
 using Speercs.Server.Extensibility.Map.Features;
 using Speercs.Server.Extensibility.Map.Tiles;
 using Speercs.Server.Game.MapGen.Tiles;
-using Speercs.Server.Models.Materials;
 
 namespace Speercs.Server.Game.MapGen.Features {
     public class DefaultMapPlugin : ISpeercsPlugin {
@@ -16,7 +15,7 @@ namespace Speercs.Server.Game.MapGen.Features {
             // Register MapGen features
             container.register<IMapGenFeature>(new OreFeature(
                 () => new TileOre {
-                    resource = ResourceId.NRG
+                    resource = "nrg"
                 },
                 0.003,
                 OreFeature.Location.Wall,

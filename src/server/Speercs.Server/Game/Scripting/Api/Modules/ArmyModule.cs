@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using IridiumJS;
 using Speercs.Server.Configuration;
-using Speercs.Server.Extensibility.Entities;
 using Speercs.Server.Models.Construction;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Entities.Towers;
@@ -45,10 +44,15 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return userData.team.entities;
             }
 
+            ulong getResource(string resource) {
+                return userData.team.getResource(resource);
+            }
+
             defineFunction(nameof(boot), new Func<bool>(boot));
             defineFunction(nameof(getFactory), new Func<int, FactoryTower>(getFactory));
             defineFunction(nameof(constructBot), new Func<string, FactoryTower, bool>(constructBot));
             defineFunction(nameof(getUnits), new Func<IEnumerable<GameEntity>>(getUnits));
+            defineFunction(nameof(getResource), new Func<string, ulong>(getResource));
         }
     }
 }

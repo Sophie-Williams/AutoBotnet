@@ -2,7 +2,6 @@
 using Speercs.Server.Game.MapGen;
 using Speercs.Server.Models.Entities.Towers;
 using Speercs.Server.Models.Map;
-using Speercs.Server.Models.Materials;
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Mechanics {
@@ -13,7 +12,7 @@ namespace Speercs.Server.Models.Mechanics {
             // reset the team
             destroyTeam(team);
             // give resources
-            team.resources[ResourceId.NRG] = 80;
+            team.resources["nrg"] = 80;
             // create a starter factory in a new room
             // TODO: generate a nearby unoccupied room and spawn the factory
             var mapExpander =

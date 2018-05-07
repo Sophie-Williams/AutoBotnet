@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using LiteDB;
 using Speercs.Server.Models.Entities;
-using Speercs.Server.Models.Entities.Towers;
-using Speercs.Server.Models.Materials;
 
 namespace Speercs.Server.Models {
     /// <summary>
@@ -13,10 +11,10 @@ namespace Speercs.Server.Models {
         public List<GameEntity> entities { get; set; } = new List<GameEntity>();
 
         public string identifier { get; set; }
-        public Dictionary<ResourceId, ulong> resources { get; set; } = new Dictionary<ResourceId, ulong>();
+        public Dictionary<string, ulong> resources { get; set; } = new Dictionary<string, ulong>();
         public bool booted { get; set; } = false;
 
-        public ulong getResource(ResourceId resourceId) {
+        public ulong getResource(string resourceId) {
             if (resources.ContainsKey(resourceId)) {
                 return resources[resourceId];
             }
