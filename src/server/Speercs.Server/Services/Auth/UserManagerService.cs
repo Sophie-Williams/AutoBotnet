@@ -52,7 +52,7 @@ namespace Speercs.Server.Services.Auth {
 
                 // create persistent data
                 var persistentDataService = new PersistentDataService(serverContext);
-                await persistentDataService.createPersistentDataAsync(user.identifier);
+                persistentDataService.createPersistentData(user.identifier);
 
                 serverContext.appState.userMetrics[user.identifier] = new UserMetrics();
 
@@ -122,7 +122,7 @@ namespace Speercs.Server.Services.Auth {
 
                 // remove persistent data
                 var persistentDataService = new PersistentDataService(serverContext);
-                await persistentDataService.removePersistentDataAsync(userId);
+                persistentDataService.removePersistentData(userId);
 
                 serverContext.appState.userMetrics.Remove(userId);
 

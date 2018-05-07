@@ -122,7 +122,9 @@ namespace Speercs.Server {
 
         private void onUnload(ISContext scx) {
             scx.log.writeLine("Server unloading, force-persisting state data.", SpeercsLogger.LogLevel.Information);
-            // persist on unload
+            // call onShutdown
+            gameBootstrapper.onShutdown();
+            // persist appState
             scx.appState.persist(true);
             scx.Dispose();
         }

@@ -16,7 +16,7 @@ namespace Speercs.Server.Models.Entities {
 
     public abstract class GameEntity {
         [BsonId]
-        public string id { get; }
+        public string id { get; set; }
 
         private RoomPosition _position;
 
@@ -28,7 +28,9 @@ namespace Speercs.Server.Models.Entities {
             set { propagatePosition(value); }
         }
 
-        [JsonIgnore] [BsonField("team")] public UserTeam team;
+        [JsonIgnore]
+        [BsonField("teamId")]
+        public string teamId { get; set; }
 
         /// <summary>
         /// Bson constructor
@@ -37,7 +39,7 @@ namespace Speercs.Server.Models.Entities {
 
         public GameEntity(RoomPosition pos, UserTeam team) {
             position = pos;
-            this.team = team;
+            this.teamId = team.identifier;
 
             id = Guid.NewGuid().ToString("N");
         }

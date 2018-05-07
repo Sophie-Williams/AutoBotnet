@@ -5,7 +5,6 @@ using Speercs.Server.Models.Map;
 namespace Speercs.Server.Models.Entities {
     public class Bot : MobileEntity {
         public Bot(RoomPosition pos, UserTeam team, int coreCapacity) : base(pos, team) {
-            this.team = team;
             this.coreCapacity = coreCapacity;
         }
         

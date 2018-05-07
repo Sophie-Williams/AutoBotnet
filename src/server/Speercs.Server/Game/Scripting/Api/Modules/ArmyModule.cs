@@ -11,7 +11,8 @@ using Speercs.Server.Services.Game;
 namespace Speercs.Server.Game.Scripting.Api.Modules {
     public class ArmyModule : ScriptingApiModule {
         public ArmyModule(JSEngine engine, ISContext context, string userId) : base(engine, context, userId) {
-            var userData = new PersistentDataService(context).get(userId);
+            var dataService = new PersistentDataService(context);
+            var userData = dataService.get(userId);
 
             bool boot() {
                 // "boot up", or create the player's force
@@ -22,7 +23,6 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
 
                 var starter = new GameStarter(context);
                 starter.bootTeam(userData.team);
-
                 return true;
             }
 
