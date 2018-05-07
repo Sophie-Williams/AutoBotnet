@@ -8,7 +8,7 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
             _bot = bot;
         }
 
-        public BotCore[] getCores() => _bot.cores.ToArray();
+        public BotCore[] cores => _bot.cores.ToArray();
 
         public int coreCapacity => _bot.coreCapacity;
 

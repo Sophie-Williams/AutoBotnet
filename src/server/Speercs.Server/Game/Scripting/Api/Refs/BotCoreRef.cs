@@ -9,7 +9,7 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
             _core = core;
         }
 
-        public Dictionary<string, int> qualities => _core.qualities;
+        public Dictionary<string, long> qualities => _core.qualities;
         public int drain => _core.drain;
         public BotCoreFlags flags => _core.flags;
         public int size => _core.drain;

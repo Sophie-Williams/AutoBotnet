@@ -23,9 +23,9 @@ namespace Speercs.Server.Models.Entities {
         [JsonIgnore]
         [BsonField("cores")]
         public List<BotCore> cores { get; set; } = new List<BotCore>();
-        
+
         public int usedCoreSpace => cores.Sum(x => x.size);
-        
+
         public int coreDrain => cores.Sum(x => x.drain);
 
         protected override bool moveRelative(Direction direction) {
@@ -50,7 +50,7 @@ namespace Speercs.Server.Models.Entities {
     }
 
     public abstract class BotCore {
-        public Dictionary<string, int> qualities { get; } = new Dictionary<string, int>();
+        public abstract Dictionary<string, long> qualities { get; }
         public abstract int drain { get; }
         public abstract BotCoreFlags flags { get; }
         public abstract int size { get; }
