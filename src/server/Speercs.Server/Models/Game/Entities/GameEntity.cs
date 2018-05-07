@@ -18,6 +18,7 @@ namespace Speercs.Server.Models.Entities {
         [BsonField("e_id")]
         private string _id { get; set; }
 
+        [BsonIgnore]
         public string id => _id;
 
         [BsonField("position")]
@@ -25,15 +26,17 @@ namespace Speercs.Server.Models.Entities {
 
         [BsonIgnore] protected ISContext _context;
 
+        [BsonIgnore]
         public RoomPosition position {
             get => _position;
             set { propagatePosition(value); }
         }
 
-        [JsonIgnore]
         [BsonField("teamId")]
         private string _teamId { get; set; }
 
+        [BsonIgnore]
+        [JsonIgnore]
         public string teamId => _teamId;
 
         [BsonIgnore]
