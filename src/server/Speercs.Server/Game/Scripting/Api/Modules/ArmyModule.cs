@@ -50,7 +50,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             BotCoreRef installCore(string templateName, BotEntityRef botRef) {
-                var core = RobotConstructor.constructCore(context, (Bot) botRef.target, templateName, userData.team);
+                var (core, err) = RobotConstructor.constructCore(context, (Bot) botRef.target, templateName, userData.team);
                 if (core == null) return null;
                 return new BotCoreRef(core);
             }

@@ -20,23 +20,31 @@ namespace Speercs.Server.Models.Construction {
             return bot;
         }
 
-        public static BotCore constructCore(ISContext context, Bot bot, string templateName, UserTeam team) {
+        public enum BotCoreInstallStatus {
+            Success,
+            TemplateNotFound,
+            InsufficientCapacity,
+            InsufficientPower,
+            InsufficientResources,
+        }
+
+        public static (BotCore, BotCoreInstallStatus) constructCore(ISContext context, Bot bot, string templateName, UserTeam team) {
             var templates = context.extensibilityContainer.resolveAll<IBotCoreTemplate>();
             var template = templates.FirstOrDefault(x => x.name == templateName);
-            if (template == null) return null;
+            if (template == null) return (null, BotCoreInstallStatus.TemplateNotFound);
             // ensure bot has space to fit core
             var core = template.construct();
             if (bot.usedCoreSpace + core.size > bot.coreCapacity) {
-                return null;
+                return (null, BotCoreInstallStatus.InsufficientCapacity);
             }
             // check reactor power
             if (bot.coreDrain + core.drain > bot.reactorPower) {
-                return null;
+                return (null, BotCoreInstallStatus.InsufficientPower);
             }
-            if (!spendResources(team, template.costs)) return null;
+            if (!spendResources(team, template.costs)) return (null, BotCoreInstallStatus.InsufficientResources);
             // now install the core
             bot.cores.Add(core);
-            return core;
+            return (core, BotCoreInstallStatus.Success);
         }
 
         private static bool spendResources(UserTeam team, IEnumerable<(string, ulong)> costs) {
