@@ -6,13 +6,15 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
     public class BotCoreRef : GameObjectRef {
         private BotCore _core;
 
-        public BotCoreRef(JSEngine engine, BotCore core) : base(engine) {
+        public BotCoreRef(BotCore core) {
             _core = core;
+        }
 
-            // load actions
-            foreach (var action in core.actions) {
-                defineFunction(action.Key, action.Value);
+        public object call(string name, params object[] args) {
+            if (_core.actions.ContainsKey(name)) {
+                return _core.actions[name].DynamicInvoke(args);
             }
+            return null;
         }
 
         public Dictionary<string, long> qualities => _core.qualities;

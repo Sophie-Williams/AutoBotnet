@@ -5,7 +5,7 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
     public class BotEntityRef : GameEntityRef {
         private Bot _bot;
 
-        public BotEntityRef(JSEngine engine, Bot bot) : base(engine, bot) {
+        public BotEntityRef(Bot bot) : base(bot) {
             _bot = bot;
         }
 

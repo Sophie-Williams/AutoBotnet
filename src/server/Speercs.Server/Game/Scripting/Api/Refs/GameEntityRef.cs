@@ -9,7 +9,7 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
 
         internal GameEntity target => _entity;
 
-        public GameEntityRef(JSEngine engine, GameEntity entity) : base(engine) {
+        public GameEntityRef(GameEntity entity) {
             _entity = entity;
         }
 

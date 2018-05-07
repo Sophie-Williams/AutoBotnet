@@ -9,9 +9,6 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Game.Scripting.Api {
-    public class GameObjectRef : ScriptObjectInstance {
-        public GameObjectRef(JSEngine engine) : base(engine) {
-            setDefaultToString();
-        }
+    public class GameObjectRef {
     }
 }

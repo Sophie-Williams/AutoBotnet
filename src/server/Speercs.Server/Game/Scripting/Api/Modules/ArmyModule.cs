@@ -31,13 +31,13 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             GameEntityRef getFactory(int seq) {
                 var factories = userData.team.entities.Where(x => x is FactoryTower).ToList();
                 if (!factories.Any()) return null;
-                return new GameEntityRef(engine, (FactoryTower) factories[seq]);
+                return new GameEntityRef((FactoryTower) factories[seq]);
             }
 
             BotEntityRef getBot(string id) {
                 var bot = userData.team.entities.FirstOrDefault(x => x.id == id) as Bot;
                 if (bot == null) return null;
-                return new BotEntityRef(engine, bot);
+                return new BotEntityRef(bot);
             }
 
             bool constructBot(string templateName, GameEntityRef factoryRef) {
@@ -52,11 +52,11 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             BotCoreRef installCore(string templateName, BotEntityRef botRef) {
                 var core = RobotConstructor.constructCore(context, (Bot) botRef.target, templateName, userData.team);
                 if (core == null) return null;
-                return new BotCoreRef(engine, core);
+                return new BotCoreRef(core);
             }
 
             GameEntityRef[] getUnits() {
-                return userData.team.entities.Select(x => new GameEntityRef(engine, x)).ToArray();
+                return userData.team.entities.Select(x => new GameEntityRef(x)).ToArray();
             }
 
             ulong getResource(string resource) {
