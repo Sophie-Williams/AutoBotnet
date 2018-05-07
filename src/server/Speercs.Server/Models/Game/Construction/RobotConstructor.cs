@@ -29,7 +29,10 @@ namespace Speercs.Server.Models.Construction {
             if (bot.usedCoreSpace + core.size > bot.coreCapacity) {
                 return null;
             }
-
+            // check reactor power
+            if (bot.coreDrain + core.drain > bot.reactorPower) {
+                return null;
+            }
             if (!spendResources(team, template.costs)) return null;
             // now install the core
             bot.cores.Add(core);
