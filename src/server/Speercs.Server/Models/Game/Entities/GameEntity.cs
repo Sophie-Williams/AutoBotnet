@@ -32,6 +32,9 @@ namespace Speercs.Server.Models.Entities {
         [BsonField("teamId")]
         public string teamId { get; set; }
 
+        [BsonIgnore]
+        public string type => this.GetType().Name;
+
         /// <summary>
         /// Bson constructor
         /// </summary>
