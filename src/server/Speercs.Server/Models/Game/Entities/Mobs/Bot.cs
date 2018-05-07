@@ -54,5 +54,10 @@ namespace Speercs.Server.Models.Entities {
         public abstract int drain { get; }
         public abstract BotCoreFlags flags { get; }
         public abstract int size { get; }
+        public Dictionary<string, Delegate> actions { get; } = new Dictionary<string, Delegate>();
+
+        public void defineFunction(string name, Delegate func) {
+            actions[name] = func;
+        }
     }
 }

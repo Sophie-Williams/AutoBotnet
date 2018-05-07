@@ -8,6 +8,11 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
 
         public BotCoreRef(JSEngine engine, BotCore core) : base(engine) {
             _core = core;
+
+            // load actions
+            foreach (var action in core.actions) {
+                defineFunction(action.Key, action.Value);
+            }
         }
 
         public Dictionary<string, long> qualities => _core.qualities;

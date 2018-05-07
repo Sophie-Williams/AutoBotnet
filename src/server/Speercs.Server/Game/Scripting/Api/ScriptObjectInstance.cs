@@ -11,7 +11,7 @@ using Speercs.Server.Services.Game;
 namespace Speercs.Server.Game.Scripting.Api {
     public class ScriptObjectInstance : ObjectInstance {
         public ScriptObjectInstance(JSEngine engine) : base(engine) {
-            defineFunction("toString", () => $"[object {Class}]");
+            defineFunction("toString", () => $"[object {this.GetType().Name}]");
         }
 
         protected void defineFunction<T>(string name, Func<T> func) {

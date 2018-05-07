@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Speercs.Server.Models.Entities;
 
 namespace Speercs.Server.Extensibility.Entities.Templates {
@@ -35,6 +36,14 @@ namespace Speercs.Server.Extensibility.Entities.Templates {
             public override int drain { get; } = 10;
             public override BotCoreFlags flags { get; } = BotCoreFlags.Switchable;
             public override int size { get; } = 1;
+
+            public CoreDrill1() {
+                defineFunction("drill", new Action(actionDrill));
+            }
+
+            public void actionDrill() {
+                throw new NotImplementedException();
+            }
         }
     }
 }
