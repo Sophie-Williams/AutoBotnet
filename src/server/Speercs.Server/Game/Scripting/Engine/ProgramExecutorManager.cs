@@ -39,6 +39,7 @@ namespace Speercs.Server.Game.Scripting.Engine {
                     serverContext.log.writeLine($"Error loading player {userIdentifier}'s code: {ex.Message}",
                         SpeercsLogger.LogLevel.Warning);
                     // TODO: let the user know
+                    // TODO: through a notification?
                 }
 
                 return new ScriptExecutor(engine, userIdentifier, serverContext);

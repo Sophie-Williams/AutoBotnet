@@ -40,13 +40,13 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return new BotEntityRef(bot);
             }
 
-            bool constructBot(string templateName, GameEntityRef factoryRef) {
+            BotEntityRef constructBot(string templateName, GameEntityRef factoryRef) {
                 var factory = factoryRef.target as FactoryTower;
-                if (factory == null) return false;
+                if (factory == null) return null;
                 var bot = RobotConstructor.constructBot(context, factory, templateName, userData.team);
-                if (bot == null) return false;
+                if (bot == null) return null;
                 userData.team.addEntity(bot);
-                return true;
+                return new BotEntityRef(bot);
             }
 
             BotCoreRef installCore(string templateName, BotEntityRef botRef) {
@@ -59,17 +59,18 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return userData.team.entities.Select(x => new GameEntityRef(x)).ToArray();
             }
 
-            ulong getResource(string resource) {
-                return userData.team.getResource(resource);
+            Dictionary<string, ulong> getResources() {
+                return userData.team.resources.Keys.Select(x => new {k = x, v = userData.team.getResource(x)})
+                    .ToDictionary(x => x.k, x=> x.v);
             }
 
             defineFunction(nameof(boot), new Func<bool>(boot));
             defineFunction(nameof(getFactory), new Func<int, GameEntityRef>(getFactory));
             defineFunction(nameof(getBot), new Func<string, GameEntityRef>(getBot));
-            defineFunction(nameof(constructBot), new Func<string, GameEntityRef, bool>(constructBot));
+            defineFunction(nameof(constructBot), new Func<string, GameEntityRef, BotEntityRef>(constructBot));
             defineFunction(nameof(installCore), new Func<string, BotEntityRef, BotCoreRef>(installCore));
             defineFunction(nameof(getUnits), new Func<GameEntityRef[]>(getUnits));
-            defineFunction(nameof(getResource), new Func<string, ulong>(getResource));
+            defineFunction(nameof(getResources), new Func<Dictionary<string, ulong>>(getResources));
         }
     }
 }
