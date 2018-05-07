@@ -1,10 +1,11 @@
-﻿using Speercs.Server.Models.Entities;
+﻿using IridiumJS;
+using Speercs.Server.Models.Entities;
 
 namespace Speercs.Server.Game.Scripting.Api.Refs {
     public class BotEntityRef : GameEntityRef {
         private Bot _bot;
 
-        public BotEntityRef(Bot bot) : base(bot) {
+        public BotEntityRef(JSEngine engine, Bot bot) : base(engine, bot) {
             _bot = bot;
         }
 

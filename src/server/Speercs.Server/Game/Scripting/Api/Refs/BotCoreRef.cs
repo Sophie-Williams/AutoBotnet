@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using IridiumJS;
 using Speercs.Server.Models.Entities;
 
 namespace Speercs.Server.Game.Scripting.Api.Refs {
-    public class BotCoreRef {
+    public class BotCoreRef : GameObjectRef {
         private BotCore _core;
 
-        public BotCoreRef(BotCore core) {
+        public BotCoreRef(JSEngine engine, BotCore core) : base(engine) {
             _core = core;
         }
 

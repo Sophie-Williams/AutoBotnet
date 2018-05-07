@@ -1,14 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using IridiumJS;
+using Newtonsoft.Json;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Game.Scripting.Api.Refs {
-    public class GameEntityRef {
+    public class GameEntityRef : GameObjectRef {
         private GameEntity _entity;
 
         internal GameEntity target => _entity;
 
-        public GameEntityRef(GameEntity entity) {
+        public GameEntityRef(JSEngine engine, GameEntity entity) : base(engine) {
             _entity = entity;
         }
 
