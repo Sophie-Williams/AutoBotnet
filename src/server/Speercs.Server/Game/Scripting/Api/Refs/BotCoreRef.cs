@@ -22,5 +22,9 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
         public int drain => _core.drain;
         public BotCoreFlags flags => _core.flags;
         public int size => _core.drain;
+
+        public void destroy() {
+            _core = null;
+        }
     }
 }

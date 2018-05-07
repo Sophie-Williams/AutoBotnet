@@ -4,7 +4,7 @@ using Speercs.Server.Models.Entities;
 
 namespace Speercs.Server.Extensibility.Entities.Templates {
     public class CoreStorage1Template : IBotCoreTemplate {
-        public (string, ulong)[] costs { get; } = {("iron", 4)};
+        public (string, long)[] costs { get; } = {("iron", 4)};
 
         public string name { get; } = nameof(CoreStorage1);
 
@@ -22,7 +22,7 @@ namespace Speercs.Server.Extensibility.Entities.Templates {
     }
 
     public class CoreDrill1Template : IBotCoreTemplate {
-        public (string, ulong)[] costs { get; } = {("iron", 4)};
+        public (string, long)[] costs { get; } = {("iron", 4)};
 
         public string name { get; } = nameof(CoreDrill1);
 

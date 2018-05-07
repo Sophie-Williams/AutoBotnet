@@ -49,6 +49,16 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return new BotEntityRef(bot);
             }
 
+            bool deconstructBot(BotEntityRef botRef, GameEntityRef factoryRef) {
+                var factory = factoryRef.target as FactoryTower;
+                if (factory == null) return false;
+                var result = RobotConstructor.deconstructBot(context, (Bot) botRef.target, factory, userData.team);
+                if (!result) return false;
+                userData.team.removeEntity(botRef.target);
+                botRef.destroy();
+                return true;
+            }
+
             BotCoreRef installCore(string templateName, BotEntityRef botRef) {
                 var (core, err) = RobotConstructor.constructCore(context, (Bot) botRef.target, templateName, userData.team);
                 if (core == null) return null;
@@ -59,7 +69,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return userData.team.entities.Select(x => new GameEntityRef(x)).ToArray();
             }
 
-            Dictionary<string, ulong> getResources() {
+            Dictionary<string, long> getResources() {
                 return userData.team.resources.Keys.Select(x => new {k = x, v = userData.team.getResource(x)})
                     .ToDictionary(x => x.k, x=> x.v);
             }
@@ -68,9 +78,10 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             defineFunction(nameof(getFactory), new Func<int, GameEntityRef>(getFactory));
             defineFunction(nameof(getBot), new Func<string, GameEntityRef>(getBot));
             defineFunction(nameof(constructBot), new Func<string, GameEntityRef, BotEntityRef>(constructBot));
+            defineFunction(nameof(deconstructBot), new Func<BotEntityRef, GameEntityRef, bool>(deconstructBot));
             defineFunction(nameof(installCore), new Func<string, BotEntityRef, BotCoreRef>(installCore));
             defineFunction(nameof(getUnits), new Func<GameEntityRef[]>(getUnits));
-            defineFunction(nameof(getResources), new Func<Dictionary<string, ulong>>(getResources));
+            defineFunction(nameof(getResources), new Func<Dictionary<string, long>>(getResources));
         }
     }
 }

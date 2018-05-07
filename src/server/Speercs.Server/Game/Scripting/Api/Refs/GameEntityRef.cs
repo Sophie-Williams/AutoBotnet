@@ -20,5 +20,9 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
         public string teamId => _entity.teamId;
 
         public RoomPosition pos => _entity.position;
+
+        public virtual void destroy() {
+            _entity = null;
+        }
     }
 }

@@ -4,6 +4,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility.Entities;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Entities.Towers;
+using Speercs.Server.Models.Mechanics;
 
 namespace Speercs.Server.Models.Construction {
     public static class RobotConstructor {
@@ -18,6 +19,23 @@ namespace Speercs.Server.Models.Construction {
             context.appState.entities.insertNew(bot);
 
             return bot;
+        }
+
+        public static bool deconstructBot(ISContext context, Bot bot, FactoryTower factory, UserTeam team) {
+            // ensure that the bot is at the factory
+            if (bot.position != factory.position) return false;
+            // refund resources and destroy the bot
+            var templates = context.extensibilityContainer.resolveAll<IBotTemplate>();
+            var template = templates.FirstOrDefault(x => x.name == bot.model);
+            if (template == null) return false;
+            var refundCosts = new List<(string, long)>();
+            foreach (var (resource, cost) in template.costs) {
+                refundCosts.Add((resource, (long)(-cost * MechanicsConstants.REFUND_FACTOR)));
+            }
+            if (!spendResources(team, refundCosts)) return false; // wat?
+            // unregister the entity
+            context.appState.entities.remove(bot);
+            return true;
         }
 
         public enum BotCoreInstallStatus {
@@ -47,7 +65,7 @@ namespace Speercs.Server.Models.Construction {
             return (core, BotCoreInstallStatus.Success);
         }
 
-        private static bool spendResources(UserTeam team, IEnumerable<(string, ulong)> costs) {
+        private static bool spendResources(UserTeam team, IEnumerable<(string, long)> costs) {
             // ensure that the user can afford
             var costList = costs.ToList();
             foreach (var cost in costList) {

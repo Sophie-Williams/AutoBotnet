@@ -19,5 +19,11 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
         public bool move(Direction direction) {
             return _bot.move(direction);
         }
+
+        public override void destroy() {
+            base.destroy();
+            foreach (var coreRef in cores) coreRef.destroy();
+            _bot = null;
+        }
     }
 }

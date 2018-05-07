@@ -10,10 +10,10 @@ namespace Speercs.Server.Models {
         [BsonIgnore]
         public List<GameEntity> entities { get; set; } = new List<GameEntity>();
         public string identifier { get; set; }
-        public Dictionary<string, ulong> resources { get; set; } = new Dictionary<string, ulong>();
+        public Dictionary<string, long> resources { get; set; } = new Dictionary<string, long>();
         public bool booted { get; set; } = false;
 
-        public ulong getResource(string resourceId) {
+        public long getResource(string resourceId) {
             if (resources.ContainsKey(resourceId)) {
                 return resources[resourceId];
             }

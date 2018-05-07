@@ -21,12 +21,17 @@ namespace Speercs.Server.Models.Entities {
         [BsonField("reactorPower")]
         public int reactorPower { get; set; }
 
+        [BsonField("model")]
+        public string model { get; set; }
+
         [JsonIgnore]
         [BsonField("cores")]
         public List<BotCore> cores { get; set; } = new List<BotCore>();
 
+        [BsonIgnore]
         public int usedCoreSpace => cores.Sum(x => x.size);
 
+        [BsonIgnore]
         public int coreDrain => cores.Sum(x => x.drain);
 
         protected override bool moveRelative(Direction direction) {
@@ -41,6 +46,7 @@ namespace Speercs.Server.Models.Entities {
             return false;
         }
 
+        [BsonIgnore]
         protected ulong lastMoveTime;
     }
 
