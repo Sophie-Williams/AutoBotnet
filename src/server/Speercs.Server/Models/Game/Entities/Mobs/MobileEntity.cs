@@ -8,13 +8,14 @@ namespace Speercs.Server.Models.Entities {
         /// <summary>
         /// BsonConstructor
         /// </summary>
-        public MobileEntity() {}
+        public MobileEntity() { }
+
         protected MobileEntity(RoomPosition pos, UserTeam team) : base(pos, team) { }
 
         public bool move(Direction direction) {
             return moveRelative(direction);
         }
-        
+
         protected virtual bool moveRelative(Direction direction) {
             var roomX = position.roomPos.x;
             var roomY = position.roomPos.y;
@@ -42,28 +43,32 @@ namespace Speercs.Server.Models.Entities {
                     throw new ArgumentException("direction must be one of the four cardinal directions", "direction");
             }
 
-            if (newX < 0 && moveRoom(roomX - 1, roomY)) {
-                roomX--;
-            } else {
-                return false;
+            if (newX < 0) {
+                if (moveRoom(roomX - 1, roomY))
+                    roomX--;
+                else
+                    return false;
             }
 
-            if (newX > Room.MAP_EDGE_SIZE && moveRoom(roomX + 1, roomY)) {
-                roomX++;
-            } else {
-                return false;
+            if (newX > Room.MAP_EDGE_SIZE) {
+                if (moveRoom(roomX + 1, roomY))
+                    roomX++;
+                else
+                    return false;
             }
 
-            if (newY < 0 && moveRoom(roomX, roomY - 1)) {
-                roomY--;
-            } else {
-                return false;
+            if (newY < 0) {
+                if (moveRoom(roomX, roomY - 1))
+                    roomY--;
+                else
+                    return false;
             }
 
-            if (newY > Room.MAP_EDGE_SIZE && moveRoom(roomX, roomY + 1)) {
-                roomY++;
-            } else {
-                return false;
+            if (newY > Room.MAP_EDGE_SIZE) {
+                if (moveRoom(roomX, roomY + 1))
+                    roomY++;
+                else
+                    return false;
             }
 
             var newPos = new RoomPosition(new Point(roomX, roomY), new Point(newX, newY));
