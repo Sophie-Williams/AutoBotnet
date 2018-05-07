@@ -59,6 +59,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
 
             defineFunction(nameof(boot), new Func<bool>(boot));
             defineFunction(nameof(getFactory), new Func<int, GameEntityRef>(getFactory));
+            defineFunction(nameof(getBot), new Func<string, GameEntityRef>(getBot));
             defineFunction(nameof(constructBot), new Func<string, GameEntityRef, bool>(constructBot));
             defineFunction(nameof(getUnits), new Func<GameEntityRef[]>(getUnits));
             defineFunction(nameof(getResource), new Func<string, ulong>(getResource));

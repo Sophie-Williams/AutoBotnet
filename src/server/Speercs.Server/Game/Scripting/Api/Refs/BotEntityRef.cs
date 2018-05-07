@@ -11,5 +11,9 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
         public BotCore[] getCores() => _bot.cores.ToArray();
 
         public int coreCapacity => _bot.coreCapacity;
+
+        public bool move(Direction direction) {
+            return _bot.move(direction);
+        }
     }
 }
