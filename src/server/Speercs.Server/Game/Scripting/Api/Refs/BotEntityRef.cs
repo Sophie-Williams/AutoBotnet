@@ -12,6 +12,7 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
 
         public BotCoreRef[] cores => _bot.cores.Select(x => new BotCoreRef(x)).ToArray();
         public int coreCapacity => _bot.coreCapacity;
+        public int reactorPower => _bot.reactorPower;
         public int usedCoreSpace => _bot.usedCoreSpace;
         public int coreDrain => _bot.coreDrain;
 
