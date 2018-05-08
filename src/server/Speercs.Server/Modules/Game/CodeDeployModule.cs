@@ -3,6 +3,7 @@ using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Program;
 using Speercs.Server.Models.Requests.Game;
+using Speercs.Server.Models.User;
 using Speercs.Server.Modules.User;
 using Speercs.Server.Services.Application;
 using Speercs.Server.Utilities;
@@ -33,7 +34,7 @@ namespace Speercs.Server.Modules.Game {
                 }
 
                 var metricsObject = userMetrics.get();
-                metricsObject.codeDeploys++;
+                userMetrics.log(MetricsEventType.CodeDeploy);
                 var numLines = (ulong) req.source.Split('\n').Length;
                 metricsObject.lineCount = numLines;
                 metricsObject.totalLineCount += numLines;
