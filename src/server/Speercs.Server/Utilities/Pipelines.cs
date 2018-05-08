@@ -34,6 +34,6 @@ namespace Speercs.Server.Utilities {
 
         public int handlerCount => handlers.Count;
 
-        public bool unregisterHandler(Func<TInput, Task<TResult>> pipelineHandler) => handlers.Remove(pipelineHandler);
+        public bool unregister(Func<TInput, Task<TResult>> pipelineHandler) => handlers.Remove(pipelineHandler);
     }
 }

@@ -88,7 +88,7 @@ namespace Speercs.Server.Web {
                 // Attempt to add handler
                 serverContext.notificationPipeline
                     .retrieveUserPipeline(user.identifier)
-                    .addItemToEnd(pipelineHandler);
+                    .addEnd(pipelineHandler);
                 pipelineRegistered = true;
 
                 // save last connection metric
@@ -134,7 +134,7 @@ namespace Speercs.Server.Web {
                     // Unregister pipeline
                     serverContext.notificationPipeline
                         .retrieveUserPipeline(user.identifier)
-                        .UnregisterHandler(pipelineHandler);
+                        .unregister(pipelineHandler);
 
                     // update playtime (using disconnect time)
                     var metricsService = new UserMetricsService(serverContext, user.identifier);

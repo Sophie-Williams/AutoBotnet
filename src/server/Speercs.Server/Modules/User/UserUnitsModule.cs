@@ -7,8 +7,8 @@ namespace Speercs.Server.Modules.User {
         public UserUnitsModule(ISContext serverContext) : base("/user/units", serverContext) {
             Get("/",
                 _ => Response.asJsonNet(
-                    EntityBag.getByUser(
-                        persistentData.team)));
+                    serverContext.appState.entities.getByUser(
+                        currentUser.identifier)));
         }
     }
 }

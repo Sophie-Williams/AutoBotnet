@@ -13,7 +13,7 @@ namespace Speercs.Server.Web.Realtime.Handlers {
             JToken jsonResult = JValue.CreateNull();
             string error;
             try {
-                var engine = serverContext.executors.retrieveExecutor(rtContext.userIdentifier).engine;
+                var engine = serverContext.executors.retrieveExecutor(rtContext.userId).engine;
                 var expression = data["expr"].ToString();
                 var result = engine
                     .Execute(expression)
