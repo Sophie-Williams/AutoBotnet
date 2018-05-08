@@ -21,7 +21,7 @@ namespace Speercs.Server.Infrastructure.Push {
             var userPipeline = retrieveUserPipeline(userIdentifier);
             // make sure handlers are available to process the message
             if (userPipeline.handlerCount > 0) {
-                foreach (var handler in userPipeline.GetHandlers()) {
+                foreach (var handler in userPipeline.getHandlers()) {
                     if (await handler.Invoke(dataBundle)) break;
                 }
             } else if (queue) {
