@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Speercs.Server.Models.Notifications {
     public class PushNotification {
         [JsonProperty("notifTime")]
-        public DateTime notifTime { get; set; }
+        public long notifTime { get; set; }
 
         [JsonProperty("type")]
         public string notifType { get; set; }
@@ -15,7 +15,7 @@ namespace Speercs.Server.Models.Notifications {
         public PushNotification(string type, string contents) {
             notifType = type;
             notifContent = contents;
-            notifTime = DateTime.Now;
+            notifTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
     }
 }
