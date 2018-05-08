@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LiteDB;
 using Speercs.Server.Extensibility.Map;
+using Speercs.Server.Game.MapGen;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
@@ -33,26 +34,21 @@ namespace Speercs.Server.Configuration {
                 );
                 BsonMapper.Global.RegisterType<ITile[,]>(
                     serialize: tileArray => {
-                        var doc = new BsonDocument();
-                        var d = tileArray.GetLength(0);
-                        for (var i = 0; i < d; i++) {
-                            for (var j = 0; j < d; j++) {
-                                var tile = tileArray[i, j];
-                                doc.Add((i * d + j).ToString(), new BsonValue(tile.GetType().Name));
-                            }
-                        }
-
+                        var packedTiles = Room.packTiles(serverContext, tileArray);
+                        var doc = BsonMapper.Global.ToDocument(packedTiles);
                         return doc;
                     },
                     deserialize: bson => {
                         var d = Room.MAP_EDGE_SIZE;
+                        var packedTiles = BsonMapper.Global.ToObject<Room.PackedTile[]>(bson.AsDocument);
                         var tileArray = new ITile[d, d];
                         for (var i = 0; i < d; i++) {
                             for (var j = 0; j < d; j++) {
-                                var tileTypeName = (bson.AsDocument[(i * d + j).ToString()].AsString);
-                                var tile = (ITile) Activator.CreateInstance(serverContext.extensibilityContainer
-                                    .resolveTypes<ITile>()
-                                    .First(x => x.Name == tileTypeName));
+                                var ix = (i * d + j);
+                                var packedTile = packedTiles[ix];
+                                var tileType = TileRegistry.tileById(serverContext, packedTile.id);
+                                var tile = (ITile) Activator.CreateInstance(tileType);
+                                // TODO: tile properties
                                 tileArray[i, j] = tile;
                             }
                         }

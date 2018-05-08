@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Text;
 using LiteDB;
 using Newtonsoft.Json;
+using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Map;
+using Speercs.Server.Game.MapGen;
 using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Math;
 
@@ -14,7 +16,7 @@ namespace Speercs.Server.Models.Map {
         public Room(int x, int y) {
             this.x = x;
             this.y = y;
-            tiles = new ITile[MAP_EDGE_SIZE, MAP_EDGE_SIZE]; 
+            tiles = new ITile[MAP_EDGE_SIZE, MAP_EDGE_SIZE];
         }
 
         public string dump() {
@@ -47,6 +49,28 @@ namespace Speercs.Server.Models.Map {
         [JsonProperty("tiles")]
         [BsonField("tiles")]
         public ITile[,] tiles { get; set; }
+
+        public static PackedTile[] packTiles(ISContext context, ITile[,] tiles) {
+            var arr = new PackedTile[MAP_EDGE_SIZE * MAP_EDGE_SIZE];
+            for (var i = 0; i < MAP_EDGE_SIZE; i++) {
+                for (var j = 0; j < MAP_EDGE_SIZE; j++) {
+                    var tile = tiles[i, j];
+                    // TODO: pack tile props
+                    arr[i * MAP_EDGE_SIZE + j] = new PackedTile(TileRegistry.tileId(context, tile));
+                }
+            }
+            return arr;
+        }
+
+        public struct PackedTile {
+            public int id { get; set; }
+            public Dictionary<string, object> props { get; set; }
+
+            public PackedTile(int id, Dictionary<string, object> props = null) {
+                this.id = id;
+                this.props = props;
+            }
+        }
 
         public Exit northExit, southExit, eastExit, westExit;
 
