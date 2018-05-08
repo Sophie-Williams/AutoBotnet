@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Speercs.Server.Configuration;
+using Speercs.Server.Models.User;
 using Speercs.Server.Services.Metrics;
 
 namespace Speercs.Server.Services.Auth {
@@ -34,9 +35,7 @@ namespace Speercs.Server.Services.Auth {
             if (user == null) return null;
 
             var metricsService = new UserMetricsService(serverContext, user.identifier);
-            var metricsObject = metricsService.get();
-            metricsObject.apiRequests++;
-            metricsObject.lastRequest = (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            metricsService.log(MetricsEventType.ApiRequest);
 
             var userAuthClaims = new List<Claim> {
                 new Claim(AUTH_TYPE_CLAIM_KEY, ApiAccessScope.User.ToString()),

@@ -1,26 +1,37 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using LiteDB;
 using Newtonsoft.Json;
 
 namespace Speercs.Server.Models.User {
-    public class UserMetrics {
-        [JsonProperty("playtime")]
+    public enum MetricsEventType {
+        Unspecified,
+        CodeDeploy,
+        ApiRequest,
+        RealtimeConnect,
+    }
+    public enum MetricsLevel {
+        Minimal,
+        Full
+    }
+    public class MetricsEvent {
+        public MetricsEventType type { get; set; }
+        public long time { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+    }
+
+    public class UserMetrics : DatabaseObject {
         public ulong playtime { get; set; }
 
-        [JsonProperty("codeDeploys")]
-        public ulong codeDeploys { get; set; }
+        [BsonIgnore]
+        public int codeDeploys => events.Where(x => x.type == MetricsEventType.CodeDeploy).Count();
 
-        [JsonProperty("lineCount")]
         public ulong lineCount { get; set; }
 
-        [JsonProperty("totalLineCount")]
         public ulong totalLineCount { get; set; }
 
-        [JsonProperty("apiRequests")]
-        public ulong apiRequests { get; set; }
+        public ulong lastRealtimeCollection { get; set; }
 
-        [JsonProperty("lastRequest")]
-        public ulong lastRequest { get; set; }
-
-        [JsonProperty("lastConnection")]
-        public ulong lastConnection { get; set; }
+        public List<MetricsEvent> events { get; set; } = new List<MetricsEvent>();
     }
 }

@@ -12,5 +12,11 @@ namespace Speercs.Server.Services.Metrics {
         public UserMetrics get() {
             return serverContext.appState.userMetrics[_userIdentifier];
         }
+
+        public MetricsEvent log(MetricsEventType type) {
+            var ev = new MetricsEvent { type = type };
+            get().events.Add(ev);
+            return ev;
+        }
     }
 }

@@ -94,7 +94,8 @@ namespace Speercs.Server.Web {
                 // save last connection metric
                 var metricsService = new UserMetricsService(serverContext, user.identifier);
                 var metricsObject = metricsService.get();
-                metricsObject.lastConnection =
+                metricsService.log(MetricsEventType.RealtimeConnect);
+                metricsObject.lastRealtimeCollection =
                     (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
                 // pipeline is registered, send any queued, previously undelivered data
@@ -139,7 +140,7 @@ namespace Speercs.Server.Web {
                     var metricsService = new UserMetricsService(serverContext, user.identifier);
                     var metricsObject = metricsService.get();
                     metricsObject.playtime += ((ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) -
-                                              metricsObject.lastConnection;
+                                              metricsObject.lastRealtimeCollection;
                 }
             }
         }
