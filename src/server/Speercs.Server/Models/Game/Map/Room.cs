@@ -68,7 +68,10 @@ namespace Speercs.Server.Models.Map {
 
             public PackedTile(int id, Dictionary<string, object> props = null) {
                 this.id = id;
-                this.props = props;
+                if (props != null)
+                    this.props = props;
+                else
+                    this.props = new Dictionary<string, object>();
             }
         }
 
