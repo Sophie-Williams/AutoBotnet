@@ -3,19 +3,19 @@ using Newtonsoft.Json;
 
 namespace Speercs.Server.Models.Notifications {
     public class PushNotification {
-        [JsonProperty("notifTime")]
-        public long notifTime { get; set; }
+        public long time { get; set; }
 
-        [JsonProperty("type")]
-        public string notifType { get; set; }
+        public string type { get; set; }
 
-        [JsonProperty("content")]
-        public string notifContent { get; set; }
+        public object content { get; set; }
+        
+        public string source { get; set; }
 
-        public PushNotification(string type, string contents) {
-            notifType = type;
-            notifContent = contents;
-            notifTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        public PushNotification(string source, string type, object content) {
+            this.source = source;
+            this.type = type;
+            this.content = content;
+            time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
     }
 }

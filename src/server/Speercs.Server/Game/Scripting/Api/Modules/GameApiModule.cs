@@ -2,18 +2,20 @@
 using IridiumJS;
 using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
+using Speercs.Server.Models.Notifications;
 
 namespace Speercs.Server.Game.Scripting.Api.Modules {
     public class GameApiModule : ScriptingApiModule {
         public GameApiModule(JSEngine engine, ISContext context, string userId) : base(engine, context, userId) {
-            bool push(object obj) {
-                var pushMessageTask = context.notificationPipeline.pushMessageAsync(JToken.FromObject(obj),
-                        userId, true);
+            bool push(object data, string type) {
+                var pushMessageTask = context.notificationPipeline.pushMessageAsync(JToken.FromObject(
+                    new PushNotification("user", type, data)
+                ), userId, true);
                 return true;
             }
 
             defineFunction("getUserIdentifier", () => this.userId);
-            defineFunction("push", new Func<object, bool>(push));
+            defineFunction("push", new Func<object, string, bool>(push));
         }
     }
 }
