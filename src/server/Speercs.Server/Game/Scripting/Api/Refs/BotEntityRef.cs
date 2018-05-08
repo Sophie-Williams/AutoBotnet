@@ -15,6 +15,7 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
         public int reactorPower => _bot.reactorPower;
         public int usedCoreSpace => _bot.usedCoreSpace;
         public int coreDrain => _bot.coreDrain;
+        public string model => _bot.model;
 
         public bool move(Direction direction) {
             return _bot.move(direction);
