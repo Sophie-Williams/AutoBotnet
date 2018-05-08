@@ -28,8 +28,12 @@ namespace Speercs.Server.Infrastructure.Push {
                 // get player data service, and retrieve queued notifications container
                 var userNotificationQueue =
                     new PersistentDataService(serverContext).retrieveNotificationQueue(userIdentifier);
-                // Enqueue the data.
-                userNotificationQueue.Enqueue(data);
+                if (userNotificationQueue.Count >= serverContext.configuration.notificationQueueMaxSize) {
+
+                } else {
+                    // Enqueue the data.
+                    userNotificationQueue.Enqueue(data);
+                }
             }
         }
 
