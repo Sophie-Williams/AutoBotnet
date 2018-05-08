@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Speercs.Server.Models.User;
 using Speercs.Server.Services.Application;
 
 namespace Speercs.Server.Configuration {
@@ -105,6 +106,8 @@ namespace Speercs.Server.Configuration {
         /// </summary>
         [JsonProperty("logLevel")]
         public SpeercsLogger.LogLevel logLevel { get; set; } = SpeercsLogger.LogLevel.Information;
+
+        public MetricsLevel metricsLevel { get; set; } = MetricsLevel.Full;
 
         /// <summary>
         /// Maximum number of registered users. Set to -1 for unlimited.

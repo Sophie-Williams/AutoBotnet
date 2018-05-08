@@ -5,9 +5,11 @@ using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests.User;
+using Speercs.Server.Models.User;
 using Speercs.Server.Modules.Exceptions;
 using Speercs.Server.Services.Application;
 using Speercs.Server.Services.Auth;
+using Speercs.Server.Services.Metrics;
 using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.Auth {
@@ -55,16 +57,18 @@ namespace Speercs.Server.Modules.Auth {
                     }
 
                     // Attempt to register user
-                    var newUser = await _userManager.registerUserAsync(req);
+                    var user = await _userManager.registerUserAsync(req);
+                    var metrics = new UserMetricsService(serverContext, user.identifier);
+                        metrics.log(MetricsEventType.Auth);
 
-                    serverContext.log.writeLine($"Registered user {newUser.username} [{newUser.identifier}]",
+                    serverContext.log.writeLine($"Registered user {user.username} [{user.identifier}]",
                         SpeercsLogger.LogLevel.Information);
 
                     // queue persist
                     this.serverContext.appState.queuePersist();
 
                     // Return user details
-                    return Response.asJsonNet(newUser);
+                    return Response.asJsonNet(user);
                 } catch (NullReferenceException) {
                     return HttpStatusCode.BadRequest;
                 } catch (SecurityException sx) {
@@ -86,6 +90,8 @@ namespace Speercs.Server.Modules.Auth {
                 try {
                     // Validate password
                     if (user.enabled && await _userManager.checkPasswordAsync(req.password, user)) {
+                        var metrics = new UserMetricsService(serverContext, user.identifier);
+                        metrics.log(MetricsEventType.Auth);
                         // Return user details
                         return Response.asJsonNet(user);
                     }

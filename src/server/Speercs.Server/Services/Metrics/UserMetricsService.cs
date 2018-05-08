@@ -13,10 +13,16 @@ namespace Speercs.Server.Services.Metrics {
             return serverContext.appState.userMetrics[_userIdentifier];
         }
 
-        public MetricsEvent log(MetricsEventType type) {
+        public void log(MetricsEventType type) {
             var ev = new MetricsEvent { type = type };
-            get().events.Add(ev);
-            return ev;
+            bool log = true;
+            if (serverContext.configuration.metricsLevel == MetricsLevel.Minimal) {
+                // only log relatively critical information
+                log =
+                    type == MetricsEventType.CodeDeploy
+                    || type == MetricsEventType.Unspecified;
+            }
+            if (log) get().events.Add(ev);
         }
     }
 }

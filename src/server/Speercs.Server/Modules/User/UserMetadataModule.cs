@@ -3,6 +3,7 @@ using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests.User;
 using Speercs.Server.Models.User;
+using Speercs.Server.Services.Metrics;
 using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Modules.User {
@@ -15,6 +16,12 @@ namespace Speercs.Server.Modules.User {
                 req.apply(currentUser);
                 await userManager.updateUserInDatabaseAsync(currentUser);
                 return Response.asJsonNet(currentUser);
+            });
+
+            // users own their data.
+            Get("/metrics", _ => {
+                var metricsService = new UserMetricsService(serverContext, currentUser.identifier);
+                return Response.asJsonNet(metricsService.get());
             });
         }
     }

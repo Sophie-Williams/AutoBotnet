@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 namespace Speercs.Server.Models.User {
     public enum MetricsEventType {
         Unspecified,
+        Auth,
         CodeDeploy,
         ApiRequest,
         RealtimeConnect,
