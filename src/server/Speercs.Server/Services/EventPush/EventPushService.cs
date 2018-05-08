@@ -36,7 +36,7 @@ namespace Speercs.Server.Services.EventPush {
             var bundle = new JObject(
                 new JProperty("item", item),
                 new JProperty("type", type),
-                new JProperty("data", data)
+                new JProperty("data", JToken.FromObject(data))
             );
             foreach (var recipient in recipients) {
                 var pushTask = serverContext.notificationPipeline.pushMessageAsync(bundle, "event", recipient, false);

@@ -33,7 +33,7 @@ namespace Speercs.Server.Web.Realtime.Handlers {
                     foreach (var entity in serverContext.appState.entities.getByUser(rtContext.userId)) {
                         roomPositions.Add(entity.position.roomPos);
                     }
-                    return Task.FromResult<JToken>(JObject.FromObject(roomPositions.ToArray()));
+                    return Task.FromResult<JToken>(JToken.FromObject(roomPositions.ToArray()));
             }
             // switch should handle sending result
             return Task.FromResult<JToken>(JValue.CreateNull());
