@@ -120,5 +120,11 @@ namespace Speercs.Server.Configuration {
         /// </summary>
         [JsonProperty("persistenceInterval")]
         public int persistenceInterval { get; set; } = 1000 * 60;
+
+        /// <summary>
+        /// Whether to send script execution errors that occur inside the server code. This can potentially be a security risk with undiscovered vulnerabilities being easier to find and even exploit.
+        /// </summary>
+        [JsonProperty("sendInternalScriptErrors")]
+        public bool sendInternalScriptErrors { get; set; } = false;
     }
 }

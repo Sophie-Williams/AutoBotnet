@@ -25,13 +25,16 @@ namespace Speercs.Server.Web.Realtime.Handlers {
 
                 error = null;
             } catch (ParserException ex) {
-                error = "parse";
+                error = $"parse: {ex}";
             } catch (JavaScriptException ex) {
                 // there was an error
                 error = ex.Message;
             } catch (Exception ex) {
-                // for now no need to give debug info to clients
-                error = "true";
+                if (serverContext.configuration.sendInternalScriptErrors) {
+                    error = ex.ToString();
+                } else {
+                    error = "true";
+                }
             }
 
             return Task.FromResult<JToken>(
