@@ -8,6 +8,7 @@ using Speercs.Server.Game.Scripting.Engine;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
 using Speercs.Server.Services.Application;
+using Speercs.Server.Services.EventPush;
 
 namespace Speercs.Server.Configuration {
     public class SContext : ISContext {
@@ -34,11 +35,14 @@ namespace Speercs.Server.Configuration {
 
         public SpeercsLogger log { get; }
 
+        public EventPushService eventPush { get; }
+
         public const string version = "0.0.3-dev";
 
         public SContext(SConfiguration config) {
             configuration = config;
             notificationPipeline = new NotificationPipeline(this);
+            eventPush = new EventPushService(this);
             serviceTable = new UserServiceTable(this);
             extensibilityContainer = new CookieJar();
             pluginLoader = new PluginLoader<ISpeercsPlugin>();

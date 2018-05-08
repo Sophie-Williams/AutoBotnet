@@ -106,7 +106,7 @@ namespace Speercs.Server.Web {
                     // now that a pipeline is registered, the data will be sent through the channel
                     // in the case of an exception or other delivery failure, the message will be queued again.
                     await serverContext.notificationPipeline.pushMessageAsync(userNotificationQueue.Dequeue(),
-                        user.identifier);
+                        "queue", user.identifier, true);
                 }
 
                 while (_ws.State == WebSocketState.Open) {

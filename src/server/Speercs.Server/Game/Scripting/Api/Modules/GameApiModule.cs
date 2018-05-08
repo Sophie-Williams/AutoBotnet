@@ -10,7 +10,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             bool push(object data, string type) {
                 var pushMessageTask = context.notificationPipeline.pushMessageAsync(JToken.FromObject(
                     new PushNotification("user", type, data)
-                ), userId, true);
+                ), "user", userId, true);
                 return true;
             }
 

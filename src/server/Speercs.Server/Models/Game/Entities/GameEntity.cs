@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
+using Speercs.Server.Services.EventPush;
 
 namespace Speercs.Server.Models.Entities {
     public enum Direction {
@@ -15,6 +16,9 @@ namespace Speercs.Server.Models.Entities {
     }
 
     public abstract class GameEntity : DatabaseObject {
+        public const string EVENT_POSITION = "pos";
+        public const string EVENT_DIE = "die";
+
         [BsonField("eid")]
         public string id { get; set; }
 
@@ -61,9 +65,15 @@ namespace Speercs.Server.Models.Entities {
                 _context.appState.entities.spatialHash[pos.roomPos.ToString()].Contains(this)) {
                 _context.appState.entities.spatialHash[pos.roomPos.ToString()].Remove(this);
             }
-
             _context.appState.entities.insertSpatialHash(this);
+            raiseEvent(EVENT_POSITION, pos);
             return true;
+        }
+
+        public (bool, bool) raiseEvent(string type, object data) {
+            if (_context == null) return (false, false);
+            var result = _context.eventPush.pushEvent(EventPushService.EVENTPUSH_ENTITY, type, this, data);
+            return (true, result);
         }
     }
 }

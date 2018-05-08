@@ -7,6 +7,7 @@ using Speercs.Server.Game.Scripting.Engine;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
 using Speercs.Server.Services.Application;
+using Speercs.Server.Services.EventPush;
 
 namespace Speercs.Server.Configuration {
     public interface ISContext : IDisposable {
@@ -27,5 +28,7 @@ namespace Speercs.Server.Configuration {
         ProgramExecutorManager executors { get; }
 
         SpeercsLogger log { get; }
+
+        EventPushService eventPush { get; }
     }
 }

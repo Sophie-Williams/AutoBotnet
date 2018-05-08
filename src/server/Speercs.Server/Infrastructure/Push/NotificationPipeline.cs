@@ -12,10 +12,11 @@ namespace Speercs.Server.Infrastructure.Push {
 
         public NotificationPipeline(ISContext context) : base(context) { }
 
-        public async Task pushMessageAsync(JToken data, string userIdentifier, bool queue = false) {
+        public async Task pushMessageAsync(JToken data, string source, string userIdentifier, bool queue = false) {
             var dataBundle = new JObject(
                 new JProperty("data", data),
-                new JProperty("type", "push")
+                new JProperty("type", "push"),
+                new JProperty("source", source)
             );
             var userPipeline = retrieveUserPipeline(userIdentifier);
             // make sure handlers are available to process the message
