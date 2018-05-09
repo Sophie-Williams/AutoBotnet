@@ -29,6 +29,8 @@ namespace Speercs.Server.Services.EventPush {
                             recipients.Add(nearEntity.teamId);
                         }
                     }
+                    // append the entity ID
+                    item += $"|{senderEntity.id}";
                     break;
                 }
             }

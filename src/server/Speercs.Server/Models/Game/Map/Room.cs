@@ -46,7 +46,7 @@ namespace Speercs.Server.Models.Map {
         [BsonField("creationTime")]
         public ulong creationTime { get; set; }
 
-        [JsonProperty("tiles")]
+        [JsonIgnore]
         [BsonField("tiles")]
         public ITile[,] tiles { get; set; }
 

@@ -11,11 +11,11 @@ namespace Speercs.Server.Models.User {
         [JsonProperty("apikey")]
         public string apiKey { get; set; }
 
-        [JsonIgnore]
-        public ItemCrypto crypto { get; set; }
+        [JsonProperty("id")]
+        public string identifier { get; set; }
 
         [JsonIgnore]
-        public string identifier { get; set; }
+        public ItemCrypto crypto { get; set; }
 
         [JsonIgnore]
         public bool enabled { get; set; }

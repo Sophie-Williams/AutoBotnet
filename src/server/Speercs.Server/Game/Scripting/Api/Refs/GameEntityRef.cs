@@ -16,7 +16,6 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
         public string id => _entity.id;
         public string type => _entity.type;
 
-        [JsonIgnore]
         public string teamId => _entity.teamId;
 
         public RoomPosition pos => _entity.position;

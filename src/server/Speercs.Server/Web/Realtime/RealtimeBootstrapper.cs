@@ -8,6 +8,7 @@ namespace Speercs.Server.Web.Realtime {
             var container = new CookieJar();
             container.register<IRealtimeHandler>(new PingRealtimeHandler(context));
             container.register<IRealtimeHandler>(new MapFetchRealtimeHandler(context));
+            container.register<IRealtimeHandler>(new EntityFetchRealtimeHandler(context));
             container.register<IRealtimeHandler>(new InteractiveConsoleHandler(context));
             return container;
         }
