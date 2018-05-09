@@ -42,7 +42,7 @@ namespace Speercs.Server.Models.Map {
             _passable = passable;
         }
 
-        public List<RoomPosition> findPath() {
+        public List<RoomPosition> findPath(bool includeGoal = true) {
             if (_start == _goal) return new List<RoomPosition>();
             if (_start.roomPos.x != _goal.roomPos.x || _start.roomPos.y != _goal.roomPos.y)
                 throw new NotImplementedException("Inter-room pathfinding not implemented yet");
@@ -59,7 +59,7 @@ namespace Speercs.Server.Models.Map {
                 // check if we've reached the goal
                 var dx = _goal.pos.x - curNode.x;
                 var dy = _goal.pos.y - curNode.y;
-                if (System.Math.Abs(dx) + System.Math.Abs(dy) <= 1) {
+                if (System.Math.Abs(dx) + System.Math.Abs(dy) <= (includeGoal ? 0 : 1)) {
                     // return the found path
                     var path = new List<RoomPosition>();
                     while (curNode.parent != null) {

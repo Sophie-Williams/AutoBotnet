@@ -19,7 +19,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
 
             RoomPosition[] findPath(RoomPosition start, RoomPosition end) {
                 var pathfinder = new Pathfinder(context, start, end);
-                var path = pathfinder.findPath();
+                var path = pathfinder.findPath(includeGoal: false);
                 if (path == null) return new RoomPosition[0];
                 return path.ToArray();
             }
