@@ -57,6 +57,12 @@ namespace Speercs.Server.Models.Entities {
 
         public virtual void wake() { }
 
+        public override bool Equals(object obj) {
+            return obj is GameEntity ge && this.id == ge.id;
+        }
+
+        public override int GetHashCode() => id.GetHashCode();
+
         private bool propagatePosition(RoomPosition pos) {
             _position = pos;
             if (_context == null) return false;

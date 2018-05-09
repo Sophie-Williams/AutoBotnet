@@ -72,7 +72,8 @@ namespace Speercs.Server.Models.Entities {
             }
 
             var newPos = new RoomPosition(new Point(roomX, roomY), new Point(newX, newY));
-            if (!newPos.getTile(_context).isWalkable())
+            var tile = newPos.getTile(_context);
+            if (!tile.isWalkable())
                 return false; // not Walkable; don't move
 
             position = newPos;

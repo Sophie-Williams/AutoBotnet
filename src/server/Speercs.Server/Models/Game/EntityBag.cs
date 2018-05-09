@@ -10,9 +10,9 @@ namespace Speercs.Server.Models {
         [BsonField("entityData")]
         public Dictionary<string, GameEntity> entityData { get; set; } = new Dictionary<string, GameEntity>();
 
-        [BsonField("spatialHash")]
-        public Dictionary<string, List<GameEntity>> spatialHash { get; set; } =
-            new Dictionary<string, List<GameEntity>>();
+        [BsonIgnore]
+        public Dictionary<string, HashSet<GameEntity>> spatialHash { get; set; } =
+            new Dictionary<string, HashSet<GameEntity>>();
 
         [BsonIgnore]
         protected ISContext serverContext;
@@ -47,14 +47,14 @@ namespace Speercs.Server.Models {
         /// <param name="entity"></param>
         public void insertSpatialHash(GameEntity entity) {
             if (!spatialHash.ContainsKey(entity.position.roomPos.ToString())) {
-                spatialHash[entity.position.roomPos.ToString()] = new List<GameEntity>();
+                spatialHash[entity.position.roomPos.ToString()] = new HashSet<GameEntity>();
             }
 
             spatialHash[entity.position.roomPos.ToString()].Add(entity);
         }
 
-        public List<GameEntity> getByRoom(Point roomPos) {
-            return spatialHash[roomPos.ToString()] ?? new List<GameEntity>();
+        public HashSet<GameEntity> getByRoom(Point roomPos) {
+            return spatialHash[roomPos.ToString()] ?? new HashSet<GameEntity>();
         }
 
         public void remove(GameEntity entity) {
