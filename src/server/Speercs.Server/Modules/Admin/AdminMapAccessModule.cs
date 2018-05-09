@@ -18,6 +18,12 @@ namespace Speercs.Server.Modules.Admin {
                 this.serverContext.appState.worldMap[req.x, req.y] = newRoom;
                 return Response.AsJson(newRoom);
             });
+
+            Get("/dump", _ => {
+                var req = this.Bind<RoomGenerationRequest>();
+                var room = this.serverContext.appState.worldMap[req.x, req.y];
+                return Response.AsText(room.dump());
+            });
         }
     }
 }
