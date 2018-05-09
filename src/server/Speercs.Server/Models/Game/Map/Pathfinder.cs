@@ -51,12 +51,15 @@ namespace Speercs.Server.Models.Map {
             _openList.Add(_nodeGrid[_start.pos.x, _start.pos.y] =
                 new Node(_start.pos.x, _start.pos.y, 0, _goal.pathDistance(_start), null));
 
+            var curNode = default(Node);
             while (!_openList.IsEmpty) {
-                var curNode = _openList.DeleteMin(); // pop the next node off the open list
+                curNode = _openList.DeleteMin(); // pop the next node off the open list
                 curNode.open = false;
 
                 // check if we've reached the goal
-                if (curNode.x == _goal.pos.x && curNode.y == _goal.pos.y) {
+                var dx = _goal.pos.x - curNode.x;
+                var dy = _goal.pos.y - curNode.y;
+                if (System.Math.Abs(dx) + System.Math.Abs(dy) <= 1) {
                     // return the found path
                     var path = new List<RoomPosition>();
                     while (curNode.parent != null) {

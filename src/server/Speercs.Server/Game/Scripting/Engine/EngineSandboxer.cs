@@ -22,7 +22,7 @@ namespace Speercs.Server.Game.Scripting.Engine {
             addGlobal(engine, "Game", new GameApiModule(engine, serverContext, userId));
             addGlobal(engine, "Utils", new UtilsModule(engine, serverContext, userId));
             addGlobal(engine, "Army", new ArmyModule(engine, serverContext, userId));
-
+            addGlobal(engine, "Map", new MapModule(engine, serverContext, userId));
 
             // define enum values
             addGlobal(engine, "C", new ConstantsModule(engine, serverContext, userId));

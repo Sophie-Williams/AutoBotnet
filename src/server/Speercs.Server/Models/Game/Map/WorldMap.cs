@@ -19,6 +19,8 @@ namespace Speercs.Server.Models.Map {
             }
         }
 
+        public Room get(RoomPosition pos) => get(pos.roomPos);
+
         public Room get(Point roomPos) {
             return this[roomPos.x, roomPos.y];
         }
