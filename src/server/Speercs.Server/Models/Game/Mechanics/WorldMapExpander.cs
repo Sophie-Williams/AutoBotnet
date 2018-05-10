@@ -17,22 +17,22 @@ namespace Speercs.Server.Models.Mechanics {
             foreach (var room in rooms) {
                 // look for an open neighbor
                 var north = new Point(room.x, room.y - 1);
-                if (serverContext.appState.worldMap.get(north) != null) {
+                if (serverContext.appState.worldMap.get(north) == null) {
                     newRoomPos = north;
                     break;
                 }
                 var east = new Point(room.x + 1, room.y);
-                if (serverContext.appState.worldMap.get(east) != null) {
+                if (serverContext.appState.worldMap.get(east) == null) {
                     newRoomPos = east;
                     break;
                 }
                 var south = new Point(room.x, room.y + 1);
-                if (serverContext.appState.worldMap.get(south) != null) {
+                if (serverContext.appState.worldMap.get(south) == null) {
                     newRoomPos = south;
                     break;
                 }
                 var west = new Point(room.x - 1, room.y);
-                if (serverContext.appState.worldMap.get(west) != null) {
+                if (serverContext.appState.worldMap.get(west) == null) {
                     newRoomPos = west;
                     break;
                 }
