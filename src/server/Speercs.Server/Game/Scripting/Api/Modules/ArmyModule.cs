@@ -30,10 +30,12 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return true;
             }
 
-            GameEntityRef getFactory(int seq) {
-                var factories = userData.team.entities.Where(x => x is FactoryTower).ToList();
-                if (!factories.Any()) return null;
-                return new GameEntityRef((FactoryTower) factories[seq]);
+            GameEntityRef getFactory(string id) {
+                var factory = userData.team.entities
+                    .FirstOrDefault(x => x is FactoryTower
+                        && ((id == null) || (id == x.id)));
+                if (factory == null) return null;
+                return new GameEntityRef((FactoryTower) factory);
             }
 
             BotEntityRef getBot(string id) {
@@ -57,7 +59,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 if (botRef == null) return false;
                 var factory = factoryRef?.target as FactoryTower;
                 if (factory == null) return false;
-                var result = botConstructor.deconstructBot((Bot) botRef.target, factory);
+                var result = botConstructor.deconstructBot((Bot)botRef.target, factory);
                 if (!result) return false;
                 userData.team.removeEntity(botRef.target);
                 botRef.destroy();
@@ -67,7 +69,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             BotCoreRef installCore(string templateName, BotEntityRef botRef) {
                 if (templateName == null) return null;
                 if (botRef == null) return null;
-                var (core, err) = botConstructor.constructCore((Bot) botRef.target, templateName);
+                var (core, err) = botConstructor.constructCore((Bot)botRef.target, templateName);
                 if (core == null) return null;
                 return new BotCoreRef(core);
             }
@@ -77,12 +79,12 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             Dictionary<string, long> getResources() {
-                return userData.team.resources.Keys.Select(x => new {k = x, v = userData.team.getResource(x)})
-                    .ToDictionary(x => x.k, x=> x.v);
+                return userData.team.resources.Keys.Select(x => new { k = x, v = userData.team.getResource(x) })
+                    .ToDictionary(x => x.k, x => x.v);
             }
 
             defineFunction(nameof(boot), new Func<bool>(boot));
-            defineFunction(nameof(getFactory), new Func<int, GameEntityRef>(getFactory));
+            defineFunction(nameof(getFactory), new Func<string, GameEntityRef>(getFactory));
             defineFunction(nameof(getBot), new Func<string, GameEntityRef>(getBot));
             defineFunction(nameof(constructBot), new Func<string, GameEntityRef, BotEntityRef>(constructBot));
             defineFunction(nameof(deconstructBot), new Func<BotEntityRef, GameEntityRef, bool>(deconstructBot));
