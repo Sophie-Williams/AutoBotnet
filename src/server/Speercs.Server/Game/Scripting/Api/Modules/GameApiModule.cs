@@ -14,7 +14,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return true;
             }
 
-            defineFunction("getUserIdentifier", () => this.userId);
+            defineFunction("getId", () => this.userId);
             defineFunction("push", new Func<object, string, bool>(push));
         }
     }
