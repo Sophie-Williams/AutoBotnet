@@ -4,6 +4,7 @@ using Speercs.Server.Configuration;
 using IridiumJS.Runtime;
 using System;
 using IridiumJS.Parser;
+using Newtonsoft.Json;
 
 namespace Speercs.Server.Web.Realtime.Handlers {
     public class InteractiveConsoleHandler : RealtimeHandler {
@@ -20,7 +21,9 @@ namespace Speercs.Server.Web.Realtime.Handlers {
                     .GetCompletionValue()
                     .ToObject();
                 if (result != null) {
-                    jsonResult = JToken.FromObject(result);
+                    jsonResult = JToken.FromObject(result, new Newtonsoft.Json.JsonSerializer {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
                 }
 
                 error = null;

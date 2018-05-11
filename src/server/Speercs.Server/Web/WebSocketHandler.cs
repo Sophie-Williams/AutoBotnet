@@ -41,13 +41,15 @@ namespace Speercs.Server.Web {
             }
         }
 
-        private async Task writeLineAsync(string data) {
-            await _ws.SendAsync(
-                new ArraySegment<byte>(Encoding.UTF8.GetBytes(data + "\n")),
-                WebSocketMessageType.Text,
-                true,
-                CancellationToken.None
-            );
+        private Task writeLineAsync(string data) {
+            lock (_ws) {
+                return _ws.SendAsync(
+                    new ArraySegment<byte>(Encoding.UTF8.GetBytes(data + "\n")),
+                    WebSocketMessageType.Text,
+                    true,
+                    CancellationToken.None
+                );
+            }
         }
 
         public async Task eventLoopAsync() {

@@ -16,6 +16,7 @@ namespace Speercs.Server.Game.Scripting.Engine {
                     cfg.TimeoutInterval(TimeSpan.FromMilliseconds(serverContext.configuration.codeLoadTimeLimit));
                     cfg.LimitMemory(serverContext.configuration.codeMemoryLimit);
                     cfg.Strict(false);
+                    cfg.DiscardGlobal(false);
                 }
             );
 
