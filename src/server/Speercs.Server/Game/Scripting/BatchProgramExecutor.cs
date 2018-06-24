@@ -18,6 +18,7 @@ namespace Speercs.Server.Game.Scripting {
                 var executors =
                     serverContext.appState.userMetrics.Select(x => serverContext.executors.retrieveExecutor(x.Key))
                         .OrderBy(a => Guid.NewGuid()).ToList();
+                // random turn priority
                 foreach (var executor in executors) {
                     if (executor == null) continue;
                     await Task.Run(() => {
@@ -55,8 +56,6 @@ namespace Speercs.Server.Game.Scripting {
                         }
                     });
                 }
-
-                // TODO: Tick all entities
 
                 // TODO: Game update logic (state: died, etc.)
             } catch (Exception ex) {

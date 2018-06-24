@@ -22,6 +22,9 @@ namespace Speercs.Server.Models.Entities {
         [BsonField("eid")]
         public string id { get; set; }
 
+        [BsonField("integrity")]
+        public int integrity { get; set; } = 1;
+
         private RoomPosition _position { get; set; }
 
         [BsonIgnore] protected ISContext _context;
@@ -55,7 +58,15 @@ namespace Speercs.Server.Models.Entities {
             propagatePosition(_position);
         }
 
-        public virtual void wake() { }
+        public virtual void wake() { } // called on unpickling
+
+        /// <summary>
+        /// lifecycle tick
+        /// </summary>
+        public virtual bool tick() {
+            // TODO: integrity check (check cores)
+            return true;
+        }
 
         public override bool Equals(object obj) {
             return obj is GameEntity ge && this.id == ge.id;
