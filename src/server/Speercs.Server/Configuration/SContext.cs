@@ -37,7 +37,7 @@ namespace Speercs.Server.Configuration {
 
         public EventPushService eventPush { get; }
 
-        public const string version = "0.0.3-dev";
+        public const string version = "0.0.4-dev";
 
         public SContext(SConfiguration config) {
             configuration = config;

@@ -1,7 +1,26 @@
 
 # Speercs (AutoBotnet) Changelog
 
-## `0.0.3-dev` [TBD] (Unreleased)
+## `0.0.4-dev` "Clink" (June 23, 2018)
+
+- major overhaul of client script api
+    - new client api modules
+        - `MapModule`, `ArmyModule`, `GameApiModule`, `UtilsModule`, `ConstantsModule` replace old globals
+    - automatic spawn placement and room generation
+    - bot "core" system based on design
+        - modular data-driven bot cores
+        - cores define stats of bots
+        - cores provide custom functions (ex. "drill")
+    - realtime and queued push notifications
+    - bot reference sandboxing through `ProxyRef` objects: (`GameEntityRef`) that safely forward read-only data fields
+- extensibility expansions
+    - nearly every "content" part of the game can be added to without need for reflection or hooking
+- global real time evented system
+    - for connecting to client frames
+    - events are automatically restricted to bots sensor range
+- improved metrics data control and allow full data export
+
+## `0.0.3-dev` (Unreleased)
 
 - internal engine optimizations
     - store as much data as possible in persistentdata instead of using additional containers
