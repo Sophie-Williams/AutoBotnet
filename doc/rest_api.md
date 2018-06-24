@@ -1,5 +1,5 @@
 
-# API Spec for **Speercs** AutoBotnet Server
+# REST API docs for **Speercs** AutoBotnet Server
 
 ## Request Index
 
