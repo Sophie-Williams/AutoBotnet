@@ -43,8 +43,6 @@ namespace Speercs.Server {
                     .WithHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
                     .WithHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type, Authorization");
             });
-
-            // TODO: Set configuration
         }
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container) {

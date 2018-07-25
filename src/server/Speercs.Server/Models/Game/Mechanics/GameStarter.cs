@@ -14,8 +14,7 @@ namespace Speercs.Server.Models.Mechanics {
             // give resources
             team.resources["nrg"] = 80;
             team.resources["iron"] = 20;
-            // create a starter factory in a new room
-            // TODO: generate a nearby unoccupied room and spawn the factory
+            // generate a nearby unoccupied room and spawn the factory
             var mapExpander =
                 new WorldMapExpander(serverContext, new MapGenerator(serverContext, new MapGenParameters()));
             var homeRoom = mapExpander.createConnectedRoom();

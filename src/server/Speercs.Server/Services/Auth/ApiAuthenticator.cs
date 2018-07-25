@@ -44,7 +44,6 @@ namespace Speercs.Server.Services.Auth {
             };
             var userAuthIdentity = new ClaimsIdentity(userAuthClaims);
             var userIdentity = new ClaimsPrincipal(userAuthIdentity);
-            // TODO: Maybe more claims?
             return userIdentity;
         }
     }

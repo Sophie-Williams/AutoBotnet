@@ -68,7 +68,6 @@ namespace Speercs.Server {
             context.log.writeLine("Server context created", SpeercsLogger.LogLevel.Information);
 
             // load plugins
-            // load builtin; TODO: Make some builtin plugins external, load external plugins
             new BuiltinPluginBootstrapper(context).loadAll();
 
             // load persistent state

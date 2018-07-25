@@ -17,6 +17,8 @@ namespace Speercs.Server.Game.Subsystems {
                 var teamEntityList = serverContext.appState.entities.getByUser(teamId);
                 teamEntityList.Select(x => x.tick());
             }
+            
+            // TODO: Game update logic (all bots dead, achievements, etc.)
         }
     }
 }
