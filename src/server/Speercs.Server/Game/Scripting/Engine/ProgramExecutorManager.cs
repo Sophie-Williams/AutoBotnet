@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using Newtonsoft.Json.Linq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Services.Application;
 using Speercs.Server.Services.Game;
@@ -39,6 +40,8 @@ namespace Speercs.Server.Game.Scripting.Engine {
                     serverContext.log.writeLine($"Error loading player {userIdentifier}'s code: {ex.Message}",
                         SpeercsLogger.LogLevel.Warning);
                     // TODO: let the user know through a notification?
+//                    var pushTask = serverContext.notificationPipeline.pushMessageAsync(
+//                        JToken.FromObject(new {message = "error loading code"}), "codeload", userIdentifier, false);
                 }
 
                 return new ScriptExecutor(engine, userIdentifier, serverContext);
