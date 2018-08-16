@@ -2,6 +2,7 @@
 using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Entities;
 using Speercs.Server.Extensibility.Entities.Templates;
+using Speercs.Server.Extensibility.Entities.Templates.Cores;
 
 namespace Speercs.Server.Models.Entities {
     public class DefaultBotTemplatesPlugin : ISpeercsPlugin {

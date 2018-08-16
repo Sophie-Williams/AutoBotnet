@@ -46,8 +46,7 @@ namespace Speercs.Server.Models.Entities {
             return false;
         }
 
-        [BsonIgnore]
-        protected ulong lastMoveTime;
+        [BsonIgnore] protected ulong lastMoveTime;
     }
 
     [Flags]
@@ -59,10 +58,12 @@ namespace Speercs.Server.Models.Entities {
     public abstract class BotCore {
         [BsonIgnore]
         public string type => this.GetType().Name;
-        public abstract Dictionary<string, long> qualities { get; }
+
+        public Dictionary<string, long> qualities { get; } = new Dictionary<string, long>();
         public abstract int drain { get; }
         public abstract BotCoreFlags flags { get; }
         public abstract int size { get; }
+
         [BsonIgnore]
         public Dictionary<string, Delegate> actions { get; } = new Dictionary<string, Delegate>();
 
