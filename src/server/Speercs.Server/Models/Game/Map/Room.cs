@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using LiteDB;
 using Newtonsoft.Json;
@@ -54,7 +55,8 @@ namespace Speercs.Server.Models.Map {
 
         public static byte[] packTiles(ISContext context, Tile[,] tiles) {
             using (var output = new MemoryStream())
-            using (var bw = new BinaryWriter(output)) {
+            using (var compressedOutput = new GZipStream(output, CompressionMode.Compress))
+            using (var bw = new BinaryWriter(compressedOutput)) {
                 bw.Write(MAP_EDGE_SIZE); // map width
                 bw.Write(MAP_EDGE_SIZE); // map height
                 for (var i = 0; i < MAP_EDGE_SIZE; i++) {
@@ -70,13 +72,15 @@ namespace Speercs.Server.Models.Map {
                     }
                 }
 
+                bw.Flush();
                 return output.ToArray();
             }
         }
 
         public static Tile[,] unpackTiles(ISContext context, byte[] data) {
             var tiles = default(Tile[,]);
-            using (var pack = new MemoryStream(data))
+            using (var compressedPack = new MemoryStream(data))
+            using (var pack = new GZipStream(compressedPack, CompressionMode.Decompress))
             using (var br = new BinaryReader(pack)) {
                 var width = br.ReadInt32();
                 var height = br.ReadInt32();
