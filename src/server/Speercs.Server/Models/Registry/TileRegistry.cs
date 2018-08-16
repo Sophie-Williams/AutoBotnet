@@ -9,7 +9,7 @@ namespace Speercs.Server.Models.Registry {
 
         public Type[] tileTypes;
 
-        public int tileId(ITile tile) {
+        public int tileId(Tile tile) {
             var tileType = tile.GetType();
             for (var i = 0; i < tileTypes.Length; i++) {
                 if (tileType == tileTypes[i]) return i;
@@ -23,7 +23,7 @@ namespace Speercs.Server.Models.Registry {
         }
 
         public void recache() {
-            tileTypes = serverContext.extensibilityContainer.resolveTypes<ITile>().ToArray();
+            tileTypes = serverContext.extensibilityContainer.resolveTypes<Tile>().ToArray();
         }
     }
 }

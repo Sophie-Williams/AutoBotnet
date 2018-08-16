@@ -33,9 +33,9 @@ namespace Speercs.Server.Models.Map {
         }
 
         public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal)
-            : this(context, start, goal, tile => tile.isWalkable()) { }
+            : this(context, start, goal, tile => tile.walkable) { }
 
-        public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal, Predicate<ITile> passable)
+        public Pathfinder(ISContext context, RoomPosition start, RoomPosition goal, Predicate<Tile> passable)
             : base(context) {
             _start = start;
             _goal = goal;
@@ -104,7 +104,7 @@ namespace Speercs.Server.Models.Map {
             }
         }
 
-        private Predicate<ITile> _passable;
+        private Predicate<Tile> _passable;
         private RoomPosition _start, _goal;
 
         private Node[,] _nodeGrid = new Node[Room.MAP_EDGE_SIZE, Room.MAP_EDGE_SIZE];

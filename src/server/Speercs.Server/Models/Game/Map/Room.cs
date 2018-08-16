@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -17,14 +18,14 @@ namespace Speercs.Server.Models.Map {
         public Room(int x, int y) {
             this.x = x;
             this.y = y;
-            tiles = new ITile[MAP_EDGE_SIZE, MAP_EDGE_SIZE];
+            tiles = new Tile[MAP_EDGE_SIZE, MAP_EDGE_SIZE];
         }
 
         public string dump() {
             var sb = new StringBuilder();
             for (var y = 0; y < MAP_EDGE_SIZE; y++) {
                 for (var x = 0; x < MAP_EDGE_SIZE; x++) {
-                    sb.Append(tiles[x, y].getTileChar());
+                    sb.Append(tiles[x, y].tileChar);
                 }
 
                 sb.AppendLine();
@@ -49,43 +50,54 @@ namespace Speercs.Server.Models.Map {
 
         [JsonIgnore]
         [BsonField("tiles")]
-        public ITile[,] tiles { get; set; }
+        public Tile[,] tiles { get; set; }
 
-        public static byte[] packTiles(ISContext context, ITile[,] tiles) {
-            var output = new MemoryStream();
-            for (var i = 0; i < MAP_EDGE_SIZE; i++) {
-                for (var j = 0; j < MAP_EDGE_SIZE; j++) {
-                    var tile = tiles[i, j];
-                    var tileId = context.registry.tiles.tileId(tile);
+        public static byte[] packTiles(ISContext context, Tile[,] tiles) {
+            using (var output = new MemoryStream())
+            using (var bw = new BinaryWriter(output)) {
+                bw.Write(MAP_EDGE_SIZE); // map width
+                bw.Write(MAP_EDGE_SIZE); // map height
+                for (var i = 0; i < MAP_EDGE_SIZE; i++) {
+                    for (var j = 0; j < MAP_EDGE_SIZE; j++) {
+                        var tile = tiles[i, j];
+                        var tileId = context.registry.tiles.tileId(tile);
+                        bw.Write(tileId);
+                        bw.Write(tile.props.table.Count);
+                        foreach (var prop in tile.props.table) {
+                            bw.Write(prop.Key);
+                            bw.Write(prop.Value);
+                        }
+                    }
+                }
+
+                return output.ToArray();
+            }
+        }
+
+        public static Tile[,] unpackTiles(ISContext context, byte[] data) {
+            var tiles = default(Tile[,]);
+            using (var pack = new MemoryStream(data))
+            using (var br = new BinaryReader(pack)) {
+                var width = br.ReadInt32();
+                var height = br.ReadInt32();
+                tiles = new Tile[width, height];
+                for (var i = 0; i < width; i++) {
+                    for (var j = 0; j < height; j++) {
+                        var tileId = br.ReadInt32();
+                        var tile = (Tile) Activator.CreateInstance(context.registry.tiles.tileById(tileId));
+                        var propsCount = br.ReadInt32();
+                        for (var p = 0; p < propsCount; p++) {
+                            var key = br.ReadInt32();
+                            var val = br.ReadInt32();
+                            tile.props.table.Add(key, val);
+                        }
+
+                        tiles[i, j] = tile;
+                    }
                 }
             }
 
-            return output.ToArray();
-        }
-
-        public static PackedTile_old[] packTiles_old(ISContext context, ITile[,] tiles) {
-            var arr = new PackedTile_old[MAP_EDGE_SIZE * MAP_EDGE_SIZE];
-            for (var i = 0; i < MAP_EDGE_SIZE; i++) {
-                for (var j = 0; j < MAP_EDGE_SIZE; j++) {
-                    var tile = tiles[i, j];
-                    // TODO: pack tile props
-                    arr[i * MAP_EDGE_SIZE + j] = new PackedTile_old(TileRegistry.tileId(context, tile));
-                }
-            }
-            return arr;
-        }
-
-        public struct PackedTile_old {
-            public int id { get; set; }
-            public Dictionary<string, object> props { get; set; }
-
-            public PackedTile_old(int id, Dictionary<string, object> props = null) {
-                this.id = id;
-                if (props != null)
-                    this.props = props;
-                else
-                    this.props = new Dictionary<string, object>();
-            }
+            return tiles;
         }
 
         public Exit northExit, southExit, eastExit, westExit;

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using CookieIoC;
 using LiteDB;
@@ -7,7 +6,6 @@ using Speercs.Server.Extensibility;
 using Speercs.Server.Game.Scripting.Engine;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
-using Speercs.Server.Models;
 using Speercs.Server.Models.Registry;
 using Speercs.Server.Services.Application;
 using Speercs.Server.Services.EventPush;
@@ -45,7 +43,7 @@ namespace Speercs.Server.Configuration {
 
         public SContext(SConfiguration config) {
             configuration = config;
-            registry = new ItemRegistry();
+            registry = new ItemRegistry(this);
             notificationPipeline = new NotificationPipeline(this);
             eventPush = new EventPushService(this);
             serviceTable = new UserServiceTable(this);

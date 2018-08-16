@@ -64,7 +64,7 @@ namespace Speercs.Server.Models.Map {
             return new Pathfinder(context, this, goal).findPath();
         }
 
-        public List<RoomPosition> pathTo(ISContext context, RoomPosition goal, Predicate<ITile> passable) {
+        public List<RoomPosition> pathTo(ISContext context, RoomPosition goal, Predicate<Tile> passable) {
             return new Pathfinder(context, this, goal, passable).findPath();
         }
 
@@ -72,7 +72,7 @@ namespace Speercs.Server.Models.Map {
             return context.appState.worldMap[roomPos.x, roomPos.y];
         }
 
-        public ITile getTile(ISContext context) {
+        public Tile getTile(ISContext context) {
             return getRoom(context).tiles[pos.x, pos.y];
         }
 

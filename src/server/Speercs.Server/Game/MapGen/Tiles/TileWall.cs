@@ -1,14 +1,12 @@
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Map;
 
 namespace Speercs.Server.Game.MapGen.Tiles {
-    public class TileWall : ITile {
-        public bool isWalkable() => false;
-        public bool isMinable() => true;
-        public char getTileChar() => 'O';
-        public Rgba32 getColor() => Rgba32.Gray;
-        public string name { get; set; } = "wall";
+    public class TileWall : Tile {
+        public override bool walkable => false;
+        public override bool mineable => true;
+        public override char tileChar => 'O';
+        public override Rgba32 color => Rgba32.Gray;
+        public override string name => "wall";
     }
 }

@@ -8,20 +8,18 @@ using Speercs.Server.Game.MapGen.Tiles;
 namespace Speercs.Server.Game.MapGen.Features {
     public class DefaultMapPlugin : ISpeercsPlugin {
         public void beforeActivation(CookieJar container) {
-            container.registerType<ITile>(typeof(TileBedrock));
-            container.registerType<ITile>(typeof(TileCrashSite));
-            container.registerType<ITile>(typeof(TileFloor));
-            container.registerType<ITile>(typeof(TileWall));
+            container.registerType<Tile>(typeof(TileBedrock));
+            container.registerType<Tile>(typeof(TileCrashSite));
+            container.registerType<Tile>(typeof(TileFloor));
+            container.registerType<Tile>(typeof(TileWall));
             // Register MapGen features
             container.register<IMapGenFeature>(new OreFeature(
-                () => new TileOre {
-                    resource = "nrg"
-                },
+                () => TileOre.create(TileOre.OreTypes.NRG, amount: 40),
                 0.003,
                 OreFeature.Location.Wall,
                 1, 4
             ));
-            container.registerType<ITile>(typeof(TileOre));
+            container.registerType<Tile>(typeof(TileOre));
         }
     }
 }

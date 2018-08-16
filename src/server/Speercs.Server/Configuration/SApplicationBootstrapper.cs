@@ -33,31 +33,16 @@ namespace Speercs.Server.Configuration {
                     }
                 );
 
-                BsonArray serializeTiles(ITile[,] tileArray) {
-                    var packedTiles = Room.packTiles_old(serverContext, tileArray);
-                    var serTiles = packedTiles.Select(x => BsonMapper.Global.ToDocument(x)).ToList();
-                    return new BsonArray(serTiles);
+                byte[] serializeTiles(Tile[,] tileArray) {
+                    var pack = Room.packTiles(serverContext, tileArray);
+                    return pack;
                 }
 
-                ITile[,] deserializeTiles(BsonArray tilesArr) {
-                    var d = Room.MAP_EDGE_SIZE;
-                    var packedTiles = tilesArr
-                        .Select(x => BsonMapper.Global.ToObject<Room.PackedTile_old>(x.AsDocument))
-                        .ToArray();
-                    var tileArray = new ITile[d, d];
-                    for (var i = 0; i < d; i++) {
-                        for (var j = 0; j < d; j++) {
-                            var ix = (i * d + j);
-                            var packedTile = packedTiles[ix];
-                            var tileType = TileRegistry.tileById(serverContext, packedTile.id);
-                            var tile = (ITile) Activator.CreateInstance(tileType);
-                            // TODO: tile properties
-                            tileArray[i, j] = tile;
-                        }
-                    }
-
-                    return tileArray;
+                Tile[,] deserializeTiles(byte[] pack) {
+                    var tiles = Room.unpackTiles(serverContext, pack);
+                    return tiles;
                 }
+
                 BsonMapper.Global.RegisterType(
                     serialize: room => new BsonDocument(new Dictionary<string, BsonValue> {
                         [nameof(Room.x)] = new BsonValue(room.x),
@@ -75,7 +60,7 @@ namespace Speercs.Server.Configuration {
                             spawn = BsonMapper.Global.ToObject<Point>(bson.AsDocument[nameof(Room.spawn)].AsDocument),
                             creationTime = ulong.Parse(bson.AsDocument[nameof(Room.creationTime)].AsString),
                             tiles =
-                                deserializeTiles(bson.AsDocument[nameof(Room.tiles)].AsArray),
+                                deserializeTiles(bson.AsDocument[nameof(Room.tiles)].AsBinary),
                             northExit = BsonMapper.Global.ToObject<Room.Exit>(bson.AsDocument[nameof(Room.northExit)]
                                 .AsDocument),
                             eastExit = BsonMapper.Global.ToObject<Room.Exit>(bson.AsDocument[nameof(Room.eastExit)]

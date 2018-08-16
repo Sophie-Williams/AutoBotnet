@@ -12,10 +12,10 @@ namespace Speercs.Server.Extensibility.Map.Features {
             UnexposedWall
         }
 
-        public OreFeature(Func<ITile> tileGen, double density, Location loc, int veinSize)
+        public OreFeature(Func<Tile> tileGen, double density, Location loc, int veinSize)
             : this(tileGen, density, loc, veinSize, veinSize) { }
 
-        public OreFeature(Func<ITile> tileGen, double density, Location loc, int minVein, int maxVein) {
+        public OreFeature(Func<Tile> tileGen, double density, Location loc, int minVein, int maxVein) {
             tileGenerator = tileGen;
             this.density = density;
             location = loc;
@@ -61,7 +61,7 @@ namespace Speercs.Server.Extensibility.Map.Features {
             }
         }
 
-        protected Func<ITile> tileGenerator;
+        protected Func<Tile> tileGenerator;
         protected double density;
         protected Location location;
         protected int minVeinSize, maxVeinSize;

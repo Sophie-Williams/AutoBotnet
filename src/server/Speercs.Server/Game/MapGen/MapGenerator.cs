@@ -94,7 +94,7 @@ namespace Speercs.Server.Game.MapGen {
 
             /* helper functions */
 
-            ITile tileAt(int x, int y) {
+            Tile tileAt(int x, int y) {
                 if (x < 0) x = 0;
                 if (y < 0) y = 0;
                 if (x >= Room.MAP_EDGE_SIZE) x = Room.MAP_EDGE_SIZE - 1;

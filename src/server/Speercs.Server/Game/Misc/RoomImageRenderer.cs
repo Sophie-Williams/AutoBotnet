@@ -9,7 +9,7 @@ namespace Speercs.Server.Game.Misc {
             var image = new Image<Rgba32>(Room.MAP_EDGE_SIZE, Room.MAP_EDGE_SIZE);
             for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
                 for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
-                    image[x, y] = room.tiles[x, y].getColor();
+                    image[x, y] = room.tiles[x, y].color;
                 }
             }
 
@@ -37,7 +37,7 @@ namespace Speercs.Server.Game.Misc {
                 var roomY = Room.MAP_EDGE_SIZE * (room.y - worldMinY);
                 for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
                     for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
-                        image[roomX + x, roomY + y] = map[room.x, room.y].tiles[x, y].getColor();
+                        image[roomX + x, roomY + y] = map[room.x, room.y].tiles[x, y].color;
                     }
                 }
             }
