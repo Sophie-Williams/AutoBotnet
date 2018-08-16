@@ -17,7 +17,7 @@ namespace Speercs.Server.Web.Realtime {
             // call authenticator
             var auther = new ApiAuthenticator(serverContext);
             identity = auther.resolveIdentity(apikey);
-            userId = identity.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.USER_IDENTIFIER_CLAIM_KEY)
+            userId = identity?.Claims.FirstOrDefault(x => x.Type == ApiAuthenticator.USER_IDENTIFIER_CLAIM_KEY)
                 ?.Value;
             return identity != null;
         }
