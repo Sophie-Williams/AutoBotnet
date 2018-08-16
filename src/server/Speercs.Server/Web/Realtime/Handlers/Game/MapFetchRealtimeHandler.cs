@@ -29,7 +29,7 @@ namespace Speercs.Server.Web.Realtime.Handlers {
                     }
                     var room = serverContext.appState.worldMap[x, y];
                     if (room == null) break;
-                    var packedTiles = Room.packTiles(serverContext, room.tiles);
+                    var packedTiles = Room.packTiles_old(serverContext, room.tiles);
                     var roomBundle = new JObject(
                         new JProperty("map", JObject.FromObject(room)),
                         new JProperty("tiles", JArray.FromObject(packedTiles)),

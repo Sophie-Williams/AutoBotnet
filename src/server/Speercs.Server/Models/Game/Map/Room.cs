@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using LiteDB;
 using Newtonsoft.Json;
@@ -50,23 +51,35 @@ namespace Speercs.Server.Models.Map {
         [BsonField("tiles")]
         public ITile[,] tiles { get; set; }
 
-        public static PackedTile[] packTiles(ISContext context, ITile[,] tiles) {
-            var arr = new PackedTile[MAP_EDGE_SIZE * MAP_EDGE_SIZE];
+        public static byte[] packTiles(ISContext context, ITile[,] tiles) {
+            var output = new MemoryStream();
+            for (var i = 0; i < MAP_EDGE_SIZE; i++) {
+                for (var j = 0; j < MAP_EDGE_SIZE; j++) {
+                    var tile = tiles[i, j];
+                    var tileId = context.registry.tiles.tileId(tile);
+                }
+            }
+
+            return output.ToArray();
+        }
+
+        public static PackedTile_old[] packTiles_old(ISContext context, ITile[,] tiles) {
+            var arr = new PackedTile_old[MAP_EDGE_SIZE * MAP_EDGE_SIZE];
             for (var i = 0; i < MAP_EDGE_SIZE; i++) {
                 for (var j = 0; j < MAP_EDGE_SIZE; j++) {
                     var tile = tiles[i, j];
                     // TODO: pack tile props
-                    arr[i * MAP_EDGE_SIZE + j] = new PackedTile(TileRegistry.tileId(context, tile));
+                    arr[i * MAP_EDGE_SIZE + j] = new PackedTile_old(TileRegistry.tileId(context, tile));
                 }
             }
             return arr;
         }
 
-        public struct PackedTile {
+        public struct PackedTile_old {
             public int id { get; set; }
             public Dictionary<string, object> props { get; set; }
 
-            public PackedTile(int id, Dictionary<string, object> props = null) {
+            public PackedTile_old(int id, Dictionary<string, object> props = null) {
                 this.id = id;
                 if (props != null)
                     this.props = props;

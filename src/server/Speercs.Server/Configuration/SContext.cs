@@ -7,6 +7,8 @@ using Speercs.Server.Extensibility;
 using Speercs.Server.Game.Scripting.Engine;
 using Speercs.Server.Infrastructure.Concurrency;
 using Speercs.Server.Infrastructure.Push;
+using Speercs.Server.Models;
+using Speercs.Server.Models.Registry;
 using Speercs.Server.Services.Application;
 using Speercs.Server.Services.EventPush;
 
@@ -36,11 +38,14 @@ namespace Speercs.Server.Configuration {
         public SpeercsLogger log { get; }
 
         public EventPushService eventPush { get; }
+        
+        public ItemRegistry registry { get; }
 
         public const string version = "0.0.4-dev";
 
         public SContext(SConfiguration config) {
             configuration = config;
+            registry = new ItemRegistry();
             notificationPipeline = new NotificationPipeline(this);
             eventPush = new EventPushService(this);
             serviceTable = new UserServiceTable(this);

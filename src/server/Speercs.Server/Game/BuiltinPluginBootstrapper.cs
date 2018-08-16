@@ -19,6 +19,9 @@ namespace Speercs.Server.Game {
             foreach (var plugin in serverContext.pluginLoader.plugins) {
                 plugin.beforeActivation(serverContext.extensibilityContainer);
             }
+            
+            // update item cache
+            serverContext.registry.recache();
         }
     }
 }

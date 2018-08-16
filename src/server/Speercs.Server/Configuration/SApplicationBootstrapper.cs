@@ -34,7 +34,7 @@ namespace Speercs.Server.Configuration {
                 );
 
                 BsonArray serializeTiles(ITile[,] tileArray) {
-                    var packedTiles = Room.packTiles(serverContext, tileArray);
+                    var packedTiles = Room.packTiles_old(serverContext, tileArray);
                     var serTiles = packedTiles.Select(x => BsonMapper.Global.ToDocument(x)).ToList();
                     return new BsonArray(serTiles);
                 }
@@ -42,7 +42,7 @@ namespace Speercs.Server.Configuration {
                 ITile[,] deserializeTiles(BsonArray tilesArr) {
                     var d = Room.MAP_EDGE_SIZE;
                     var packedTiles = tilesArr
-                        .Select(x => BsonMapper.Global.ToObject<Room.PackedTile>(x.AsDocument))
+                        .Select(x => BsonMapper.Global.ToObject<Room.PackedTile_old>(x.AsDocument))
                         .ToArray();
                     var tileArray = new ITile[d, d];
                     for (var i = 0; i < d; i++) {
