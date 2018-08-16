@@ -97,7 +97,10 @@ namespace Speercs.Server {
             }
 
             // map websockets
-            app.UseWebSockets();
+            app.UseWebSockets(new WebSocketOptions {
+                KeepAliveInterval = TimeSpan.FromSeconds(10),
+                ReceiveBufferSize = 1024 * 16
+            });
             app.Map("/ws", ab => WebSocketHandler.map(ab, context));
 
             // add wwwroot/

@@ -29,63 +29,61 @@ namespace Speercs.Server.Web {
             _rtContext = new RealtimeContext(serverContext);
         }
 
-        private async Task<string> readLineAsync() {
-            var data = string.Empty;
+        private async Task<string> readMessageAsync() {
+            var message = new StringBuilder();
             while (true) {
-                var buf = new byte[1];
+                var buf = new byte[1024 * 16];
                 var arraySeg = new ArraySegment<byte>(buf);
-                await _ws.ReceiveAsync(arraySeg, CancellationToken.None);
-                var c = (char) buf[0];
-                data += c;
-                if (c == '\n') return data;
+                var result = await _ws.ReceiveAsync(arraySeg, CancellationToken.None);
+                var recvStr = System.Text.Encoding.UTF8.GetString(buf).Substring(0, result.Count);
+                message.Append(recvStr);
+                if (result.EndOfMessage) return message.ToString();
             }
         }
 
-        private Task writeLineAsync(string data) {
-            lock (_ws) {
-                return _ws.SendAsync(
-                    new ArraySegment<byte>(Encoding.UTF8.GetBytes(data + "\n")),
-                    WebSocketMessageType.Text,
-                    true,
-                    CancellationToken.None
-                );
+        private Task writeMessageAsync(string data) {
+            return _ws.SendAsync(
+                new ArraySegment<byte>(Encoding.UTF8.GetBytes(data + "\n")),
+                WebSocketMessageType.Text,
+                true,
+                CancellationToken.None
+            );
+        }
+
+        private async Task<(JToken, string, long)> handleRequestAsync(JObject requestBundle) {
+            // Parse request
+            var rcommand = ((JValue) requestBundle["request"]).ToObject<string>();
+            var data = (JObject) requestBundle["data"];
+            var id = ((JValue) requestBundle["id"]).ToObject<long>();
+            // Get handler
+            var handler = _realtimeCookieJar.resolveAll<IRealtimeHandler>().FirstOrDefault(x => x.path == rcommand);
+            var result = (JToken) JValue.CreateNull();
+            if (handler != null) {
+                result = await handler.handleRequestAsync(id, data, _rtContext);
             }
+
+            return (result, rcommand, id);
         }
 
         public async Task eventLoopAsync() {
-            async Task<(JToken, string, long)> handleRequestAsync(JObject requestBundle) {
-                // Parse request
-                var rcommand = ((JValue) requestBundle["request"]).ToObject<string>();
-                var data = (JObject) requestBundle["data"];
-                var id = ((JValue) requestBundle["id"]).ToObject<long>();
-                // Get handler
-                var handler = _realtimeCookieJar.resolveAll<IRealtimeHandler>().FirstOrDefault(x => x.path == rcommand);
-                var result = (JToken) JValue.CreateNull();
-                if (handler != null) {
-                    result = await handler.handleRequestAsync(id, data, _rtContext);
-                }
-
-                return (result, rcommand, id);
-            }
-
             var pipelineRegistered = false;
             var user = default(RegisteredUser);
             var pipelineHandler = new Func<JObject, Task<bool>>(async bundle => {
-                await writeLineAsync(bundle.ToString(Formatting.None));
+                await writeMessageAsync(bundle.ToString(Formatting.None));
                 return false;
             });
             try {
                 // Require auth first
-                var authApiKey = await readLineAsync();
+                var authApiKey = await readMessageAsync();
                 // Attempt to authenticate
                 if (!_rtContext.authenticateWith(authApiKey)) {
-                    await writeLineAsync("false"); // authentication failure
+                    await writeMessageAsync("false"); // authentication failure
                     await _ws.CloseAsync(WebSocketCloseStatus.ProtocolError, "Invalid authentication key",
                         CancellationToken.None);
                     throw new SecurityException();
                 }
 
-                await writeLineAsync("true"); // websocket channel was authenticated successfully
+                await writeMessageAsync("true"); // websocket channel was authenticated successfully
                 user = await _rtContext.getCurrentUserAsync();
                 // Attempt to add handler
                 serverContext.notificationPipeline
@@ -112,7 +110,7 @@ namespace Speercs.Server.Web {
                 }
 
                 while (_ws.State == WebSocketState.Open) {
-                    var rawData = await readLineAsync();
+                    var rawData = await readMessageAsync();
                     var requestBundle = JObject.Parse(rawData);
                     try {
                         await handleRequestAsync(requestBundle)
@@ -126,7 +124,7 @@ namespace Speercs.Server.Web {
                                     new JProperty("request", request)
                                 );
                                 // Write result to websocket
-                                await writeLineAsync(resultBundle.ToString(Formatting.None));
+                                await writeMessageAsync(resultBundle.ToString(Formatting.None));
                             });
                     } catch (NullReferenceException) // Missing parameter
                     { }
