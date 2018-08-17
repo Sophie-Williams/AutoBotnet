@@ -82,7 +82,7 @@ namespace Speercs.Server {
             // register application stop handler
             // AssemblyLoadContext.Default.Unloading += (c) => OnUnload(context);
             applicationLifetime.ApplicationStopping.Register(() => onUnload(context));
-            context.log.writeLine($"Application interrupt handler registered", SpeercsLogger.LogLevel.Information);
+            context.log.writeLine($"Application interrupt handler registered", SpeercsLogger.LogLevel.Trace);
 
             // add aspnet developer exception page
             if (env.IsDevelopment()) {
@@ -115,7 +115,7 @@ namespace Speercs.Server {
                 options.Bootstrapper = new SpeercsBootstrapper(context);
             }));
 
-            context.log.writeLine($"Web services mapped successfully", SpeercsLogger.LogLevel.Information);
+            context.log.writeLine($"Web services mapped successfully", SpeercsLogger.LogLevel.Trace);
 
             // start game services
             gameBootstrapper = new SGameBootstrapper(context);
