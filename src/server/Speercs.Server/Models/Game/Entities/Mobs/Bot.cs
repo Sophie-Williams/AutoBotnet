@@ -46,6 +46,15 @@ namespace Speercs.Server.Models.Entities {
             return false;
         }
 
+        public override void wake() {
+            base.wake();
+            
+            // set core properties
+            foreach (var core in cores) {
+                core.bot = this;
+            }
+        }
+
         [BsonIgnore] protected ulong lastMoveTime;
     }
 
