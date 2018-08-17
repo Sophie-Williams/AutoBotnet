@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using IridiumJS;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Speercs.Server.Models.Entities;
 
 namespace Speercs.Server.Game.Scripting.Api.Refs {
@@ -12,7 +13,11 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
 
         public object call(string name, params object[] args) {
             if (_core.actions.ContainsKey(name)) {
-                return _core.actions[name].DynamicInvoke(args);
+                try {
+                    return _core.actions[name].DynamicInvoke(args);
+                } catch (Exception callException) {
+                    Trace.WriteLine(callException);
+                }
             }
             return null;
         }

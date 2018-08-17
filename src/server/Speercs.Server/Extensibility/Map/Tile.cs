@@ -27,7 +27,7 @@ namespace Speercs.Server.Extensibility.Map {
         /// </summary>
         /// <returns>Whether the tile still exists after drilling</returns>
         public virtual bool drill(DrillContext drillContext) {
-            return mineable;
+            return !mineable; // if the tile is mineable, by default it will simply be destroyed
         }
 
         public class Properties {

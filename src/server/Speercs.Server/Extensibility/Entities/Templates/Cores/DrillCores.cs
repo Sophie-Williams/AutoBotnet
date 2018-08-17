@@ -9,10 +9,11 @@ namespace Speercs.Server.Extensibility.Entities.Templates.Cores {
         public CoreDrillBase(int mining) {
             qualities[QUALITY_MINING] = mining;
 
-            defineFunction("drill", new Func<Direction, bool>(actionDrill));
+            defineFunction("drill", new Func<double, bool>(actionDrill));
         }
 
-        public bool actionDrill(Direction direction) {
+        public bool actionDrill(double dir) {
+            var direction = (Direction) ((int) dir);
             var interaction = new RoomTileInteraction(bot.context, bot.team);
             var targetTile = bot.position.move(direction);
             // drill target must be in the same room
