@@ -24,7 +24,7 @@ namespace Speercs.Server.Modules.Admin {
                 var adminKey = Context.CurrentUser.Claims
                     .FirstOrDefault(x => x.Type == ApiAuthenticator.API_KEY_CLAIM_KEY)
                     ?.Value;
-                serverContext.log.writeLine($"Admin authenticated using key {adminKey}",
+                serverContext.log.writeLine($"Admin authenticated using key [{adminKey}]",
                     SpeercsLogger.LogLevel.Information);
 
                 userManager = new UserManagerService(this.serverContext);
