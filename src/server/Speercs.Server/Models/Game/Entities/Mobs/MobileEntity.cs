@@ -1,6 +1,4 @@
-﻿using System;
-using Speercs.Server.Configuration;
-using Speercs.Server.Models.Map;
+﻿using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Entities {

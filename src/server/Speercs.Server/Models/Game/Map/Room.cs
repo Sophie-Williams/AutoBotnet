@@ -100,7 +100,7 @@ namespace Speercs.Server.Models.Map {
                         var propsCount = br.ReadInt32();
                         for (var p = 0; p < propsCount; p++) {
                             var key = br.ReadInt32();
-                            var val = br.ReadInt32();
+                            var val = br.ReadInt64();
                             tile.props.table.Add(key, val);
                         }
 
