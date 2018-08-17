@@ -42,12 +42,14 @@ namespace Speercs.Server.Web {
         }
 
         private Task writeMessageAsync(string data) {
-            return _ws.SendAsync(
-                new ArraySegment<byte>(Encoding.UTF8.GetBytes(data + "\n")),
-                WebSocketMessageType.Text,
-                true,
-                CancellationToken.None
-            );
+            lock (_ws) {
+                return _ws.SendAsync(
+                    new ArraySegment<byte>(Encoding.UTF8.GetBytes(data + "\n")),
+                    WebSocketMessageType.Text,
+                    true,
+                    CancellationToken.None
+                );
+            }
         }
 
         private async Task<(JToken, string, long)> handleRequestAsync(JObject requestBundle) {
