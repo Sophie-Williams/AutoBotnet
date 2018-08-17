@@ -1,19 +1,15 @@
 using CookieIoC;
-using Speercs.Server.Extensibility;
-using Speercs.Server.Extensibility.Map;
 using Speercs.Server.Extensibility.Map.Features;
 using Speercs.Server.Extensibility.Map.Tiles;
 using Speercs.Server.Game.MapGen.Tiles;
 
-namespace Speercs.Server.Game.MapGen.Features {
+namespace Speercs.Server.Extensibility.Map {
     public class DefaultMapPlugin : ISpeercsPlugin {
+        public string name => nameof(DefaultMapPlugin);
+        
         public void beforeActivation(CookieJar container) {
-            container.registerType<Tile>(typeof(TileBedrock));
-            container.registerType<Tile>(typeof(TileCrashSite));
-            container.registerType<Tile>(typeof(TileFloor));
-            container.registerType<Tile>(typeof(TileRock));
             // Register MapGen features
-            var nrgOre = new TileOre.NRGOre();
+            var nrgOre = new NRGOre();
             container.register<IMapGenFeature>(new OreFeature(
                 () => TileOre.create(nrgOre, amount: nrgOre.resource.chunk * 4),
                 0.003,

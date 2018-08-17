@@ -43,15 +43,15 @@ namespace Speercs.Server.Extensibility.Map.Tiles {
             tile.oreAmount = amount;
             return tile;
         }
+    }
 
-        public abstract class OreType {
-            public abstract int durability { get; }
-            public abstract EconomyResource resource { get; }
-        }
+    public abstract class OreType {
+        public abstract int durability { get; }
+        public abstract EconomyResource resource { get; }
+    }
 
-        public class NRGOre : OreType {
-            public override int durability => 1;
-            public override EconomyResource resource => new NRGResource();
-        }
+    public class NRGOre : OreType {
+        public override int durability => 1;
+        public override EconomyResource resource => new NRGResource();
     }
 }
