@@ -33,5 +33,9 @@ namespace Speercs.Server.Models.Math {
         public static double distance(Point p1, Point p2) {
             return System.Math.Sqrt(System.Math.Pow(p1.x - p2.x, 2) + System.Math.Pow(p1.y - p2.y, 2));
         }
+
+        public static int manhattanDistance(Point p1, Point p2) {
+            return System.Math.Abs(p1.x - p2.x) + System.Math.Abs(p1.y - p2.y);
+        }
     }
 }

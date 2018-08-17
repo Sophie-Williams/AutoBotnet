@@ -69,6 +69,7 @@ namespace Speercs.Server.Models.Construction {
             }
             if (!spendResources(template.costs)) return (null, BotCoreInstallStatus.InsufficientResources);
             // now install the core
+            core.bot = bot;
             bot.cores.Add(core);
             return (core, BotCoreInstallStatus.Success);
         }

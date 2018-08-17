@@ -53,6 +53,14 @@ namespace Speercs.Server.Models.Map {
         [BsonField("tiles")]
         public Tile[,] tiles { get; set; }
 
+        public void setTile(Point pos, Tile tile) {
+            tiles[pos.x, pos.y] = tile;
+        }
+
+        public Tile getTile(Point pos) {
+            return tiles[pos.x, pos.y];
+        }
+
         public static byte[] packTiles(ISContext context, Tile[,] tiles) {
             using (var output = new MemoryStream())
             using (var compressedOutput = new GZipStream(output, CompressionMode.Compress))

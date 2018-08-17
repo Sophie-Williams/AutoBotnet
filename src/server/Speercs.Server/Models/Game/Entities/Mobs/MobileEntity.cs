@@ -17,62 +17,14 @@ namespace Speercs.Server.Models.Entities {
         }
 
         protected virtual bool moveRelative(Direction direction) {
-            var roomX = position.roomPos.x;
-            var roomY = position.roomPos.y;
-            var newX = position.pos.x;
-            var newY = position.pos.y;
-
-            switch (direction) {
-                case Direction.North:
-                    newY--;
-                    break;
-
-                case Direction.East:
-                    newX++;
-                    break;
-
-                case Direction.South:
-                    newY++;
-                    break;
-
-                case Direction.West:
-                    newX--;
-                    break;
-                default:
-                    // this can happen if an int is casted to Direction
-                    throw new ArgumentException("direction must be one of the four cardinal directions", nameof(direction));
+            var newPos = position.move(direction);
+            // if the new position is a different room, ensure we can move there
+            if (!newPos.roomPos.equalTo(position.roomPos)) {
+                if (Point.manhattanDistance(newPos.roomPos, position.roomPos) > 1) return false;
+                if (!moveRoom(newPos.roomPos)) return false;
             }
 
-            if (newX < 0) {
-                if (moveRoom(roomX - 1, roomY))
-                    roomX--;
-                else
-                    return false;
-            }
-
-            if (newX > Room.MAP_EDGE_SIZE) {
-                if (moveRoom(roomX + 1, roomY))
-                    roomX++;
-                else
-                    return false;
-            }
-
-            if (newY < 0) {
-                if (moveRoom(roomX, roomY - 1))
-                    roomY--;
-                else
-                    return false;
-            }
-
-            if (newY > Room.MAP_EDGE_SIZE) {
-                if (moveRoom(roomX, roomY + 1))
-                    roomY++;
-                else
-                    return false;
-            }
-
-            var newPos = new RoomPosition(new Point(roomX, roomY), new Point(newX, newY));
-            var tile = newPos.getTile(_context);
+            var tile = newPos.getTile(context);
             if (!tile.walkable)
                 return false; // not Walkable; don't move
 
@@ -80,11 +32,12 @@ namespace Speercs.Server.Models.Entities {
             return true;
         }
 
-        private bool moveRoom(int roomX, int roomY) {
+        private bool moveRoom(Point roomPos) {
             // only allow moving to an adjacent room that exists
-            if (System.Math.Abs(position.roomPos.x - roomX) == 1 || System.Math.Abs(position.roomPos.y - roomY) == 1) {
-                if (_context.appState.worldMap[roomX, roomY] != null) {
-                    position = new RoomPosition(new Point(roomX, roomY), position.pos);
+            if (System.Math.Abs(position.roomPos.x - roomPos.x) == 1 ||
+                System.Math.Abs(position.roomPos.y - roomPos.y) == 1) {
+                if (context.appState.worldMap[roomPos.x, roomPos.y] != null) {
+                    position = new RoomPosition(new Point(roomPos.x, roomPos.y), position.pos);
                 }
             }
 

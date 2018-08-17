@@ -1,17 +1,23 @@
 ﻿using System;
 using Speercs.Server.Models.Entities;
+using Speercs.Server.Models.Mechanics;
 
 namespace Speercs.Server.Extensibility.Entities.Templates.Cores {
     public abstract class CoreDrillBase : BotCore {
-        public CoreDrillBase(int mining) {
-            qualities[nameof(mining)] = mining;
+        public const string QUALITY_MINING = "mining";
 
-            defineFunction("drill", new Func<DrillResult>(actionDrill));
+        public CoreDrillBase(int mining) {
+            qualities[QUALITY_MINING] = mining;
+
+            defineFunction("drill", new Func<Direction, bool>(actionDrill));
         }
 
-        public DrillResult actionDrill() {
-            return new DrillResult(false, amount: 0);
-//            throw new NotImplementedException();
+        public bool actionDrill(Direction direction) {
+            var interaction = new RoomTileInteraction(bot.context, bot.team);
+            var targetTile = bot.position.move(direction);
+            // drill target must be in the same room
+            if (!bot.position.roomPos.equalTo(targetTile.roomPos)) return false;
+            return interaction.drill(targetTile, (int) qualities[QUALITY_MINING]);
         }
 
         public override BotCoreFlags flags { get; } = BotCoreFlags.Switchable;

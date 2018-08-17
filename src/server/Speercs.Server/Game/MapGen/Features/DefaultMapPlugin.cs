@@ -13,8 +13,9 @@ namespace Speercs.Server.Game.MapGen.Features {
             container.registerType<Tile>(typeof(TileFloor));
             container.registerType<Tile>(typeof(TileRock));
             // Register MapGen features
+            var nrgOre = new TileOre.NRGOre();
             container.register<IMapGenFeature>(new OreFeature(
-                () => TileOre.create(new TileOre.NRGOre(), amount: 40),
+                () => TileOre.create(nrgOre, amount: nrgOre.resource.chunk * 4),
                 0.003,
                 OreFeature.Location.Wall,
                 1, 4

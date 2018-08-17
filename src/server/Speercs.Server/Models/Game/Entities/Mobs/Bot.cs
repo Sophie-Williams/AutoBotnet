@@ -35,11 +35,11 @@ namespace Speercs.Server.Models.Entities {
         public int coreDrain => cores.Sum(x => x.drain);
 
         protected override bool moveRelative(Direction direction) {
-            if (_context.appState.tickCount <= lastMoveTime)
+            if (context.appState.tickCount <= lastMoveTime)
                 return false; // already moved this tick
 
             if (base.moveRelative(direction)) {
-                lastMoveTime = _context.appState.tickCount;
+                lastMoveTime = context.appState.tickCount;
                 return true;
             }
 
@@ -56,6 +56,8 @@ namespace Speercs.Server.Models.Entities {
     }
 
     public abstract class BotCore {
+        [BsonIgnore] [JsonIgnore] public Bot bot;
+
         [BsonIgnore]
         public string type => this.GetType().Name;
 

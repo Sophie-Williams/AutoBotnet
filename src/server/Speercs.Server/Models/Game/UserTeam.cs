@@ -21,6 +21,11 @@ namespace Speercs.Server.Models {
             return 0;
         }
 
+        public void addResource(string resourceId, long amount) {
+            if (!resources.ContainsKey(resourceId)) resources[resourceId] = 0;
+            resources[resourceId] = resources[resourceId] + amount;
+        }
+
         public GameEntity addEntity(GameEntity entity) {
             entities.Add(entity);
             return entity;

@@ -12,6 +12,7 @@ namespace Speercs.Server.Models.Map {
     public struct RoomPosition {
         [BsonField("pos")]
         public Point pos { get; set; }
+
         [BsonField("roomPos")]
         public Point roomPos { get; set; }
 
@@ -60,6 +61,53 @@ namespace Speercs.Server.Models.Map {
                 .MinBy(entity => _this.distance(entity));
         }
 
+        public RoomPosition move(Direction direction) {
+            var roomX = roomPos.x;
+            var roomY = roomPos.y;
+            var newX = pos.x;
+            var newY = pos.y;
+
+            switch (direction) {
+                case Direction.North:
+                    newY--;
+                    break;
+
+                case Direction.East:
+                    newX++;
+                    break;
+
+                case Direction.South:
+                    newY++;
+                    break;
+
+                case Direction.West:
+                    newX--;
+                    break;
+                default:
+                    // this can happen if an int is casted to Direction
+                    throw new ArgumentException("direction must be one of the four cardinal directions",
+                        nameof(direction));
+            }
+
+            if (newX < 0) {
+                roomX--;
+            }
+
+            if (newX > Room.MAP_EDGE_SIZE) {
+                roomX++;
+            }
+
+            if (newY < 0) {
+                roomY--;
+            }
+
+            if (newY > Room.MAP_EDGE_SIZE) {
+                roomY++;
+            }
+            
+            return new RoomPosition(new Point(roomX, roomY), new Point(newX, newY));
+        }
+
         public List<RoomPosition> pathTo(ISContext context, RoomPosition goal) {
             return new Pathfinder(context, this, goal).findPath();
         }
@@ -75,7 +123,6 @@ namespace Speercs.Server.Models.Map {
         public Tile getTile(ISContext context) {
             return getRoom(context).tiles[pos.x, pos.y];
         }
-
 
         public override bool Equals(object obj) {
             return obj is RoomPosition position && this == position;

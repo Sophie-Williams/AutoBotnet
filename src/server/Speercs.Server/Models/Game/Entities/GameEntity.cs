@@ -5,6 +5,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
 using Speercs.Server.Services.EventPush;
+using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Models.Entities {
     public enum Direction {
@@ -27,7 +28,7 @@ namespace Speercs.Server.Models.Entities {
 
         private RoomPosition _position { get; set; }
 
-        [BsonIgnore] protected ISContext _context;
+        [BsonIgnore] [JsonIgnore] public ISContext context;
 
         [BsonField("position")]
         public RoomPosition position {
@@ -38,6 +39,10 @@ namespace Speercs.Server.Models.Entities {
         [JsonIgnore]
         [BsonField("teamId")]
         public string teamId { get; set; }
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public UserTeam team { get; private set; }
 
         [BsonIgnore]
         public string type => this.GetType().Name;
@@ -53,8 +58,10 @@ namespace Speercs.Server.Models.Entities {
             id = Guid.NewGuid().ToString("N");
         }
 
-        internal void loadContext(ISContext context) {
-            _context = context;
+        public void loadContext(ISContext context) {
+            this.context = context;
+            var userDataService = new PersistentDataService(context);
+            team = userDataService.get(teamId).team;
             propagatePosition(_position);
         }
 
@@ -76,20 +83,21 @@ namespace Speercs.Server.Models.Entities {
 
         private bool propagatePosition(RoomPosition pos) {
             _position = pos;
-            if (_context == null) return false;
+            if (context == null) return false;
             // Propagate position to spatial hash, etc.
-            if (_context.appState.entities.spatialHash.ContainsKey(pos.roomPos.ToString()) &&
-                _context.appState.entities.spatialHash[pos.roomPos.ToString()].Contains(this)) {
-                _context.appState.entities.spatialHash[pos.roomPos.ToString()].Remove(this);
+            if (context.appState.entities.spatialHash.ContainsKey(pos.roomPos.ToString()) &&
+                context.appState.entities.spatialHash[pos.roomPos.ToString()].Contains(this)) {
+                context.appState.entities.spatialHash[pos.roomPos.ToString()].Remove(this);
             }
-            _context.appState.entities.insertSpatialHash(this);
+
+            context.appState.entities.insertSpatialHash(this);
             raiseEvent(EVENT_POSITION, pos);
             return true;
         }
 
         public (bool, bool) raiseEvent(string type, object data) {
-            if (_context == null) return (false, false);
-            var result = _context.eventPush.pushEvent(EventPushService.EVENTPUSH_ENTITY, type, this, data);
+            if (context == null) return (false, false);
+            var result = context.eventPush.pushEvent(EventPushService.EVENTPUSH_ENTITY, type, this, data);
             return (true, result);
         }
     }
