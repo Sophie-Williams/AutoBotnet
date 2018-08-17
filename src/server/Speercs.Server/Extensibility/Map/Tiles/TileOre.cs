@@ -24,10 +24,6 @@ namespace Speercs.Server.Extensibility.Map.Tiles {
             set { props.set(PROP_ORE_AMOUNT, value); }
         }
 
-        public TileOre(int durability) {
-            this.durability = durability;
-        }
-
         public override bool drill(DrillContext context) {
             if (oreAmount <= 0) return false;
             var resource = context.serverContext.registry.resources.resourceById((int) oreType);
@@ -38,7 +34,8 @@ namespace Speercs.Server.Extensibility.Map.Tiles {
         }
 
         public static TileOre create(OreType ore, long amount) {
-            var tile = new TileOre(ore.durability);
+            var tile = new TileOre();
+            tile.durability = ore.durability;
             tile.oreType = ore.resource.id;
             tile.oreAmount = amount;
             return tile;
