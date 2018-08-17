@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using LiteDB;
 using Speercs.Server.Configuration;
 using Speercs.Server.Models.Entities;
+using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
 using Speercs.Server.Services.Game;
 
@@ -14,17 +16,14 @@ namespace Speercs.Server.Models {
         public Dictionary<string, HashSet<GameEntity>> spatialHash { get; set; } =
             new Dictionary<string, HashSet<GameEntity>>();
 
-        [BsonIgnore]
-        protected ISContext serverContext;
+        [BsonIgnore] protected ISContext serverContext;
 
-        [BsonIgnore]
-        protected PersistentDataService dataService;
+        [BsonIgnore] protected PersistentDataService dataService;
 
         public void initialize(ISContext context) {
             serverContext = context;
             dataService = new PersistentDataService(serverContext);
         }
-        
 
         public void wake(GameEntity entity) {
             entity.loadContext(serverContext);
@@ -64,6 +63,11 @@ namespace Speercs.Server.Models {
         public T get<T>(string id) where T : GameEntity {
             entityData.TryGetValue(id, out var entity);
             return entity as T;
+        }
+
+        public bool anyAt(RoomPosition pos) {
+            var entitiesInRoom = getByRoom(pos.roomPos);
+            return entitiesInRoom.Any(x => x.position.pos.equalTo(pos.pos));
         }
 
         public IEnumerable<GameEntity> getByUser(string userId) {

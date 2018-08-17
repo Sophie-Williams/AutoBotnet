@@ -49,6 +49,8 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 if (templateName == null) return null;
                 var factory = factoryRef?.target as FactoryTower;
                 if (factory == null) return null;
+                // no entities must currently be on top of the factory
+                if (context.appState.entities.anyAt(factory.position)) return null;
                 var bot = botConstructor.constructBot(factory, templateName);
                 if (bot == null) return null;
                 userData.team.addEntity(bot);

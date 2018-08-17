@@ -18,11 +18,15 @@ namespace Speercs.Server.Models.Entities {
 
         protected virtual bool moveRelative(Direction direction) {
             var newPos = position.move(direction);
+            
             // if the new position is a different room, ensure we can move there
             if (!newPos.roomPos.equalTo(position.roomPos)) {
                 if (Point.manhattanDistance(newPos.roomPos, position.roomPos) > 1) return false;
                 if (!moveRoom(newPos.roomPos)) return false;
             }
+            
+            // make sure there's nothing there
+            if (context.appState.entities.anyAt(newPos)) return false;
 
             var tile = newPos.getTile(context);
             if (!tile.walkable)
