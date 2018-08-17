@@ -11,10 +11,10 @@ namespace Speercs.Server.Game.MapGen.Features {
             container.registerType<Tile>(typeof(TileBedrock));
             container.registerType<Tile>(typeof(TileCrashSite));
             container.registerType<Tile>(typeof(TileFloor));
-            container.registerType<Tile>(typeof(TileWall));
+            container.registerType<Tile>(typeof(TileRock));
             // Register MapGen features
             container.register<IMapGenFeature>(new OreFeature(
-                () => TileOre.create(TileOre.OreTypes.NRG, amount: 40),
+                () => TileOre.create(new TileOre.NRGOre(), amount: 40),
                 0.003,
                 OreFeature.Location.Wall,
                 1, 4

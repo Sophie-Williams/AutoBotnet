@@ -8,5 +8,6 @@ namespace Speercs.Server.Game.MapGen.Tiles {
         public override char tileChar => '#';
         public override Rgba32 color => Rgba32.DarkGray;
         public override string name => "bedrock";
+        public override int durability { get; protected set; } = 65536;
     }
 }

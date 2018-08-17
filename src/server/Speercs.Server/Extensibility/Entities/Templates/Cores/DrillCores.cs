@@ -14,16 +14,6 @@ namespace Speercs.Server.Extensibility.Entities.Templates.Cores {
 //            throw new NotImplementedException();
         }
 
-        public struct DrillResult {
-            public bool result;
-            public int amount;
-
-            public DrillResult(bool result, int amount) {
-                this.result = result;
-                this.amount = amount;
-            }
-        }
-
         public override BotCoreFlags flags { get; } = BotCoreFlags.Switchable;
     }
 

@@ -9,6 +9,7 @@ namespace Speercs.Server.Extensibility.Map {
         public abstract Rgba32 color { get; }
         public abstract string name { get; }
         public Properties props { get; } = new Properties();
+        public virtual int durability { get; protected set; } = 1;
 
         public const int PROP_ORE_TYPE = 0x07;
         public const int PROP_ORE_AMOUNT = 0x08;

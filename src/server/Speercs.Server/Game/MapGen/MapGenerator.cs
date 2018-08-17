@@ -47,7 +47,7 @@ namespace Speercs.Server.Game.MapGen {
             for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
                 for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
                     if (shouldBeBedrock(x, y)) room.tiles[x, y] = new TileBedrock();
-                    if (tileAt(x, y) is TileWall) {
+                    if (tileAt(x, y) is TileRock) {
                         walls.Add(new Point(x, y));
                         if (isExposed()) exposedWalls.Add(new Point(x, y));
                         else unexposedWalls.Add(new Point(x, y));
@@ -149,7 +149,7 @@ namespace Speercs.Server.Game.MapGen {
                 for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
                     for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
                         var d = densityMap[x, y];
-                        if (random.NextDouble() < d) room.tiles[x, y] = new TileWall();
+                        if (random.NextDouble() < d) room.tiles[x, y] = new TileRock();
                         else room.tiles[x, y] = new TileFloor();
                     }
                 }
@@ -162,26 +162,26 @@ namespace Speercs.Server.Game.MapGen {
                     for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
                         for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
                             counts[x, y] = 0;
-                            if (tileAt(x - 1, y) is TileWall) counts[x, y]++;
-                            if (tileAt(x + 1, y) is TileWall) counts[x, y]++;
-                            if (tileAt(x, y - 1) is TileWall) counts[x, y]++;
-                            if (tileAt(x, y + 1) is TileWall) counts[x, y]++;
-                            if (tileAt(x - 1, y - 1) is TileWall) counts[x, y]++;
-                            if (tileAt(x - 1, y + 1) is TileWall) counts[x, y]++;
-                            if (tileAt(x + 1, y - 1) is TileWall) counts[x, y]++;
-                            if (tileAt(x + 1, y + 1) is TileWall) counts[x, y]++;
+                            if (tileAt(x - 1, y) is TileRock) counts[x, y]++;
+                            if (tileAt(x + 1, y) is TileRock) counts[x, y]++;
+                            if (tileAt(x, y - 1) is TileRock) counts[x, y]++;
+                            if (tileAt(x, y + 1) is TileRock) counts[x, y]++;
+                            if (tileAt(x - 1, y - 1) is TileRock) counts[x, y]++;
+                            if (tileAt(x - 1, y + 1) is TileRock) counts[x, y]++;
+                            if (tileAt(x + 1, y - 1) is TileRock) counts[x, y]++;
+                            if (tileAt(x + 1, y + 1) is TileRock) counts[x, y]++;
                         }
                     }
 
                     // update the grid
                     for (var x = 0; x < Room.MAP_EDGE_SIZE; x++) {
                         for (var y = 0; y < Room.MAP_EDGE_SIZE; y++) {
-                            if (tileAt(x, y) is TileWall) {
+                            if (tileAt(x, y) is TileRock) {
                                 if (counts[x, y] < prm.cellularAutomatonMinNeighbors)
                                     room.tiles[x, y] = new TileFloor();
                             } else {
                                 if (counts[x, y] >= prm.cellularAutomatonMaxNeighbors)
-                                    room.tiles[x, y] = new TileWall();
+                                    room.tiles[x, y] = new TileRock();
                             }
                         }
                     }
@@ -192,7 +192,7 @@ namespace Speercs.Server.Game.MapGen {
                 // only Wall becomes Bedrock
                 if (tileAt(x, y) is TileFloor) return false;
                 // edges are bedrock
-                if (tileAt(x, y) is TileWall &&
+                if (tileAt(x, y) is TileRock &&
                     (x == 0 || x == Room.MAP_EDGE_SIZE - 1 || y == 0 || y == Room.MAP_EDGE_SIZE - 1))
                     return true;
                 // walls 2 tiles deep become bedrock
