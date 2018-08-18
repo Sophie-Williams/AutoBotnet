@@ -1,6 +1,20 @@
 
 # Speercs (AutoBotnet) Changelog
 
+## `0.0.5-dev` (In Development)
+
+- performance tweaks and optimizations
+    - optimized room pack format to be gzipped binary; this new format is also used in database serialization
+    - types from plugins are cached for quick indexed lookup in `ItemRegistry`
+- map interaction support
+    - drilling support
+        - drill using the `CoreDrill`, by calling the `drill` action
+        - tiles now have an associated `durability` that represents the amount of drill power (drill core tier) required
+        - drilling transfers resources from tiles to an empire
+    - `TileDeltaEvent` for when tiles change
+- multiple entities can no longer inhabit the same space
+    - enforced when creating new bots from factory and in `MobileEntity::move`
+
 ## `0.0.4-dev` "Clink" (June 23, 2018)
 
 - major overhaul of client script api
