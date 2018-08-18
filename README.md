@@ -7,16 +7,19 @@
 
 ## Documentation
 
-- Server REST API documentation can be found in [doc](doc/).
+- Documentation can be found in [doc](doc/).
+  - See `rest_api.md` for REST API documentation
+  - See `player_api.md` for user scripting API documentation
+  - See `dev/` for dev notes and documentation
 
 ## Design
 
-Design information can be found in [AutoBotnetDesign](https://github.com/CookieEaters/AutoBotnetDesign).
+Design information and documents can be found in [AutoBotnetDesign](https://github.com/CookieEaters/AutoBotnetDesign).
 
 ## Hacking
 
 - Install latest .NET Core tooling/sdk
-  - As of the time of writing: [this version](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.5-download.md)
+  - Current tooling (at time of writing): [v2.1.2](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.1.2-sdk-download.md)
 - Clone the repository recursively (`git clone --recursive https://github.com/CookieEaters/AutoBotnet.git`)
 - Open `src/server` in your editor (vscode recommended)
 - Restore `dotnet` dependencies: `dotnet restore` in `src/server`
@@ -49,7 +52,7 @@ Here is an example, running `speercs` in Docker using the development configurat
 
 # License
 
-Copyright © 2017 The CookieEaters. All Rights Reserved.
+Copyright © 2017-2018 ALTiCU, The CookieEaters. All Rights Reserved.
 
 The source code of AutoBotnet is licensed under the **AGPLv3**, which can
 be found in `LICENSE`.
