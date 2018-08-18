@@ -1,20 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 using LiteDB;
 using Newtonsoft.Json;
 using Speercs.Server.Configuration;
-using Speercs.Server.Extensibility;
 using Speercs.Server.Extensibility.Map;
-using Speercs.Server.Game.MapGen;
-using Speercs.Server.Models.Entities;
+using Speercs.Server.Models.Events;
 using Speercs.Server.Models.Math;
+using Speercs.Server.Services.EventPush;
 
 namespace Speercs.Server.Models.Map {
     public class Room {
         [JsonIgnore] public const int MAP_EDGE_SIZE = 64;
+
+        public const string EVENTPUSH_UPDATE = "update";
 
         public Room(int x, int y) {
             this.x = x;
@@ -61,6 +61,22 @@ namespace Speercs.Server.Models.Map {
             return tiles[pos.x, pos.y];
         }
 
+        public bool raiseTileChanged(ISContext context, Point tilePos) {
+            var tileRoomPosition = new RoomPosition(pos(), tilePos);
+            return context.eventPush.pushEvent(EventPushService.EVENTPUSH_ROOM_TILE, EVENTPUSH_UPDATE,
+                tileRoomPosition, TileDeltaEvent.pack(context, tileRoomPosition, getTile(tilePos)));
+        }
+
+        public static void writeTile(ISContext context, BinaryWriter bw, Tile tile) {
+            var tileId = context.registry.tiles.tileId(tile);
+            bw.Write(tileId);
+            bw.Write(tile.props.table.Count);
+            foreach (var prop in tile.props.table) {
+                bw.Write(prop.Key);
+                bw.Write(prop.Value);
+            }
+        }
+
         public static byte[] packTiles(ISContext context, Tile[,] tiles) {
             using (var output = new MemoryStream())
             using (var compressedOutput = new GZipStream(output, CompressionMode.Compress))
@@ -70,13 +86,7 @@ namespace Speercs.Server.Models.Map {
                 for (var i = 0; i < MAP_EDGE_SIZE; i++) {
                     for (var j = 0; j < MAP_EDGE_SIZE; j++) {
                         var tile = tiles[i, j];
-                        var tileId = context.registry.tiles.tileId(tile);
-                        bw.Write(tileId);
-                        bw.Write(tile.props.table.Count);
-                        foreach (var prop in tile.props.table) {
-                            bw.Write(prop.Key);
-                            bw.Write(prop.Value);
-                        }
+                        writeTile(context, bw, tile);
                     }
                 }
 

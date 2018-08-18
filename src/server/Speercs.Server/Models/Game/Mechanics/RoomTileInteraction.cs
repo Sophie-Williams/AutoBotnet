@@ -24,6 +24,9 @@ namespace Speercs.Server.Models.Mechanics {
                 // remove the tile (turn into "Floor")
                 room.setTile(roomPos.pos, new TileFloor());
             }
+            
+            // send an event for the tile change
+            room.raiseTileChanged(serverContext, roomPos.pos);
 
             // distribute the resources
             foreach (var output in drillContext.outputs) {
