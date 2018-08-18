@@ -50,7 +50,7 @@ Here is an example, running `speercs` in Docker using the development configurat
 ## Useful Commands
 - Run server in development mode: `dotnet run --no-restore ENVIRONMENT=Development`
 
-# License
+## License
 
 Copyright © 2017-2018 ALTiCU, The CookieEaters. All Rights Reserved.
 
@@ -59,4 +59,4 @@ be found in `LICENSE`.
 
 Art and assets are licensed under the **CC BY-SA 4.0**.
 
-Additional information is available in `CREDITS.md`.
+Additional information about credits and licensing is available in `CREDITS.md`.
