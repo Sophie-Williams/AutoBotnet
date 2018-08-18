@@ -39,7 +39,7 @@ namespace Speercs.Server.Configuration {
         
         public ItemRegistry registry { get; }
 
-        public const string version = "0.0.4-dev";
+        public const string version = "0.0.5-dev";
 
         public SContext(SConfiguration config) {
             configuration = config;
