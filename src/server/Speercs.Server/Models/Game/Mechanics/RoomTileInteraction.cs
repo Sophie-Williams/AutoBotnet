@@ -5,9 +5,9 @@ using Speercs.Server.Models.Map;
 
 namespace Speercs.Server.Models.Mechanics {
     public class RoomTileInteraction : DependencyObject {
-        private UserTeam team;
+        private UserEmpire team;
 
-        public RoomTileInteraction(ISContext context, UserTeam team) : base(context) {
+        public RoomTileInteraction(ISContext context, UserEmpire team) : base(context) {
             this.team = team;
         }
 

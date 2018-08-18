@@ -8,7 +8,7 @@ namespace Speercs.Server.Models.Entities.Towers {
         /// </summary>
         public TowerEntity() { }
 
-        protected TowerEntity(RoomPosition pos, UserTeam team) :
+        protected TowerEntity(RoomPosition pos, UserEmpire team) :
             base(pos, team) { }
     }
 }

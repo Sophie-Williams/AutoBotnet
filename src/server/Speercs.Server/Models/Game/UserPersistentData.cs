@@ -18,6 +18,6 @@ namespace Speercs.Server.Models {
 
         public Queue<JToken> queuedNotifications { get; set; } = new Queue<JToken>();
 
-        public UserTeam team { get; set; } = new UserTeam();
+        public UserEmpire team { get; set; } = new UserEmpire();
     }
 }

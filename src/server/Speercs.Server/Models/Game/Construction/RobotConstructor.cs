@@ -8,9 +8,9 @@ using Speercs.Server.Models.Mechanics;
 
 namespace Speercs.Server.Models.Construction {
     public class RobotConstructor : DependencyObject {
-        private UserTeam team;
+        private UserEmpire team;
 
-        public RobotConstructor(ISContext context, UserTeam team) : base(context) {
+        public RobotConstructor(ISContext context, UserEmpire team) : base(context) {
             this.team = team;
         }
 

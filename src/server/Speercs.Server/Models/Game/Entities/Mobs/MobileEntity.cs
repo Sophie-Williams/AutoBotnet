@@ -8,7 +8,7 @@ namespace Speercs.Server.Models.Entities {
         /// </summary>
         public MobileEntity() { }
 
-        protected MobileEntity(RoomPosition pos, UserTeam team) : base(pos, team) { }
+        protected MobileEntity(RoomPosition pos, UserEmpire team) : base(pos, team) { }
 
         public bool move(Direction direction) {
             return moveRelative(direction);

@@ -13,7 +13,7 @@ namespace Speercs.Server.Models.Entities {
         /// </summary>
         public Bot() { }
 
-        public Bot(RoomPosition pos, UserTeam team) : base(pos, team) { }
+        public Bot(RoomPosition pos, UserEmpire team) : base(pos, team) { }
 
         [BsonField("coreCapacity")]
         public int coreCapacity { get; set; }

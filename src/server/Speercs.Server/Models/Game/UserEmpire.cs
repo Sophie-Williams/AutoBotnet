@@ -6,7 +6,7 @@ namespace Speercs.Server.Models {
     /// <summary>
     /// Data model for storing all information about a user and his/her stuff
     /// </summary>
-    public class UserTeam : DatabaseObject {
+    public class UserEmpire : DatabaseObject {
         [BsonIgnore]
         public List<GameEntity> entities { get; set; } = new List<GameEntity>();
         public string identifier { get; set; }

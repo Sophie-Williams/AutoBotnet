@@ -8,7 +8,7 @@ namespace Speercs.Server.Models.Entities.Towers {
         /// </summary>
         public FactoryTower() { }
 
-        public FactoryTower(RoomPosition pos, UserTeam team) :
+        public FactoryTower(RoomPosition pos, UserEmpire team) :
             base(pos, team) { }
     }
 }

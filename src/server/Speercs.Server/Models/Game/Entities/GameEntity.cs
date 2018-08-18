@@ -42,7 +42,7 @@ namespace Speercs.Server.Models.Entities {
 
         [JsonIgnore]
         [BsonIgnore]
-        public UserTeam team { get; private set; }
+        public UserEmpire team { get; private set; }
 
         [BsonIgnore]
         public string type => this.GetType().Name;
@@ -52,7 +52,7 @@ namespace Speercs.Server.Models.Entities {
         /// </summary>
         public GameEntity() { }
 
-        public GameEntity(RoomPosition pos, UserTeam team) {
+        public GameEntity(RoomPosition pos, UserEmpire team) {
             position = pos;
             teamId = team.identifier;
             id = Guid.NewGuid().ToString("N");

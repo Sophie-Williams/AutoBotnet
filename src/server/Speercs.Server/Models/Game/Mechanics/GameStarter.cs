@@ -8,7 +8,7 @@ namespace Speercs.Server.Models.Mechanics {
     public class GameStarter : DependencyObject {
         public GameStarter(ISContext context) : base(context) { }
 
-        public void bootTeam(UserTeam team) {
+        public void bootTeam(UserEmpire team) {
             // reset the team
             destroyTeam(team);
             // give resources
@@ -24,7 +24,7 @@ namespace Speercs.Server.Models.Mechanics {
             team.booted = true;
         }
 
-        public void destroyTeam(UserTeam team) {
+        public void destroyTeam(UserEmpire team) {
             foreach (var entity in team.entities) {
                 serverContext.appState.entities.remove(entity);
             }

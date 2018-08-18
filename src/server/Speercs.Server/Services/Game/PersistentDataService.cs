@@ -19,7 +19,7 @@ namespace Speercs.Server.Services.Game {
         public void createPersistentData(string ownerId) {
             var persistentData = new UserPersistentData(ownerId) {
                 program = new UserProgram("\nfunction loop () {\n  // your code\n}\n"),
-                team = new UserTeam {
+                team = new UserEmpire {
                     identifier = ownerId
                 }
             };
