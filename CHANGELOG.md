@@ -14,6 +14,7 @@
     - `TileDeltaEvent` for when tiles change
 - multiple entities can no longer inhabit the same space
     - enforced when creating new bots from factory and in `MobileEntity::move`
+- renamed `UserTeam` to `UserEmpire` to be more semantic (it represents a single empire, not a "team" or "alliance")
 
 ## `0.0.4-dev` "Clink" (June 23, 2018)
 
