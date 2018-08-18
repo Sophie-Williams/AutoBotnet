@@ -28,7 +28,7 @@ namespace Speercs.Server.Web.Realtime.Handlers {
 
                 error = null;
             } catch (ParserException ex) {
-                error = $"parse: {ex}";
+                error = $"parse: {ex.Message}";
             } catch (JavaScriptException ex) {
                 // there was an error
                 error = ex.Message;
