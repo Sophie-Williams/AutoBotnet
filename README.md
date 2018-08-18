@@ -48,7 +48,7 @@ Here is an example, running `speercs` in Docker using the development configurat
 - `docker start AutoBotnetLocalDev` and `docker stop AutoBotnetLocalDev` to start/stop the container.
 
 ## Useful Commands
-- Run server in development mode: `dotnet run --no-restore ENVIRONMENT=Development`
+- Run server in development mode: `dotnet run ASPNETCORE_ENVIRONMENT=Development`
 
 ## License
 
