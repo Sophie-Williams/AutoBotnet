@@ -41,7 +41,8 @@ namespace Speercs.Server.Modules.Admin {
             Delete("/delete/{key}", args => {
                 var inviteKeys =
                     this.serverContext.database.GetCollection<InviteKey>(DatabaseKeys.COLLECTION_INVITEKEYS);
-                return inviteKeys.Delete(x => x.key == (string) args.key) > 0
+                var key = (string) args.key;
+                return inviteKeys.Delete(x => x.key == key) > 0
                     ? HttpStatusCode.NoContent
                     : HttpStatusCode.NotFound;
             });

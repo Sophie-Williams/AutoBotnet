@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LiteDB;
 using Speercs.Server.Extensibility.Map;
-using Speercs.Server.Game.MapGen;
-using Speercs.Server.Models.Entities;
 using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
 
@@ -19,11 +16,9 @@ namespace Speercs.Server.Configuration {
             return context;
         }
 
-        private const string state_storage_key = "state";
-
         private static bool serializationMappersRegistered { get; set; }
 
-        public static void loadState(SContext serverContext, string stateStorageFile) {
+        public static void loadState(SContext serverContext) {
             if (!serializationMappersRegistered) {
                 BsonMapper.Global.RegisterType(
                     serialize: map => BsonMapper.Global.ToDocument(map.rooms),
@@ -91,8 +86,7 @@ namespace Speercs.Server.Configuration {
             }
 
             // Load the Server State into the context. This object also includes the OsmiumMine Core state
-            var database = new LiteDatabase(stateStorageFile);
-            var stateStorage = database.GetCollection<SAppState>(state_storage_key);
+            var stateStorage = serverContext.database.GetCollection<SAppState>(DatabaseKeys.ITEM_STATE);
             var savedState = stateStorage.FindAll().FirstOrDefault();
             if (savedState == null) {
                 // Create and save new state

@@ -71,8 +71,8 @@ namespace Speercs.Server {
             new BuiltinPluginBootstrapper(context).loadAll();
 
             // load persistent state
-            SConfigurator.loadState(context, state_storage_database_file_name);
-            context.log.writeLine($"Persistent state loaded from {state_storage_database_file_name}",
+            SConfigurator.loadState(context);
+            context.log.writeLine($"Persistent state loaded",
                 SpeercsLogger.LogLevel.Information);
 
             // load database
