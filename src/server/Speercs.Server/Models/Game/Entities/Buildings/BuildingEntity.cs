@@ -8,10 +8,17 @@ namespace Speercs.Server.Models.Entities.Buildings {
         /// <summary>
         /// Bson constructor
         /// </summary>
-        public BuildingEntity() { }
+        public BuildingEntity() {
+            defineActions();
+        }
+
+        protected abstract void defineActions();
 
         protected BuildingEntity(RoomPosition pos, UserEmpire team) :
-            base(pos, team) { }
+            base(pos, team) {
+            
+            defineActions();
+        }
         
         [BsonIgnore]
         public Dictionary<string, Delegate> actions { get; } = new Dictionary<string, Delegate>();

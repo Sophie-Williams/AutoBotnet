@@ -14,6 +14,9 @@ namespace Speercs.Server.Models.Entities.Buildings {
             base(pos, team) {
             
             resetHealth(400);
+        }
+
+        protected override void defineActions() {
             defineAction("repair", new Func<BotEntityRef, bool>(actionRepair));
         }
 
