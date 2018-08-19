@@ -10,7 +10,6 @@ namespace Speercs.Server.Extensibility.Entities {
             // register bot templates
             container.register<IBotTemplate>(new ScoutBotTemplate());
             // register core templates
-            container.register<IBotCoreTemplate>(new CoreStorage1Template());
             container.register<IBotCoreTemplate>(new CoreDrill1Template());
         }
     }
