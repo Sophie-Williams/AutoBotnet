@@ -6,7 +6,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting.Api.Refs;
 using Speercs.Server.Models.Construction;
 using Speercs.Server.Models.Entities;
-using Speercs.Server.Models.Entities.Towers;
+using Speercs.Server.Models.Entities.Buildings;
 using Speercs.Server.Models.Mechanics;
 using Speercs.Server.Services.Game;
 
@@ -30,12 +30,19 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                 return true;
             }
 
-            GameEntityRef getFactory(string id) {
+            BuildingRef getBuilding(string id) {
+                if (id == null) return null;
+                var building = userData.team.entities.FirstOrDefault(x => x.id == id) as BuildingEntity;
+                if (building == null) return null;
+                return new BuildingRef(building);
+            }
+
+            BuildingRef getFactory(string id) {
                 var factory = userData.team.entities
-                    .FirstOrDefault(x => x is FactoryTower
+                    .FirstOrDefault(x => x is FactoryBuilding
                         && ((id == null) || (id == x.id)));
                 if (factory == null) return null;
-                return new GameEntityRef((FactoryTower) factory);
+                return new BuildingRef((FactoryBuilding) factory);
             }
 
             BotEntityRef getBot(string id) {
@@ -47,7 +54,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
 
             BotEntityRef constructBot(string templateName, GameEntityRef factoryRef) {
                 if (templateName == null) return null;
-                var factory = factoryRef?.target as FactoryTower;
+                var factory = factoryRef?.target as FactoryBuilding;
                 if (factory == null) return null;
                 // no entities must currently be on top of the factory
                 if (context.appState.entities.anyAt(factory.position)) return null;
@@ -59,7 +66,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
 
             bool deconstructBot(BotEntityRef botRef, GameEntityRef factoryRef) {
                 if (botRef == null) return false;
-                var factory = factoryRef?.target as FactoryTower;
+                var factory = factoryRef?.target as FactoryBuilding;
                 if (factory == null) return false;
                 var result = botConstructor.deconstructBot((Bot)botRef.target, factory);
                 if (!result) return false;
@@ -86,7 +93,8 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             defineFunction(nameof(boot), new Func<bool>(boot));
-            defineFunction(nameof(getFactory), new Func<string, GameEntityRef>(getFactory));
+            defineFunction(nameof(getBuilding), new Func<string, BuildingRef>(getBuilding));
+            defineFunction(nameof(getFactory), new Func<string, BuildingRef>(getFactory));
             defineFunction(nameof(getBot), new Func<string, GameEntityRef>(getBot));
             defineFunction(nameof(constructBot), new Func<string, GameEntityRef, BotEntityRef>(constructBot));
             defineFunction(nameof(deconstructBot), new Func<BotEntityRef, GameEntityRef, bool>(deconstructBot));

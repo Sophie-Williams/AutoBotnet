@@ -3,7 +3,7 @@ using System.Linq;
 using Speercs.Server.Configuration;
 using Speercs.Server.Extensibility.Entities;
 using Speercs.Server.Models.Entities;
-using Speercs.Server.Models.Entities.Towers;
+using Speercs.Server.Models.Entities.Buildings;
 using Speercs.Server.Models.Mechanics;
 
 namespace Speercs.Server.Models.Construction {
@@ -20,7 +20,7 @@ namespace Speercs.Server.Models.Construction {
             return template;
         }
 
-        public Bot constructBot(FactoryTower factory, string templateName) {
+        public Bot constructBot(FactoryBuilding factory, string templateName) {
             var template = resolveTemplate<IBotTemplate>(templateName);
             if (template == null) return null;
             if (!spendResources(template.costs)) return null;
@@ -31,7 +31,7 @@ namespace Speercs.Server.Models.Construction {
             return bot;
         }
 
-        public bool deconstructBot(Bot bot, FactoryTower factory) {
+        public bool deconstructBot(Bot bot, FactoryBuilding factory) {
             // ensure that the bot is at the factory
             if (bot.position != factory.position) return false;
             // refund resources and destroy the bot

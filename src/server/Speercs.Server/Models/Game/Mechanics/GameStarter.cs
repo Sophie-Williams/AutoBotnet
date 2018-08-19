@@ -1,6 +1,6 @@
 ﻿using Speercs.Server.Configuration;
 using Speercs.Server.Game.MapGen;
-using Speercs.Server.Models.Entities.Towers;
+using Speercs.Server.Models.Entities.Buildings;
 using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
 
@@ -18,7 +18,7 @@ namespace Speercs.Server.Models.Mechanics {
             var mapExpander =
                 new WorldMapExpander(serverContext, new MapGenerator(serverContext, new MapGenParameters()));
             var homeRoom = mapExpander.createConnectedRoom();
-            var factory = new FactoryTower(new RoomPosition(new Point(homeRoom.x, homeRoom.y), homeRoom.spawn), team);
+            var factory = new FactoryBuilding(new RoomPosition(new Point(homeRoom.x, homeRoom.y), homeRoom.spawn), team);
             serverContext.appState.entities.insertNew(factory);
             team.addEntity(factory);
             team.booted = true;
