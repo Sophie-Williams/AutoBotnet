@@ -68,16 +68,17 @@ namespace Speercs.Server {
             context.log.writeLine("Server context created", SpeercsLogger.LogLevel.Information);
 
             // load plugins
-            new BuiltinPluginBootstrapper(context).loadAll();
+            var pluginBootstrapper = new BuiltinPluginBootstrapper(context);
+            pluginBootstrapper.loadAll();
+
+            // load database
+            context.connectDatabase();
+            context.log.writeLine($"Database connected", SpeercsLogger.LogLevel.Information);
 
             // load persistent state
             SConfigurator.loadState(context);
             context.log.writeLine($"Persistent state loaded",
                 SpeercsLogger.LogLevel.Information);
-
-            // load database
-            context.connectDatabase();
-            context.log.writeLine($"Database connected", SpeercsLogger.LogLevel.Information);
 
             // register application stop handler
             // AssemblyLoadContext.Default.Unloading += (c) => OnUnload(context);
