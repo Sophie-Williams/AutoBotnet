@@ -13,6 +13,7 @@ namespace Speercs.Server.Models {
         public string identifier { get; set; }
         public Dictionary<string, long> resources { get; set; } = new Dictionary<string, long>();
         public bool booted { get; set; } = false;
+        public long bootTime { get; set; } = -1;
 
         public long getResource(string resourceId) {
             if (resources.ContainsKey(resourceId)) {

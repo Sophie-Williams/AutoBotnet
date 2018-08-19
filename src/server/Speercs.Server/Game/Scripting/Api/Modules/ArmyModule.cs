@@ -25,8 +25,16 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
                     return false;
                 }
 
-                var starter = new GameStarter(context);
-                starter.bootTeam(userData.team);
+                var manager = new GameManager(context);
+                return manager.bootTeam(userData.team);
+            }
+            
+            bool surrender() {
+                // destroy all entities and enforce the delay
+
+                var manager = new GameManager(context);
+                manager.destroyTeam(userData.team);
+                
                 return true;
             }
 
@@ -93,6 +101,7 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
             }
 
             defineFunction(nameof(boot), new Func<bool>(boot));
+            defineFunction(nameof(surrender), new Func<bool>(surrender));
             defineFunction(nameof(getBuilding), new Func<string, BuildingRef>(getBuilding));
             defineFunction(nameof(getFactory), new Func<string, BuildingRef>(getFactory));
             defineFunction(nameof(getBot), new Func<string, GameEntityRef>(getBot));

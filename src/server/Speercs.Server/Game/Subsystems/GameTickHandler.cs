@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting;
@@ -18,7 +19,7 @@ namespace Speercs.Server.Game.Subsystems {
             // tick entities
             foreach (var user in _userManager.getUsers()) {
                 var teamId = user.identifier;
-                var teamEntities = serverContext.appState.entities.getByUser(teamId);
+                var teamEntities = serverContext.appState.entities.getByUser(teamId).ToList();
                 foreach (var entity in teamEntities) {
                     var result = entity.tick();
                     
@@ -27,9 +28,8 @@ namespace Speercs.Server.Game.Subsystems {
                         serverContext.appState.entities.remove(entity);
                     }
                 }
+                // TODO: Game update logic (???, achievements, etc.)
             }
-
-            // TODO: Game update logic (all bots dead, achievements, etc.)
         }
     }
 }

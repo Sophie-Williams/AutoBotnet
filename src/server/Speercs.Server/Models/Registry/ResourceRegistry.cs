@@ -13,6 +13,10 @@ namespace Speercs.Server.Models.Registry {
             return resourceTypes[id];
         }
 
+        public IEnumerable<EconomyResource> getAll() {
+            return resourceTypes.Values;
+        }
+
         public void recache() {
             resourceTypes = serverContext.extensibilityContainer.resolveAll<EconomyResource>()
                 .ToDictionary(res => res.id);

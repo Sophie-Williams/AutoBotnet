@@ -1,14 +1,21 @@
-﻿using Speercs.Server.Configuration;
+﻿using System.Linq;
+using Speercs.Server.Configuration;
 using Speercs.Server.Game.MapGen;
 using Speercs.Server.Models.Entities.Buildings;
 using Speercs.Server.Models.Map;
 using Speercs.Server.Models.Math;
 
 namespace Speercs.Server.Models.Mechanics {
-    public class GameStarter : DependencyObject {
-        public GameStarter(ISContext context) : base(context) { }
+    public class GameManager : DependencyObject {
+        public GameManager(ISContext context) : base(context) { }
 
-        public void bootTeam(UserEmpire team) {
+        public bool bootTeam(UserEmpire team) {
+            if (team.bootTime > 0) {
+                // enforce the boot limit
+                if (serverContext.appState.tickCount - team.bootTime < serverContext.configuration.armyBootCooldown)
+                    return false;
+            }
+
             // reset the team
             destroyTeam(team);
             // give resources
@@ -18,18 +25,23 @@ namespace Speercs.Server.Models.Mechanics {
             var mapExpander =
                 new WorldMapExpander(serverContext, new MapGenerator(serverContext, new MapGenParameters()));
             var homeRoom = mapExpander.createConnectedRoom();
-            var factory = new FactoryBuilding(new RoomPosition(new Point(homeRoom.x, homeRoom.y), homeRoom.spawn), team);
+            var factory =
+                new FactoryBuilding(new RoomPosition(new Point(homeRoom.x, homeRoom.y), homeRoom.spawn), team);
             serverContext.appState.entities.insertNew(factory);
             team.addEntity(factory);
+            team.bootTime = serverContext.appState.tickCount;
             team.booted = true;
+            return true;
         }
 
         public void destroyTeam(UserEmpire team) {
-            foreach (var entity in team.entities) {
+            var entityList = team.entities.ToList();
+            foreach (var entity in entityList) {
                 serverContext.appState.entities.remove(entity);
             }
 
             team.resources.Clear();
+            team.booted = false;
         }
     }
 }

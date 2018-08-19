@@ -127,6 +127,16 @@ namespace Speercs.Server.Configuration {
         [JsonProperty("sendInternalScriptErrors")]
         public bool sendInternalScriptErrors { get; set; } = false;
 
-        public int notificationQueueMaxSize { get; set; } = 256;
+        /// <summary>
+        /// The maximum size of the notification queue
+        /// </summary>
+        [JsonProperty("notificationQueueSize")]
+        public int notificationQueueSize { get; set; } = 256;
+
+        /// <summary>
+        /// The cooldown enforced between Army boots
+        /// </summary>
+        [JsonProperty("armyBootCooldown")]
+        public long armyBootCooldown { get; set; } = 200;
     }
 }
