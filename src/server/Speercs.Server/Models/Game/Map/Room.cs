@@ -47,7 +47,7 @@ namespace Speercs.Server.Models.Map {
         public Point spawn { get; set; }
 
         [BsonField("creationTime")]
-        public ulong creationTime { get; set; }
+        public long creationTime { get; set; }
 
         [JsonIgnore]
         [BsonField("tiles")]

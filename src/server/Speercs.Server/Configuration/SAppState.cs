@@ -39,6 +39,6 @@ namespace Speercs.Server.Configuration {
 
         public EntitySystem entities { get; set; } = new EntitySystem();
 
-        public ulong tickCount { get; set; }
+        public long tickCount { get; set; }
     }
 }

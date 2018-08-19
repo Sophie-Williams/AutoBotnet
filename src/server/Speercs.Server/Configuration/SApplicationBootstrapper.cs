@@ -43,7 +43,7 @@ namespace Speercs.Server.Configuration {
                         [nameof(Room.x)] = new BsonValue(room.x),
                         [nameof(Room.y)] = new BsonValue(room.y),
                         [nameof(Room.spawn)] = BsonMapper.Global.ToDocument(room.spawn),
-                        [nameof(Room.creationTime)] = new BsonValue(room.creationTime.ToString()),
+                        [nameof(Room.creationTime)] = new BsonValue(room.creationTime),
                         [nameof(Room.tiles)] = serializeTiles(room.tiles),
                         [nameof(Room.northExit)] = BsonMapper.Global.ToDocument(room.northExit),
                         [nameof(Room.eastExit)] = BsonMapper.Global.ToDocument(room.eastExit),
@@ -53,7 +53,7 @@ namespace Speercs.Server.Configuration {
                     deserialize: bson =>
                         new Room(bson.AsDocument[nameof(Room.x)].AsInt32, bson.AsDocument[nameof(Room.y)].AsInt32) {
                             spawn = BsonMapper.Global.ToObject<Point>(bson.AsDocument[nameof(Room.spawn)].AsDocument),
-                            creationTime = ulong.Parse(bson.AsDocument[nameof(Room.creationTime)].AsString),
+                            creationTime = bson.AsDocument[nameof(Room.creationTime)].AsInt64,
                             tiles =
                                 deserializeTiles(bson.AsDocument[nameof(Room.tiles)].AsBinary),
                             northExit = BsonMapper.Global.ToObject<Room.Exit>(bson.AsDocument[nameof(Room.northExit)]

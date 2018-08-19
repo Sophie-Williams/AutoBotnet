@@ -23,6 +23,12 @@ namespace Speercs.Server.Models.Entities {
 
         [BsonField("model")]
         public string model { get; set; }
+        
+        /// <summary>
+        /// the tick where the bot was last moved
+        /// </summary>
+        [BsonField("lastMoved")]
+        public long lastMoved { get; set; }
 
         [JsonIgnore]
         [BsonField("cores")]
@@ -31,6 +37,10 @@ namespace Speercs.Server.Models.Entities {
         [JsonIgnore]
         [BsonField("memory")] public int[] memory { get; set; }
 
+        [JsonIgnore]
+        [BsonField("moveCost")]
+        public int moveCost { get; set; } = 1;
+
         [BsonIgnore]
         public int usedCoreSpace => cores.Sum(x => x.size);
 
@@ -38,11 +48,11 @@ namespace Speercs.Server.Models.Entities {
         public int coreDrain => cores.Sum(x => x.drain);
 
         protected override bool moveRelative(Direction direction) {
-            if (context.appState.tickCount <= lastMoveTime)
+            if (context.appState.tickCount <= lastMoved + moveCost)
                 return false; // already moved this tick
 
             if (base.moveRelative(direction)) {
-                lastMoveTime = context.appState.tickCount;
+                lastMoved = context.appState.tickCount;
                 return true;
             }
 
@@ -57,8 +67,6 @@ namespace Speercs.Server.Models.Entities {
                 core.bot = this;
             }
         }
-
-        [BsonIgnore] protected ulong lastMoveTime;
     }
 
     [Flags]
