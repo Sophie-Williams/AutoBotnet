@@ -67,10 +67,12 @@ namespace Speercs.Server.Models {
             return entity as T;
         }
 
-        public bool anyAt(RoomPosition pos) {
+        public IEnumerable<GameEntity> allAt(RoomPosition pos) {
             var entitiesInRoom = getByRoom(pos.roomPos);
-            return entitiesInRoom.Any(x => x.position.pos.equalTo(pos.pos));
+            return entitiesInRoom.Where(x => x.position.pos.equalTo(pos.pos));
         }
+
+        public bool anyAt(RoomPosition pos) => allAt(pos).Any();
 
         public IEnumerable<GameEntity> getByUser(string userId) {
             return dataService.get(userId).team.entities;
