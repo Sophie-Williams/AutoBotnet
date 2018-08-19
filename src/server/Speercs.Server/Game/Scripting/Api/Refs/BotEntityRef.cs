@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using IridiumJS;
+using Newtonsoft.Json;
 using Speercs.Server.Models.Entities;
 
 namespace Speercs.Server.Game.Scripting.Api.Refs {
@@ -11,7 +12,7 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
         }
 
         public BotCoreRef[] cores => _bot.cores.Select(x => new BotCoreRef(x)).ToArray();
-        public int[] memory => _bot.memory;
+        [JsonIgnore] public int[] memory => _bot.memory;
         public int coreCapacity => _bot.coreCapacity;
         public int reactorPower => _bot.reactorPower;
         public int usedCoreSpace => _bot.usedCoreSpace;
