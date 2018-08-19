@@ -15,8 +15,9 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
 
         public string id => _entity.id;
         public string type => _entity.type;
-
         public string teamId => _entity.teamId;
+        public int health => _entity.health;
+        public int maxhealth => _entity.maxhealth;
 
         public RoomPosition pos => _entity.position;
 
