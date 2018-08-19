@@ -8,12 +8,17 @@ using Speercs.Server.Models.Program;
 
 namespace Speercs.Server.Services.Game {
     public class PersistentDataService : DependencyObject {
-        public PersistentDataService(ISContext serverContext) : base(serverContext) { }
+        private LiteCollection<UserPersistentData> _persistentDataCollection;
+
+        public PersistentDataService(ISContext serverContext) : base(serverContext) {
+            _persistentDataCollection =
+                serverContext.database.GetCollection<UserPersistentData>(DatabaseKeys.COLLECTION_USERPERSISTENTDATA);
+        }
 
         public UserPersistentData get(string ownerId) => findPersistentData(ownerId);
 
         private UserPersistentData findPersistentData(string ownerId) {
-            return serverContext.appState.userPersistentData[ownerId];
+            return _persistentDataCollection.FindOne(x => x.ownerId == ownerId);
         }
 
         public void createPersistentData(string ownerId) {
@@ -23,11 +28,12 @@ namespace Speercs.Server.Services.Game {
                     identifier = ownerId
                 }
             };
-            serverContext.appState.userPersistentData[ownerId] = persistentData;
+            _persistentDataCollection.Insert(persistentData);
+            _persistentDataCollection.EnsureIndex(x => x.ownerId);
         }
 
         public void removePersistentData(string ownerId) {
-            serverContext.appState.userPersistentData.Remove(ownerId);
+            _persistentDataCollection.Delete(x => x.ownerId == ownerId);
         }
 
         public void deployProgram(string ownerId, UserProgram program) {

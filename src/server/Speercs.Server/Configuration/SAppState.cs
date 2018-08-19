@@ -38,8 +38,6 @@ namespace Speercs.Server.Configuration {
         public WorldMap worldMap { get; set; } = new WorldMap();
 
         public EntityBag entities { get; set; } = new EntityBag();
-        
-        public Dictionary<string, UserPersistentData> userPersistentData { get; set; } = new Dictionary<string, UserPersistentData>();
 
         public ulong tickCount { get; set; }
     }
