@@ -12,9 +12,16 @@
         - tiles now have an associated `durability` that represents the amount of drill power (drill core tier) required
         - drilling transfers resources from tiles to an empire
     - `TileDeltaEvent` for when tiles change
-- multiple entities can no longer inhabit the same space
-    - enforced when creating new bots from factory and in `MobileEntity::move`
 - renamed `UserTeam` to `UserEmpire` to be more semantic (it represents a single empire, not a "team" or "alliance")
+- entities feature development
+    - multiple entities can no longer inhabit the same space
+        - enforced when creating new bots from factory and in `MobileEntity::move`
+    - base for buildings (`BuildingEntity`), which have custom actions that can be called with `.call`
+    - entities now have a health value (max health comes from template)
+    - Bots can now have a move cost, which is a cooldown before they can move
+    - Bots have a small data storage array, where they can store persistent data
+- gameplay
+    - you can now surrender to destroy your team, starting a cooldown before you can `boot` again as a new empire
 
 ## `0.0.4-dev` "Clink" (June 23, 2018)
 
