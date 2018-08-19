@@ -20,6 +20,8 @@ namespace Speercs.Server.Configuration {
 
         public static void loadState(SContext serverContext) {
             if (!serializationMappersRegistered) {
+                BsonMapper.Global.IncludeFields = true;
+                
                 BsonMapper.Global.RegisterType(
                     serialize: map => BsonMapper.Global.ToDocument(map.rooms),
                     deserialize: bson => new WorldMap {

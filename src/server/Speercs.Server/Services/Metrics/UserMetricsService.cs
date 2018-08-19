@@ -16,6 +16,7 @@ namespace Speercs.Server.Services.Metrics {
 
         public UserMetrics create(RegisteredUser user) {
             var userMetrics = new UserMetrics();
+            userMetrics.userId = user.identifier;
             _metricsCollection.Insert(userMetrics);
             _metricsCollection.EnsureIndex(x => x.userId);
             return userMetrics;
