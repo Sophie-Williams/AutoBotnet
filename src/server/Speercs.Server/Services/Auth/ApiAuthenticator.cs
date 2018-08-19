@@ -34,8 +34,8 @@ namespace Speercs.Server.Services.Auth {
             var user = userManager.findUserByApiKeyAsync(apikey).Result;
             if (user == null) return null;
 
-            var metricsService = new UserMetricsService(serverContext, user.identifier);
-            metricsService.log(MetricsEventType.ApiRequest);
+            var metricsService = new UserMetricsService(serverContext);
+            metricsService.log(user.identifier, MetricsEventType.ApiRequest);
 
             var userAuthClaims = new List<Claim> {
                 new Claim(AUTH_TYPE_CLAIM_KEY, ApiAccessScope.User.ToString()),

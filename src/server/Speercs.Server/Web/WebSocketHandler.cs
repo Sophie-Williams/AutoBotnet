@@ -94,9 +94,9 @@ namespace Speercs.Server.Web {
                 pipelineRegistered = true;
 
                 // save last connection metric
-                var metricsService = new UserMetricsService(serverContext, user.identifier);
-                var metricsObject = metricsService.get();
-                metricsService.log(MetricsEventType.RealtimeConnect);
+                var metricsService = new UserMetricsService(serverContext);
+                var metricsObject = metricsService.get(user.identifier);
+                metricsService.log(user.identifier, MetricsEventType.RealtimeConnect);
                 metricsObject.lastRealtimeCollection =
                     (ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
@@ -139,8 +139,8 @@ namespace Speercs.Server.Web {
                         .unregister(pipelineHandler);
 
                     // update playtime (using disconnect time)
-                    var metricsService = new UserMetricsService(serverContext, user.identifier);
-                    var metricsObject = metricsService.get();
+                    var metricsService = new UserMetricsService(serverContext);
+                    var metricsObject = metricsService.get(user.identifier);
                     metricsObject.playtime += ((ulong) DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) -
                                               metricsObject.lastRealtimeCollection;
                 }

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
+using Speercs.Server.Models.Meta;
 using Speercs.Server.Models.Requests.Game;
 using Speercs.Server.Services.Application;
 using Speercs.Server.Utilities;
@@ -12,20 +14,37 @@ namespace Speercs.Server.Modules.Admin {
             Post("/gen", _ => {
                 var req = this.Bind<KeyGenerationRequest>();
                 if (req.amount < 1) return HttpStatusCode.BadRequest;
-                var newCodes = new List<string>();
+                var newCodes = new List<InviteKey>();
+                var creationTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 for (var i = 0; i < req.amount; i++) {
-                    newCodes.Add(StringUtils.secureRandomString(16));
+                    newCodes.Add(new InviteKey {
+                        key = StringUtils.secureRandomString(16),
+                        timestamp = creationTime
+                    });
                 }
 
                 serverContext.log.writeLine($"Admin generated {req.amount} invite keys",
                     SpeercsLogger.LogLevel.Information);
-                this.serverContext.appState.inviteKeys.AddRange(newCodes);
+                var inviteKeys =
+                    this.serverContext.database.GetCollection<InviteKey>(DatabaseKeys.COLLECTION_INVITEKEYS);
+                inviteKeys.InsertBulk(newCodes);
+                inviteKeys.EnsureIndex(x => x.key);
                 return Response.asJsonNet(newCodes);
             });
 
-            Get("/active", _ => Response.asJsonNet(this.serverContext.appState.inviteKeys));
+            Get("/active", _ => {
+                var inviteKeys =
+                    this.serverContext.database.GetCollection<InviteKey>(DatabaseKeys.COLLECTION_INVITEKEYS);
+                return Response.asJsonNet(inviteKeys);
+            });
 
-            Delete("/delete/{key}", args => this.serverContext.appState.inviteKeys.Remove((string) args.key));
+            Delete("/delete/{key}", args => {
+                var inviteKeys =
+                    this.serverContext.database.GetCollection<InviteKey>(DatabaseKeys.COLLECTION_INVITEKEYS);
+                return inviteKeys.Delete(x => x.key == (string) args.key) > 0
+                    ? HttpStatusCode.NoContent
+                    : HttpStatusCode.NotFound;
+            });
         }
     }
 }

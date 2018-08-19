@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Security;
 using System.Threading.Tasks;
 using LiteDB;
@@ -148,6 +149,10 @@ namespace Speercs.Server.Services.Auth {
             user.enabled = status;
             await updateUserInDatabaseAsync(user);
             lockEntry.releaseExclusiveWrite();
+        }
+
+        public IEnumerable<RegisteredUser> getUsers() {
+            return _userCollection.FindAll();
         }
 
         public int registeredUserCount => _userCollection.Count();

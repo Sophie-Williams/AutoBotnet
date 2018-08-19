@@ -17,8 +17,8 @@ namespace Speercs.Server.Modules.Admin {
             Get("/metrics/{id}", async args => {
                 var user = await userManager.findUserByIdentifierAsync((string) args.id);
                 if (user == null) return HttpStatusCode.NotFound;
-                var metricsService = new UserMetricsService(serverContext, (string) args.id);
-                return Response.asJsonNet(metricsService.get());
+                var metricsService = new UserMetricsService(serverContext);
+                return Response.asJsonNet(metricsService.get((string) args.id));
             });
 
             Put("/{id}", async args => {

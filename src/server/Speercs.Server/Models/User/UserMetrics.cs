@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LiteDB;
-using Newtonsoft.Json;
 
 namespace Speercs.Server.Models.User {
     public enum MetricsEventType {
@@ -22,17 +21,19 @@ namespace Speercs.Server.Models.User {
     }
 
     public class UserMetrics : DatabaseObject {
-        public ulong playtime { get; set; }
+        public string userId;
+
+        public ulong playtime;
 
         [BsonIgnore]
-        public int codeDeploys => events.Where(x => x.type == MetricsEventType.CodeDeploy).Count();
+        public int codeDeploys => events.Count(x => x.type == MetricsEventType.CodeDeploy);
 
-        public ulong lineCount { get; set; }
+        public ulong lineCount;
 
-        public ulong totalLineCount { get; set; }
+        public ulong totalLineCount;
 
-        public ulong lastRealtimeCollection { get; set; }
+        public ulong lastRealtimeCollection;
 
-        public List<MetricsEvent> events { get; set; } = new List<MetricsEvent>();
+        public List<MetricsEvent> events = new List<MetricsEvent>();
     }
 }

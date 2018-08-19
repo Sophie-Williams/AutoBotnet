@@ -34,14 +34,10 @@ namespace Speercs.Server.Configuration {
         public void queuePersist() {
             persistNeeded = true;
         }
-
-        public List<string> inviteKeys { get; set; } = new List<string>();
-
+        
         public WorldMap worldMap { get; set; } = new WorldMap();
 
         public EntityBag entities { get; set; } = new EntityBag();
-
-        public Dictionary<string, UserMetrics> userMetrics { get; set; } = new Dictionary<string, UserMetrics>();
         
         public Dictionary<string, UserPersistentData> userPersistentData { get; set; } = new Dictionary<string, UserPersistentData>();
 

@@ -33,8 +33,9 @@ namespace Speercs.Server.Modules.Game {
                     return HttpStatusCode.UnprocessableEntity;
                 }
 
-                var metricsObject = userMetrics.get();
-                userMetrics.log(MetricsEventType.CodeDeploy);
+                logMetrics(MetricsEventType.CodeDeploy);
+                // TODO: improve stored statistics about code
+                var metricsObject = metricsService.get(currentUser.identifier);
                 var numLines = (ulong) req.source.Split('\n').Length;
                 metricsObject.lineCount = numLines;
                 metricsObject.totalLineCount += numLines;

@@ -1,20 +1,29 @@
-﻿using Speercs.Server.Configuration;
+﻿using LiteDB;
+using Speercs.Server.Configuration;
 using Speercs.Server.Models.User;
 
 namespace Speercs.Server.Services.Metrics {
     public class UserMetricsService : DependencyObject {
-        private readonly string _userIdentifier;
+        private readonly LiteCollection<UserMetrics> _metricsCollection;
 
-        public UserMetricsService(ISContext context, string userIdentifier) : base(context) {
-            _userIdentifier = userIdentifier;
+        public UserMetricsService(ISContext context) : base(context) {
+            _metricsCollection = serverContext.database.GetCollection<UserMetrics>(DatabaseKeys.COLLECTION_USERMETRICS);
         }
 
-        public UserMetrics get() {
-            return serverContext.appState.userMetrics[_userIdentifier];
+        public UserMetrics get(string userIdentifier) {
+            return _metricsCollection.FindOne(x => x.userId == userIdentifier);
         }
 
-        public void log(MetricsEventType type) {
-            var ev = new MetricsEvent { type = type };
+        public UserMetrics create(RegisteredUser user) {
+            var userMetrics = new UserMetrics();
+            _metricsCollection.Insert(userMetrics);
+            _metricsCollection.EnsureIndex(x => x.userId);
+            return userMetrics;
+        }
+
+        public void log(string userIdentifier, MetricsEventType type) {
+            var userMetrics = get(userIdentifier);
+            var ev = new MetricsEvent {type = type};
             bool log = true;
             if (serverContext.configuration.metricsLevel == MetricsLevel.Minimal) {
                 // only log relatively critical information
@@ -22,7 +31,13 @@ namespace Speercs.Server.Services.Metrics {
                     type == MetricsEventType.CodeDeploy
                     || type == MetricsEventType.Unspecified;
             }
-            if (log) get().events.Add(ev);
+
+            if (log) userMetrics.events.Add(ev);
+            _metricsCollection.Update(userMetrics);
+        }
+
+        public bool delete(string userId) {
+            return _metricsCollection.Delete(x => x.userId == userId) > 0;
         }
     }
 }

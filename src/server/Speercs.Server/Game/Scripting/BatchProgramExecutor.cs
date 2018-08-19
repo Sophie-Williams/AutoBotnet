@@ -2,23 +2,27 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using IridiumJS.Native;
 using Speercs.Server.Configuration;
 using Speercs.Server.Game.Scripting.Engine;
 using Speercs.Server.Services.Application;
-using Speercs.Server.Services.Game;
+using Speercs.Server.Services.Auth;
 
 namespace Speercs.Server.Game.Scripting {
     public class BatchProgramExecutor : DependencyObject {
-        public BatchProgramExecutor(ISContext context) : base(context) { }
+        private UserManagerService _userManager;
+
+        public BatchProgramExecutor(ISContext context) : base(context) {
+            _userManager = new UserManagerService(context);
+        }
 
         public async Task executePlayerProgramsAsync() {
             try {
                 serverContext.appState.tickCount++;
-                var executors =
-                    serverContext.appState.userMetrics.Select(x => serverContext.executors.retrieveExecutor(x.Key))
-                        .OrderBy(a => Guid.NewGuid()).ToList();
-                // random turn priority
+                // retrieve executors and randomize turn order
+                var executors = _userManager.getUsers()
+                    .Select(x => serverContext.executors.retrieveExecutor(x.identifier))
+                    .OrderBy(a => Guid.NewGuid())
+                    .ToList();
                 foreach (var executor in executors) {
                     if (executor == null) continue;
                     await Task.Run(() => {

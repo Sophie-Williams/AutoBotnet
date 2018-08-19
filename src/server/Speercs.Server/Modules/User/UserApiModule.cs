@@ -18,7 +18,7 @@ namespace Speercs.Server.Modules.User {
 
         public UserPersistentData persistentData { get; private set; }
 
-        public UserMetricsService userMetrics { get; private set; }
+        public UserMetricsService metricsService { get; private set; }
 
         public RegisteredUser currentUser { get; private set; }
 
@@ -35,10 +35,14 @@ namespace Speercs.Server.Modules.User {
                 userManager = new UserManagerService(this.serverContext);
                 playerDataService = new PersistentDataService(this.serverContext);
                 persistentData = playerDataService.get(userIdentifier);
-                userMetrics = new UserMetricsService(this.serverContext, userIdentifier);
+                metricsService = new UserMetricsService(this.serverContext);
                 currentUser = userManager.findUserByIdentifierAsync(userIdentifier).Result;
                 return null;
             };
+        }
+
+        protected void logMetrics(MetricsEventType eventType) {
+            metricsService.log(currentUser.identifier, eventType);
         }
     }
 }

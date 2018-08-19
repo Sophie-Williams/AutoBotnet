@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Nancy;
 using Nancy.ModelBinding;
 using Speercs.Server.Configuration;
+using Speercs.Server.Models.Meta;
 using Speercs.Server.Models.Requests.User;
 using Speercs.Server.Models.User;
 using Speercs.Server.Modules.Exceptions;
@@ -50,16 +51,18 @@ namespace Speercs.Server.Modules.Auth {
 
                     // Check invite key if enabled
                     if (this.serverContext.configuration.inviteRequired) {
-                        // Validate invite key
-                        if (!this.serverContext.appState.inviteKeys.Remove(req.inviteKey)) {
+                        // validate invite key
+                        var inviteKeys =
+                            this.serverContext.database.GetCollection<InviteKey>(DatabaseKeys.COLLECTION_INVITEKEYS);
+                        if (inviteKeys.Delete(x => x.key == req.inviteKey) == 0) {
                             return HttpStatusCode.PaymentRequired;
                         }
                     }
 
                     // Attempt to register user
                     var user = await _userManager.registerUserAsync(req);
-                    var metrics = new UserMetricsService(serverContext, user.identifier);
-                        metrics.log(MetricsEventType.Auth);
+                    var metrics = new UserMetricsService(serverContext);
+                    metrics.log(user.identifier, MetricsEventType.Auth);
 
                     serverContext.log.writeLine($"Registered user {user.username} [{user.identifier}]",
                         SpeercsLogger.LogLevel.Information);
@@ -90,8 +93,8 @@ namespace Speercs.Server.Modules.Auth {
                 try {
                     // Validate password
                     if (user.enabled && await _userManager.checkPasswordAsync(req.password, user)) {
-                        var metrics = new UserMetricsService(serverContext, user.identifier);
-                        metrics.log(MetricsEventType.Auth);
+                        var metrics = new UserMetricsService(serverContext);
+                        metrics.log(user.identifier, MetricsEventType.Auth);
                         // Return user details
                         return Response.asJsonNet(user);
                     }
