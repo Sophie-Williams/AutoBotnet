@@ -11,6 +11,7 @@ namespace Speercs.Server.Extensibility.Entities.Templates {
             return new Bot(factory.position, team) {
                 coreCapacity = 4,
                 reactorPower = 20,
+                memory = new int[32],
                 model = name
             };
         }

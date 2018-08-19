@@ -28,6 +28,9 @@ namespace Speercs.Server.Models.Entities {
         [BsonField("cores")]
         public List<BotCore> cores { get; set; } = new List<BotCore>();
 
+        [JsonIgnore]
+        [BsonField("memory")] public int[] memory { get; set; }
+
         [BsonIgnore]
         public int usedCoreSpace => cores.Sum(x => x.size);
 
