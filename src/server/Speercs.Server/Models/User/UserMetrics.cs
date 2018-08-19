@@ -32,7 +32,7 @@ namespace Speercs.Server.Models.User {
 
         public ulong totalLineCount;
 
-        public ulong lastRealtimeCollection;
+        public ulong lastRealtimeConnection;
 
         public List<MetricsEvent> events = new List<MetricsEvent>();
     }
