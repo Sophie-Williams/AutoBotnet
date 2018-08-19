@@ -80,7 +80,7 @@ namespace Speercs.Server.Game.MapGen {
             }
 
             // pick a spawn point
-            spawnCandidates = spawnCandidates.OrderBy(x => Point.distance(x, center)).Take(prm.spawnPointCandidates)
+            spawnCandidates = spawnCandidates.OrderBy(x => Point.chDist(x, center)).Take(prm.spawnPointCandidates)
                 .ToList();
             room.spawn = spawnCandidates[random.Next(spawnCandidates.Count)];
             room.tiles[room.spawn.x, room.spawn.y] = new TileCrashSite();

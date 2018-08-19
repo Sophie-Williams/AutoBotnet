@@ -16,7 +16,7 @@ namespace Speercs.Server.Models.Entities.Buildings {
         [BsonIgnore]
         public Dictionary<string, Delegate> actions { get; } = new Dictionary<string, Delegate>();
         
-        public void defineFunction(string name, Delegate func) {
+        public void defineAction(string name, Delegate func) {
             actions[name] = func;
         }
     }

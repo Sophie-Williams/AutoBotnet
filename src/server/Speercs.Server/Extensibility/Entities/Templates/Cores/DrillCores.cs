@@ -9,7 +9,7 @@ namespace Speercs.Server.Extensibility.Entities.Templates.Cores {
         public CoreDrillBase(int mining) {
             qualities[QUALITY_MINING] = mining;
 
-            defineFunction("drill", new Func<double, bool>(actionDrill));
+            defineAction("drill", new Func<double, bool>(actionDrill));
         }
 
         public bool actionDrill(double dir) {

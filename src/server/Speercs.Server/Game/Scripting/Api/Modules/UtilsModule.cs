@@ -10,11 +10,11 @@ namespace Speercs.Server.Game.Scripting.Api.Modules {
     public class UtilsModule : ScriptingApiModule {
         public UtilsModule(JSEngine engine, ISContext context, string userId) : base(engine, context, userId) {
             double pointDistance(Point p1, Point p2) {
-                return Point.distance(p1, p2);
+                return Point.dist(p1, p2);
             }
 
             double distance(RoomPosition p1, RoomPosition p2) {
-                return p1.distance(p2);
+                return p1.dist(p2);
             }
 
             RoomPosition[] findPath(RoomPosition start, RoomPosition end) {

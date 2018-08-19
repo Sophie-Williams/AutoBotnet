@@ -19,7 +19,7 @@ namespace Speercs.Server.Models.Entities {
             
             // if the new position is a different room, ensure we can move there
             if (!newPos.roomPos.equalTo(position.roomPos)) {
-                if (Point.manhattanDistance(newPos.roomPos, position.roomPos) > 1) return false;
+                if (Point.mhDist(newPos.roomPos, position.roomPos) > 1) return false;
                 if (!moveRoom(newPos.roomPos)) return false;
             }
             

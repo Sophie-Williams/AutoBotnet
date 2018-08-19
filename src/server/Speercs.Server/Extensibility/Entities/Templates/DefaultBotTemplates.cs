@@ -8,12 +8,14 @@ namespace Speercs.Server.Extensibility.Entities.Templates {
         public string name { get; } = "scout";
 
         public Bot construct(FactoryBuilding factory, UserEmpire team) {
-            return new Bot(factory.position, team) {
+            var bot = new Bot(factory.position, team) {
                 coreCapacity = 4,
                 reactorPower = 20,
                 memory = new int[32],
                 model = name
             };
+            bot.resetHealth(10);
+            return bot;
         }
     }
 }

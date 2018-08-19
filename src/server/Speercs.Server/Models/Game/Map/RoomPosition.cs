@@ -32,8 +32,8 @@ namespace Speercs.Server.Models.Map {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public double distance(RoomPosition other) {
-            return (Point.distance(roomPos, other.roomPos) * Room.MAP_EDGE_SIZE) + Point.distance(pos, other.pos);
+        public double dist(RoomPosition other) {
+            return (Point.dist(roomPos, other.roomPos) * Room.MAP_EDGE_SIZE) + Point.dist(pos, other.pos);
         }
 
         public int pathDistance(RoomPosition other) {
@@ -42,15 +42,15 @@ namespace Speercs.Server.Models.Map {
                    System.Math.Abs(pos.x - other.pos.x) + System.Math.Abs(pos.y - other.pos.y);
         }
 
-        public double distance(GameEntity entity) {
-            return distance(entity.position);
+        public double dist(GameEntity entity) {
+            return dist(entity.position);
         }
 
         public T getClosestEntity<T>(ISContext context) where T : GameEntity {
             var _this = this;
             return context.appState.entities.getByRoom(roomPos)
                 .OfType<T>()
-                .MinBy(entity => _this.distance(entity));
+                .MinBy(entity => _this.dist(entity));
         }
 
         public T getClosestEntity<T>(ISContext context, Func<T, bool> predicate) where T : GameEntity {
@@ -58,7 +58,7 @@ namespace Speercs.Server.Models.Map {
             return context.appState.entities.getByRoom(roomPos)
                 .OfType<T>()
                 .Where(predicate)
-                .MinBy(entity => _this.distance(entity));
+                .MinBy(entity => _this.dist(entity));
         }
 
         public RoomPosition move(Direction direction) {

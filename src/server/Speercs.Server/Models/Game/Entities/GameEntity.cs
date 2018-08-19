@@ -23,8 +23,11 @@ namespace Speercs.Server.Models.Entities {
         [BsonField("eid")]
         public string id { get; set; }
 
-        [BsonField("integrity")]
-        public int integrity { get; set; } = 1;
+        [BsonField("health")]
+        public int health { get; set; } = 0;
+
+        [BsonField("maxhealth")]
+        public int maxhealth { get; set; } = 1;
 
         private RoomPosition _position { get; set; }
 
@@ -58,6 +61,10 @@ namespace Speercs.Server.Models.Entities {
             id = Guid.NewGuid().ToString("N");
         }
 
+        public void resetHealth(int initialHealth) {
+            maxhealth = health = initialHealth;
+        }
+
         public void loadContext(ISContext context) {
             this.context = context;
             var userDataService = new PersistentDataService(context);
@@ -71,7 +78,7 @@ namespace Speercs.Server.Models.Entities {
         /// lifecycle tick
         /// </summary>
         public virtual bool tick() {
-            // TODO: integrity check (check cores)
+            // TODO: health/integrity check (check cores)
             return true;
         }
 

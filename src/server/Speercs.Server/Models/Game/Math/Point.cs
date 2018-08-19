@@ -30,12 +30,29 @@ namespace Speercs.Server.Models.Math {
 
         public override string ToString() => $"({x}, {y})";
 
-        public static double distance(Point p1, Point p2) {
+        public static double dist(Point p1, Point p2) {
             return System.Math.Sqrt(System.Math.Pow(p1.x - p2.x, 2) + System.Math.Pow(p1.y - p2.y, 2));
         }
-
-        public static int manhattanDistance(Point p1, Point p2) {
+        
+        /// <summary>
+        /// Manhattan dist
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
+        public static int mhDist(Point p1, Point p2) {
             return System.Math.Abs(p1.x - p2.x) + System.Math.Abs(p1.y - p2.y);
         }
+
+        /// <summary>
+        /// Chebyshev dist
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
+        public static int chDist(Point p1, Point p2) {
+            return System.Math.Max(System.Math.Abs(p1.x - p2.x), System.Math.Abs(p1.y - p2.y));
+        }
+
     }
 }
