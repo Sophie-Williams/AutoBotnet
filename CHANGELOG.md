@@ -19,7 +19,7 @@
     - base for buildings (`BuildingEntity`), which have custom actions that can be called with `.call`
     - entities now have a health value (max health comes from template)
     - Bots can now have a move cost, which is a cooldown before they can move
-    - Bots have a small data storage array, where they can store persistent data
+    - Bots have a small data storage array, where they can store persistent data. values can be set using `.mset`
 - gameplay
     - you can now surrender to destroy your team, starting a cooldown before you can `boot` again as a new empire
 

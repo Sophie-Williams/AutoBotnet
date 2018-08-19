@@ -19,6 +19,12 @@ namespace Speercs.Server.Game.Scripting.Api.Refs {
         public int coreDrain => _bot.coreDrain;
         public string model => _bot.model;
 
+        public bool mset(int index, int value) {
+            if (index >= memory.Length) return false;
+            _bot.memory[index] = value;
+            return true;
+        }
+
         public bool move(Direction direction) {
             return _bot.move(direction);
         }
