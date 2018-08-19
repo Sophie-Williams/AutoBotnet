@@ -39,6 +39,8 @@ namespace Speercs.Server.Configuration {
 
         public EntitySystem entities { get; set; } = new EntitySystem();
 
+        public Dictionary<string, UserPersistentData> persistentData = new Dictionary<string, UserPersistentData>();
+
         public long tickCount { get; set; }
     }
 }
