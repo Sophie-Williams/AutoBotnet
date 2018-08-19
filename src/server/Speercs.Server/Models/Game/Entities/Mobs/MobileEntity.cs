@@ -15,6 +15,7 @@ namespace Speercs.Server.Models.Entities {
         }
 
         protected virtual bool moveRelative(Direction direction) {
+            if (!running) return false;
             var newPos = position.move(direction);
             
             // if the new position is a different room, ensure we can move there

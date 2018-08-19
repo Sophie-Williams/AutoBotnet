@@ -57,7 +57,9 @@ namespace Speercs.Server.Models {
         }
 
         public void remove(GameEntity entity) {
+            spatialHash[entity.position.roomPos.ToString()].Remove(entity);
             entityData.Remove(entity.id);
+            dataService.get(entity.teamId).team.removeEntity(entity);
         }
 
         public T get<T>(string id) where T : GameEntity {

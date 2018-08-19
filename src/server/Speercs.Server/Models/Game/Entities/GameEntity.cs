@@ -22,6 +22,12 @@ namespace Speercs.Server.Models.Entities {
 
         [BsonField("eid")]
         public string id { get; set; }
+        
+        /// <summary>
+        /// can be set to false to "disable" the entity
+        /// </summary>
+        [BsonField("running")]
+        public bool running { get; set; } = true;
 
         [BsonField("health")]
         public int health { get; set; } = 0;
@@ -78,8 +84,13 @@ namespace Speercs.Server.Models.Entities {
         /// lifecycle tick
         /// </summary>
         public virtual bool tick() {
-            // TODO: health/integrity check (check cores)
-            return true;
+            var ticking = true;
+            if (health == 0) {
+                // bot died
+                raiseEvent(EVENT_DIE, null);
+                ticking = false;
+            }
+            return ticking;
         }
 
         public override bool Equals(object obj) {

@@ -20,7 +20,12 @@ namespace Speercs.Server.Game.Subsystems {
                 var teamId = user.identifier;
                 var teamEntities = serverContext.appState.entities.getByUser(teamId);
                 foreach (var entity in teamEntities) {
-                    entity.tick();
+                    var result = entity.tick();
+                    
+                    // remove dead entities
+                    if (!result) {
+                        serverContext.appState.entities.remove(entity);
+                    }
                 }
             }
 

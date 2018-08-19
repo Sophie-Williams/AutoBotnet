@@ -4,11 +4,12 @@ using Speercs.Server.Models.Entities;
 
 namespace Speercs.Server.Models {
     /// <summary>
-    /// Data model for storing all information about a user and his/her stuff
+    /// Data model for storing information about an empire
     /// </summary>
     public class UserEmpire : DatabaseObject {
         [BsonIgnore]
         public List<GameEntity> entities { get; set; } = new List<GameEntity>();
+
         public string identifier { get; set; }
         public Dictionary<string, long> resources { get; set; } = new Dictionary<string, long>();
         public bool booted { get; set; } = false;
