@@ -8,7 +8,7 @@ using Speercs.Server.Models.Math;
 using Speercs.Server.Services.Game;
 
 namespace Speercs.Server.Models {
-    public class EntityBag {
+    public class EntitySystem {
         [BsonField("entityData")]
         public Dictionary<string, GameEntity> entityData { get; set; } = new Dictionary<string, GameEntity>();
 

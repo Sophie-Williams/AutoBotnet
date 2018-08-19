@@ -37,7 +37,7 @@ namespace Speercs.Server.Configuration {
         
         public WorldMap worldMap { get; set; } = new WorldMap();
 
-        public EntityBag entities { get; set; } = new EntityBag();
+        public EntitySystem entities { get; set; } = new EntitySystem();
 
         public ulong tickCount { get; set; }
     }
