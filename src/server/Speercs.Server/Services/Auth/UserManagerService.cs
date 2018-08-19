@@ -7,6 +7,7 @@ using Speercs.Server.Configuration;
 using Speercs.Server.Models.Requests.User;
 using Speercs.Server.Models.User;
 using Speercs.Server.Services.Game;
+using Speercs.Server.Services.Metrics;
 using Speercs.Server.Utilities;
 
 namespace Speercs.Server.Services.Auth {
@@ -21,7 +22,7 @@ namespace Speercs.Server.Services.Auth {
         public async Task<RegisteredUser> registerUserAsync(UserRegistrationRequest regRequest) {
             if (await findUserByUsernameAsync(regRequest.username) != null)
                 throw new SecurityException("A user with the same username already exists!");
-            return await Task.Run(async () => {
+            return await Task.Run(() => {
                 // Calculate cryptographic info
                 var cryptoConf = PasswordCryptoConfiguration.createDefault();
                 var cryptoHelper = new AuthCryptoHelper(cryptoConf);
@@ -54,22 +55,23 @@ namespace Speercs.Server.Services.Auth {
                 var persistentDataService = new PersistentDataService(serverContext);
                 persistentDataService.createPersistentData(user.identifier);
 
-                serverContext.appState.userMetrics[user.identifier] = new UserMetrics();
+                var userMetricsService = new UserMetricsService(serverContext);
+                userMetricsService.create(user);
 
                 return user;
             });
         }
 
-        public async Task<RegisteredUser> findUserByApiKeyAsync(string apikey) {
-            return await Task.Run(() => (_userCollection.FindOne(x => x.apiKey == apikey)));
+        public Task<RegisteredUser> findUserByApiKeyAsync(string apikey) {
+            return Task.Run(() => (_userCollection.FindOne(x => x.apiKey == apikey)));
         }
 
-        public async Task<RegisteredUser> findUserByUsernameAsync(string username) {
-            return await Task.Run(() => (_userCollection.FindOne(x => x.username == username)));
+        public Task<RegisteredUser> findUserByUsernameAsync(string username) {
+            return Task.Run(() => (_userCollection.FindOne(x => x.username == username)));
         }
 
-        public async Task<RegisteredUser> findUserByIdentifierAsync(string id) {
-            return await Task.Run(() => (_userCollection.FindOne(x => x.identifier == id)));
+        public Task<RegisteredUser> findUserByIdentifierAsync(string id) {
+            return Task.Run(() => (_userCollection.FindOne(x => x.identifier == id)));
         }
 
         /// <summary>
@@ -116,17 +118,18 @@ namespace Speercs.Server.Services.Auth {
             }));
         }
 
-        public async Task deleteUserAsync(string userId) {
-            await Task.Run(async () => {
+        public Task deleteUserAsync(string userId) {
+            return Task.Run(() => {
                 _userCollection.Delete(x => x.identifier == userId);
 
                 // remove persistent data
                 var persistentDataService = new PersistentDataService(serverContext);
                 persistentDataService.removePersistentData(userId);
 
-                serverContext.appState.userMetrics.Remove(userId);
+                var userMetricsService = new UserMetricsService(serverContext);
+                userMetricsService.delete(userId);
 
-                // TODO: Purge all entities
+                // TODO: do something with the orphaned entities
             });
         }
 
