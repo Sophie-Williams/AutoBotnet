@@ -1,7 +1,7 @@
 
 # Speercs (AutoBotnet) Changelog
 
-## `0.0.5-dev` (In Development)
+## `0.0.5-dev` "Memeory" (In Development)
 
 - performance tweaks and optimizations
     - optimized room pack format to be gzipped binary; this new format is also used in database serialization
